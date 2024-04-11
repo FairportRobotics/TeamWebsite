@@ -14,8 +14,9 @@ export default function RootLayout({
     const navigation = [
         { name: 'Home', href: '/', current: true },
         { name: 'About', href: 'about', current: false },
-        { name: 'Students', href: 'students', current: false },
-        { name: 'Sponsors', href: 'sponsors', current: false },
+        { name: 'Team', href: 'team', current: false },
+        { name: 'Support', href: 'support', current: false },
+        { name: 'Outreach', href: 'outreach', current: false}
     ]
 
     function classNames(...classes: string[]) {
