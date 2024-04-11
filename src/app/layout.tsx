@@ -12,11 +12,10 @@ export default function RootLayout({
 }>) {
 
     const navigation = [
-        { name: 'Home', href: '#', current: true },
-        { name: 'Team', href: '#', current: false },
-        { name: 'Projects', href: '#', current: false },
-        { name: 'Calendar', href: '#', current: false },
-        { name: 'Reports', href: '#', current: false },
+        { name: 'Home', href: '/', current: true },
+        { name: 'About', href: 'about', current: false },
+        { name: 'Students', href: 'students', current: false },
+        { name: 'Sponsors', href: 'sponsors', current: false },
     ]
 
     function classNames(...classes: string[]) {
@@ -38,7 +37,7 @@ export default function RootLayout({
                                                     <img
                                                         className="h-8 w-8"
                                                         src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                                                        alt="Your Company"
+                                                        alt="Red Raider Robotics"
                                                     />
                                                 </div>
                                                 <div className="hidden md:block">
