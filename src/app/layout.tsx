@@ -12,11 +12,12 @@ export default function RootLayout({
 }>) {
 
     const navigation = [
-        { name: 'Home', href: '#', current: true },
-        { name: 'Team', href: '#', current: false },
+        { name: 'Home', href: '/', current: true },
+        { name: 'Team', href: '/Team', current: false },
         { name: 'Projects', href: '#', current: false },
         { name: 'Calendar', href: '#', current: false },
         { name: 'Reports', href: '#', current: false },
+        { name: 'Mr.snuggles', href: '/Snuggles', current: false},
     ]
 
     function classNames(...classes: string[]) {
