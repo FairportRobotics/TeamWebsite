@@ -1,0 +1,12 @@
+[
+    {
+        "name": "Mellon Cat",
+        "imagePath": "/Images/cat-watermelon.gif",
+        "Quote": "I love Watermellon"
+    },
+    {
+        "name": "1000 Yard Cat",
+        "imagePath": "/Images/1000Cat.webp",
+        "Quote": "War is Hell..."
+    }
+]

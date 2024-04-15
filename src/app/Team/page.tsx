@@ -1,7 +1,7 @@
+/* eslint-disable react/no-unescaped-entities */
 import { Metadata } from "next";
 import Image from "next/image";
-import cat from "C:/Users/GJdul/FairportRobotics-org/.next/static/media/cat-watermelon.1b1d2103.gif"
-
+import members from "@/Members.json"
 export const metadata: Metadata = {
     title: "Fairport Robotics - Team 578",
     description: "About Our Team.",
@@ -14,9 +14,13 @@ const stats = [
 ]
 
 export default function Home() {
+
+    //console.log(JSON.stringify(members,null,2))
+
+
     return (
         <>
-            <header className="bg-white shadow">
+            <header className="bg-gray shadow">
                 <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
                     <h1 className="text-3xl font-bold tracking-tight text-gray-900">Welcome</h1>
                 </div>
@@ -26,12 +30,24 @@ export default function Home() {
                     <p>
                        Hello, we are Team 578! Below are some members of our team.
                     </p>
+                </div>
+
+                <div >
+                
+                {members.map((member,index) => (
+                    <div key={index} className="Members">
+                    {member.name}
                     <Image
-                    src= {cat} alt= {""} />
+                    src={member.imagePath} width={200} height={100} alt={member.name} className="photo"/>
+                    <q className="quote"><i dangerouslySetInnerHTML={({ __html: member.Quote })} /></q>
+                    </div>
+                ))}
+               
+
                 </div>
 
 
-                <div className="bg-white py-24 sm:py-32">
+                <div className="bg-red py-24 sm:py-32">
                     <div className="mx-auto max-w-7xl px-6 lg:px-8">
                         <dl className="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-3">
                             {stats.map((stat) => (

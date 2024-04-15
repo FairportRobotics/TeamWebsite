@@ -25,7 +25,7 @@ export default function RootLayout({
     }
 
     return (
-        <html lang="en" className="h-full bg-gray-100">
+        <html lang="en" className="h-full bg-gray-100 sticky">
             <body className="h-full">
                 <>
                     <div className="min-h-full">
