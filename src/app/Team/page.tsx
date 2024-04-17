@@ -32,14 +32,14 @@ export default function Home() {
                     </p>
                 </div>
 
-                <div >
+                <div className="flex flex-row flex-wrap gap-4 ml-[40px]" >
                 
                 {members.map((member,index) => (
-                    <div key={index} className="Members">
-                    {member.name}
+                    <div key={index} className="content-start w-[200px]">
+                    <p className="name"> {member.name} </p>
                     <Image
                     src={member.imagePath} width={200} height={100} alt={member.name} className="photo"/>
-                    <q className="quote"><i dangerouslySetInnerHTML={({ __html: member.Quote })} /></q>
+                    <q className="text-wrap"><i dangerouslySetInnerHTML={({ __html: member.Quote })} /></q>
                     </div>
                 ))}
                

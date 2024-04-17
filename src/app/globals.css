@@ -83,7 +83,7 @@
   text-align: center;
   display: inline-block;
   column-width: 200px;
-  padding-bottom: 40px;
+  padding-bottom: 60px;
   margin-left: 60px;
   
   
@@ -96,4 +96,7 @@
 .quote{
   margin-right: 40px;
   font-size: large;
+}
+.name{
+  margin-right: 40px;
 }
