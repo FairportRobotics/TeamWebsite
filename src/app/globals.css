@@ -78,21 +78,6 @@
 .beans{
   margin-left: 40px;
 }
-
-.Members {
-  text-align: center;
-  display: inline-block;
-  column-width: 200px;
-  padding-bottom: 60px;
-  margin-left: 60px;
-  
-  
-}
-
-.photo {
-  height: 240px;
-  width: 160px; 
-}
 .quote{
   margin-right: 40px;
   font-size: large;
