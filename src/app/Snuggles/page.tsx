@@ -25,7 +25,7 @@ export default function Home() {
                
                 <p className="beans">     This is wattermelon cat. After about one week of being in agonizing pain as a broken image, he has finaly been released to wreak havoc on the world. Say your prayers. </p>
                 
-
+                <Image src={"/Images/IMG_3871.jpg"} width={200} height={100} alt={"womp womp"}/>
 
                 <div className="bg-white py-24 sm:py-32">
                     <div className="mx-auto max-w-7xl px-6 lg:px-8">

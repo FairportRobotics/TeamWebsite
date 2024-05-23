@@ -1,9 +1,7 @@
 import { Metadata } from "next";
 import Image from "next/image";
-import Parallax from './components/Paralax';
-
-
-
+//import Cat from "C:/Users/GJdul/FairportRobotics-org/.next/static/media/cat-watermelon.1b1d2103.gif"
+//import Cat from "C:/Users/GJdul/FairportRobotics-org/public/cat-watermelon.gif"
 export const metadata: Metadata = {
     title: "Fairport Robotics - Team 578",
     description: "The homepage for Fairport Robotics Team 578",
@@ -20,16 +18,13 @@ export default function Home() {
         <>
             <header className="bg-white shadow">
                 <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                    <h1 className="text-3xl font-bold tracking-tight text-gray-900">Welcome</h1>
+                    <h1 className="text-3xl font-bold tracking-tight text-gray-900">Wattermellon Cat</h1>
                 </div>
             </header>
             <main>
-                <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-                    <p>
-                        Welcome to the official website of Team 578, Fairport Robotics! Our team consists of student members, alumni apprentice-mentors, and parent/professional mentors all working together to build robots, compete with other teams, and promote FIRST® in and beyond our community.
-                    </p>
-                </div>
-            <Parallax></Parallax>
+               
+                <p> This is the login page for 578 team members and parents.</p>
+
                 <div className="bg-white py-24 sm:py-32">
                     <div className="mx-auto max-w-7xl px-6 lg:px-8">
                         <dl className="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-3">
