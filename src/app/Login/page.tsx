@@ -1,5 +1,7 @@
 import { Metadata } from "next";
 import Image from "next/image";
+//import Cat from "C:/Users/GJdul/FairportRobotics-org/.next/static/media/cat-watermelon.1b1d2103.gif"
+//import Cat from "C:/Users/GJdul/FairportRobotics-org/public/cat-watermelon.gif"
 export const metadata: Metadata = {
     title: "Fairport Robotics - Team 578",
     description: "The homepage for Fairport Robotics Team 578",
@@ -21,9 +23,7 @@ export default function Home() {
             </header>
             <main>
                
-                <p className="beans">     This is wattermelon cat. After about one week of being in agonizing pain as a broken image, he has finaly been released to wreak havoc on the world. Say your prayers. </p>
-                
-                <Image src={"/Images/IMG_3871.jpg"} width={200} height={100} alt={"womp womp"}/>
+                <p> This is the login page for 578 team members and parents.</p>
 
                 <div className="bg-white py-24 sm:py-32">
                     <div className="mx-auto max-w-7xl px-6 lg:px-8">

@@ -15,6 +15,7 @@ export default function RootLayout({
         { name: 'Calendar', href: '#', current: false },
         { name: 'Meetings', href: '#', current: false },
         { name: 'Mr.snuggles', href: '/Snuggles', current: false},
+        { name: 'Login', href: '/Login', current: false},
     ]
 
     function classNames(...classes: string[]) {

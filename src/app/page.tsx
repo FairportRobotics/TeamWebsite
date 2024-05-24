@@ -1,5 +1,7 @@
 import { Metadata } from "next";
 import Image from "next/image";
+import Parallax from './components/Paralax';
+
 
 
 export const metadata: Metadata = {
@@ -27,8 +29,7 @@ export default function Home() {
                         Welcome to the official website of Team 578, Fairport Robotics! Our team consists of student members, alumni apprentice-mentors, and parent/professional mentors all working together to build robots, compete with other teams, and promote FIRST® in and beyond our community.
                     </p>
                 </div>
-
-
+            <Parallax></Parallax>
                 <div className="bg-white py-24 sm:py-32">
                     <div className="mx-auto max-w-7xl px-6 lg:px-8">
                         <dl className="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-3">

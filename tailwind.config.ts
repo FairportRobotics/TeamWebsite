@@ -1,5 +1,5 @@
 import type { Config } from "tailwindcss"
-
+import image from "./public/Images/cat-watermelon.gif"
 const config = {
   darkMode: ["class"],
   content: [
@@ -11,6 +11,7 @@ const config = {
   prefix: "",
   theme: {
     container: {
+       
       center: true,
       padding: "2rem",
       screens: {
@@ -18,6 +19,9 @@ const config = {
       },
     },
     extend: {
+      backgroundImage: {
+        'parallax' : "url('/Images/IMG_3871.jpg')",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
