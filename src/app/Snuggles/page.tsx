@@ -1,7 +1,5 @@
 import { Metadata } from "next";
 import Image from "next/image";
-//import Cat from "C:/Users/GJdul/FairportRobotics-org/.next/static/media/cat-watermelon.1b1d2103.gif"
-//import Cat from "C:/Users/GJdul/FairportRobotics-org/public/cat-watermelon.gif"
 export const metadata: Metadata = {
     title: "Fairport Robotics - Team 578",
     description: "The homepage for Fairport Robotics Team 578",

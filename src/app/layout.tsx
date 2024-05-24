@@ -1,29 +1,25 @@
 'use client';
-
 import "./globals.css";
 import { Disclosure } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Bars3Icon } from "@heroicons/react/24/outline";
-
 export default function RootLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-
     const navigation = [
         { name: 'Home', href: '/', current: true },
         { name: 'Team', href: '/Team', current: false },
-        { name: 'Projects', href: '#', current: false },
+        { name: 'Projects', href: '/Projects', current: false },
         { name: 'Calendar', href: '#', current: false },
-        { name: 'Reports', href: '#', current: false },
+        { name: 'Meetings', href: '#', current: false },
         { name: 'Mr.snuggles', href: '/Snuggles', current: false},
     ]
 
     function classNames(...classes: string[]) {
         return classes.filter(Boolean).join(' ')
     }
-
     return (
         <html lang="en" className="h-full bg-gray-100 sticky">
             <body className="h-full">
@@ -67,7 +63,6 @@ export default function RootLayout({
                                                 </div>
                                             </div>
                                             <div className="-mr-2 flex md:hidden">
-                                                {/* Mobile menu button */}
                                                 <Disclosure.Button className="relative inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                                                     <span className="absolute -inset-0.5" />
                                                     <span className="sr-only">Open main menu</span>

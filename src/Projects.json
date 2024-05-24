@@ -1,0 +1,13 @@
+[
+    {
+        "name": "Robot",
+        "imagePath": "/Projects/BotBoy.jpg",
+        "Quote": "Im a ROOOOBOTTTTTT"
+    },
+
+    {
+        "name":"Pichnich",
+        "imagePath": "/Projects/Picknich.jpg",
+        "Quote": "Im not a ROOOOBOTTTTTT"
+    }
+]
