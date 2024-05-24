@@ -33,21 +33,17 @@ export default function Home() {
                     </p>
                 </div>
 
-                <div className="flex flex-row flex-wrap gap-4 bg-slate-800 p-4 justify-between" >
+                <div className="flex flex-row flex-wrap gap-4 bg-slate-200 p-4 justify-between" >
                 {/* this is where the magic happens */}
                 {members.map((member,index) => (
-                    <div key={index} className="text-center w-48 bg-slate-700">
+                    <div key={index} className="text-center w-48 bg-white shadow-md rounded p-2">
                     <Image
                     src={member.imagePath} width={200} height={100} alt={member.name}/>
                     <p className="font-semibold text-center"> {member.name} </p>
                     <q className="text-wrap"><i dangerouslySetInnerHTML={({ __html: member.Quote })} /></q>
                     </div>
                 ))}
-               
-
                 </div>
-                
-
 
                 <div className="bg-red py-24 sm:py-32">
                     <div className="mx-auto max-w-7xl px-6 lg:px-8">
