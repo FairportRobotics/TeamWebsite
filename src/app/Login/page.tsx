@@ -1,3 +1,5 @@
+"use server"
+import exp from "constants";
 import { Metadata } from "next";
 import Image from "next/image";
 //import Cat from "C:/Users/GJdul/FairportRobotics-org/.next/static/media/cat-watermelon.1b1d2103.gif"
@@ -13,7 +15,8 @@ const stats = [
     { id: 3, name: 'New users annually', value: '46,000' },
 ]
 
-export default function Home() {
+const Home = async() => {
+    const search = async () =>{ console.log("wabung")}
     return (
         <>
             <header className="bg-white shadow">
@@ -24,6 +27,11 @@ export default function Home() {
             <main>
                
                 <p> This is the login page for 578 team members and parents.</p>
+
+                <form action={search}>
+                        <input name="query" />
+                        <button type="submit">Search</button>
+                </form>
 
                 <div className="bg-white py-24 sm:py-32">
                     <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -43,3 +51,4 @@ export default function Home() {
         </>
     );
 }
+export default Home
