@@ -1,23 +1,23 @@
-import { Button } from '@/components/ui/button'
-import { authClient } from '@/lib/auth-client'
-import { createFileRoute } from '@tanstack/react-router'
+import { Button } from "@/components/ui/button";
+import { authClient } from "@/lib/auth-client";
+import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute('/auth/signup')({
+export const Route = createFileRoute("/auth/signup")({
   component: RouteComponent,
-})
+});
 
 function RouteComponent() {
   async function handleSignUp() {
     const { data, error } = await authClient.signUp.email({
-      name: 'John Doe', // required
-      email: 'john.doe@example.com', // required
-      password: 'password1234', // required
-      image: 'https://example.com/image.png',
-      callbackURL: '/',
-    })
+      name: "John Doe", // required
+      email: "john.doe@example.com", // required
+      password: "password1234", // required
+      image: "https://example.com/image.png",
+      callbackURL: "/",
+    });
 
-    console.log('handleSignUp', data)
-    console.log('handleSignUp', error)
+    console.log("handleSignUp", data);
+    console.log("handleSignUp", error);
   }
 
   return (
@@ -26,5 +26,5 @@ function RouteComponent() {
         <Button onClick={handleSignUp}>Sign Up</Button>
       </section>
     </main>
-  )
+  );
 }
