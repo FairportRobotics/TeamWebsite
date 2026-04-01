@@ -60,7 +60,6 @@ function RouteComponent() {
           // toast.error(error.error.message || "Failed to sign in");
         },
         onSuccess: () => {
-          // router.push("/");
           navigate({ to: "/" });
         },
       },
@@ -86,7 +85,12 @@ function RouteComponent() {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input type="email" autoComplete="" {...field} />
+                    <Input
+                      type="email"
+                      autoComplete=""
+                      {...field}
+                      placeholder="user@example.com"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -111,7 +115,11 @@ function RouteComponent() {
                     </Button>
                   </div>
                   <FormControl>
-                    <PasswordInput {...field} autoComplete="" />
+                    <PasswordInput
+                      {...field}
+                      autoComplete=""
+                      placeholder="********"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

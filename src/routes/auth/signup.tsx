@@ -61,6 +61,8 @@ function RouteComponent() {
 
     if (res.error == null && !res.data.user.emailVerified) {
     }
+
+    navigate({ to: "/" });
   }
 
   return (
@@ -82,7 +84,12 @@ function RouteComponent() {
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input type="name" autoComplete="" {...field} />
+                    <Input
+                      type="name"
+                      autoComplete=""
+                      {...field}
+                      placeholder="First Last"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -96,7 +103,12 @@ function RouteComponent() {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input type="email" autoComplete="" {...field} />
+                    <Input
+                      type="email"
+                      autoComplete=""
+                      {...field}
+                      placeholder="user@example.com"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -112,7 +124,11 @@ function RouteComponent() {
                     <FormLabel>Password</FormLabel>
                   </div>
                   <FormControl>
-                    <PasswordInput {...field} autoComplete="" />
+                    <PasswordInput
+                      {...field}
+                      autoComplete=""
+                      placeholder="********"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
