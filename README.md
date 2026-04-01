@@ -3,3 +3,9 @@
 ```shell
 docker compose up -d
 ```
+
+## Generate Better-Auth Schema
+
+```shell
+npx auth generate
+```
