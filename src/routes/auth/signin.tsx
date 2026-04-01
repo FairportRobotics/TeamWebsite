@@ -64,64 +64,70 @@ function RouteComponent() {
   }
 
   return (
-    <main className="page-wrap px-4 pb-8 pt-14">
-      <Card>
-        <CardHeader>
-          <CardTitle>Sign In</CardTitle>
-          <CardDescription>Sign in and enjoy our content</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form
-              className="space-y-4"
-              onSubmit={form.handleSubmit(handleSignIn)}
-            >
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input type="email" autoComplete="" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+    <div className="flex min-h-svh flex-col items-center justify-center bg-muted p-6 md:p-10">
+      <div className="w-full max-w-sm md:max-w-4xl">
+        <Card>
+          <CardHeader>
+            <CardTitle>Sign In</CardTitle>
+            <CardDescription>Sign in and enjoy our content</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Form {...form}>
+              <form
+                className="space-y-4"
+                onSubmit={form.handleSubmit(handleSignIn)}
+              >
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input type="email" autoComplete="" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="flex justify-between items-center">
-                      <FormLabel>Password</FormLabel>
-                      <Button
-                        onClick={() => console.log("Forgot password")}
-                        type="button"
-                        variant="link"
-                        size="sm"
-                        className="text-sm font-normal underline"
-                      >
-                        Forgot Password?
-                      </Button>
-                    </div>
-                    <FormControl>
-                      <Input {...field} autoComplete="" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex justify-between items-center">
+                        <FormLabel>Password</FormLabel>
+                        <Button
+                          onClick={() => console.log("Forgot password")}
+                          type="button"
+                          variant="link"
+                          size="sm"
+                          className="text-sm font-normal underline"
+                        >
+                          Forgot Password?
+                        </Button>
+                      </div>
+                      <FormControl>
+                        <Input {...field} autoComplete="" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <Button type="submit" className="w-full " disabled={isSubmitting}>
-                Sign In
-              </Button>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
-    </main>
+                <Button
+                  type="submit"
+                  className="w-full "
+                  disabled={isSubmitting}
+                >
+                  Sign In
+                </Button>
+              </form>
+            </Form>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
   );
 }
