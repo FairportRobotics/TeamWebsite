@@ -4,10 +4,14 @@ import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 
-import { authClient } from "@/lib/auth-client";
+import type { authClient } from "@/lib/auth-client";
 import appCss from "../styles.css?url";
 
-export const Route = createRootRoute({
+interface RouterContext {
+  session: Awaited<ReturnType<typeof authClient.getSession>>["data"];
+}
+
+export const Route = createRootRoute<RouterContext>({
   head: () => ({
     meta: [
       {
@@ -29,10 +33,6 @@ export const Route = createRootRoute({
     ],
   }),
   shellComponent: RootDocument,
-  loader: async () => {
-    const result = await authClient.getSession();
-    return result.data;
-  },
 });
 
 function RootDocument({ children }: { children: React.ReactNode }) {
