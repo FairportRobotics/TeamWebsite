@@ -5,7 +5,7 @@ const config = {
   semi: true,
   singleQuote: false,
   jsxSingleQuote: false,
-  trailingComma: 'all',
-}
+  trailingComma: "all",
+};
 
-export default config
+export default config;
