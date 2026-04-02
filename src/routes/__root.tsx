@@ -1,10 +1,9 @@
+import Footer from "@/components/footer";
+import Header from "@/components/header";
+import type { authClient } from "@/lib/auth-client";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
-import Footer from "../components/Footer";
-import Header from "../components/Header";
-
-import type { authClient } from "@/lib/auth-client";
 import appCss from "../styles.css?url";
 
 interface RouterContext {

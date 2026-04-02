@@ -5,7 +5,6 @@ export const Route = createFileRoute("/")({
   component: App,
   loader: async () => {
     const session = await getSessionFn();
-    console.log("Root Session:", session);
 
     return {
       user: session?.user ?? undefined,
@@ -14,12 +13,11 @@ export const Route = createFileRoute("/")({
 });
 
 function App() {
-  const whatever = Route.useLoaderData();
+  const { user } = Route.useLoaderData();
   return (
     <main className="">
       <section>
-        Welcome {whatever.user ? whatever.user.email : "Guest"}! This is the
-        home page.
+        Welcome {user ? user.name : "Guest"}! This is the home page.
       </section>
     </main>
   );

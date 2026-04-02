@@ -1,3 +1,4 @@
+import { SocialAuthButtons } from "@/components/social-login-buttons";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -96,7 +97,6 @@ function RouteComponent() {
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="password"
@@ -125,19 +125,21 @@ function RouteComponent() {
                 </FormItem>
               )}
             />
-
             <div>
               Don't have an account?{" "}
               <Link to="/auth/signup" className="text-blue-700 underline">
                 Sign Up
               </Link>
             </div>
-
             <LoadingSwap isLoading={isSubmitting}>
               <Button type="submit" className="w-full " disabled={isSubmitting}>
                 Sign In
               </Button>
             </LoadingSwap>
+            or
+            <div>
+              <SocialAuthButtons />
+            </div>
           </form>
         </Form>
       </CardContent>

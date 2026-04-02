@@ -14,7 +14,6 @@ export default function Header() {
   const { data: session } = authClient.useSession();
 
   async function handleSignOut() {
-    console.log("Signing out...");
     await authClient.signOut();
     navigate({ to: "/" });
   }
@@ -30,10 +29,9 @@ export default function Header() {
           <Link to="/sponsors">Sponsors</Link>
         </section>
         <section className="flex items-center justify-center gap-3">
-          <Link to="/admin">Admin</Link>
-
           {session ? (
             <>
+              <Link to="/admin">Admin</Link>
               <Button variant="outline" onClick={() => handleSignOut()}>
                 Sign Out
               </Button>
