@@ -3,6 +3,8 @@ import { createFileRoute } from "@tanstack/react-router";
 export const Route = createFileRoute("/admin/")({
   component: RouteComponent,
   loader: async () => {
+    // const results = await auth.api.listUsers();
+
     return [];
   },
 });
