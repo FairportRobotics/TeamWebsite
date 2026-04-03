@@ -1,3 +1,4 @@
+import { authClient } from "@/lib/auth-client";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin/")({
@@ -5,7 +6,15 @@ export const Route = createFileRoute("/admin/")({
   loader: async () => {
     // const results = await auth.api.listUsers();
 
-    return [];
+    const { data, error } = await authClient.admin.listUsers({
+      query: { sortBy: "name", sortDirection: "desc" },
+    });
+
+    if (error) {
+      return [];
+    }
+
+    return data.users;
   },
 });
 
@@ -16,7 +25,17 @@ function RouteComponent() {
       <h1>User Admimnistration</h1>
       <ul>
         {users.map((user, idx) => (
-          <li key={idx}>User[{idx}]</li>
+          <li key={idx}>
+            User[{idx}]: {user.name} ({user.email}) - {user.role ?? "visitor"}{" "}
+            {user.image && (
+              <img
+                src={user.image}
+                alt={`${user.name}'s profile picture`}
+                width={32}
+                height={32}
+              />
+            )}
+          </li>
         ))}
       </ul>
     </div>
