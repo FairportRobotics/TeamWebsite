@@ -18,6 +18,14 @@ Drizzle is the ORM (Object Relational Mapper) that allows our application to com
 
 # FAQ
 
+### Install dependencies
+
+Once you have cloned the source from GitHub, install the dependencies.
+
+```shell
+pnpm i
+```
+
 ### Get the database up and running in Docker
 
 We are using a Postgres instance hosted in Docker for local development work. Execute the following command to initialize and start the instance.
@@ -26,7 +34,7 @@ We are using a Postgres instance hosted in Docker for local development work. Ex
 docker compose up -d
 ```
 
-## Generate Better-Auth schema
+### Generate Better-Auth schema
 
 Anytime we change the Better-Auth configuration by adding or removing features, we will need to generate a new schema and manually incorporate those changes in the `src/db/schema.ts` file.
 
@@ -38,19 +46,19 @@ pnpm run auth:generate
 
 Next, open `src/db/new-auth-schema.ts` and compare to `src/db/schema.ts`. Migrate over any changes. Once complete, you can delete `src/db/new-auth-schema.ts`.
 
-## Push changes to the database
+### Push changes to the database
 
 ```shell
 pnpm run db:push
 ```
 
-## Run the application locally
+### Run the application locally
 
 ```shell
 pnpm run dev
 ```
 
-## Run Drizzle Studio
+### Run Drizzle Studio
 
 Drizzle Studio is a useful UI for interacting with the database configured for use by Drizzle ORM.
 
