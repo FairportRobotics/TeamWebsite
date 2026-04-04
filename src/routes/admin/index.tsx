@@ -13,38 +13,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { authClient } from "@/lib/auth-client";
-import { getUserAccountsFn, getUserSessionsFn } from "@/lib/server-functions";
+import { getUsersForAdmin } from "@/lib/server-functions";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin/")({
   component: RouteComponent,
   loader: async () => {
-    // const results = await auth.api.listUsers();
+    const usersForAdmin = await getUsersForAdmin();
 
-    const { data, error } = await authClient.admin.listUsers({
-      query: { sortBy: "name", sortDirection: "asc" },
-    });
-
-    if (error) {
-      return [];
-    }
-
-    const userSessions = await getUserSessionsFn();
-    const userAccounts = await getUserAccountsFn();
-
-    const users = data.users.map((user) => {
-      const activeSessions = userSessions.filter(
-        (session) => session.userId === user.id,
-      );
-
-      const activeAccounts = userAccounts.filter(
-        (account) => account.userId === user.id,
-      );
-      return { ...user, activeSessions, activeAccounts };
-    });
-
-    return users;
+    return usersForAdmin;
   },
 });
 
@@ -70,9 +47,13 @@ function RouteComponent() {
                     <TableHead>Name</TableHead>
                     <TableHead>Email</TableHead>
                     <TableHead>Role</TableHead>
-                    <TableHead>Active Sessions</TableHead>
-                    <TableHead>Related Accounts</TableHead>
-                    <TableHead className="w-25">Actions</TableHead>
+                    <TableHead className="text-right">
+                      Active Sessions
+                    </TableHead>
+                    <TableHead className="text-right">
+                      Related Accounts
+                    </TableHead>
+                    <TableHead>Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -81,8 +62,12 @@ function RouteComponent() {
                       <TableCell>{user.name}</TableCell>
                       <TableCell>{user.email}</TableCell>
                       <TableCell>{user.role ?? "visitor"}</TableCell>
-                      <TableCell>{user.activeSessions.length}</TableCell>
-                      <TableCell>{user.activeAccounts.length}</TableCell>
+                      <TableCell className="text-right">
+                        {user.sessions.length}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        {user.accounts.length}
+                      </TableCell>
                       <TableCell>TBD</TableCell>
                     </TableRow>
                   ))}
