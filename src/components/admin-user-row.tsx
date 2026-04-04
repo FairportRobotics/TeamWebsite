@@ -1,7 +1,7 @@
 import { TableCell, TableRow } from "@/components/ui/table";
 import { authClient } from "@/lib/auth-client";
 import type { AdminUser } from "@/lib/server-functions";
-import { useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { MoreHorizontal } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -61,7 +61,15 @@ export default function AdminUserRow({
   // TODO: Use selfId to disable actions for the current user (e.g. deleting own account, changing own role, etc.)
   return (
     <TableRow>
-      <TableCell>{user.name}</TableCell>
+      <TableCell>
+        <Link
+          to="/admin/user/$id"
+          params={{ id: user.id }}
+          className="underline"
+        >
+          {user.name}
+        </Link>
+      </TableCell>
       <TableCell>{user.email}</TableCell>
       <TableCell>{user.role ?? "visitor"}</TableCell>
       <TableCell className="text-right">{user.sessions.length}</TableCell>
