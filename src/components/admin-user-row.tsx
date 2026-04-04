@@ -1,6 +1,9 @@
 import { TableCell, TableRow } from "@/components/ui/table";
+import { authClient } from "@/lib/auth-client";
 import type { AdminUser } from "@/lib/server-functions";
+import { useNavigate } from "@tanstack/react-router";
 import { MoreHorizontal } from "lucide-react";
+import { toast } from "sonner";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -28,9 +31,24 @@ export default function AdminUserRow({
   user: AdminUser;
   selfId: string | undefined;
 }) {
+  const { refetch } = authClient.useSession();
+  const navigate = useNavigate();
   const isSelf = selfId === user.id;
 
-  async function handleImpersonateUser(userId: string) {}
+  async function handleImpersonateUser(userId: string) {
+    authClient.admin.impersonateUser(
+      { userId },
+      {
+        onError: (error) => {
+          toast.error(error.error.message || "Failed to imprtsonate user");
+        },
+        onSuccess: () => {
+          refetch();
+          navigate({ to: "/" });
+        },
+      },
+    );
+  }
 
   async function handleRevokeSessions(userId: string) {}
 

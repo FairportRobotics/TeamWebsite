@@ -3,6 +3,7 @@
 import { authClient } from "@/lib/auth-client";
 import { Link, useNavigate } from "@tanstack/react-router";
 import type { User } from "better-auth";
+import { ImpersonateButton } from "./impersonate-button";
 import { Button } from "./ui/button";
 
 export interface NavUserProps {
@@ -27,11 +28,12 @@ export default function Header() {
           <Link to="/robots">Robots</Link>
           <Link to="/events">Events</Link>
           <Link to="/sponsors">Sponsors</Link>
+          <Link to="/admin">Admin</Link>
         </section>
         <section className="flex items-center justify-center gap-3">
           {session ? (
             <>
-              <Link to="/admin">Admin</Link>
+              <ImpersonateButton />
               <Button variant="outline" onClick={() => handleSignOut()}>
                 Sign Out
               </Button>
