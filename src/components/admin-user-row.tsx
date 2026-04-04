@@ -1,7 +1,7 @@
 import { TableCell, TableRow } from "@/components/ui/table";
 import { authClient } from "@/lib/auth-client";
 import type { AdminUser } from "@/lib/server-functions";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate, useRouter } from "@tanstack/react-router";
 import { MoreHorizontal } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -32,6 +32,7 @@ export default function AdminUserRow({
   selfId: string | undefined;
 }) {
   const { refetch } = authClient.useSession();
+  const router = useRouter();
   const navigate = useNavigate();
   const isSelf = selfId === user.id;
 
@@ -50,7 +51,20 @@ export default function AdminUserRow({
     );
   }
 
-  async function handleRevokeSessions(userId: string) {}
+  async function handleRevokeSessions(userId: string) {
+    authClient.admin.revokeUserSessions(
+      { userId },
+      {
+        onError: (error) => {
+          toast.error(error.error.message || "Failed to revoke user sessions");
+        },
+        onSuccess: () => {
+          toast.success("User sessions were revoked");
+          router.invalidate();
+        },
+      },
+    );
+  }
 
   async function handleUnbanUser(userId: string) {}
 
