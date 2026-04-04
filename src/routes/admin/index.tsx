@@ -69,10 +69,9 @@ function RouteComponent() {
                   <TableRow>
                     <TableHead>Name</TableHead>
                     <TableHead>Email</TableHead>
-                    <TableHead>Created</TableHead>
                     <TableHead>Role</TableHead>
                     <TableHead>Active Sessions</TableHead>
-                    <TableHead>From Accounts</TableHead>
+                    <TableHead>Related Accounts</TableHead>
                     <TableHead className="w-25">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -81,26 +80,9 @@ function RouteComponent() {
                     <TableRow key={user.id}>
                       <TableCell>{user.name}</TableCell>
                       <TableCell>{user.email}</TableCell>
-                      <TableCell>{user.createdAt.toISOString()}</TableCell>
                       <TableCell>{user.role ?? "visitor"}</TableCell>
-                      <TableCell>
-                        <ul>
-                          {user.activeSessions.map((session) => (
-                            <li key={session.id}>
-                              Session ID: {session.id}
-                              <br></br>Expires At:{" "}
-                              {session.expiresAt.toISOString()}
-                            </li>
-                          ))}
-                        </ul>
-                      </TableCell>
-                      <TableCell>
-                        <ul>
-                          {user.activeAccounts.map((account) => (
-                            <li key={account.id}>* {account.providerId}</li>
-                          ))}
-                        </ul>
-                      </TableCell>
+                      <TableCell>{user.activeSessions.length}</TableCell>
+                      <TableCell>{user.activeAccounts.length}</TableCell>
                       <TableCell>TBD</TableCell>
                     </TableRow>
                   ))}
