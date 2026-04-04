@@ -1,4 +1,24 @@
-## Get the database up and running in Docker
+# Technologies
+
+[Tanstack Start](https://tanstack.com/start/latest)
+
+Tanstack Start provides full-document SSR, Streaming, Server Functions, bundling and more, powered by TanStack Router and Vite.
+
+[Tanstack Router](https://tanstack.com/router/latest)
+
+A powerful React router for client-side and full-stack react applications. Fully type-safe APIs, first-class search-params for managing state in the URL and seamless integration with the existing React ecosystem.
+
+[Better-Auth](https://better-auth.com/)
+
+Better-Auth provides APIS and hooks for us to code all the functiions necessary for us to implememnt authentication and some authorization.
+
+[Drizzle ORM](https://orm.drizzle.team/)
+
+Drizzle is the ORM (Object Relational Mapper) that allows our application to communicate with the database.
+
+# FAQ
+
+### Get the database up and running in Docker
 
 We are using a Postgres instance hosted in Docker for local development work. Execute the following command to initialize and start the instance.
 
@@ -6,7 +26,7 @@ We are using a Postgres instance hosted in Docker for local development work. Ex
 docker compose up -d
 ```
 
-# Generate Better-Auth schema
+## Generate Better-Auth schema
 
 Anytime we change the Better-Auth configuration by adding or removing features, we will need to generate a new schema and manually incorporate those changes in the `src/db/schema.ts` file.
 
@@ -18,14 +38,22 @@ pnpm run auth:generate
 
 Next, open `src/db/new-auth-schema.ts` and compare to `src/db/schema.ts`. Migrate over any changes. Once complete, you can delete `src/db/new-auth-schema.ts`.
 
-# Push changes to the database
+## Push changes to the database
 
 ```shell
 pnpm run db:push
 ```
 
-# Run the application locally
+## Run the application locally
 
 ```shell
 pnpm run dev
+```
+
+## Run Drizzle Studio
+
+Drizzle Studio is a useful UI for interacting with the database configured for use by Drizzle ORM.
+
+```shell
+pnpm run db:studio
 ```
