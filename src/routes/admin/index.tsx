@@ -1,3 +1,4 @@
+import AdminUserRow from "@/components/admin-user-row";
 import {
   Card,
   CardContent,
@@ -8,7 +9,6 @@ import {
 import {
   Table,
   TableBody,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
@@ -58,18 +58,7 @@ function RouteComponent() {
                 </TableHeader>
                 <TableBody>
                   {users.map((user) => (
-                    <TableRow key={user.id}>
-                      <TableCell>{user.name}</TableCell>
-                      <TableCell>{user.email}</TableCell>
-                      <TableCell>{user.role ?? "visitor"}</TableCell>
-                      <TableCell className="text-right">
-                        {user.sessions.length}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        {user.accounts.length}
-                      </TableCell>
-                      <TableCell>TBD</TableCell>
-                    </TableRow>
+                    <AdminUserRow user={user} key={user.id} />
                   ))}
                 </TableBody>
               </Table>

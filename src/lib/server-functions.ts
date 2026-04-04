@@ -6,7 +6,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeaders } from "@tanstack/react-start/server";
 import { gt } from "drizzle-orm";
 
-interface AdminUser extends UserSelect {
+export interface AdminUser extends UserSelect {
   accounts: AccountSelect[];
   sessions: SessionSelect[];
 }
