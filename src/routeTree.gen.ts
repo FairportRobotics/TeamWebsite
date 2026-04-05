@@ -14,9 +14,8 @@ import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TeamIndexRouteImport } from './routes/team/index'
 import { Route as SponsorsIndexRouteImport } from './routes/sponsors/index'
-import { Route as RobotsIndexRouteImport } from './routes/robots/index'
 import { Route as GamesIndexRouteImport } from './routes/games/index'
-import { Route as EventsIndexRouteImport } from './routes/events/index'
+import { Route as CalendarIndexRouteImport } from './routes/calendar/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AuthSignupRouteImport } from './routes/auth/signup'
 import { Route as AuthSigninRouteImport } from './routes/auth/signin'
@@ -49,19 +48,14 @@ const SponsorsIndexRoute = SponsorsIndexRouteImport.update({
   path: '/sponsors/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const RobotsIndexRoute = RobotsIndexRouteImport.update({
-  id: '/robots/',
-  path: '/robots/',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const GamesIndexRoute = GamesIndexRouteImport.update({
   id: '/games/',
   path: '/games/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EventsIndexRoute = EventsIndexRouteImport.update({
-  id: '/events/',
-  path: '/events/',
+const CalendarIndexRoute = CalendarIndexRouteImport.update({
+  id: '/calendar/',
+  path: '/calendar/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
@@ -103,9 +97,8 @@ export interface FileRoutesByFullPath {
   '/auth/signin': typeof AuthSigninRoute
   '/auth/signup': typeof AuthSignupRoute
   '/admin/': typeof AdminIndexRoute
-  '/events/': typeof EventsIndexRoute
+  '/calendar/': typeof CalendarIndexRoute
   '/games/': typeof GamesIndexRoute
-  '/robots/': typeof RobotsIndexRoute
   '/sponsors/': typeof SponsorsIndexRoute
   '/team/': typeof TeamIndexRoute
   '/admin/user/$id': typeof AdminUserIdRoute
@@ -118,9 +111,8 @@ export interface FileRoutesByTo {
   '/auth/signin': typeof AuthSigninRoute
   '/auth/signup': typeof AuthSignupRoute
   '/admin': typeof AdminIndexRoute
-  '/events': typeof EventsIndexRoute
+  '/calendar': typeof CalendarIndexRoute
   '/games': typeof GamesIndexRoute
-  '/robots': typeof RobotsIndexRoute
   '/sponsors': typeof SponsorsIndexRoute
   '/team': typeof TeamIndexRoute
   '/admin/user/$id': typeof AdminUserIdRoute
@@ -135,9 +127,8 @@ export interface FileRoutesById {
   '/auth/signin': typeof AuthSigninRoute
   '/auth/signup': typeof AuthSignupRoute
   '/admin/': typeof AdminIndexRoute
-  '/events/': typeof EventsIndexRoute
+  '/calendar/': typeof CalendarIndexRoute
   '/games/': typeof GamesIndexRoute
-  '/robots/': typeof RobotsIndexRoute
   '/sponsors/': typeof SponsorsIndexRoute
   '/team/': typeof TeamIndexRoute
   '/admin/user/$id': typeof AdminUserIdRoute
@@ -153,9 +144,8 @@ export interface FileRouteTypes {
     | '/auth/signin'
     | '/auth/signup'
     | '/admin/'
-    | '/events/'
+    | '/calendar/'
     | '/games/'
-    | '/robots/'
     | '/sponsors/'
     | '/team/'
     | '/admin/user/$id'
@@ -168,9 +158,8 @@ export interface FileRouteTypes {
     | '/auth/signin'
     | '/auth/signup'
     | '/admin'
-    | '/events'
+    | '/calendar'
     | '/games'
-    | '/robots'
     | '/sponsors'
     | '/team'
     | '/admin/user/$id'
@@ -184,9 +173,8 @@ export interface FileRouteTypes {
     | '/auth/signin'
     | '/auth/signup'
     | '/admin/'
-    | '/events/'
+    | '/calendar/'
     | '/games/'
-    | '/robots/'
     | '/sponsors/'
     | '/team/'
     | '/admin/user/$id'
@@ -197,9 +185,8 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
-  EventsIndexRoute: typeof EventsIndexRoute
+  CalendarIndexRoute: typeof CalendarIndexRoute
   GamesIndexRoute: typeof GamesIndexRoute
-  RobotsIndexRoute: typeof RobotsIndexRoute
   SponsorsIndexRoute: typeof SponsorsIndexRoute
   TeamIndexRoute: typeof TeamIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
@@ -242,13 +229,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SponsorsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/robots/': {
-      id: '/robots/'
-      path: '/robots'
-      fullPath: '/robots/'
-      preLoaderRoute: typeof RobotsIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/games/': {
       id: '/games/'
       path: '/games'
@@ -256,11 +236,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GamesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/events/': {
-      id: '/events/'
-      path: '/events'
-      fullPath: '/events/'
-      preLoaderRoute: typeof EventsIndexRouteImport
+    '/calendar/': {
+      id: '/calendar/'
+      path: '/calendar'
+      fullPath: '/calendar/'
+      preLoaderRoute: typeof CalendarIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/': {
@@ -342,9 +322,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRouteRoute: AdminRouteRouteWithChildren,
   AuthRouteRoute: AuthRouteRouteWithChildren,
-  EventsIndexRoute: EventsIndexRoute,
+  CalendarIndexRoute: CalendarIndexRoute,
   GamesIndexRoute: GamesIndexRoute,
-  RobotsIndexRoute: RobotsIndexRoute,
   SponsorsIndexRoute: SponsorsIndexRoute,
   TeamIndexRoute: TeamIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,

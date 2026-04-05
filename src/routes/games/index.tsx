@@ -1,10 +1,16 @@
+import { getGameYearsFn } from "@/lib/server-functions";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/games/")({
   component: RouteComponent,
+  loader: async () => {
+    const years = await getGameYearsFn();
+    return years;
+  },
 });
 
 function RouteComponent() {
+  const years = Route.useLoaderData();
   return (
     <div>
       <h1>Hello from "/games/"!</h1>
@@ -25,6 +31,26 @@ function RouteComponent() {
           year.
         </li>
       </ul>
+      {years.map((game) => (
+        <div key={game.year} className="my-4 rounded border p-4">
+          <div className="flex flex-row items-start justify-between">
+            <h2 className="text-xl font-bold">
+              {game.year}: {game.name}
+            </h2>
+            <div className="bg-gray-200 p-4 rounded-3xl">
+              {game.image && (
+                <img
+                  src={game.image}
+                  alt={`${game.name!} image`}
+                  className="h-50 my-2 max-w-xs"
+                />
+              )}
+            </div>
+          </div>
+
+          <p>Hello</p>
+        </div>
+      ))}
     </div>
   );
 }

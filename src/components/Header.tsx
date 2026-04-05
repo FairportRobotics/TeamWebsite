@@ -26,8 +26,7 @@ export default function Header() {
           <Link to="/">Home</Link>
           <Link to="/team">Team</Link>
           <Link to="/games">Games</Link>
-          <Link to="/robots">Robots</Link>
-          <Link to="/events">Events</Link>
+          <Link to="/calendar">Calendar</Link>
           <Link to="/sponsors">Sponsors</Link>
           <Link to="/admin">Admin</Link>
         </section>

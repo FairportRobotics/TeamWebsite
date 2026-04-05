@@ -6,7 +6,7 @@ import { game, robot } from "./schema";
 
 // Make sure we're loading the correct .env file and have the DATABASE_URL set.
 if (!process.env.DATABASE_URL) {
-  throw new Error("DATABASE_URL is not set");
+  throw new Error("❌ DATABASE_URL is not set");
 }
 
 // Protect against accidentally running this script in production.
@@ -30,7 +30,7 @@ async function resetDatabase() {
   await db.delete(game).execute();
 
   // Now we can seed the database with initial data.
-  console.log("🌱 Seeding data...");
+  console.log("🌱 Seeding games...");
   await db.insert(game).values([
     {
       year: 2026,
@@ -63,11 +63,27 @@ async function resetDatabase() {
     {
       year: 2022,
       name: "Rapid React",
-      image: "https://en.wikipedia.org/wiki/Rapid_React",
+      image:
+        "https://upload.wikimedia.org/wikipedia/en/thumb/0/08/Rapid_React_Logo.svg/250px-Rapid_React_Logo.svg.png",
       url: "https://en.wikipedia.org/wiki/Rapid_React",
+    },
+    {
+      year: 2021,
+      name: "Infinite Recharge (2021)",
+      image:
+        "https://upload.wikimedia.org/wikipedia/en/thumb/2/2b/Infinite_Recharge_Logo.png/250px-Infinite_Recharge_Logo.png",
+      url: "https://en.wikipedia.org/wiki/Infinite_Recharge_(2021)",
+    },
+    {
+      year: 2020,
+      name: "Infinite Recharge",
+      image:
+        "https://upload.wikimedia.org/wikipedia/en/thumb/2/2b/Infinite_Recharge_Logo.png/250px-Infinite_Recharge_Logo.png",
+      url: "https://en.wikipedia.org/wiki/Infinite_Recharge",
     },
   ]);
 
+  console.log("🌱 Seeding robots...");
   await db.insert(robot).values([
     {
       id: "2026",
@@ -75,7 +91,8 @@ async function resetDatabase() {
       gameYear: 2026,
       image: "",
       awards: "",
-      specifications: "",
+      specifications:
+        "* Intake: balls\n* Spindexer: brushes\n* Shooter: More balls\n* Weight: 115 pounds\n* Perimeter: 100 miles",
     },
     {
       id: "2025",
@@ -105,6 +122,22 @@ async function resetDatabase() {
       id: "2022",
       name: "TBD",
       gameYear: 2022,
+      image: "",
+      awards: "",
+      specifications: "",
+    },
+    {
+      id: "2021",
+      name: "TBD",
+      gameYear: 2021,
+      image: "",
+      awards: "",
+      specifications: "",
+    },
+    {
+      id: "202-",
+      name: "TBD",
+      gameYear: 2020,
       image: "",
       awards: "",
       specifications: "",

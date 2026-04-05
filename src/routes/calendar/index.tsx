@@ -1,13 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/events/")({
+export const Route = createFileRoute("/calendar/")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
   return (
     <div>
-      <h1>Hello from "/events/"!</h1>
+      <h1>Hello from "/calendar/"!</h1>
       <p>This is where we can display information about upcoming events</p>
       <ul className="list-disc">
         <li>Display calendaro of current month with Events filled in.</li>
