@@ -1,5 +1,12 @@
 import { relations } from "drizzle-orm";
-import { boolean, index, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  index,
+  integer,
+  pgTable,
+  text,
+  timestamp,
+} from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -78,6 +85,57 @@ export const verification = pgTable(
   (table) => [index("verification_identifier_idx").on(table.identifier)],
 );
 
+export const game = pgTable(
+  "game",
+  {
+    year: integer("year").primaryKey(),
+    name: text("name").notNull(),
+    image: text("image"),
+    url: text("url"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at")
+      .defaultNow()
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  },
+  (table) => [index("game_idx").on(table.year)],
+);
+
+export const robot = pgTable(
+  "robot",
+  {
+    id: text("id").primaryKey(),
+    name: text("name").notNull(),
+    gameYear: integer("game_year")
+      .notNull()
+      .references(() => game.year, { onDelete: "cascade" }),
+    image: text("image"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at")
+      .defaultNow()
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  },
+  (table) => [index("robot_gameId_idx").on(table.gameYear)],
+);
+
+export const robotAward = pgTable(
+  "robot-award",
+  {
+    id: text("id").primaryKey(),
+    title: text("name").notNull(),
+    robotId: text("robot_id")
+      .notNull()
+      .references(() => robot.id, { onDelete: "cascade" }),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at")
+      .defaultNow()
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  },
+  (table) => [index("robot_award_robotId_idx").on(table.robotId)],
+);
+
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),
   accounts: many(account),
@@ -97,6 +155,15 @@ export const accountRelations = relations(account, ({ one }) => ({
   }),
 }));
 
+export const gameRelations = relations(game, ({ many }) => ({
+  robots: many(robot),
+}));
+
+export const robotRelations = relations(robot, ({ many }) => ({
+  awards: many(robotAward),
+}));
+
+// Export types for select queries.
 export type UserSelect = typeof user.$inferSelect;
 export type AccountSelect = typeof account.$inferSelect;
 export type SessionSelect = typeof session.$inferSelect;

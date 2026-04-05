@@ -15,6 +15,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "./ui/alert-dialog";
+import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import {
   DropdownMenu,
@@ -65,10 +66,36 @@ export default function AdminUserRow({
       },
     );
   }
+  // TODO: Add the ban reason as a dialog or something.
+  async function handleBanUser(userId: string) {
+    authClient.admin.banUser(
+      { userId },
+      {
+        onError: (error) => {
+          toast.error(error.error.message || "Failed to ban user");
+        },
+        onSuccess: () => {
+          toast.success("User was banned");
+          router.invalidate();
+        },
+      },
+    );
+  }
 
-  async function handleUnbanUser(userId: string) {}
-
-  async function handleBanUser(userId: string) {}
+  async function handleUnbanUser(userId: string) {
+    authClient.admin.unbanUser(
+      { userId },
+      {
+        onError: (error) => {
+          toast.error(error.error.message || "Failed to unban user");
+        },
+        onSuccess: () => {
+          toast.success("User was unbanned");
+          router.invalidate();
+        },
+      },
+    );
+  }
 
   async function handleRemoveUser(userId: string) {}
 
@@ -83,6 +110,12 @@ export default function AdminUserRow({
         >
           {user.name}
         </Link>
+        {user.banned && (
+          <Badge variant="destructive" className="py-1 px-2">
+            Banned
+          </Badge>
+        )}
+        {isSelf && <Badge className="py-1 px-2">You</Badge>}
       </TableCell>
       <TableCell>{user.email}</TableCell>
       <TableCell>{user.role ?? "visitor"}</TableCell>
