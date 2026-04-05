@@ -2,7 +2,7 @@ import * as schema from "@/db/schema";
 import "dotenv/config";
 import { drizzle } from "drizzle-orm/node-postgres";
 import pg from "pg";
-import { game, robot, robotAward } from "./schema";
+import { game, robot } from "./schema";
 
 // Make sure we're loading the correct .env file and have the DATABASE_URL set.
 if (!process.env.DATABASE_URL) {
@@ -26,7 +26,6 @@ const db = drizzle(pool, { schema });
 async function resetDatabase() {
   // Order matters if you have foreign keys
   console.log("🧹 Clearing database...");
-  await db.delete(robotAward).execute();
   await db.delete(robot).execute();
   await db.delete(game).execute();
 
@@ -66,6 +65,49 @@ async function resetDatabase() {
       name: "Rapid React",
       image: "https://en.wikipedia.org/wiki/Rapid_React",
       url: "https://en.wikipedia.org/wiki/Rapid_React",
+    },
+  ]);
+
+  await db.insert(robot).values([
+    {
+      id: "2026",
+      name: "Boulder",
+      gameYear: 2026,
+      image: "",
+      awards: "",
+      specifications: "",
+    },
+    {
+      id: "2025",
+      name: "TBD",
+      gameYear: 2025,
+      image: "",
+      awards: "",
+      specifications: "",
+    },
+    {
+      id: "2024",
+      name: "TBD",
+      gameYear: 2024,
+      image: "",
+      awards: "",
+      specifications: "",
+    },
+    {
+      id: "2023",
+      name: "TBD",
+      gameYear: 2023,
+      image: "",
+      awards: "",
+      specifications: "",
+    },
+    {
+      id: "2022",
+      name: "TBD",
+      gameYear: 2022,
+      image: "",
+      awards: "",
+      specifications: "",
     },
   ]);
 

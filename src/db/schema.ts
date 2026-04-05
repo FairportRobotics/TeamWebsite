@@ -110,6 +110,8 @@ export const robot = pgTable(
       .notNull()
       .references(() => game.year, { onDelete: "cascade" }),
     image: text("image"),
+    specifications: text("specifications"),
+    awards: text("awards"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")
       .defaultNow()
@@ -117,23 +119,6 @@ export const robot = pgTable(
       .notNull(),
   },
   (table) => [index("robot_gameId_idx").on(table.gameYear)],
-);
-
-export const robotAward = pgTable(
-  "robot-award",
-  {
-    id: text("id").primaryKey(),
-    title: text("name").notNull(),
-    robotId: text("robot_id")
-      .notNull()
-      .references(() => robot.id, { onDelete: "cascade" }),
-    createdAt: timestamp("created_at").defaultNow().notNull(),
-    updatedAt: timestamp("updated_at")
-      .defaultNow()
-      .$onUpdate(() => /* @__PURE__ */ new Date())
-      .notNull(),
-  },
-  (table) => [index("robot_award_robotId_idx").on(table.robotId)],
 );
 
 export const userRelations = relations(user, ({ many }) => ({
@@ -157,10 +142,6 @@ export const accountRelations = relations(account, ({ one }) => ({
 
 export const gameRelations = relations(game, ({ many }) => ({
   robots: many(robot),
-}));
-
-export const robotRelations = relations(robot, ({ many }) => ({
-  awards: many(robotAward),
 }));
 
 // Export types for select queries.

@@ -25,6 +25,7 @@ export default function Header() {
         <section className="flex items-center justify-center gap-3">
           <Link to="/">Home</Link>
           <Link to="/team">Team</Link>
+          <Link to="/games">Games</Link>
           <Link to="/robots">Robots</Link>
           <Link to="/events">Events</Link>
           <Link to="/sponsors">Sponsors</Link>
