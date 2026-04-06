@@ -52,6 +52,12 @@ Next, open `src/db/new-auth-schema.ts` and compare to `src/db/schema.ts`. Migrat
 pnpm run db:push
 ```
 
+### Flush/fill database with seed data
+
+```shell
+pnpm run db:seed
+```
+
 ### Run the application locally
 
 ```shell
