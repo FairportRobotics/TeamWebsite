@@ -1,3 +1,4 @@
+import { SocialAuthButtons } from "@/components/social-login-buttons";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -146,6 +147,16 @@ function RouteComponent() {
                 Sign Up
               </Button>
             </LoadingSwap>
+            <div className="relative flex py-5 items-center">
+              <div className="grow border-t border-gray-400"></div>
+              <span className="shrink mx-4 text-gray-400">
+                Or continue with
+              </span>
+              <div className="grow border-t border-gray-400"></div>
+            </div>
+            <div className="grid grid-cols-3 gap-4">
+              <SocialAuthButtons />
+            </div>
           </form>
         </Form>
       </CardContent>

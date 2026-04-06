@@ -104,15 +104,12 @@ function RouteComponent() {
                 <FormItem>
                   <div className="flex justify-between items-center">
                     <FormLabel>Password</FormLabel>
-                    <Button
-                      onClick={() => console.log("Forgot password")}
-                      type="button"
-                      variant="link"
-                      size="sm"
-                      className="text-sm font-normal underline"
+                    <Link
+                      to="/auth/forgot-password"
+                      className="text-sm text-blue-700 underline"
                     >
                       Forgot Password?
-                    </Button>
+                    </Link>
                   </div>
                   <FormControl>
                     <PasswordInput
@@ -136,8 +133,14 @@ function RouteComponent() {
                 Sign In
               </Button>
             </LoadingSwap>
-            or
-            <div>
+            <div className="relative flex py-5 items-center">
+              <div className="grow border-t border-gray-400"></div>
+              <span className="shrink mx-4 text-gray-400">
+                Or continue with
+              </span>
+              <div className="grow border-t border-gray-400"></div>
+            </div>
+            <div className="grid grid-cols-3 gap-4">
               <SocialAuthButtons />
             </div>
           </form>
