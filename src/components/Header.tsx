@@ -12,7 +12,7 @@ export interface NavUserProps {
 
 export default function Header() {
   const navigate = useNavigate();
-  const { data: session } = authClient.useSession();
+  const { data: session, isPending } = authClient.useSession();
 
   async function handleSignOut() {
     await authClient.signOut();
@@ -31,18 +31,22 @@ export default function Header() {
           <Link to="/admin">Admin</Link>
         </section>
         <section className="flex items-center justify-center gap-3">
-          {session ? (
+          {!isPending && (
             <>
-              <ImpersonateButton />
-              <Button variant="outline" onClick={() => handleSignOut()}>
-                Sign Out
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button variant="outline">
-                <Link to="/auth/signin">Sign In</Link>
-              </Button>
+              {session ? (
+                <>
+                  <ImpersonateButton />
+                  <Button variant="destructive" onClick={() => handleSignOut()}>
+                    Sign Out
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button variant="default">
+                    <Link to="/auth/signin">Sign In</Link>
+                  </Button>
+                </>
+              )}
             </>
           )}
         </section>

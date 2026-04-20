@@ -1,102 +1,48 @@
-export const PERMISSIONS = {
-  events: {
-    view: "events.view",
-    manage: "events.manage",
-    post: "events.post",
-  },
-  robots: {
-    view: "robots.view",
-    manage: "robots.manage",
-    post: "robots.post",
-  },
-  team_members: {
-    view: "team_members.view",
-    manage: "team_members.manage",
-    post: "team_members.post",
-  },
-  sponsors: {
-    view: "sponsors.view",
-    manage: "sponsors.manage",
-    post: "sponsors.post",
-  },
-  users: {
-    view: "users.view",
-    manage: "users.manage",
-  },
-  students: {
-    associate: "students.associate",
-  },
-  parents: {
-    associate: "parents.associate",
-  },
-} as const;
+type UserType = "coach" | "mentor" | "student" | "parent" | "visitor";
 
-type NestedValues<T> = T extends object ? NestedValues<T[keyof T]> : T;
+type Permission =
+  | "team.meta.manage"
+  | "team.member.manage"
+  | "games.draft"
+  | "games.manage"
+  | "calendar.draft"
+  | "calendar.manage"
+  | "sponsors.draft"
+  | "sponsors.manage"
+  | "admin.view"
+  | "admin.users.view"
+  | "admin.users.impersonate"
+  | "admin.users.manage";
 
-export type Permission = NestedValues<typeof PERMISSIONS>;
+type Role = "admin" | "team_manager" | "content_editor" | "member" | "guest";
 
-export const ROLES = {
-  coach: ["*"],
-
-  mentor: ["*"],
-
-  student: [
-    PERMISSIONS.events.view,
-    PERMISSIONS.robots.view,
-    PERMISSIONS.team_members.view,
-    PERMISSIONS.sponsors.view,
-    PERMISSIONS.parents.associate,
+const rolePermissions: Record<Role, Permission[]> = {
+  admin: [
+    "team.meta.manage",
+    "team.member.manage",
+    "games.draft",
+    "games.manage",
+    "calendar.draft",
+    "calendar.manage",
+    "admin.view",
+    "admin.users.view",
+    "admin.users.impersonate",
+    "admin.users.manage",
   ],
-
-  parent: [
-    PERMISSIONS.events.view,
-    PERMISSIONS.robots.view,
-    PERMISSIONS.team_members.view,
-    PERMISSIONS.sponsors.view,
-    PERMISSIONS.students.associate,
+  team_manager: [
+    "team.meta.manage",
+    "team.member.manage",
+    "games.manage",
+    "calendar.manage",
+    "admin.view",
   ],
-
-  user: [
-    PERMISSIONS.events.view,
-    PERMISSIONS.robots.view,
-    PERMISSIONS.team_members.view,
-    PERMISSIONS.sponsors.view,
+  content_editor: [
+    "team.meta.manage",
+    "games.draft",
+    "games.manage",
+    "calendar.draft",
+    "calendar.manage",
   ],
-} as const;
-
-export type Role = keyof typeof ROLES;
-
-export type UserAuth = {
-  roles: Role[];
-  permissions?: Permission[];
+  member: ["games.draft", "calendar.draft"],
+  guest: [],
 };
-
-export function getUserPermissions(user: UserAuth) {
-  const rolePerms = user.roles.flatMap(
-    (role) => ROLES[role] as readonly (Permission | "*")[],
-  );
-
-  return new Set<Permission | "*">([...rolePerms, ...(user.permissions ?? [])]);
-}
-
-export function hasPermission(user: UserAuth, permission: Permission) {
-  const perms = getUserPermissions(user);
-
-  return perms.has("*") || perms.has(permission);
-}
-
-const user = {
-  roles: ["student"],
-} as UserAuth;
-
-hasPermission(user, PERMISSIONS.sponsors.post);
-
-/*
-
-export function hasPermission(
-  userType: UserType,
-  permission: Permission,
-): boolean {
-  return UserPermissions[userType].includes(permission);
-}
-*/

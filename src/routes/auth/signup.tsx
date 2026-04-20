@@ -22,6 +22,7 @@ import { authClient } from "@/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import z from "zod";
 
 export const Route = createFileRoute("/auth/signup")({
@@ -51,12 +52,13 @@ function RouteComponent() {
   const { isSubmitting } = form.formState;
 
   async function handleSignUp(data: SignUpForm) {
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
     const res = await authClient.signUp.email(
       { ...data, callbackURL: "/" },
       {
-        onError: (error) => {},
+        onError: (error) => {
+          console.error("Error signing up:", error);
+          toast.error("Error, something went wrong. Please try again.");
+        },
       },
     );
 
@@ -125,11 +127,7 @@ function RouteComponent() {
                     <FormLabel>Password</FormLabel>
                   </div>
                   <FormControl>
-                    <PasswordInput
-                      {...field}
-                      autoComplete=""
-                      placeholder="********"
-                    />
+                    <PasswordInput {...field} autoComplete="" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

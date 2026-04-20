@@ -12,7 +12,7 @@ export const Route = createFileRoute("/games/")({
 function RouteComponent() {
   const years = Route.useLoaderData();
   return (
-    <div>
+    <div className="p-4">
       <h1>Hello from "/games/"!</h1>
       <p>
         This is where we can list each game year and include the robot name and
@@ -37,15 +37,6 @@ function RouteComponent() {
             <h2 className="text-xl font-bold">
               {game.year}: {game.name}
             </h2>
-            <div className="bg-gray-200 p-4 rounded-3xl">
-              {game.image && (
-                <img
-                  src={game.image}
-                  alt={`${game.name!} image`}
-                  className="h-50 my-2 max-w-xs"
-                />
-              )}
-            </div>
           </div>
 
           <p>Hello</p>
