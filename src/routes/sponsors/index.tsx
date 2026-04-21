@@ -1,3 +1,8 @@
+import {
+  PageDescription,
+  PageHeader,
+  PageTitle,
+} from "@/components/page-header";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/sponsors/")({
@@ -7,8 +12,15 @@ export const Route = createFileRoute("/sponsors/")({
 function RouteComponent() {
   return (
     <div>
-      <h1>Hello from "/sponsors/"!</h1>
-      <p>This is where we can display information about and for sponsors.</p>
+      <PageHeader>
+        <PageTitle>
+          Our <span className="text-(--color-destructive)">sponsors</span>
+        </PageTitle>
+        <PageDescription>
+          This is where we can display information about and for sponsors.
+        </PageDescription>
+      </PageHeader>
+
       <ul className="list-disc">
         <li>Show the sponsor logos</li>
         <li>

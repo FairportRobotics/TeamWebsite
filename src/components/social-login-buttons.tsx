@@ -12,7 +12,7 @@ export function SocialAuthButtons() {
     return (
       <TeamActionButton
         key={provider}
-        variant="outline"
+        variant="default"
         action={() => {
           return authClient.signIn.social({ provider, callbackURL: "/" });
         }}

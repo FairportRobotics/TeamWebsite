@@ -22,6 +22,7 @@ import { authClient } from "@/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import z from "zod";
 
 export const Route = createFileRoute("/auth/signin")({
@@ -49,16 +50,12 @@ function RouteComponent() {
   const { isSubmitting } = form.formState;
 
   async function handleSignIn(data: SignInForm) {
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
     await authClient.signIn.email(
       { ...data, callbackURL: "/" },
       {
         onError: (error) => {
-          if (error.error.code === "EMAIL_NOT_VERIFIED") {
-            // openEmailVerificationTab(data.email);
-          }
-          // toast.error(error.error.message || "Failed to sign in");
+          console.error("Error signing in:", error);
+          toast.error("Invalid email or password. Please try again.");
         },
         onSuccess: () => {
           navigate({ to: "/" });
@@ -112,11 +109,7 @@ function RouteComponent() {
                     </Link>
                   </div>
                   <FormControl>
-                    <PasswordInput
-                      {...field}
-                      autoComplete=""
-                      placeholder="********"
-                    />
+                    <PasswordInput {...field} autoComplete="" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

@@ -569,3 +569,40 @@ https://www.team254.com/
 https://www.thebluealliance.com/
 
 https://www.perforce.com/blog/alm/how-write-software-requirements-specification-srs-document
+
+https://www.team3182.org/
+
+1418 - Vae Victis
+Nice site. I like the animation of the logo in the upper left when scrolling.
+
+Sponsors section is nice. White on dark. We should do something like this where we have support for editing the following:
+
+https://1418.team/robot/2025
+
+- Year
+- Name of robot
+- Pictures (0 or more)
+- Awards (0 or more)
+- Brief game description. Link to game reveal.
+- Section
+  - Subsection
+    - Header
+    - Content
+- Performance (how did we do at the events)
+
+https://1418.team/team
+Nice summary and bio.
+
+https://1418.team/alumni
+Nice map of where the students moved on to. Quotes from students.
+
+https://1418.team/sponsorship
+Nice page. Clean and lays out the different sponsorship levels.
+
+Links to a downloadable PDF that describes how sponsorship helps.
+
+https://1418.team/branding
+Branding page helps nicely.
+
+https://robotics.nasa.gov/frc-resources/
+https://spectrum3847.org/recommendedreading/

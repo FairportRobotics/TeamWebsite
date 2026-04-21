@@ -7,7 +7,6 @@ export const Route = createFileRoute("/admin")({
 function RouteComponent() {
   return (
     <div>
-      <h1>Administration</h1>
       <Outlet />
     </div>
   );

@@ -1,5 +1,10 @@
 import AdminUserRow from "@/components/admin-user-row";
 import {
+  PageDescription,
+  PageHeader,
+  PageTitle,
+} from "@/components/page-header";
+import {
   Card,
   CardContent,
   CardDescription,
@@ -30,6 +35,17 @@ function RouteComponent() {
   const { users, selfId } = Route.useLoaderData();
   return (
     <div>
+      <PageHeader>
+        <PageTitle>
+          Site{" "}
+          <span className="text-(--color-destructive)">Administration</span>
+        </PageTitle>
+        <PageDescription>
+          Manage users, roles, permissions, and other administrative tasks for
+          the website.
+        </PageDescription>
+      </PageHeader>
+
       <div className="mx-auto container my-6 px-4">
         <Card>
           <CardHeader>

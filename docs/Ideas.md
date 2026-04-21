@@ -1,23 +1,37 @@
-# Events
+# What do we want to show or provide:
 
-https://site/event
-
-- Shows all current and upcoming events in order by date.
-- Shows limited information about Event.
-- Can toggle display of Events beteween List and Calendar.
-- Clicking on an Event takes you to a page dedicated solely to that Event.
-- For authorized Users, can Add/Edit an Event.
-
-https://site/event/123
-
-- Shows complete information about an Event.
-- Shows Posts published for an Event.
-- For authorized Users, can Edit an Event.
-
-- Title
-- Description
-- Date
-- Links to socials
+- Information about the team.
+  - School district, team numbers,
+  - History of the team
+- Upcoming events
+  - Name of event
+  - Date(s) times
+  - Visibility (some events are for internal use only like crockpot rodeo, workshops)
+- Want to Help?
+  - Names and links to sponsors
+  - How to become a sponsor
+  - Benefits of sponsorship (tier list)
+  - Wish list
+  - Types of people we'd love to have join the team (mechanical engineers, electrical engineers, programmers, AI developers, marketing, business planning, graphic design, sewing, carpentry)
+- Members on the Team
+  - name
+  - position
+  - awards and accolades
+  - years on the team
+  - alumni
+- Robots
+  - name
+  - stats
+  - performance
+  - awards and accolades
+- More
+  - Source Code links
+  - TBA links
+  - Stabotics links
+  - Outreach
+  - Branding
+  - Contact us
+- Social links
 
 # Posts
 
