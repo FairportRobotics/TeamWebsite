@@ -101,7 +101,7 @@ function SocialLinkButton({
   return (
     <div
       className={cn(
-        "p-2 bg-(--color-background) hover:bg-(--color-destructive) transition-colors duration-250",
+        "p-2 rounded-md bg-(--color-background) hover:bg-(--color-destructive) transition-colors duration-250",
         className,
       )}
       {...props}
