@@ -28,19 +28,6 @@ function RouteComponent() {
         </PageDescription>
       </PageHeader>
 
-      <ul className="list-disc">
-        <li>Display games, descending by year.</li>
-        <li>
-          For each year, provide information about the Robot, events it attended
-          and any awards it won.
-        </li>
-        <li>For each year, list any awards or accolades we want to share.</li>
-        <li>For each year, list any milestones the team wants to share.</li>
-        <li>
-          For each year, list any events we hosted or attended for that game
-          year.
-        </li>
-      </ul>
       {years.map((game) => (
         <div key={game.year} className="my-4 rounded border p-4">
           <div className="flex flex-row items-start justify-between">
