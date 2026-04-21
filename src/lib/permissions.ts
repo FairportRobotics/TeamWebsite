@@ -1,48 +1,65 @@
-type UserType = "coach" | "mentor" | "student" | "parent" | "visitor";
+// src/lib/permissions.ts
+import { createAccessControl } from "better-auth/plugins/access";
 
-type Permission =
-  | "team.meta.manage"
-  | "team.member.manage"
-  | "games.draft"
-  | "games.manage"
-  | "calendar.draft"
-  | "calendar.manage"
-  | "sponsors.draft"
-  | "sponsors.manage"
-  | "admin.view"
-  | "admin.users.view"
-  | "admin.users.impersonate"
-  | "admin.users.manage";
+// Define all resources and their possible actions.
+export const statement = {
+  team_member: ["create", "update", "delete", "approve"],
+  game_year: ["create", "update", "delete", "approve"],
+  calendar: ["create", "read.private", "update", "delete", "approve"],
+  sponsor: ["create", "update", "delete", "approve"],
+  user: [
+    "create",
+    "update.self",
+    "update.other",
+    "delete",
+    "ban",
+    "impersonate",
+    "administer",
+    "approve",
+  ],
+} as const;
 
-type Role = "admin" | "team_manager" | "content_editor" | "member" | "guest";
+export const ac = createAccessControl(statement);
 
-const rolePermissions: Record<Role, Permission[]> = {
-  admin: [
-    "team.meta.manage",
-    "team.member.manage",
-    "games.draft",
-    "games.manage",
-    "calendar.draft",
-    "calendar.manage",
-    "admin.view",
-    "admin.users.view",
-    "admin.users.impersonate",
-    "admin.users.manage",
+// Define roles with their allowed actions.
+export const visitor = ac.newRole({
+  user: ["update.self"],
+});
+
+export const student = ac.newRole({
+  team_member: ["create"],
+  game_year: ["create"],
+  calendar: ["create", "read.private"],
+  sponsor: ["create"],
+  user: ["update.self"],
+});
+
+export const parent = ac.newRole({
+  calendar: ["read.private"],
+  user: ["update.self"],
+});
+
+export const moderator = ac.newRole({
+  team_member: ["create", "update", "delete", "approve"],
+  game_year: ["create", "update", "delete", "approve"],
+  calendar: ["create", "read.private", "update", "delete", "approve"],
+  sponsor: ["create", "update", "delete", "approve"],
+  user: ["create", "update.self", "update.other", "administer", "approve"],
+});
+
+export const admin = ac.newRole({
+  team_member: ["create", "update", "delete", "approve"],
+  game_year: ["create", "update", "delete", "approve"],
+  calendar: ["create", "read.private", "update", "delete", "approve"],
+  sponsor: ["create", "update", "delete", "approve"],
+  user: [
+    "create",
+    "update.self",
+    "update.other",
+    "delete",
+    "ban",
+    "impersonate",
+    "administer",
+    "approve",
   ],
-  team_manager: [
-    "team.meta.manage",
-    "team.member.manage",
-    "games.manage",
-    "calendar.manage",
-    "admin.view",
-  ],
-  content_editor: [
-    "team.meta.manage",
-    "games.draft",
-    "games.manage",
-    "calendar.draft",
-    "calendar.manage",
-  ],
-  member: ["games.draft", "calendar.draft"],
-  guest: [],
-};
+});
