@@ -33,9 +33,11 @@ export const Permissions = {
   UserBan: "user:ban",
   UserCreate: "user:create",
   UserDelete: "user:delete",
-  UserImpersonate: "user:inpersonate",
+  UserImpersonate: "user:impersonate",
   UserUpdate: "user:update",
 } as const;
+
+export type Permission = (typeof Permissions)[keyof typeof Permissions];
 
 // Define all resources and their possible actions.
 export const statement = {
@@ -96,13 +98,18 @@ export const parent = ac.newRole({
   event: [Permissions.EventReadPrivate],
 });
 
-export const moderator = ac.newRole({
-  user: [
-    Permissions.UserAdminister,
-    Permissions.UserApprove,
-    Permissions.UserAssociateStudent,
+export const eventModerator = ac.newRole({
+  event: [
+    Permissions.EventAdminister,
+    Permissions.EventCreate,
+    Permissions.EventUpdate,
+    Permissions.EventDelete,
+    Permissions.EventApprove,
+    Permissions.EventReadPrivate,
   ],
-  event: [Permissions.EventAdminister, Permissions.EventReadPrivate],
+});
+
+export const gameYearModerator = ac.newRole({
   gameYear: [
     Permissions.GameYearAdminister,
     Permissions.GameYearCreate,
@@ -114,6 +121,9 @@ export const moderator = ac.newRole({
     Permissions.GameYearRobotDelete,
     Permissions.GameYearRobotApprove,
   ],
+});
+
+export const sponsorModerator = ac.newRole({
   sponsor: [
     Permissions.SponsorAdminister,
     Permissions.SponsorCreate,
@@ -121,6 +131,17 @@ export const moderator = ac.newRole({
     Permissions.SponsorDelete,
     Permissions.SponsorApprove,
   ],
+});
+
+export const mentor = ac.newRole({
+  user: [
+    Permissions.UserAdminister,
+    Permissions.UserApprove,
+    Permissions.UserAssociateStudent,
+  ],
+  event: [Permissions.EventAdminister, Permissions.EventReadPrivate],
+  gameYear: [Permissions.GameYearAdminister],
+  sponsor: [Permissions.SponsorAdminister],
 });
 
 export const admin = ac.newRole({

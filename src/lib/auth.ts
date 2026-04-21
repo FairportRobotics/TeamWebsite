@@ -3,7 +3,16 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { admin as adminPlugin } from "better-auth/plugins";
 import { tanstackStartCookies as tanstackStartCookiesPlugin } from "better-auth/tanstack-start";
-import { ac, admin, moderator, parent, student } from "./auth/permissions";
+import {
+  ac,
+  admin,
+  eventModerator,
+  gameYearModerator,
+  mentor,
+  parent,
+  sponsorModerator,
+  student,
+} from "./auth/permissions";
 
 export const auth = betterAuth({
   appName: "Better-Auth Tutorial",
@@ -43,7 +52,15 @@ export const auth = betterAuth({
   plugins: [
     adminPlugin({
       ac,
-      roles: { student, parent, moderator, admin },
+      roles: {
+        admin,
+        eventModerator,
+        gameYearModerator,
+        sponsorModerator,
+        mentor,
+        parent,
+        student,
+      },
       adminRoles: ["admin"], // roles that can access admin endpoints
     }),
     tanstackStartCookiesPlugin(),

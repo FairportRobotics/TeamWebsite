@@ -1,7 +1,7 @@
 import Footer from "@/components/footer";
 import Header from "@/components/header";
 import { Toaster } from "@/components/ui/sonner";
-import type { auth } from "@/lib/auth";
+import { getSessionFn } from "@/lib/server-functions";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import {
   HeadContent,
@@ -11,9 +11,27 @@ import {
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import appCss from "../styles.css?url";
 
-export const Route = createRootRouteWithContext<{ auth: typeof auth }>()({
-  beforeLoad: async ({ context }) => {
-    // TODO:
+export type AppSession = {
+  user: {
+    id: string;
+    name: string;
+    roles: string[];
+  };
+};
+
+export const Route = createRootRouteWithContext<{ appSession: AppSession }>()({
+  beforeLoad: async () => {
+    const userSession = await getSessionFn();
+
+    if (!userSession) return {};
+
+    return {
+      user: {
+        id: userSession.user.id,
+        name: userSession.user.name,
+        roles: userSession.user.role?.split("") || [],
+      },
+    };
   },
   head: () => ({
     meta: [

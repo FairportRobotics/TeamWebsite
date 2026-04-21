@@ -3,11 +3,11 @@ import {
   PageHeader,
   PageTitle,
 } from "@/components/page-header";
+import { Permissions } from "@/lib/auth/permissions";
 import { getSessionFn } from "@/lib/server-functions";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
-  component: App,
   loader: async () => {
     const session = await getSessionFn();
 
@@ -15,6 +15,7 @@ export const Route = createFileRoute("/")({
       user: session?.user ?? undefined,
     };
   },
+  component: App,
 });
 
 function App() {
@@ -25,10 +26,17 @@ function App() {
         <PageTitle>
           Team <span className="text-(--color-destructive)">578</span>
         </PageTitle>
-        <PageDescription>Welcome {user ? user.name : "Guest"}!</PageDescription>
+        <PageDescription>
+          <div>Welcome {user ? user.name : "Guest"}!</div>
+          <div>Roles: {user?.role}</div>
+        </PageDescription>
       </PageHeader>
 
-      <section></section>
+      <section>
+        {Object.values(Permissions).map((m) => (
+          <div key={m}>{m}</div>
+        ))}
+      </section>
     </main>
   );
 }
