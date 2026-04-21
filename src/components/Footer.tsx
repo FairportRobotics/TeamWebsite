@@ -5,16 +5,14 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="p-4 py-10 flex gap-10 flex-col items-center justify-center bg-(--color-accent)">
+    <footer className="p-4 py-10 flex gap-10 flex-col items-center bg-(--color-accent)">
       <div className="flex flex-col items-center justify-center">
-        <div className="text-3xl uppercase text-white">
-          We{" "}
-          <span className="uppercase text-(--color-destructive) hover:text-4xl">
-            love
-          </span>{" "}
-          our sponsors!
+        <div className="text-3xl uppercase text-white mb-2">
+          Thank you to our{" "}
+          <span className="uppercase text-(--color-destructive)">generous</span>{" "}
+          sponsors!
         </div>
-        <div>
+        <div className="mb-4">
           Please consider{" "}
           <Link to="/sponsors" className="text-(--color-destructive)">
             sponsoring us
@@ -23,21 +21,26 @@ export default function Footer() {
         </div>
 
         {/* TODO: Pull sponsors for the most recent Game Year and display here */}
-        <div className="grid grid-cols-3 grid-flow-row gap-6">
+        <div className="grid grid-cols-3 grid-flow-row gap-6 text-3xl font-bold">
           <div>
-            <a href="https://www.microsoft.com">Microsoft</a>
+            <a href="https://www.microsoft.com" target="_blank">
+              Microsoft
+            </a>
           </div>
           <div>
-            <a href="https://www.wegmans.com">Wegmans</a>
+            <a href="https://www.wegmans.com" target="_blank">
+              Wegmans
+            </a>
           </div>
           <div>
-            <a href="https://dxselect.com/">DxSelect</a>
+            <a href="https://dxselect.com/" target="_blank">
+              DxSelect
+            </a>
           </div>
         </div>
       </div>
-      <div>
-        <hr className="border-t border-amber-200 my-8" />
-      </div>
+
+      <div className="border-t-2 border-(--color-secondary) w-full mx-4" />
       <div className="flex flex-row gap-20 justify-between">
         <div>
           <h2 className="text-2xl uppercase text-white font-semibold">
@@ -52,7 +55,7 @@ export default function Footer() {
           <div className="hover:text-(--color-destructive)">
             <Link to="/contact">Contact us</Link>
           </div>
-          <div className="flex flex-row gap-2 mt-8">
+          <div className="flex flex-row gap-2 mt-8 overflow-hidden">
             <SocialLinkButton
               link="https://x.com/fairportrobotic"
               image="/twitter.svg"
@@ -76,9 +79,7 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      <div>
-        <hr className="my-6 border-gray-300 border-t-3" />
-      </div>
+      <div className="border-t-2 border-(--color-secondary) w-full mx-4" />
       <div className="text-sm">
         © {year} FRC Team 578 Fairport Robotics. All rights reserved.
       </div>
@@ -100,12 +101,13 @@ function SocialLinkButton({
   return (
     <div
       className={cn(
-        "p-2 rounded-xl bg-(--color-background) hover:bg-(--color-destructive)",
+        "p-2 bg-(--color-background) hover:bg-(--color-destructive) transition-colors duration-250",
         className,
       )}
       {...props}
     >
-      <a href={link} className="">
+      {/* TODO: Rounded isn't working */}
+      <a href={link} className="" target="_blank">
         <img src={image} className="w-8 h-8" />
       </a>
     </div>
