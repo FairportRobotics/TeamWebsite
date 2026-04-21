@@ -3,7 +3,6 @@ import {
   PageHeader,
   PageTitle,
 } from "@/components/page-header";
-import { Permissions } from "@/lib/auth/permissions";
 import { getSessionFn } from "@/lib/server-functions";
 import { createFileRoute } from "@tanstack/react-router";
 
@@ -20,6 +19,7 @@ export const Route = createFileRoute("/")({
 
 function App() {
   const { user } = Route.useLoaderData();
+
   return (
     <main className="">
       <PageHeader>
@@ -32,11 +32,7 @@ function App() {
         </PageDescription>
       </PageHeader>
 
-      <section>
-        {Object.values(Permissions).map((m) => (
-          <div key={m}>{m}</div>
-        ))}
-      </section>
+      <section></section>
     </main>
   );
 }
