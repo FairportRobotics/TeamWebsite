@@ -14,7 +14,7 @@ function RouteComponent() {
     <div>
       <PageHeader>
         <PageTitle>
-          Our <span className="text-red-600">sponsors</span>
+          Our <span className="text-(--color-destructive)">sponsors</span>
         </PageTitle>
         <PageDescription>
           This is where we can display information about and for sponsors.

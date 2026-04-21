@@ -95,7 +95,7 @@ function RouteComponent() {
     <div>
       <PageHeader>
         <PageTitle>
-          The <span className="text-red-600">team</span>
+          The <span className="text-(--color-destructive)">team</span>
         </PageTitle>
         <PageDescription>
           Get to know the coaches, mentors and students that make up our team.

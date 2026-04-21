@@ -1,3 +1,8 @@
+import {
+  PageDescription,
+  PageHeader,
+  PageTitle,
+} from "@/components/page-header";
 import { getGameYearsFn } from "@/lib/server-functions";
 import { createFileRoute } from "@tanstack/react-router";
 
@@ -12,12 +17,17 @@ export const Route = createFileRoute("/games/")({
 function RouteComponent() {
   const years = Route.useLoaderData();
   return (
-    <div className="p-4">
-      <h1>Hello from "/games/"!</h1>
-      <p>
-        This is where we can list each game year and include the robot name and
-        any other awards or accolades we achieved.
-      </p>
+    <div className="">
+      <PageHeader>
+        <PageTitle>
+          FIRST <span className="text-(--color-destructive)">games</span>
+        </PageTitle>
+        <PageDescription>
+          This is where we can list each game year and include the robot name
+          and any other awards or accolades we achieved.
+        </PageDescription>
+      </PageHeader>
+
       <ul className="list-disc">
         <li>Display games, descending by year.</li>
         <li>

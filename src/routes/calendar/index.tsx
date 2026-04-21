@@ -1,3 +1,8 @@
+import {
+  PageDescription,
+  PageHeader,
+  PageTitle,
+} from "@/components/page-header";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/calendar/")({
@@ -7,8 +12,15 @@ export const Route = createFileRoute("/calendar/")({
 function RouteComponent() {
   return (
     <div>
-      <h1>Hello from "/calendar/"!</h1>
-      <p>This is where we can display information about upcoming events</p>
+      <PageHeader>
+        <PageTitle>
+          Team <span className="text-(--color-destructive)">events</span>
+        </PageTitle>
+        <PageDescription>
+          This is where we can display information about upcoming events
+        </PageDescription>
+      </PageHeader>
+
       <ul className="list-disc">
         <li>Display calendaro of current month with Events filled in.</li>
         <li>
