@@ -186,3 +186,15 @@ export const admin = ac.newRole({
     Permissions.UserUpdate,
   ],
 });
+
+export const Roles = {
+  student,
+  parent,
+  eventModerator,
+  gameYearModerator,
+  sponsorModerator,
+  mentor,
+  admin,
+} as const;
+
+export type Role = (typeof Roles)[keyof typeof Roles];

@@ -3,22 +3,17 @@ import {
   PageHeader,
   PageTitle,
 } from "@/components/page-header";
-import { getSessionFn } from "@/lib/server-functions";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
-  loader: async () => {
-    const session = await getSessionFn();
-
-    return {
-      user: session?.user ?? undefined,
-    };
-  },
   component: App,
+  loader: async ({ context }) => {
+    return context.user;
+  },
 });
 
 function App() {
-  const { user } = Route.useLoaderData();
+  const user = Route.useLoaderData();
 
   return (
     <main className="">

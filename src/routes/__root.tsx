@@ -1,17 +1,25 @@
 import Footer from "@/components/footer";
 import Header from "@/components/header";
 import { Toaster } from "@/components/ui/sonner";
-import type { authClient } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth-client";
 import { TanStackDevtools } from "@tanstack/react-devtools";
-import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router";
+import {
+  HeadContent,
+  Scripts,
+  createRootRouteWithContext,
+} from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import appCss from "../styles.css?url";
 
-interface RouterContext {
+type RouterContext = {
   session: Awaited<ReturnType<typeof authClient.getSession>>["data"];
-}
+};
 
-export const Route = createRootRoute<RouterContext>({
+export const Route = createRootRouteWithContext<{ session: RouterContext }>()({
+  beforeLoad: async () => {
+    const session = await authClient.getSession();
+    return { user: session.data?.user };
+  },
   head: () => ({
     meta: [
       {
