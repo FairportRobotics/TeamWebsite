@@ -1,6 +1,10 @@
 import { redirect } from "@tanstack/react-router";
 import { createMiddleware } from "@tanstack/react-start";
-import { getPermissionsFromRole, parseRoles, validateRequest } from "./utils";
+import {
+  getPermissionsFromRole,
+  parseRoles,
+  validateRequest,
+} from "./auth/utils";
 
 //
 export const logMiddleware = createMiddleware({

@@ -3,7 +3,7 @@ import {
   PageHeader,
   PageTitle,
 } from "@/components/page-header";
-import { getSessionFn } from "@/lib/server-functions";
+import { getSessionFn } from "@/lib/auth/server";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({

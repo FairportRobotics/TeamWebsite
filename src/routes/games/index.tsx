@@ -3,7 +3,7 @@ import {
   PageHeader,
   PageTitle,
 } from "@/components/page-header";
-import { getGameYearsFn } from "@/lib/server-functions";
+import { getGameYearsFn } from "@/lib/fn/games";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/games/")({
