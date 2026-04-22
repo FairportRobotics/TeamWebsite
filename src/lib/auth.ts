@@ -1,8 +1,8 @@
 import { db } from "@/db/index";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { admin } from "better-auth/plugins";
-import { tanstackStartCookies } from "better-auth/tanstack-start";
+import { admin as adminPlugin } from "better-auth/plugins";
+import { tanstackStartCookies as tanstackStartCookiesPlugin } from "better-auth/tanstack-start";
 
 export const auth = betterAuth({
   appName: "Better-Auth Tutorial",
@@ -15,8 +15,6 @@ export const auth = betterAuth({
   }),
 
   // Enable support for registering and authenticating via email/password.
-  // Additionally, provide a hook to support sending a password reset
-  // email with link and instructions.
   emailAndPassword: {
     enabled: true,
   },
@@ -41,5 +39,5 @@ export const auth = betterAuth({
   },
 
   // Make sure tanstackStartCookies is the last plugin in the array.
-  plugins: [admin(), tanstackStartCookies()],
+  plugins: [adminPlugin(), tanstackStartCookiesPlugin()],
 });

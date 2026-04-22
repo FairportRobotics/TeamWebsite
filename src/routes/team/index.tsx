@@ -9,7 +9,7 @@ export const Route = createFileRoute("/team/")({
   component: RouteComponent,
 });
 
-const coaches = [
+const moderators = [
   {
     name: "Marie Kraus",
     role: "Head Coach",
@@ -22,9 +22,6 @@ const coaches = [
     bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     email: "terry.elie@fairportrobotics.org",
   },
-];
-
-const mentors = [
   {
     name: "Curt Moczarski",
     role: "Lead Mentor",
@@ -88,6 +85,12 @@ const students = [
     bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     email: "Nicholas.Munier@fairportrobotics.org",
   },
+  {
+    name: "Carter Silva",
+    role: "Software Lead",
+    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    email: "Carter.Silva@fairportrobotics.org",
+  },
 ];
 
 function RouteComponent() {
@@ -107,36 +110,23 @@ function RouteComponent() {
       <div className="mt-8">
         <div className="flex flex-col gap-8 items-center justify-center">
           <h2 className="text-2xl text-white uppercase font-extrabold">
-            Coaches
-          </h2>
-          <div className="grid grid-cols-3 gap-8 items-center justify-center">
-            {coaches.map((person) => (
-              <PersonCard key={person.name} person={person} />
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-8">
-        <div className="flex flex-col gap-8 items-center justify-center">
-          <h2 className="text-2xl text-white uppercase font-extrabold">
-            Mentors
-          </h2>
-          <div className="grid grid-cols-3 gap-8 items-center justify-center">
-            {mentors.map((person) => (
-              <PersonCard key={person.name} person={person} />
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-8">
-        <div className="flex flex-col gap-8 items-center justify-center">
-          <h2 className="text-2xl text-white uppercase font-extrabold">
             Students
           </h2>
-          <div className="grid grid-cols-3 gap-8 items-center justify-center">
+          <div className="flex flex-row flex-wrap gap-8 items-center justify-center">
             {students.map((person) => (
+              <PersonCard key={person.name} person={person} />
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-8">
+        <div className="flex flex-col gap-8 items-center justify-center">
+          <h2 className="text-2xl text-white uppercase font-extrabold">
+            Coaches and Mentors
+          </h2>
+          <div className="flex flex-row flex-wrap gap-8 items-center justify-center">
+            {moderators.map((person) => (
               <PersonCard key={person.name} person={person} />
             ))}
           </div>
@@ -146,7 +136,7 @@ function RouteComponent() {
   );
 }
 
-function PersonCard({ person }: { person: (typeof coaches)[0] }) {
+function PersonCard({ person }: { person: (typeof moderators)[0] }) {
   return (
     <div className="flex flex-col items-center mb-4 bg-stone-700 w-80 p-4 rounded-lg">
       <img src="https://i.pravatar.cc/300" className="rounded-md mb-2" />

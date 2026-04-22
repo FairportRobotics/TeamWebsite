@@ -1,6 +1,6 @@
 import { TableCell, TableRow } from "@/components/ui/table";
 import { authClient } from "@/lib/auth-client";
-import type { AdminUser } from "@/lib/server-functions";
+import type { AdminUser } from "@/lib/fn/user";
 import { Link, useNavigate, useRouter } from "@tanstack/react-router";
 import { MoreHorizontal } from "lucide-react";
 import { toast } from "sonner";
@@ -42,7 +42,7 @@ export default function AdminUserRow({
       { userId },
       {
         onError: (error) => {
-          toast.error(error.error.message || "Failed to imprtsonate user");
+          toast.error(error.error.message || "Failed to impersonate user");
         },
         onSuccess: () => {
           refetch();
@@ -115,7 +115,7 @@ export default function AdminUserRow({
             Banned
           </Badge>
         )}
-        {isSelf && <Badge className="py-1 px-2">You</Badge>}
+        {isSelf && <Badge className="py-1 px-2 ml-2 bg-orange-400">You</Badge>}
       </TableCell>
       <TableCell>{user.email}</TableCell>
       <TableCell>{user.role ?? "visitor"}</TableCell>

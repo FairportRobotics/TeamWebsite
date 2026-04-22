@@ -3,7 +3,7 @@ import Header from "@/components/header";
 import { Toaster } from "@/components/ui/sonner";
 import type { authClient } from "@/lib/auth-client";
 import { TanStackDevtools } from "@tanstack/react-devtools";
-import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router";
+import { createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import appCss from "../styles.css?url";
 

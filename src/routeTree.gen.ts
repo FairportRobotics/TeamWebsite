@@ -9,6 +9,8 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as UnauthorizedRouteImport } from './routes/unauthorized'
+import { Route as UnauthenticatedRouteImport } from './routes/unauthenticated'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AuthRouteRouteImport } from './routes/auth/route'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
@@ -21,9 +23,23 @@ import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AuthSignupRouteImport } from './routes/auth/signup'
 import { Route as AuthSigninRouteImport } from './routes/auth/signin'
 import { Route as AuthForgotPasswordRouteImport } from './routes/auth/forgot-password'
+import { Route as AdminUsersRouteImport } from './routes/admin/users'
+import { Route as AdminSponsorsRouteImport } from './routes/admin/sponsors'
+import { Route as AdminGameYearsRouteImport } from './routes/admin/game-years'
+import { Route as AdminEventsRouteImport } from './routes/admin/events'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as AdminUserIdRouteImport } from './routes/admin/user/$id'
 
+const UnauthorizedRoute = UnauthorizedRouteImport.update({
+  id: '/unauthorized',
+  path: '/unauthorized',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UnauthenticatedRoute = UnauthenticatedRouteImport.update({
+  id: '/unauthenticated',
+  path: '/unauthenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -84,6 +100,26 @@ const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
   path: '/forgot-password',
   getParentRoute: () => AuthRouteRoute,
 } as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminSponsorsRoute = AdminSponsorsRouteImport.update({
+  id: '/sponsors',
+  path: '/sponsors',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminGameYearsRoute = AdminGameYearsRouteImport.update({
+  id: '/game-years',
+  path: '/game-years',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminEventsRoute = AdminEventsRouteImport.update({
+  id: '/events',
+  path: '/events',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -100,6 +136,12 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
   '/contact': typeof ContactRoute
+  '/unauthenticated': typeof UnauthenticatedRoute
+  '/unauthorized': typeof UnauthorizedRoute
+  '/admin/events': typeof AdminEventsRoute
+  '/admin/game-years': typeof AdminGameYearsRoute
+  '/admin/sponsors': typeof AdminSponsorsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/signin': typeof AuthSigninRoute
   '/auth/signup': typeof AuthSignupRoute
@@ -115,6 +157,12 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
   '/contact': typeof ContactRoute
+  '/unauthenticated': typeof UnauthenticatedRoute
+  '/unauthorized': typeof UnauthorizedRoute
+  '/admin/events': typeof AdminEventsRoute
+  '/admin/game-years': typeof AdminGameYearsRoute
+  '/admin/sponsors': typeof AdminSponsorsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/signin': typeof AuthSigninRoute
   '/auth/signup': typeof AuthSignupRoute
@@ -132,6 +180,12 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
   '/contact': typeof ContactRoute
+  '/unauthenticated': typeof UnauthenticatedRoute
+  '/unauthorized': typeof UnauthorizedRoute
+  '/admin/events': typeof AdminEventsRoute
+  '/admin/game-years': typeof AdminGameYearsRoute
+  '/admin/sponsors': typeof AdminSponsorsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/signin': typeof AuthSigninRoute
   '/auth/signup': typeof AuthSignupRoute
@@ -150,6 +204,12 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/contact'
+    | '/unauthenticated'
+    | '/unauthorized'
+    | '/admin/events'
+    | '/admin/game-years'
+    | '/admin/sponsors'
+    | '/admin/users'
     | '/auth/forgot-password'
     | '/auth/signin'
     | '/auth/signup'
@@ -165,6 +225,12 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/contact'
+    | '/unauthenticated'
+    | '/unauthorized'
+    | '/admin/events'
+    | '/admin/game-years'
+    | '/admin/sponsors'
+    | '/admin/users'
     | '/auth/forgot-password'
     | '/auth/signin'
     | '/auth/signup'
@@ -181,6 +247,12 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/contact'
+    | '/unauthenticated'
+    | '/unauthorized'
+    | '/admin/events'
+    | '/admin/game-years'
+    | '/admin/sponsors'
+    | '/admin/users'
     | '/auth/forgot-password'
     | '/auth/signin'
     | '/auth/signup'
@@ -198,6 +270,8 @@ export interface RootRouteChildren {
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   ContactRoute: typeof ContactRoute
+  UnauthenticatedRoute: typeof UnauthenticatedRoute
+  UnauthorizedRoute: typeof UnauthorizedRoute
   CalendarIndexRoute: typeof CalendarIndexRoute
   GamesIndexRoute: typeof GamesIndexRoute
   SponsorsIndexRoute: typeof SponsorsIndexRoute
@@ -207,6 +281,20 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/unauthorized': {
+      id: '/unauthorized'
+      path: '/unauthorized'
+      fullPath: '/unauthorized'
+      preLoaderRoute: typeof UnauthorizedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/unauthenticated': {
+      id: '/unauthenticated'
+      path: '/unauthenticated'
+      fullPath: '/unauthenticated'
+      preLoaderRoute: typeof UnauthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
@@ -291,6 +379,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthForgotPasswordRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/sponsors': {
+      id: '/admin/sponsors'
+      path: '/sponsors'
+      fullPath: '/admin/sponsors'
+      preLoaderRoute: typeof AdminSponsorsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/game-years': {
+      id: '/admin/game-years'
+      path: '/game-years'
+      fullPath: '/admin/game-years'
+      preLoaderRoute: typeof AdminGameYearsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/events': {
+      id: '/admin/events'
+      path: '/events'
+      fullPath: '/admin/events'
+      preLoaderRoute: typeof AdminEventsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -309,11 +425,19 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteRouteChildren {
+  AdminEventsRoute: typeof AdminEventsRoute
+  AdminGameYearsRoute: typeof AdminGameYearsRoute
+  AdminSponsorsRoute: typeof AdminSponsorsRoute
+  AdminUsersRoute: typeof AdminUsersRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminUserIdRoute: typeof AdminUserIdRoute
 }
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+  AdminEventsRoute: AdminEventsRoute,
+  AdminGameYearsRoute: AdminGameYearsRoute,
+  AdminSponsorsRoute: AdminSponsorsRoute,
+  AdminUsersRoute: AdminUsersRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminUserIdRoute: AdminUserIdRoute,
 }
@@ -343,6 +467,8 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRouteRoute: AdminRouteRouteWithChildren,
   AuthRouteRoute: AuthRouteRouteWithChildren,
   ContactRoute: ContactRoute,
+  UnauthenticatedRoute: UnauthenticatedRoute,
+  UnauthorizedRoute: UnauthorizedRoute,
   CalendarIndexRoute: CalendarIndexRoute,
   GamesIndexRoute: GamesIndexRoute,
   SponsorsIndexRoute: SponsorsIndexRoute,
