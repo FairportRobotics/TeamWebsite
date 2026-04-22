@@ -1,19 +1,8 @@
-import { Permissions } from "@/lib/auth/permissions";
-import { assertHasAnyPermissionFn } from "@/lib/auth/server";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin")({
-  beforeLoad: async () => {
-    await assertHasAnyPermissionFn({
-      data: {
-        requiredPermission: [
-          Permissions.UserAdminister,
-          Permissions.EventAdminister,
-          Permissions.SponsorAdminister,
-          Permissions.GameYearAdminister,
-        ],
-      },
-    });
+  beforeLoad: async ({ context }) => {
+    console.log(context.data?.user.name);
   },
   component: RouteComponent,
 });

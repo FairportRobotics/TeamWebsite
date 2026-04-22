@@ -1,11 +1,4 @@
-// Define the permissions and their names.
-export const Permissions = {
-  EventAdminister: "event:administer",
-  EventApprove: "event:approve",
-  EventCreate: "event:create",
-  EventDelete: "event:delete",
-  EventReadPrivate: "event:read:private",
-  EventUpdate: "event:update",
+import { createAccessControl } from "better-auth/plugins/access";
 
   GameYearAdminister: "game-year:administer",
   GameYearApprove: "game-year:approve",
@@ -50,7 +43,8 @@ export const Roles = {
   Parent: "parent",
 } as const;
 
-export type Role = (typeof Roles)[keyof typeof Roles];
+// Create the access control object for Better-Auth.
+export const accessControl = createAccessControl(ResourceActions);
 
 // Map roles → permissions
 export const RolePermissions: Record<Role, Permission[]> = {
@@ -69,39 +63,48 @@ export const RolePermissions: Record<Role, Permission[]> = {
     Permissions.UserAssociateStudent,
     Permissions.EventReadPrivate,
   ],
+});
 
-  student: [Permissions.UserAssociateParent, Permissions.EventReadPrivate],
+export const mentor = accessControl.newRole({
+  event: ["administer", "read:private"],
+  game: ["administer", "approve"],
+  robot: ["administer", "approve"],
+  sponsor: ["administer", "approve"],
+  user: ["administer", "approve", "add:student"],
+});
 
-  parent: [Permissions.UserAssociateStudent, Permissions.EventReadPrivate],
+export const student = accessControl.newRole({
+  event: ["read:private"],
+  user: ["add:parent"],
+});
 
-  eventModerator: [
-    Permissions.EventAdminister,
-    Permissions.EventCreate,
-    Permissions.EventUpdate,
-    Permissions.EventDelete,
-    Permissions.EventApprove,
-    Permissions.EventReadPrivate,
+export const parent = accessControl.newRole({
+  event: ["read:private"],
+  user: ["add:student"],
+});
+
+export const eventModerator = accessControl.newRole({
+  event: [
+    "administer",
+    "approve",
+    "create",
+    "delete",
+    "read:private",
+    "update",
   ],
+});
 
-  gameYearModerator: [
-    Permissions.GameYearAdminister,
-    Permissions.GameYearCreate,
-    Permissions.GameYearUpdate,
-    Permissions.GameYearDelete,
-    Permissions.GameYearApprove,
-    Permissions.GameYearRobotCreate,
-    Permissions.GameYearRobotUpdate,
-    Permissions.GameYearRobotDelete,
-    Permissions.GameYearRobotApprove,
-  ],
+export const gameModerator = accessControl.newRole({
+  game: ["administer", "approve", "create", "delete", "update"],
+});
 
-  sponsorModerator: [
-    Permissions.SponsorAdminister,
-    Permissions.SponsorCreate,
-    Permissions.SponsorUpdate,
-    Permissions.SponsorDelete,
-    Permissions.SponsorApprove,
-  ],
+export const robotModerator = accessControl.newRole({
+  robot: ["administer", "create", "delete", "update", "approve"],
+});
+
+export const sponsorModerator = accessControl.newRole({
+  sponsor: ["administer", "approve", "create", "delete", "update"],
+});
 
   userModerator: [
     Permissions.UserAdminister,
@@ -112,4 +115,4 @@ export const RolePermissions: Record<Role, Permission[]> = {
     Permissions.UserDelete,
     Permissions.UserUpdate,
   ],
-};
+});

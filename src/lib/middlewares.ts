@@ -1,16 +1,14 @@
 import { redirect } from "@tanstack/react-router";
 import { createMiddleware } from "@tanstack/react-start";
-import {
-  getPermissionsFromRole,
-  parseRoles,
-  validateRequest,
-} from "./auth/utils";
+import { validateRequest } from "./auth/utils";
 
 //
 export const logMiddleware = createMiddleware({
   type: "function",
 }).server(async ({ next }) => {
-  return next({ context: { requestStart: new Date().toISOString() } });
+  return next({
+    context: { requestStart: new Date().toISOString() },
+  });
 });
 
 // Handles checking whether the request is part of an authenticated pipeline and adds context for
@@ -29,12 +27,5 @@ export const authenticatedMiddleware = createMiddleware({
     }
 
     // Add desired properties to the context.
-    return next({
-      context: {
-        userId: user.id,
-        name: user.name,
-        roles: parseRoles(user.role || ""),
-        permissions: getPermissionsFromRole(user.role),
-      },
-    });
+    return next({ context: { user: user } });
   });
