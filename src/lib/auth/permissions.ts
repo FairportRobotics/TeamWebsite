@@ -27,12 +27,13 @@ export const Permissions = {
   UserApprove: "user:approve",
   UserAssociateParent: "user:associate:parent",
   UserAssociateStudent: "user:associate:student",
-  UserBan: "user:ban",
   UserCreate: "user:create",
   UserDelete: "user:delete",
-  UserImpersonate: "user:impersonate",
   UserUpdate: "user:update",
-  UserRevokeSessions: "user:revoke:sessions",
+
+  AdminUserBan: "user:ban",
+  AdminUserImpersonate: "user:impersonate",
+  AdminUserRevokeSessions: "user:revoke:sessions",
 } as const;
 
 export type Permission = (typeof Permissions)[keyof typeof Permissions];
@@ -53,6 +54,11 @@ export type Role = (typeof Roles)[keyof typeof Roles];
 
 // Map roles → permissions
 export const RolePermissions: Record<Role, Permission[]> = {
+  // Note that this permission is special. It is the ONLY means by which Better-Auth will allow us
+  // to perform various operations such as creating users, managing user roles, banning/unbanning
+  // users, impersonating users, and more. Applying the "user:*" permissions to our custom roles
+  // IS NOT ENOUGH. Merely assign the "admin" role to a user and they will then have the ability
+  // to perform those Better-Auth Admin actions. So lame.
   admin: Object.values(Permissions),
 
   mentor: [
@@ -62,7 +68,6 @@ export const RolePermissions: Record<Role, Permission[]> = {
     Permissions.UserAdminister,
     Permissions.UserAssociateStudent,
     Permissions.EventReadPrivate,
-    Permissions.UserImpersonate,
   ],
 
   student: [Permissions.UserAssociateParent, Permissions.EventReadPrivate],
@@ -103,11 +108,8 @@ export const RolePermissions: Record<Role, Permission[]> = {
     Permissions.UserApprove,
     Permissions.UserAssociateParent,
     Permissions.UserAssociateStudent,
-    Permissions.UserBan,
     Permissions.UserCreate,
     Permissions.UserDelete,
-    Permissions.UserImpersonate,
     Permissions.UserUpdate,
-    Permissions.UserRevokeSessions,
   ],
 };

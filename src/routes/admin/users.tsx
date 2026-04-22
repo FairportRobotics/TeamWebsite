@@ -49,13 +49,13 @@ export const Route = createFileRoute("/admin/users")({
       getSessionFn(),
       getUserListFn(),
       hasPermissionFn({
-        data: { requiredPermission: Permissions.UserBan },
+        data: { requiredPermission: Permissions.AdminUserBan },
       }),
       hasPermissionFn({
-        data: { requiredPermission: Permissions.UserImpersonate },
+        data: { requiredPermission: Permissions.AdminUserImpersonate },
       }),
       hasPermissionFn({
-        data: { requiredPermission: Permissions.UserRevokeSessions },
+        data: { requiredPermission: Permissions.AdminUserRevokeSessions },
       }),
       hasPermissionFn({
         data: { requiredPermission: Permissions.UserDelete },
