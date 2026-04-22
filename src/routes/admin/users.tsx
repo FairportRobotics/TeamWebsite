@@ -29,6 +29,18 @@ export const Route = createFileRoute("/admin/users")({
     const [session, users] = await Promise.all([
       getSessionFn(),
       getUserListFn(),
+      hasPermissionFn({
+        data: { requiredPermission: Permissions.AdminUserBan },
+      }),
+      hasPermissionFn({
+        data: { requiredPermission: Permissions.AdminUserImpersonate },
+      }),
+      hasPermissionFn({
+        data: { requiredPermission: Permissions.AdminUserRevokeSessions },
+      }),
+      hasPermissionFn({
+        data: { requiredPermission: Permissions.UserDelete },
+      }),
     ]);
 
     return {
