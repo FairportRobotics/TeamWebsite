@@ -1,10 +1,6 @@
 import { redirect } from "@tanstack/react-router";
 import { createMiddleware } from "@tanstack/react-start";
-import {
-  getPermissionsFromRole,
-  parseRoles,
-  validateRequest,
-} from "./auth/utils";
+import { validateRequest } from "./auth/utils";
 
 //
 export const logMiddleware = createMiddleware({
@@ -33,8 +29,7 @@ export const authenticatedMiddleware = createMiddleware({
       context: {
         userId: user.id,
         name: user.name,
-        roles: parseRoles(user.role || ""),
-        permissions: getPermissionsFromRole(user.role),
+        roles: user.role,
       },
     });
   });

@@ -19,72 +19,27 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Permissions } from "@/lib/auth/permissions";
-import {
-  assertHasPermissionFn,
-  getSessionFn,
-  hasPermissionFn,
-} from "@/lib/auth/server";
+import { getSessionFn } from "@/lib/auth/server";
 import { getUserListFn } from "@/lib/fn/user";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin/users")({
-  beforeLoad: async () => {
-    await assertHasPermissionFn({
-      data: {
-        requiredPermission: Permissions.UserAdminister,
-      },
-    });
-  },
   component: RouteComponent,
   loader: async () => {
-    const [
-      session,
-      users,
-      canBan,
-      canImpersonate,
-      canRevokeSessions,
-      canDelete,
-    ] = await Promise.all([
+    const [session, users] = await Promise.all([
       getSessionFn(),
       getUserListFn(),
-      hasPermissionFn({
-        data: { requiredPermission: Permissions.UserBan },
-      }),
-      hasPermissionFn({
-        data: { requiredPermission: Permissions.UserImpersonate },
-      }),
-      hasPermissionFn({
-        data: { requiredPermission: Permissions.UserRevokeSessions },
-      }),
-      hasPermissionFn({
-        data: { requiredPermission: Permissions.UserDelete },
-      }),
     ]);
 
     return {
       users,
       selfId: session?.user.id,
-      canBan,
-      canImpersonate,
-      canRevokeSessions,
-      canDelete,
     };
   },
 });
 
 function RouteComponent() {
-  const {
-    users,
-    selfId,
-    canBan,
-    canImpersonate,
-    canRevokeSessions,
-    canDelete,
-  } = Route.useLoaderData();
-
-  const canSeeActions =
-    canBan || canImpersonate || canRevokeSessions || canDelete;
+  const { users, selfId } = Route.useLoaderData();
 
   return (
     <div>
@@ -125,9 +80,7 @@ function RouteComponent() {
                     <TableHead className="text-right">
                       Related Accounts
                     </TableHead>
-                    {canSeeActions && (
-                      <TableHead className="text-center">Actions</TableHead>
-                    )}
+                    <TableHead className="text-center">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>

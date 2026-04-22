@@ -1,113 +1,114 @@
-// Define the permissions and their names.
-export const Permissions = {
-  EventAdminister: "event:administer",
-  EventApprove: "event:approve",
-  EventCreate: "event:create",
-  EventDelete: "event:delete",
-  EventReadPrivate: "event:read:private",
-  EventUpdate: "event:update",
+import { createAccessControl } from "better-auth/plugins/access";
 
-  GameYearAdminister: "game-year:administer",
-  GameYearApprove: "game-year:approve",
-  GameYearCreate: "game-year:create",
-  GameYearDelete: "game-year:delete",
-  GameYearUpdate: "game-year:update",
-  GameYearRobotCreate: "game-year:robot:create",
-  GameYearRobotDelete: "game-year:robot:delete",
-  GameYearRobotUpdate: "game-year:robot:update",
-  GameYearRobotApprove: "game-year:robot:approve",
-
-  SponsorAdminister: "sponsor:administer",
-  SponsorApprove: "sponsor:approve",
-  SponsorCreate: "sponsor:create",
-  SponsorDelete: "sponsor:delete",
-  SponsorUpdate: "sponsor:update",
-
-  UserAdminister: "user:administer",
-  UserApprove: "user:approve",
-  UserAssociateParent: "user:associate:parent",
-  UserAssociateStudent: "user:associate:student",
-  UserBan: "user:ban",
-  UserCreate: "user:create",
-  UserDelete: "user:delete",
-  UserImpersonate: "user:impersonate",
-  UserUpdate: "user:update",
-  UserRevokeSessions: "user:revoke:sessions",
+// Define the resources and the actions needed to manage them.
+export const statement = {
+  event: [
+    "administer",
+    "approve",
+    "create",
+    "delete",
+    "read:private",
+    "update",
+  ],
+  game: ["administer", "approve", "create", "delete", "update"],
+  robot: ["administer", "create", "delete", "update", "approve"],
+  sponsor: ["administer", "approve", "create", "delete", "update"],
+  user: [
+    "administer",
+    "approve",
+    "add:parent",
+    "add:student",
+    "ban",
+    "create",
+    "delete",
+    "impersonate",
+    "update",
+    "revoke:sessions",
+  ],
 } as const;
 
-export type Permission = (typeof Permissions)[keyof typeof Permissions];
+// Create the access control object for Better-Auth.
+export const accessControl = createAccessControl(statement);
 
-// Define Roles and their names.
-export const Roles = {
-  Admin: "admin",
-  EventModerator: "eventModerator",
-  GameYearModerator: "gameYearModerator",
-  SponsorModerator: "sponsorModerator",
-  UserModerator: "userModerator",
-  Mentor: "mentor",
-  Student: "student",
-  Parent: "parent",
-} as const;
-
-export type Role = (typeof Roles)[keyof typeof Roles];
-
-// Map roles → permissions
-export const RolePermissions: Record<Role, Permission[]> = {
-  admin: Object.values(Permissions),
-
-  mentor: [
-    Permissions.EventAdminister,
-    Permissions.GameYearAdminister,
-    Permissions.SponsorAdminister,
-    Permissions.UserAdminister,
-    Permissions.UserAssociateStudent,
-    Permissions.EventReadPrivate,
-    Permissions.UserImpersonate,
+// Define Roles and their allowed actions.
+export const admin = accessControl.newRole({
+  event: [
+    "administer",
+    "approve",
+    "create",
+    "delete",
+    "read:private",
+    "update",
   ],
-
-  student: [Permissions.UserAssociateParent, Permissions.EventReadPrivate],
-
-  parent: [Permissions.UserAssociateStudent, Permissions.EventReadPrivate],
-
-  eventModerator: [
-    Permissions.EventAdminister,
-    Permissions.EventCreate,
-    Permissions.EventUpdate,
-    Permissions.EventDelete,
-    Permissions.EventApprove,
-    Permissions.EventReadPrivate,
+  game: ["administer", "approve", "create", "delete", "update"],
+  robot: ["administer", "create", "delete", "update", "approve"],
+  sponsor: ["administer", "approve", "create", "delete", "update"],
+  user: [
+    "administer",
+    "approve",
+    "add:parent",
+    "add:student",
+    "ban",
+    "create",
+    "delete",
+    "impersonate",
+    "update",
+    "revoke:sessions",
   ],
+});
 
-  gameYearModerator: [
-    Permissions.GameYearAdminister,
-    Permissions.GameYearCreate,
-    Permissions.GameYearUpdate,
-    Permissions.GameYearDelete,
-    Permissions.GameYearApprove,
-    Permissions.GameYearRobotCreate,
-    Permissions.GameYearRobotUpdate,
-    Permissions.GameYearRobotDelete,
-    Permissions.GameYearRobotApprove,
-  ],
+export const mentor = accessControl.newRole({
+  event: ["administer", "read:private"],
+  game: ["administer", "approve"],
+  robot: ["administer", "approve"],
+  sponsor: ["administer", "approve"],
+  user: ["administer", "approve", "add:student", "impersonate"],
+});
 
-  sponsorModerator: [
-    Permissions.SponsorAdminister,
-    Permissions.SponsorCreate,
-    Permissions.SponsorUpdate,
-    Permissions.SponsorDelete,
-    Permissions.SponsorApprove,
-  ],
+export const student = accessControl.newRole({
+  event: ["read:private"],
+  user: ["add:parent"],
+});
 
-  userModerator: [
-    Permissions.UserAdminister,
-    Permissions.UserApprove,
-    Permissions.UserAssociateParent,
-    Permissions.UserAssociateStudent,
-    Permissions.UserBan,
-    Permissions.UserCreate,
-    Permissions.UserDelete,
-    Permissions.UserImpersonate,
-    Permissions.UserUpdate,
-    Permissions.UserRevokeSessions,
+export const parent = accessControl.newRole({
+  event: ["read:private"],
+  user: ["add:student"],
+});
+
+export const eventModerator = accessControl.newRole({
+  event: [
+    "administer",
+    "approve",
+    "create",
+    "delete",
+    "read:private",
+    "update",
   ],
-};
+});
+
+export const gameModerator = accessControl.newRole({
+  game: ["administer", "approve", "create", "delete", "update"],
+});
+
+export const robotModerator = accessControl.newRole({
+  robot: ["administer", "create", "delete", "update", "approve"],
+});
+
+export const sponsorModerator = accessControl.newRole({
+  sponsor: ["administer", "approve", "create", "delete", "update"],
+});
+
+export const userModerator = accessControl.newRole({
+  user: [
+    "administer",
+    "approve",
+    "add:parent",
+    "add:student",
+    "ban",
+    "create",
+    "delete",
+    "impersonate",
+    "update",
+    "revoke:sessions",
+  ],
+});

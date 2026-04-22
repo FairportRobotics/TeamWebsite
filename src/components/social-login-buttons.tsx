@@ -2,7 +2,7 @@ import { authClient } from "@/lib/auth-client";
 import {
   SUPPORTED_AUTH_PROVIDERS,
   SUPPORTED_OAUTH_PROVIDER_DETAILS,
-} from "@/lib/auth/o-auth-providers";
+} from "@/lib/auth/oauth-providers";
 import { TeamActionButton } from "./team-action-buttom";
 
 export function SocialAuthButtons() {
