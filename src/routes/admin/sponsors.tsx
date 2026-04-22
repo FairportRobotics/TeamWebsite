@@ -1,3 +1,4 @@
+import { BackTo } from "@/components/back-to";
 import {
   PageDescription,
   PageHeader,
@@ -21,6 +22,7 @@ export const Route = createFileRoute("/admin/sponsors")({
 function RouteComponent() {
   return (
     <div>
+      <BackTo to="/admin" label="Admin" />
       <PageHeader>
         <PageTitle>
           Sponsor{" "}

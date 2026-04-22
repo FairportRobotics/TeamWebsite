@@ -32,6 +32,7 @@ export const Permissions = {
   UserDelete: "user:delete",
   UserImpersonate: "user:impersonate",
   UserUpdate: "user:update",
+  UserRevokeSessions: "user:revoke:sessions",
 } as const;
 
 export type Permission = (typeof Permissions)[keyof typeof Permissions];
@@ -61,6 +62,7 @@ export const RolePermissions: Record<Role, Permission[]> = {
     Permissions.UserAdminister,
     Permissions.UserAssociateStudent,
     Permissions.EventReadPrivate,
+    Permissions.UserImpersonate,
   ],
 
   student: [Permissions.UserAssociateParent, Permissions.EventReadPrivate],
@@ -106,5 +108,6 @@ export const RolePermissions: Record<Role, Permission[]> = {
     Permissions.UserDelete,
     Permissions.UserImpersonate,
     Permissions.UserUpdate,
+    Permissions.UserRevokeSessions,
   ],
 };

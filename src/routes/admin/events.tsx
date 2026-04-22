@@ -1,3 +1,4 @@
+import { BackTo } from "@/components/back-to";
 import {
   PageDescription,
   PageHeader,
@@ -11,7 +12,7 @@ export const Route = createFileRoute("/admin/events")({
   beforeLoad: async () => {
     await assertHasPermissionFn({
       data: {
-        requiredPermission: Permissions.GameYearAdminister,
+        requiredPermission: Permissions.EventAdminister,
       },
     });
   },
@@ -21,6 +22,7 @@ export const Route = createFileRoute("/admin/events")({
 function RouteComponent() {
   return (
     <div>
+      <BackTo to="/admin" label="Admin" />
       <PageHeader>
         <PageTitle>
           Event{" "}
