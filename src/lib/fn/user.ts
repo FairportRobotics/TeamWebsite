@@ -11,8 +11,8 @@ import { createServerFn } from "@tanstack/react-start";
 import { zodValidator } from "@tanstack/zod-adapter";
 import { gt } from "drizzle-orm";
 import { z } from "zod";
-import { authenticatedMiddleware } from "../auth/middlewares";
 import { assertHasPermissionFn } from "../auth/server";
+import { authenticatedMiddleware } from "../middlewares";
 
 export interface AdminUser extends UserSelect {
   accounts: AccountSelect[];

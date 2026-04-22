@@ -18,11 +18,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Permissions } from "@/lib/auth/permissions";
+import { assertHasPermissionFn, getSessionFn } from "@/lib/auth/server";
 import { getUserListFn } from "@/lib/fn/user";
-import { getSessionFn } from "@/lib/server-functions";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin/users")({
+  beforeLoad: async () => {
+    await assertHasPermissionFn({
+      data: {
+        requiredPermission: Permissions.UserAdminister,
+      },
+    });
+  },
   component: RouteComponent,
   loader: async () => {
     const session = await getSessionFn();

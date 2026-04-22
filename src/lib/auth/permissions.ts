@@ -42,6 +42,7 @@ export const Roles = {
   EventModerator: "eventModerator",
   GameYearModerator: "gameYearModerator",
   SponsorModerator: "sponsorModerator",
+  UserModerator: "userModerator",
   Mentor: "mentor",
   Student: "student",
   Parent: "parent",
@@ -54,13 +55,12 @@ export const RolePermissions: Record<Role, Permission[]> = {
   admin: Object.values(Permissions),
 
   mentor: [
-    Permissions.UserAdminister,
-    Permissions.UserApprove,
-    Permissions.UserAssociateStudent,
     Permissions.EventAdminister,
-    Permissions.EventReadPrivate,
     Permissions.GameYearAdminister,
     Permissions.SponsorAdminister,
+    Permissions.UserAdminister,
+    Permissions.UserAssociateStudent,
+    Permissions.EventReadPrivate,
   ],
 
   student: [Permissions.UserAssociateParent, Permissions.EventReadPrivate],
@@ -94,5 +94,17 @@ export const RolePermissions: Record<Role, Permission[]> = {
     Permissions.SponsorUpdate,
     Permissions.SponsorDelete,
     Permissions.SponsorApprove,
+  ],
+
+  userModerator: [
+    Permissions.UserAdminister,
+    Permissions.UserApprove,
+    Permissions.UserAssociateParent,
+    Permissions.UserAssociateStudent,
+    Permissions.UserBan,
+    Permissions.UserCreate,
+    Permissions.UserDelete,
+    Permissions.UserImpersonate,
+    Permissions.UserUpdate,
   ],
 };

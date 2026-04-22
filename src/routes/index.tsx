@@ -3,7 +3,7 @@ import {
   PageHeader,
   PageTitle,
 } from "@/components/page-header";
-import { getSessionFn } from "@/lib/server-functions";
+import { getSessionFn } from "@/lib/auth/server";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
@@ -25,7 +25,9 @@ function App() {
         <PageTitle>
           Team <span className="text-(--color-destructive)">578</span>
         </PageTitle>
-        <PageDescription>Welcome {user ? user.name : "Guest"}!</PageDescription>
+        <PageDescription>
+          Welcome {user ? user.name : "Guest"}! <p>{user?.role}</p>
+        </PageDescription>
       </PageHeader>
 
       <section></section>
