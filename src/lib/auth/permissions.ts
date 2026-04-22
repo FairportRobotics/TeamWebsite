@@ -53,6 +53,9 @@ export type Role = (typeof Roles)[keyof typeof Roles];
 
 // Map roles → permissions
 export const RolePermissions: Record<Role, Permission[]> = {
+  // Note that the Better-Auth permissions pattern does not really work for us. It's much too
+  // inflexible. All we really need to userstand is that in order to use the Admin functions
+  // like ban, impersonate and revoke sessions, we just need to assign users to the "admin" role.
   admin: Object.values(Permissions),
 
   mentor: [
