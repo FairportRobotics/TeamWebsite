@@ -1,6 +1,3 @@
-// src/lib/permissions.ts
-import { createAccessControl } from "better-auth/plugins/access";
-
 // Define the permissions and their names.
 export const Permissions = {
   EventAdminister: "event:administer",
@@ -39,162 +36,67 @@ export const Permissions = {
 
 export type Permission = (typeof Permissions)[keyof typeof Permissions];
 
-// Define all resources and their possible actions.
-export const statement = {
-  event: [
-    Permissions.EventAdminister,
-    Permissions.EventCreate,
-    Permissions.EventUpdate,
-    Permissions.EventDelete,
-    Permissions.EventApprove,
-    Permissions.EventReadPrivate,
-  ],
-
-  gameYear: [
-    Permissions.GameYearAdminister,
-    Permissions.GameYearCreate,
-    Permissions.GameYearUpdate,
-    Permissions.GameYearDelete,
-    Permissions.GameYearApprove,
-    Permissions.GameYearRobotCreate,
-    Permissions.GameYearRobotUpdate,
-    Permissions.GameYearRobotDelete,
-    Permissions.GameYearRobotApprove,
-  ],
-
-  sponsor: [
-    Permissions.SponsorAdminister,
-    Permissions.SponsorCreate,
-    Permissions.SponsorUpdate,
-    Permissions.SponsorDelete,
-    Permissions.SponsorApprove,
-  ],
-
-  user: [
-    Permissions.UserAdminister,
-    Permissions.UserApprove,
-    Permissions.UserAssociateParent,
-    Permissions.UserAssociateStudent,
-    Permissions.UserBan,
-    Permissions.UserCreate,
-    Permissions.UserDelete,
-    Permissions.UserImpersonate,
-    Permissions.UserUpdate,
-  ],
-} as const;
-
-export const ac = createAccessControl(statement);
-
-// Define roles with their allowed actions.
-export const student = ac.newRole({
-  user: [Permissions.UserAssociateParent],
-  event: [Permissions.EventReadPrivate, Permissions.EventAdminister],
-  gameYear: [Permissions.GameYearAdminister],
-  sponsor: [Permissions.SponsorAdminister],
-});
-
-export const parent = ac.newRole({
-  user: [Permissions.UserAssociateStudent],
-  event: [Permissions.EventReadPrivate],
-});
-
-export const eventModerator = ac.newRole({
-  event: [
-    Permissions.EventAdminister,
-    Permissions.EventCreate,
-    Permissions.EventUpdate,
-    Permissions.EventDelete,
-    Permissions.EventApprove,
-    Permissions.EventReadPrivate,
-  ],
-});
-
-export const gameYearModerator = ac.newRole({
-  gameYear: [
-    Permissions.GameYearAdminister,
-    Permissions.GameYearCreate,
-    Permissions.GameYearUpdate,
-    Permissions.GameYearDelete,
-    Permissions.GameYearApprove,
-    Permissions.GameYearRobotCreate,
-    Permissions.GameYearRobotUpdate,
-    Permissions.GameYearRobotDelete,
-    Permissions.GameYearRobotApprove,
-  ],
-});
-
-export const sponsorModerator = ac.newRole({
-  sponsor: [
-    Permissions.SponsorAdminister,
-    Permissions.SponsorCreate,
-    Permissions.SponsorUpdate,
-    Permissions.SponsorDelete,
-    Permissions.SponsorApprove,
-  ],
-});
-
-export const mentor = ac.newRole({
-  user: [
-    Permissions.UserAdminister,
-    Permissions.UserApprove,
-    Permissions.UserAssociateStudent,
-  ],
-  event: [Permissions.EventAdminister, Permissions.EventReadPrivate],
-  gameYear: [Permissions.GameYearAdminister],
-  sponsor: [Permissions.SponsorAdminister],
-});
-
-export const admin = ac.newRole({
-  event: [
-    Permissions.EventAdminister,
-    Permissions.EventCreate,
-    Permissions.EventUpdate,
-    Permissions.EventDelete,
-    Permissions.EventApprove,
-    Permissions.EventReadPrivate,
-  ],
-
-  gameYear: [
-    Permissions.GameYearAdminister,
-    Permissions.GameYearCreate,
-    Permissions.GameYearUpdate,
-    Permissions.GameYearDelete,
-    Permissions.GameYearApprove,
-    Permissions.GameYearRobotCreate,
-    Permissions.GameYearRobotUpdate,
-    Permissions.GameYearRobotDelete,
-    Permissions.GameYearRobotApprove,
-  ],
-
-  sponsor: [
-    Permissions.SponsorAdminister,
-    Permissions.SponsorCreate,
-    Permissions.SponsorUpdate,
-    Permissions.SponsorDelete,
-    Permissions.SponsorApprove,
-  ],
-
-  user: [
-    Permissions.UserAdminister,
-    Permissions.UserApprove,
-    Permissions.UserAssociateParent,
-    Permissions.UserAssociateStudent,
-    Permissions.UserBan,
-    Permissions.UserCreate,
-    Permissions.UserDelete,
-    Permissions.UserImpersonate,
-    Permissions.UserUpdate,
-  ],
-});
-
+// Define Roles and their names.
 export const Roles = {
-  student,
-  parent,
-  eventModerator,
-  gameYearModerator,
-  sponsorModerator,
-  mentor,
-  admin,
+  Admin: "admin",
+  EventModerator: "eventModerator",
+  GameYearModerator: "gameYearModerator",
+  SponsorModerator: "sponsorModerator",
+  Mentor: "mentor",
+  Student: "student",
+  Parent: "parent",
 } as const;
 
 export type Role = (typeof Roles)[keyof typeof Roles];
+
+// Map roles → permissions
+export const RolePermissions: Record<Role, Permission[]> = {
+  admin: Object.values(Permissions),
+
+  mentor: [
+    Permissions.UserAdminister,
+    Permissions.UserApprove,
+    Permissions.UserAssociateStudent,
+    Permissions.EventAdminister,
+    Permissions.EventReadPrivate,
+    Permissions.GameYearAdminister,
+    Permissions.SponsorAdminister,
+  ],
+
+  student: [Permissions.UserAssociateParent, Permissions.EventReadPrivate],
+
+  parent: [Permissions.UserAssociateStudent, Permissions.EventReadPrivate],
+
+  eventModerator: [
+    Permissions.EventAdminister,
+    Permissions.EventCreate,
+    Permissions.EventUpdate,
+    Permissions.EventDelete,
+    Permissions.EventApprove,
+    Permissions.EventReadPrivate,
+  ],
+
+  gameYearModerator: [
+    Permissions.GameYearAdminister,
+    Permissions.GameYearCreate,
+    Permissions.GameYearUpdate,
+    Permissions.GameYearDelete,
+    Permissions.GameYearApprove,
+    Permissions.GameYearRobotCreate,
+    Permissions.GameYearRobotUpdate,
+    Permissions.GameYearRobotDelete,
+    Permissions.GameYearRobotApprove,
+  ],
+
+  sponsorModerator: [
+    Permissions.SponsorAdminister,
+    Permissions.SponsorCreate,
+    Permissions.SponsorUpdate,
+    Permissions.SponsorDelete,
+    Permissions.SponsorApprove,
+  ],
+};
+
+export function getPermissionsForRoles(roles: Role[]): Permission[] {
+  return Array.from(new Set(roles.flatMap((role) => RolePermissions[role])));
+}
