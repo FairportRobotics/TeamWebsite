@@ -40,6 +40,13 @@ export const assertAuthenticatedFn = createServerFn().handler(async () => {
   return user;
 });
 
+export const hasPermissionFn = createServerFn()
+  .middleware([authenticatedMiddleware])
+  .inputValidator(zodValidator(hasPermissionSchema))
+  .handler(async ({ data, context }) => {
+    return context.permissions.includes(data.requiredPermission);
+  });
+
 export const assertHasPermissionFn = createServerFn()
   .middleware([authenticatedMiddleware])
   .inputValidator(zodValidator(hasPermissionSchema))
@@ -50,6 +57,13 @@ export const assertHasPermissionFn = createServerFn()
     }
 
     return true;
+  });
+
+export const hasAnyPermissionFn = createServerFn()
+  .middleware([authenticatedMiddleware])
+  .inputValidator(zodValidator(hasAnyPermissionSchema))
+  .handler(async ({ data, context }) => {
+    return context.permissions.some((p) => data.requiredPermission.includes(p));
   });
 
 export const assertHasAnyPermissionFn = createServerFn()
