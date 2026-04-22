@@ -42,7 +42,7 @@ export default function AdminUserRow({
       { userId },
       {
         onError: (error) => {
-          toast.error(error.error.message || "Failed to imprtsonate user");
+          toast.error(error.error.message || "Failed to impersonate user");
         },
         onSuccess: () => {
           refetch();
