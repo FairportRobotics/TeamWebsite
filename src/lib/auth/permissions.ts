@@ -1,7 +1,7 @@
 import { createAccessControl } from "better-auth/plugins/access";
 
 // Define the resources and the actions needed to manage them.
-export const statement = {
+export const ResourceActions = {
   event: [
     "administer",
     "approve",
@@ -28,7 +28,7 @@ export const statement = {
 } as const;
 
 // Create the access control object for Better-Auth.
-export const accessControl = createAccessControl(statement);
+export const accessControl = createAccessControl(ResourceActions);
 
 // Define Roles and their allowed actions.
 export const admin = accessControl.newRole({
@@ -62,7 +62,7 @@ export const mentor = accessControl.newRole({
   game: ["administer", "approve"],
   robot: ["administer", "approve"],
   sponsor: ["administer", "approve"],
-  user: ["administer", "approve", "add:student", "impersonate"],
+  user: ["administer", "approve", "add:student"],
 });
 
 export const student = accessControl.newRole({

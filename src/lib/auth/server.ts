@@ -50,3 +50,15 @@ export const assertHasAnyPermissionFn = createServerFn()
   .handler(async () => {
     return true;
   });
+
+export const canAdministerUsersFn = createServerFn()
+  .middleware([authenticatedMiddleware])
+  .handler(async ({ context }) => {
+    const allowed = await auth.api.userHasPermission({
+      body: {
+        userId: context.user.id,
+        permissions: { user: ["impersonate"] },
+      },
+    });
+    return true;
+  });
