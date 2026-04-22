@@ -3,30 +3,29 @@ import {
   PageHeader,
   PageTitle,
 } from "@/components/page-header";
-import { createFileRoute, useRouteContext } from "@tanstack/react-router";
+import { getSessionFn } from "@/lib/server-functions";
+import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
   component: App,
-  loader: async ({ context }) => {
-    console.log("loader context:", context);
-    return { user: context.session?.user };
+  loader: async () => {
+    const session = await getSessionFn();
+
+    return {
+      user: session?.user ?? undefined,
+    };
   },
 });
 
 function App() {
-  const { session } = useRouteContext({ from: "__root__" });
-  console.log("useRouteContext session", session);
-
-  const whatever = Route.useLoaderData();
-  console.log("useRouteContext whatever", whatever);
-
+  const { user } = Route.useLoaderData();
   return (
     <main className="">
       <PageHeader>
         <PageTitle>
           Team <span className="text-(--color-destructive)">578</span>
         </PageTitle>
-        <PageDescription>{session?.user.name}</PageDescription>
+        <PageDescription>Welcome {user ? user.name : "Guest"}!</PageDescription>
       </PageHeader>
 
       <section></section>

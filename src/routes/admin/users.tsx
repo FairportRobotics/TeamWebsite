@@ -18,14 +18,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getSessionFn, getUsersForAdmin } from "@/lib/server-functions";
+import { getUserListFn } from "@/lib/fn/user";
+import { getSessionFn } from "@/lib/server-functions";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin/users")({
   component: RouteComponent,
   loader: async () => {
     const session = await getSessionFn();
-    const usersForAdmin = await getUsersForAdmin();
+    const usersForAdmin = await getUserListFn();
     return { users: usersForAdmin, selfId: session?.user.id };
   },
 });

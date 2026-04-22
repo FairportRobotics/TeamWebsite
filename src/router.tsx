@@ -1,5 +1,4 @@
 import { createRouter as createTanStackRouter } from "@tanstack/react-router";
-import type { AppSession } from "./lib/auth/session";
 import { routeTree } from "./routeTree.gen";
 
 export function getRouter() {
@@ -8,9 +7,6 @@ export function getRouter() {
     scrollRestoration: true,
     defaultPreload: "intent",
     defaultPreloadStaleTime: 0,
-    context: {
-      session: null as AppSession | null,
-    },
   });
 
   return router;

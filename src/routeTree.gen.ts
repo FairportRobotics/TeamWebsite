@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UnauthorizedRouteImport } from './routes/unauthorized'
+import { Route as UnauthenticatedRouteImport } from './routes/unauthenticated'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AuthRouteRouteImport } from './routes/auth/route'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
@@ -32,6 +33,11 @@ import { Route as AdminUserIdRouteImport } from './routes/admin/user/$id'
 const UnauthorizedRoute = UnauthorizedRouteImport.update({
   id: '/unauthorized',
   path: '/unauthorized',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UnauthenticatedRoute = UnauthenticatedRouteImport.update({
+  id: '/unauthenticated',
+  path: '/unauthenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -130,6 +136,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
   '/contact': typeof ContactRoute
+  '/unauthenticated': typeof UnauthenticatedRoute
   '/unauthorized': typeof UnauthorizedRoute
   '/admin/events': typeof AdminEventsRoute
   '/admin/game-years': typeof AdminGameYearsRoute
@@ -150,6 +157,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
   '/contact': typeof ContactRoute
+  '/unauthenticated': typeof UnauthenticatedRoute
   '/unauthorized': typeof UnauthorizedRoute
   '/admin/events': typeof AdminEventsRoute
   '/admin/game-years': typeof AdminGameYearsRoute
@@ -172,6 +180,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
   '/contact': typeof ContactRoute
+  '/unauthenticated': typeof UnauthenticatedRoute
   '/unauthorized': typeof UnauthorizedRoute
   '/admin/events': typeof AdminEventsRoute
   '/admin/game-years': typeof AdminGameYearsRoute
@@ -195,6 +204,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/contact'
+    | '/unauthenticated'
     | '/unauthorized'
     | '/admin/events'
     | '/admin/game-years'
@@ -215,6 +225,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/contact'
+    | '/unauthenticated'
     | '/unauthorized'
     | '/admin/events'
     | '/admin/game-years'
@@ -236,6 +247,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/contact'
+    | '/unauthenticated'
     | '/unauthorized'
     | '/admin/events'
     | '/admin/game-years'
@@ -258,6 +270,7 @@ export interface RootRouteChildren {
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   ContactRoute: typeof ContactRoute
+  UnauthenticatedRoute: typeof UnauthenticatedRoute
   UnauthorizedRoute: typeof UnauthorizedRoute
   CalendarIndexRoute: typeof CalendarIndexRoute
   GamesIndexRoute: typeof GamesIndexRoute
@@ -273,6 +286,13 @@ declare module '@tanstack/react-router' {
       path: '/unauthorized'
       fullPath: '/unauthorized'
       preLoaderRoute: typeof UnauthorizedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/unauthenticated': {
+      id: '/unauthenticated'
+      path: '/unauthenticated'
+      fullPath: '/unauthenticated'
+      preLoaderRoute: typeof UnauthenticatedRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -447,6 +467,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRouteRoute: AdminRouteRouteWithChildren,
   AuthRouteRoute: AuthRouteRouteWithChildren,
   ContactRoute: ContactRoute,
+  UnauthenticatedRoute: UnauthenticatedRoute,
   UnauthorizedRoute: UnauthorizedRoute,
   CalendarIndexRoute: CalendarIndexRoute,
   GamesIndexRoute: GamesIndexRoute,

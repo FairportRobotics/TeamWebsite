@@ -96,7 +96,3 @@ export const RolePermissions: Record<Role, Permission[]> = {
     Permissions.SponsorApprove,
   ],
 };
-
-export function getPermissionsForRoles(roles: Role[]): Permission[] {
-  return Array.from(new Set(roles.flatMap((role) => RolePermissions[role])));
-}
