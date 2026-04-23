@@ -62,3 +62,10 @@ export const sponsor = pgTable(
 export const gameRelations = relations(game, ({ many }) => ({
   robots: many(robot),
 }));
+
+export type GameSelect = typeof game.$inferSelect;
+export type GameInsert = typeof game.$inferInsert;
+export type RobotSelect = typeof robot.$inferSelect;
+export type RobotInsert = typeof robot.$inferInsert;
+export type SponsorSelect = typeof sponsor.$inferSelect;
+export type SponsorInsert = typeof sponsor.$inferInsert;

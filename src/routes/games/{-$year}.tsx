@@ -95,7 +95,7 @@ function RouteComponent() {
         <CardContent></CardContent>
       </Card>
       <Button className="mt-6" variant="destructive" onClick={handleSeedGames}>
-        Seed Users
+        Seed Games
       </Button>
     </div>
   );
