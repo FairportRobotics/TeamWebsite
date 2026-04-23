@@ -3,22 +3,17 @@ import {
   PageHeader,
   PageTitle,
 } from "@/components/page-header";
-import { getSessionFn } from "@/lib/auth/server";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
   component: App,
-  loader: async () => {
-    const session = await getSessionFn();
-
-    return {
-      user: session?.user ?? undefined,
-    };
+  loader: async ({ context }) => {
+    return context.data?.user || null;
   },
 });
 
 function App() {
-  const { user } = Route.useLoaderData();
+  const user = Route.useLoaderData();
   return (
     <main className="">
       <PageHeader>
@@ -26,7 +21,10 @@ function App() {
           Team <span className="text-(--color-destructive)">578</span>
         </PageTitle>
         <PageDescription>
-          Welcome {user ? user.name : "Guest"}! <p>{user?.role}</p>
+          <div>Welcome {user ? user.name : "Guest"}!</div>
+          <p>Id: {user?.id}</p>
+          <p>Email: {user?.email}</p>
+          <p>Roles: {user?.role}</p>
         </PageDescription>
       </PageHeader>
 
