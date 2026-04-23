@@ -5,6 +5,7 @@ import {
   session as dbSession,
   user as dbUser,
 } from "@/db/schema";
+import { seedUsers } from "@/db/seed/users";
 import { createServerFn } from "@tanstack/react-start";
 import { zodValidator } from "@tanstack/zod-adapter";
 import { gt } from "drizzle-orm";
@@ -52,12 +53,19 @@ export const banUserFn = createServerFn()
   .middleware([authenticatedMiddleware])
   .inputValidator(zodValidator(banUserSchema))
   .handler(async ({ data, context }) => {
-    console.log("Ban User", data.userId, data.reason, " by ", context.userId);
+    console.log("Ban User", data.userId, data.reason, " by ", context.user.id);
   });
 
 export const unbanUserFn = createServerFn()
   .middleware([authenticatedMiddleware])
   .inputValidator(zodValidator(unbanUserSchema))
   .handler(async ({ data, context }) => {
-    console.log("UnBan User", data.userId, " by ", context.userId);
+    console.log("UnBan User", data.userId, " by ", context.user.id);
   });
+
+export const seedUsersFn = createServerFn().handler(async () => {
+  console.log("Seeding users...");
+  seedUsers.forEach((u, i) => {
+    console.log(i, u);
+  });
+});
