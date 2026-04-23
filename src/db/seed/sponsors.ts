@@ -11,7 +11,8 @@ export const seedSponsors = [
     imageUrl:
       "https://icon2.cleanpng.com/20180824/wox/kisspng-microsoft-corporation-microsoft-software-assurance-26-microsoft-1713948935718.webp",
     sponsorUrl: "https://www.microsoft.com/",
-    provided: "Azure credits used for hosting infrastructure",
+    provided:
+      "Microsoft provides with Azure credits used for hosting infrastructure. Additionally, Microsoft supports one of our mentors.",
     fromYear: 2000,
   },
   {
@@ -19,7 +20,8 @@ export const seedSponsors = [
     imageUrl:
       "https://www.wegmans.com/_next/static/media/logo.0ckgqa_ldnzpt.svg",
     sponsorUrl: "https://www.microsoft.com/",
-    provided: "Azure credits used for hosting infrastructure",
+    provided:
+      "Wegmans has generously provided the team with financial donations and delicious foods. Our students develop big appetites when building.",
     fromYear: 2000,
   },
 ];

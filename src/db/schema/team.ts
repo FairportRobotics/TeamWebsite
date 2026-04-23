@@ -1,5 +1,24 @@
 import { relations } from "drizzle-orm";
 import { index, integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { user } from "./better-auth";
+
+export const memberTable = pgTable(
+  "member",
+  {
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    position: text("position"),
+    bio: text("bio"),
+    imageUrl: text("image_url"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at")
+      .defaultNow()
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  },
+  (table) => [index("member_idx").on(table.userId)],
+);
 
 export const gameTable = pgTable(
   "game",
