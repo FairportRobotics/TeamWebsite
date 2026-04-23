@@ -18,6 +18,7 @@ export const Route = createFileRoute("/team/")({
 function RouteComponent() {
   const teamMembers = Route.useLoaderData();
 
+  // TODO: Sort
   const students = teamMembers.filter((t) => t.role?.includes("student"));
   const moderators = teamMembers.filter((t) => t.role?.includes("mentor"));
 
@@ -63,6 +64,8 @@ function TeamMemberSection({
   );
 }
 
+// TODO: Link to individuals so we can show more details.
+// TODO: Remove role and include position on the team.
 function PersonCard({ person }: { person: UserSelect }) {
   return (
     <div className="flex flex-col items-center mb-4 bg-stone-700 w-80 p-4 rounded-lg">
