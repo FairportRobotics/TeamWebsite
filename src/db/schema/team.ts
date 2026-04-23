@@ -43,13 +43,10 @@ export const sponsorTable = pgTable(
     id: text("id").primaryKey(),
     name: text("name").notNull(),
     imageUrl: text("image_url"),
-    spnosorUrl: text("sponsor_url"),
-    fromYear: integer("from_year")
-      .notNull()
-      .references(() => gameTable.year, { onDelete: "cascade" }),
-    throughYear: integer("through_year").references(() => gameTable.year, {
-      onDelete: "cascade",
-    }),
+    sponsorUrl: text("sponsor_url"),
+    provided: text("provided"),
+    fromYear: integer("from_year").notNull(),
+    throughYear: integer("through_year"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")
       .defaultNow()
