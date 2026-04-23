@@ -35,51 +35,51 @@ async function resetDatabase() {
     {
       year: 2026,
       name: "Rebuilt",
-      image:
+      imageUrl:
         "https://upload.wikimedia.org/wikipedia/en/0/0e/Rebuilt_FRC_Logo.png",
-      url: "https://en.wikipedia.org/wiki/Rebuilt_(FIRST)",
+      gameUrl: "https://en.wikipedia.org/wiki/Rebuilt_(FIRST)",
     },
     {
       year: 2025,
       name: "Reefscape",
-      image:
+      imageUrl:
         "https://upload.wikimedia.org/wikipedia/en/b/b9/Reefscape_FRC_Logo.png",
-      url: "https://en.wikipedia.org/wiki/Reefscape",
+      gameUrl: "https://en.wikipedia.org/wiki/Reefscape",
     },
     {
       year: 2024,
       name: "Crescendo",
-      image:
+      imageUrl:
         "https://upload.wikimedia.org/wikipedia/en/thumb/8/88/Crescendo_FRC_Logo.svg/500px-Crescendo_FRC_Logo.svg.png",
-      url: "https://en.wikipedia.org/wiki/Crescendo_(FIRST)",
+      gameUrl: "https://en.wikipedia.org/wiki/Crescendo_(FIRST)",
     },
     {
       year: 2023,
       name: "Charged Up",
-      image:
+      imageUrl:
         "https://upload.wikimedia.org/wikipedia/en/thumb/b/b7/Charged_Up_Logo.svg/500px-Charged_Up_Logo.svg.png",
-      url: "https://en.wikipedia.org/wiki/Charged_Up_(FIRST)",
+      gameUrl: "https://en.wikipedia.org/wiki/Charged_Up_(FIRST)",
     },
     {
       year: 2022,
       name: "Rapid React",
-      image:
+      imageUrl:
         "https://upload.wikimedia.org/wikipedia/en/thumb/0/08/Rapid_React_Logo.svg/250px-Rapid_React_Logo.svg.png",
-      url: "https://en.wikipedia.org/wiki/Rapid_React",
+      gameUrl: "https://en.wikipedia.org/wiki/Rapid_React",
     },
     {
       year: 2021,
       name: "Infinite Recharge (2021)",
-      image:
+      imageUrl:
         "https://upload.wikimedia.org/wikipedia/en/thumb/2/2b/Infinite_Recharge_Logo.png/250px-Infinite_Recharge_Logo.png",
-      url: "https://en.wikipedia.org/wiki/Infinite_Recharge_(2021)",
+      gameUrl: "https://en.wikipedia.org/wiki/Infinite_Recharge_(2021)",
     },
     {
       year: 2020,
       name: "Infinite Recharge",
-      image:
+      imageUrl:
         "https://upload.wikimedia.org/wikipedia/en/thumb/2/2b/Infinite_Recharge_Logo.png/250px-Infinite_Recharge_Logo.png",
-      url: "https://en.wikipedia.org/wiki/Infinite_Recharge",
+      gameUrl: "https://en.wikipedia.org/wiki/Infinite_Recharge",
     },
   ]);
 
@@ -89,7 +89,7 @@ async function resetDatabase() {
       id: "2026",
       name: "Boulder",
       gameYear: 2026,
-      image: "",
+      imageUrl: "",
       awards: "",
       specifications:
         "* Intake: balls\n* Spindexer: brushes\n* Shooter: More balls\n* Weight: 115 pounds\n* Perimeter: 100 miles",
@@ -98,7 +98,7 @@ async function resetDatabase() {
       id: "2025",
       name: "TBD",
       gameYear: 2025,
-      image: "",
+      imageUrl: "",
       awards: "",
       specifications: "",
     },
@@ -106,7 +106,7 @@ async function resetDatabase() {
       id: "2024",
       name: "TBD",
       gameYear: 2024,
-      image: "",
+      imageUrl: "",
       awards: "",
       specifications: "",
     },
@@ -114,7 +114,7 @@ async function resetDatabase() {
       id: "2023",
       name: "TBD",
       gameYear: 2023,
-      image: "",
+      imageUrl: "",
       awards: "",
       specifications: "",
     },
@@ -122,7 +122,7 @@ async function resetDatabase() {
       id: "2022",
       name: "TBD",
       gameYear: 2022,
-      image: "",
+      imageUrl: "",
       awards: "",
       specifications: "",
     },
@@ -130,7 +130,7 @@ async function resetDatabase() {
       id: "2021",
       name: "TBD",
       gameYear: 2021,
-      image: "",
+      imageUrl: "",
       awards: "",
       specifications: "",
     },
@@ -138,7 +138,7 @@ async function resetDatabase() {
       id: "202-",
       name: "TBD",
       gameYear: 2020,
-      image: "",
+      imageUrl: "",
       awards: "",
       specifications: "",
     },

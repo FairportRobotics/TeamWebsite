@@ -48,11 +48,9 @@ export const accessControl = createAccessControl(ResourceActions);
 
 // Map roles → permissions
 export const RolePermissions: Record<Role, Permission[]> = {
-  // Note that this permission is special. It is the ONLY means by which Better-Auth will allow us
-  // to perform various operations such as creating users, managing user roles, banning/unbanning
-  // users, impersonating users, and more. Applying the "user:*" permissions to our custom roles
-  // IS NOT ENOUGH. Merely assign the "admin" role to a user and they will then have the ability
-  // to perform those Better-Auth Admin actions. So lame.
+  // Note that the Better-Auth permissions pattern does not really work for us. It's much too
+  // inflexible. All we really need to userstand is that in order to use the Admin functions
+  // like ban, impersonate and revoke sessions, we just need to assign users to the "admin" role.
   admin: Object.values(Permissions),
 
   mentor: [

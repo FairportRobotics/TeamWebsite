@@ -8,8 +8,7 @@ import { createFileRoute } from "@tanstack/react-router";
 export const Route = createFileRoute("/")({
   component: App,
   loader: async ({ context }) => {
-    const user = context.data?.user;
-    return user || null;
+    return context.data?.user || null;
   },
 });
 
@@ -23,9 +22,9 @@ function App() {
         </PageTitle>
         <PageDescription>
           <div>Welcome {user ? user.name : "Guest"}!</div>
-          <p>{user?.id}</p>
-          <p>{user?.email}</p>
-          <p>{user?.role}</p>
+          <p>Id: {user?.id}</p>
+          <p>Email: {user?.email}</p>
+          <p>Roles: {user?.role}</p>
         </PageDescription>
       </PageHeader>
 

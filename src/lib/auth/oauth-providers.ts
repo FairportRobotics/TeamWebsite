@@ -1,4 +1,4 @@
-import { DiscordIcon, GitHubIcon, GoogleIcon } from "@/components/o-auth-icons";
+import { DiscordIcon, GitHubIcon, GoogleIcon } from "@/components/oauth-icons";
 import type { ComponentProps, ElementType } from "react";
 
 export const SUPPORTED_AUTH_PROVIDERS = [
