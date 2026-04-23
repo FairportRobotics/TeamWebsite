@@ -53,6 +53,7 @@ export const Route = createFileRoute("/games/{-$year}")({
 
 function RouteComponent() {
   const { game, minYear, maxYear } = Route.useLoaderData();
+
   return (
     <div className="">
       <PageHeader>

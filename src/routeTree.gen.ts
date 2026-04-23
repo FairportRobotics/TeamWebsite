@@ -25,7 +25,7 @@ import { Route as AuthSigninRouteImport } from './routes/auth/signin'
 import { Route as AuthForgotPasswordRouteImport } from './routes/auth/forgot-password'
 import { Route as AdminUsersRouteImport } from './routes/admin/users'
 import { Route as AdminSponsorsRouteImport } from './routes/admin/sponsors'
-import { Route as AdminGameYearsRouteImport } from './routes/admin/game-years'
+import { Route as AdminGamesRouteImport } from './routes/admin/games'
 import { Route as AdminEventsRouteImport } from './routes/admin/events'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as AdminUserIdRouteImport } from './routes/admin/user/$id'
@@ -110,9 +110,9 @@ const AdminSponsorsRoute = AdminSponsorsRouteImport.update({
   path: '/sponsors',
   getParentRoute: () => AdminRouteRoute,
 } as any)
-const AdminGameYearsRoute = AdminGameYearsRouteImport.update({
-  id: '/game-years',
-  path: '/game-years',
+const AdminGamesRoute = AdminGamesRouteImport.update({
+  id: '/games',
+  path: '/games',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminEventsRoute = AdminEventsRouteImport.update({
@@ -139,7 +139,7 @@ export interface FileRoutesByFullPath {
   '/unauthenticated': typeof UnauthenticatedRoute
   '/unauthorized': typeof UnauthorizedRoute
   '/admin/events': typeof AdminEventsRoute
-  '/admin/game-years': typeof AdminGameYearsRoute
+  '/admin/games': typeof AdminGamesRoute
   '/admin/sponsors': typeof AdminSponsorsRoute
   '/admin/users': typeof AdminUsersRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
@@ -160,7 +160,7 @@ export interface FileRoutesByTo {
   '/unauthenticated': typeof UnauthenticatedRoute
   '/unauthorized': typeof UnauthorizedRoute
   '/admin/events': typeof AdminEventsRoute
-  '/admin/game-years': typeof AdminGameYearsRoute
+  '/admin/games': typeof AdminGamesRoute
   '/admin/sponsors': typeof AdminSponsorsRoute
   '/admin/users': typeof AdminUsersRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
@@ -183,7 +183,7 @@ export interface FileRoutesById {
   '/unauthenticated': typeof UnauthenticatedRoute
   '/unauthorized': typeof UnauthorizedRoute
   '/admin/events': typeof AdminEventsRoute
-  '/admin/game-years': typeof AdminGameYearsRoute
+  '/admin/games': typeof AdminGamesRoute
   '/admin/sponsors': typeof AdminSponsorsRoute
   '/admin/users': typeof AdminUsersRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
@@ -207,7 +207,7 @@ export interface FileRouteTypes {
     | '/unauthenticated'
     | '/unauthorized'
     | '/admin/events'
-    | '/admin/game-years'
+    | '/admin/games'
     | '/admin/sponsors'
     | '/admin/users'
     | '/auth/forgot-password'
@@ -228,7 +228,7 @@ export interface FileRouteTypes {
     | '/unauthenticated'
     | '/unauthorized'
     | '/admin/events'
-    | '/admin/game-years'
+    | '/admin/games'
     | '/admin/sponsors'
     | '/admin/users'
     | '/auth/forgot-password'
@@ -250,7 +250,7 @@ export interface FileRouteTypes {
     | '/unauthenticated'
     | '/unauthorized'
     | '/admin/events'
-    | '/admin/game-years'
+    | '/admin/games'
     | '/admin/sponsors'
     | '/admin/users'
     | '/auth/forgot-password'
@@ -393,11 +393,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSponsorsRouteImport
       parentRoute: typeof AdminRouteRoute
     }
-    '/admin/game-years': {
-      id: '/admin/game-years'
-      path: '/game-years'
-      fullPath: '/admin/game-years'
-      preLoaderRoute: typeof AdminGameYearsRouteImport
+    '/admin/games': {
+      id: '/admin/games'
+      path: '/games'
+      fullPath: '/admin/games'
+      preLoaderRoute: typeof AdminGamesRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/events': {
@@ -426,7 +426,7 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteRouteChildren {
   AdminEventsRoute: typeof AdminEventsRoute
-  AdminGameYearsRoute: typeof AdminGameYearsRoute
+  AdminGamesRoute: typeof AdminGamesRoute
   AdminSponsorsRoute: typeof AdminSponsorsRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -435,7 +435,7 @@ interface AdminRouteRouteChildren {
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminEventsRoute: AdminEventsRoute,
-  AdminGameYearsRoute: AdminGameYearsRoute,
+  AdminGamesRoute: AdminGamesRoute,
   AdminSponsorsRoute: AdminSponsorsRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminIndexRoute: AdminIndexRoute,

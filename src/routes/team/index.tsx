@@ -3,152 +3,100 @@ import {
   PageHeader,
   PageTitle,
 } from "@/components/page-header";
-import { createFileRoute } from "@tanstack/react-router";
+import type { UserSelect } from "@/db/schema";
+import { getTeamMembersFn } from "@/lib/fn/user";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { MailIcon } from "lucide-react";
 
 export const Route = createFileRoute("/team/")({
   component: RouteComponent,
+  loader: async () => {
+    const teamMembers = await getTeamMembersFn();
+    return teamMembers;
+  },
 });
 
-const moderators = [
-  {
-    name: "Marie Kraus",
-    role: "Head Coach",
-    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    email: "marie.kraus@fairportrobotics.org",
-  },
-  {
-    name: "Terry Elie",
-    role: "Assistant Coach",
-    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    email: "terry.elie@fairportrobotics.org",
-  },
-  {
-    name: "Curt Moczarski",
-    role: "Lead Mentor",
-    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    email: "Curt.Moczarski@fairportrobotics.org",
-  },
-  {
-    name: "John Hurrell",
-    role: "Software Mentor",
-    bio: "John has been a mentor since the end of the 2023 season. John works as a Senior Software Engineer at DxSelect.",
-    email: "John.Hurrell@fairportrobotics.org",
-  },
-  {
-    name: "Tyler Wilcox",
-    role: "Software Mentor",
-    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    email: "Tyler.Wilcox@fairportrobotics.org",
-  },
-  {
-    name: "Fred Schoenfeld",
-    role: "Software Mentor",
-    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    email: "Fred.Schoenfeld@fairportrobotics.org",
-  },
-  {
-    name: "Aaron Stuckey",
-    role: "TBD",
-    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    email: "Aaron.Stuckey@fairportrobotics.org",
-  },
-  {
-    name: "Roger White",
-    role: "TBD",
-    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    email: "Roger.White@fairportrobotics.org",
-  },
-  {
-    name: "Bill Voter",
-    role: "TBD",
-    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    email: "Bill.Voter@fairportrobotics.org",
-  },
-];
-
-const students = [
-  {
-    name: "Autumn Schoenfeld",
-    role: "Chief Engineer",
-    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    email: "Autumn.Schoenfeld@fairportrobotics.org",
-  },
-  {
-    name: "Maddie DeCicca",
-    role: "CFT Lead",
-    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    email: "Maddie.DeCicca@fairportrobotics.org",
-  },
-  {
-    name: "Nicholas Munier",
-    role: "Software Lead",
-    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    email: "Nicholas.Munier@fairportrobotics.org",
-  },
-  {
-    name: "Carter Silva",
-    role: "Software Lead",
-    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    email: "Carter.Silva@fairportrobotics.org",
-  },
-];
-
 function RouteComponent() {
+  const teamMembers = Route.useLoaderData();
+
+  // TODO: Sort
+  const students = teamMembers.filter((t) => t.role?.includes("student"));
+  const moderators = teamMembers.filter((t) => t.role?.includes("mentor"));
+
   return (
     <div>
       <PageHeader>
         <PageTitle>
           The <span className="text-(--color-destructive)">team</span>
         </PageTitle>
-        <PageDescription>
-          Get to know the coaches, mentors and students that make up our team.
-          Learn about their roles on the team, their backgrounds and their
-          contributions to our success.
+        <PageDescription className="flex flex-col gap-2">
+          <p>
+            Get to know the coaches, mentors and students that make up our team.
+            Learn about their roles on the team, their backgrounds and their
+            contributions to our success.
+          </p>
+          <p>
+            Inspiration for this page is{" "}
+            <a
+              href="https://1418.team/team"
+              target="_blank"
+              className="text-(--color-destructive)"
+            >
+              Team 1418
+            </a>
+            .
+          </p>
         </PageDescription>
       </PageHeader>
 
-      <div className="mt-8">
-        <div className="flex flex-col gap-8 items-center justify-center">
-          <h2 className="text-2xl text-white uppercase font-extrabold">
-            Students
-          </h2>
-          <div className="flex flex-row flex-wrap gap-8 items-center justify-center">
-            {students.map((person) => (
-              <PersonCard key={person.name} person={person} />
-            ))}
-          </div>
-        </div>
-      </div>
+      <TeamMemberSection teamMembers={students} label="Students" />
+      <TeamMemberSection teamMembers={moderators} label="Mentors" />
+    </div>
+  );
+}
 
-      <div className="mt-8">
-        <div className="flex flex-col gap-8 items-center justify-center">
-          <h2 className="text-2xl text-white uppercase font-extrabold">
-            Coaches and Mentors
-          </h2>
-          <div className="flex flex-row flex-wrap gap-8 items-center justify-center">
-            {moderators.map((person) => (
-              <PersonCard key={person.name} person={person} />
-            ))}
-          </div>
+function TeamMemberSection({
+  teamMembers,
+  label,
+}: {
+  teamMembers: UserSelect[];
+  label: string;
+}) {
+  return (
+    <div className="mt-8">
+      <div className="flex flex-col gap-8 items-center justify-center">
+        <h2 className="text-2xl text-white uppercase font-extrabold">
+          {label}
+        </h2>
+        <div className="flex flex-row flex-wrap gap-8 items-center justify-center">
+          {teamMembers.map((person) => (
+            <PersonCard key={person.name} person={person} />
+          ))}
         </div>
       </div>
     </div>
   );
 }
 
-function PersonCard({ person }: { person: (typeof moderators)[0] }) {
+// TODO: Link to individuals so we can show more details.
+// TODO: Remove role and include position on the team.
+function PersonCard({ person }: { person: UserSelect }) {
   return (
     <div className="flex flex-col items-center mb-4 bg-stone-700 w-80 p-4 rounded-lg">
-      <img src="https://i.pravatar.cc/300" className="rounded-md mb-2" />
-      <h3 className="text-xl font-semibold text-white">{person.name}</h3>
-      <p className="text-sm text-white/75">{person.role}</p>
-      <p className="text-center line-clamp-2 mt-2">{person.bio}</p>
-      <a
-        href={`mailto:${person.email}`}
-        className="text-blue-500 text-sm mt-2 lowercase"
-      >
-        {person.email}
-      </a>
+      <Link to="/">
+        <img src="https://placehold.co/300" className="rounded-md mb-2" />
+      </Link>
+      <div className="flex flex-row w-full items-start justify-between">
+        <div>
+          <h3 className="text-xl font-semibold text-white">{person.name} </h3>
+          <p className="text-sm text-white/75">{person.role}</p>
+        </div>
+        <div className="bg-(--color-background) p-2 rounded-md hover:bg-(--color-destructive)">
+          <a href={`mailto:${person.email}`} className="text-sm mt-2 lowercase">
+            <MailIcon />
+          </a>
+        </div>
+      </div>
     </div>
   );
 }

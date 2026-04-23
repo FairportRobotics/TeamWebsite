@@ -2,7 +2,7 @@ import * as schema from "@/db/schema";
 import "dotenv/config";
 import { drizzle } from "drizzle-orm/node-postgres";
 import pg from "pg";
-import { game, robot } from "./schema";
+import { gameTable, robotTable } from "./schema";
 
 // Make sure we're loading the correct .env file and have the DATABASE_URL set.
 if (!process.env.DATABASE_URL) {
@@ -26,12 +26,12 @@ const db = drizzle(pool, { schema });
 async function resetDatabase() {
   // Order matters if you have foreign keys
   console.log("🧹 Clearing database...");
-  await db.delete(robot).execute();
-  await db.delete(game).execute();
+  await db.delete(robotTable).execute();
+  await db.delete(gameTable).execute();
 
   // Now we can seed the database with initial data.
   console.log("🌱 Seeding games...");
-  await db.insert(game).values([
+  await db.insert(gameTable).values([
     {
       year: 2026,
       name: "Rebuilt",
@@ -84,7 +84,7 @@ async function resetDatabase() {
   ]);
 
   console.log("🌱 Seeding robots...");
-  await db.insert(robot).values([
+  await db.insert(robotTable).values([
     {
       id: "2026",
       name: "Boulder",

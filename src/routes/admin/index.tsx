@@ -25,7 +25,7 @@ function RouteComponent() {
           <Link to="/admin/events">Manage Events</Link>
         </li>
         <li>
-          <Link to="/admin/game-years">Manage Game Years</Link>
+          <Link to="/admin/games">Manage Game Years</Link>
         </li>
         <li>
           <Link to="/admin/sponsors">Manage Sponsors</Link>

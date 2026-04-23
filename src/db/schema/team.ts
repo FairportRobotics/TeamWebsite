@@ -1,7 +1,34 @@
 import { relations } from "drizzle-orm";
-import { index, integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  index,
+  integer,
+  pgTable,
+  text,
+  timestamp,
+} from "drizzle-orm/pg-core";
+import { user } from "./better-auth";
 
-export const game = pgTable(
+export const memberTable = pgTable(
+  "member",
+  {
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    positions: text("position"),
+    bio: text("bio"),
+    active: boolean("active").default(true),
+    imageUrl: text("image_url"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at")
+      .defaultNow()
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  },
+  (table) => [index("member_idx").on(table.userId)],
+);
+
+export const gameTable = pgTable(
   "game",
   {
     year: integer("year").primaryKey(),
@@ -17,14 +44,14 @@ export const game = pgTable(
   (table) => [index("game_idx").on(table.year)],
 );
 
-export const robot = pgTable(
+export const robotTable = pgTable(
   "robot",
   {
     id: text("id").primaryKey(),
     name: text("name").notNull(),
     gameYear: integer("game_year")
       .notNull()
-      .references(() => game.year, { onDelete: "cascade" }),
+      .references(() => gameTable.year, { onDelete: "cascade" }),
     imageUrl: text("image_url"),
     specifications: text("specifications"),
     awards: text("awards"),
@@ -37,19 +64,16 @@ export const robot = pgTable(
   (table) => [index("robot_gameId_idx").on(table.gameYear)],
 );
 
-export const sponsor = pgTable(
+export const sponsorTable = pgTable(
   "sponsor",
   {
     id: text("id").primaryKey(),
     name: text("name").notNull(),
     imageUrl: text("image_url"),
-    spnosorUrl: text("sponsor_url"),
-    fromYear: integer("from_year")
-      .notNull()
-      .references(() => game.year, { onDelete: "cascade" }),
-    throughYear: integer("through_year").references(() => game.year, {
-      onDelete: "cascade",
-    }),
+    sponsorUrl: text("sponsor_url"),
+    provided: text("provided"),
+    fromYear: integer("from_year").notNull(),
+    throughYear: integer("through_year"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")
       .defaultNow()
@@ -59,6 +83,14 @@ export const sponsor = pgTable(
   (table) => [index("sponsor_name_idx").on(table.name)],
 );
 
-export const gameRelations = relations(game, ({ many }) => ({
-  robots: many(robot),
+export const gameRelations = relations(gameTable, ({ many }) => ({
+  robots: many(robotTable),
 }));
+
+// Export types for select queries.
+export type GameSelect = typeof gameTable.$inferSelect;
+export type GameInsert = typeof gameTable.$inferInsert;
+export type RobotSelect = typeof robotTable.$inferSelect;
+export type RobotInsert = typeof robotTable.$inferInsert;
+export type SponsorSelect = typeof sponsorTable.$inferSelect;
+export type SponsorInsert = typeof sponsorTable.$inferInsert;

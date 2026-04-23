@@ -5,9 +5,10 @@ import {
   session as dbSession,
   user as dbUser,
 } from "@/db/schema";
+import { seedUsers } from "@/db/seed/users";
 import { createServerFn } from "@tanstack/react-start";
 import { zodValidator } from "@tanstack/zod-adapter";
-import { gt } from "drizzle-orm";
+import { gt, like, or } from "drizzle-orm";
 import { z } from "zod";
 import { authenticatedMiddleware } from "../middlewares";
 
@@ -25,6 +26,21 @@ const banUserSchema = z.object({
 const unbanUserSchema = z.object({
   userId: z.string(),
 });
+
+// Admin Functions
+export const banUserFn = createServerFn()
+  .middleware([authenticatedMiddleware])
+  .inputValidator(zodValidator(banUserSchema))
+  .handler(async ({ data, context }) => {
+    console.log("Ban User", data.userId, data.reason, " by ", context.user.id);
+  });
+
+export const unbanUserFn = createServerFn()
+  .middleware([authenticatedMiddleware])
+  .inputValidator(zodValidator(unbanUserSchema))
+  .handler(async ({ data, context }) => {
+    console.log("UnBan User", data.userId, " by ", context.user.id);
+  });
 
 // Retrieves all the users in the system.
 export const getUserListFn = createServerFn()
@@ -47,17 +63,27 @@ export const getUserListFn = createServerFn()
     return users;
   });
 
-// Functions
-export const banUserFn = createServerFn()
-  .middleware([authenticatedMiddleware])
-  .inputValidator(zodValidator(banUserSchema))
-  .handler(async ({ data, context }) => {
-    console.log("Ban User", data.userId, data.reason, " by ", context.userId);
+export const seedUsersFn = createServerFn().handler(async () => {
+  console.log("Seeding users...");
+  seedUsers.forEach((u, i) => {
+    console.log(i, u);
   });
+});
 
-export const unbanUserFn = createServerFn()
+export const getTeamMembersFn = createServerFn()
   .middleware([authenticatedMiddleware])
-  .inputValidator(zodValidator(unbanUserSchema))
-  .handler(async ({ data, context }) => {
-    console.log("UnBan User", data.userId, " by ", context.userId);
+  .handler(async () => {
+    // Retrieve the raw data we need for team members.
+    // const teamMembers = await db
+    //   .select()
+    //   .from(dbUser)
+    //   .leftJoin(memberTable, eq(dbUser.id, memberTable.userId))
+    //   .where(or(like(dbUser.role, "%student%"), like(dbUser.role, "%mentor%")));
+
+    const teamMembers = await db
+      .select()
+      .from(dbUser)
+      .where(or(like(dbUser.role, "%student%"), like(dbUser.role, "%mentor%")));
+
+    return teamMembers;
   });
