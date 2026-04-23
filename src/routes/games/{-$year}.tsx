@@ -3,6 +3,7 @@ import {
   PageHeader,
   PageTitle,
 } from "@/components/page-header";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -53,6 +54,11 @@ export const Route = createFileRoute("/games/{-$year}")({
 
 function RouteComponent() {
   const { game, minYear, maxYear } = Route.useLoaderData();
+
+  function handleSeedGames() {
+    console.log("🌱 Seeding games...");
+  }
+
   return (
     <div className="">
       <PageHeader>
@@ -88,6 +94,9 @@ function RouteComponent() {
         </CardHeader>
         <CardContent></CardContent>
       </Card>
+      <Button className="mt-6" variant="destructive" onClick={handleSeedGames}>
+        Seed Users
+      </Button>
     </div>
   );
 }
