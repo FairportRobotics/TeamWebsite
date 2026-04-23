@@ -1,7 +1,7 @@
 import { relations } from "drizzle-orm";
 import { index, integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 
-export const game = pgTable(
+export const gameTable = pgTable(
   "game",
   {
     year: integer("year").primaryKey(),
@@ -17,14 +17,14 @@ export const game = pgTable(
   (table) => [index("game_idx").on(table.year)],
 );
 
-export const robot = pgTable(
+export const robotTable = pgTable(
   "robot",
   {
     id: text("id").primaryKey(),
     name: text("name").notNull(),
     gameYear: integer("game_year")
       .notNull()
-      .references(() => game.year, { onDelete: "cascade" }),
+      .references(() => gameTable.year, { onDelete: "cascade" }),
     imageUrl: text("image_url"),
     specifications: text("specifications"),
     awards: text("awards"),
@@ -37,7 +37,7 @@ export const robot = pgTable(
   (table) => [index("robot_gameId_idx").on(table.gameYear)],
 );
 
-export const sponsor = pgTable(
+export const sponsorTable = pgTable(
   "sponsor",
   {
     id: text("id").primaryKey(),
@@ -46,8 +46,8 @@ export const sponsor = pgTable(
     spnosorUrl: text("sponsor_url"),
     fromYear: integer("from_year")
       .notNull()
-      .references(() => game.year, { onDelete: "cascade" }),
-    throughYear: integer("through_year").references(() => game.year, {
+      .references(() => gameTable.year, { onDelete: "cascade" }),
+    throughYear: integer("through_year").references(() => gameTable.year, {
       onDelete: "cascade",
     }),
     createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -59,13 +59,14 @@ export const sponsor = pgTable(
   (table) => [index("sponsor_name_idx").on(table.name)],
 );
 
-export const gameRelations = relations(game, ({ many }) => ({
-  robots: many(robot),
+export const gameRelations = relations(gameTable, ({ many }) => ({
+  robots: many(robotTable),
 }));
 
-export type GameSelect = typeof game.$inferSelect;
-export type GameInsert = typeof game.$inferInsert;
-export type RobotSelect = typeof robot.$inferSelect;
-export type RobotInsert = typeof robot.$inferInsert;
-export type SponsorSelect = typeof sponsor.$inferSelect;
-export type SponsorInsert = typeof sponsor.$inferInsert;
+// Export types for select queries.
+export type GameSelect = typeof gameTable.$inferSelect;
+export type GameInsert = typeof gameTable.$inferInsert;
+export type RobotSelect = typeof robotTable.$inferSelect;
+export type RobotInsert = typeof robotTable.$inferInsert;
+export type SponsorSelect = typeof sponsorTable.$inferSelect;
+export type SponsorInsert = typeof sponsorTable.$inferInsert;

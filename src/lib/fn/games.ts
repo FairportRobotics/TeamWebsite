@@ -1,5 +1,6 @@
 import { db } from "@/db";
-import { game as dbGame } from "@/db/schema";
+import { gameTable as dbGame, gameTable } from "@/db/schema";
+import { seedGames } from "@/db/seed/games";
 import { createServerFn } from "@tanstack/react-start";
 import { zodValidator } from "@tanstack/zod-adapter";
 import { desc, eq, max, min } from "drizzle-orm";
@@ -29,6 +30,25 @@ export const getGameYearsFn = createServerFn({ method: "GET" }).handler(
     return years;
   },
 );
+
+export const seedGameYearsFn = createServerFn({ method: "GET" })
+  .middleware([authenticatedMiddleware])
+  .handler(async () => {
+    seedGames.forEach(async (g) => {
+      console.log("🌱 Seeding Year", g.year, g.name);
+
+      try {
+        await db.insert(gameTable).values({
+          year: g.year,
+          name: g.name,
+          imageUrl: g.imageUrl,
+          gameUrl: g.gameUrl,
+        });
+      } catch {
+        // Do nothing.
+      }
+    });
+  });
 
 export const getGameYearFn = createServerFn()
   .middleware([authenticatedMiddleware])
