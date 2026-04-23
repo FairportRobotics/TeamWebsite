@@ -1,7 +1,7 @@
 //  @ts-check
-
 import { tanstackConfig } from "@tanstack/eslint-config";
 
+// TODO: Add rules for line length.
 export default [
   ...tanstackConfig,
   {

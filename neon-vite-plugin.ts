@@ -1,5 +1,6 @@
 import { postgres } from "vite-plugin-neon-new";
 
+// TODO: Fix seed path.
 export default postgres({
   seed: {
     type: "sql-script",

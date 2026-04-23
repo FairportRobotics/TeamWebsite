@@ -1,6 +1,7 @@
 import { config } from "dotenv";
 import { defineConfig } from "drizzle-kit";
 
+// TODO: Look up that repo that forces a schema for .env.
 config({ path: [".env.local", ".env"] });
 
 export default defineConfig({

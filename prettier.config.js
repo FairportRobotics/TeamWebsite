@@ -1,5 +1,6 @@
 //  @ts-check
 
+// TODO: Add rules for line length.
 /** @type {import('prettier').Config} */
 const config = {
   semi: true,
