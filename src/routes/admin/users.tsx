@@ -5,6 +5,7 @@ import {
   PageHeader,
   PageTitle,
 } from "@/components/page-header";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -19,6 +20,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { seedUsers } from "@/db/seed/users";
+import { authClient } from "@/lib/auth-client";
 import { Permissions } from "@/lib/auth/permissions";
 import {
   assertHasPermissionFn,
@@ -86,6 +89,28 @@ function RouteComponent() {
   const canSeeActions =
     canBan || canImpersonate || canRevokeSessions || canDelete;
 
+  async function handleSeedUsers() {
+    console.log("handleSeedUsers");
+
+    seedUsers.forEach(async (u, i) => {
+      console.log("Creating user for ", u.name, "...");
+
+      await authClient.admin.createUser(
+        {
+          email: u.email,
+          password: "Password123!",
+          name: u.name,
+          role: "user",
+        },
+        {
+          onError: (error) => {
+            console.error("Error signing up:", error);
+          },
+        },
+      );
+    });
+  }
+
   return (
     <div>
       <BackTo to="/admin" label="Admin" />
@@ -139,6 +164,13 @@ function RouteComponent() {
             </div>
           </CardContent>
         </Card>
+        <Button
+          className="mt-6"
+          variant="destructive"
+          onClick={handleSeedUsers}
+        >
+          Seed Users
+        </Button>
       </div>
     </div>
   );

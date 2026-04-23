@@ -29,25 +29,25 @@ export const assertAuthenticatedFn = createServerFn().handler(async () => {
 
 export const hasPermissionFn = createServerFn()
   .middleware([authenticatedMiddleware])
-  .handler(async () => {
+  .handler(async ({ data }) => {
     return true;
   });
 
 export const assertHasPermissionFn = createServerFn()
   .middleware([authenticatedMiddleware])
-  .handler(async () => {
+  .handler(async ({ data }) => {
     return true;
   });
 
 export const hasAnyPermissionFn = createServerFn()
   .middleware([authenticatedMiddleware])
-  .handler(async () => {
+  .handler(async ({ data }) => {
     return true;
   });
 
 export const assertHasAnyPermissionFn = createServerFn()
   .middleware([authenticatedMiddleware])
-  .handler(async () => {
+  .handler(async ({ data }) => {
     return true;
   });
 

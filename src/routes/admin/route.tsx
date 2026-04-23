@@ -1,9 +1,7 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin")({
-  beforeLoad: async ({ context }) => {
-    console.log(context.data?.user.name);
-  },
+  beforeLoad: async ({ context }) => {},
   component: RouteComponent,
 });
 
