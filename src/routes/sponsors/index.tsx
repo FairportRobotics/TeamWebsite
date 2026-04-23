@@ -21,6 +21,8 @@ export const Route = createFileRoute("/sponsors/")({
   },
 });
 
+// TODO: Adjust images so they align better. Wegmans, for example, pushes the container down.
+// TODO: Consider whether we want to show color or B&W.
 function RouteComponent() {
   const sponsors = Route.useLoaderData();
 

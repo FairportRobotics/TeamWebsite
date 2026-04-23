@@ -5,7 +5,8 @@ import {
 } from "@/components/page-header";
 import type { UserSelect } from "@/db/schema";
 import { getTeamMembersFn } from "@/lib/fn/user";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { MailIcon } from "lucide-react";
 
 export const Route = createFileRoute("/team/")({
   component: RouteComponent,
@@ -28,10 +29,23 @@ function RouteComponent() {
         <PageTitle>
           The <span className="text-(--color-destructive)">team</span>
         </PageTitle>
-        <PageDescription>
-          Get to know the coaches, mentors and students that make up our team.
-          Learn about their roles on the team, their backgrounds and their
-          contributions to our success.
+        <PageDescription className="flex flex-col gap-2">
+          <p>
+            Get to know the coaches, mentors and students that make up our team.
+            Learn about their roles on the team, their backgrounds and their
+            contributions to our success.
+          </p>
+          <p>
+            Inspiration for this page is{" "}
+            <a
+              href="https://1418.team/team"
+              target="_blank"
+              className="text-(--color-destructive)"
+            >
+              Team 1418
+            </a>
+            .
+          </p>
         </PageDescription>
       </PageHeader>
 
@@ -69,15 +83,20 @@ function TeamMemberSection({
 function PersonCard({ person }: { person: UserSelect }) {
   return (
     <div className="flex flex-col items-center mb-4 bg-stone-700 w-80 p-4 rounded-lg">
-      <img src="https://i.pravatar.cc/300" className="rounded-md mb-2" />
-      <h3 className="text-xl font-semibold text-white">{person.name}</h3>
-      <p className="text-sm text-white/75">{person.role}</p>
-      <a
-        href={`mailto:${person.email}`}
-        className="text-blue-500 text-sm mt-2 lowercase"
-      >
-        {person.email}
-      </a>
+      <Link to="/">
+        <img src="https://placehold.co/300" className="rounded-md mb-2" />
+      </Link>
+      <div className="flex flex-row w-full items-start justify-between">
+        <div>
+          <h3 className="text-xl font-semibold text-white">{person.name} </h3>
+          <p className="text-sm text-white/75">{person.role}</p>
+        </div>
+        <div className="bg-(--color-background) p-2 rounded-md hover:bg-(--color-destructive)">
+          <a href={`mailto:${person.email}`} className="text-sm mt-2 lowercase">
+            <MailIcon />
+          </a>
+        </div>
+      </div>
     </div>
   );
 }

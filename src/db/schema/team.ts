@@ -1,5 +1,12 @@
 import { relations } from "drizzle-orm";
-import { index, integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  index,
+  integer,
+  pgTable,
+  text,
+  timestamp,
+} from "drizzle-orm/pg-core";
 import { user } from "./better-auth";
 
 export const memberTable = pgTable(
@@ -8,8 +15,9 @@ export const memberTable = pgTable(
     userId: text("user_id")
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
-    position: text("position"),
+    positions: text("position"),
     bio: text("bio"),
+    active: boolean("active").default(true),
     imageUrl: text("image_url"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")
