@@ -31,59 +31,14 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 bg-(--color-accent) px-4 backdrop-blur-lg">
       <nav className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 py-3 sm:py-4">
-        <section className="flex items-center justify-center gap-3">
-          <Link
-            to="/"
-            activeOptions={{ exact: false }}
-            activeProps={{ className: "font-bold text-(--color-destructive)" }}
-            inactiveProps={{ className: "text-white" }}
-          >
-            Home
-          </Link>
-          <Link
-            to="/team"
-            activeOptions={{ exact: false }}
-            activeProps={{ className: "font-bold text-(--color-destructive)" }}
-            inactiveProps={{ className: "text-white" }}
-          >
-            Team
-          </Link>
-          <Link
-            to="/games"
-            activeOptions={{ exact: false }}
-            activeProps={{ className: "font-bold text-(--color-destructive)" }}
-            inactiveProps={{ className: "text-white" }}
-          >
-            Games
-          </Link>
-          <Link
-            to="/calendar"
-            activeOptions={{ exact: false }}
-            activeProps={{ className: "font-bold text-(--color-destructive)" }}
-            inactiveProps={{ className: "text-white" }}
-          >
-            Calendar
-          </Link>
-          <Link
-            to="/sponsors"
-            className=""
-            activeOptions={{ exact: false }}
-            activeProps={{ className: "font-bold text-(--color-destructive)" }}
-            inactiveProps={{ className: "text-white" }}
-          >
-            Sponsors
-          </Link>
+        <section className="flex items-center justify-center gap-2">
+          <NavigationLink label="Home" link="/" />
+          <NavigationLink label="Team" link="/team" />
+          <NavigationLink label="Games" link="/games" />
+          <NavigationLink label="Calendar" link="/calendar" />
+          <NavigationLink label="Sponsors" link="/sponsors" />
 
-          {hasAdminPermission && (
-            <Link
-              to="/admin"
-              activeOptions={{ exact: false }}
-              activeProps={{ className: "font-bold text-(--color-destructive)" }}
-              inactiveProps={{ className: "text-white" }}
-            >
-              Admin
-            </Link>
-          )}
+          {hasAdminPermission && <NavigationLink label="Admin" link="/admin" />}
         </section>
         <section className="flex items-center justify-center gap-3">
           {!isPending && (
@@ -107,5 +62,26 @@ export default function Header() {
         </section>
       </nav>
     </header>
+  );
+}
+
+function NavigationLink({ label, link }: { label: string; link: string }) {
+  return (
+    <>
+      <Link
+        to={link}
+        activeOptions={{ exact: false }}
+        activeProps={{
+          className:
+            "uppercase px-4 py-2 text-white font-extrabold rounded-md bg-(--color-destructive)",
+        }}
+        inactiveProps={{
+          className:
+            "uppercase px-4 py-2 text-white font-extrabold rounded-md hover:bg-(--color-secondary) hover:text-(--color-destructive)",
+        }}
+      >
+        {label}
+      </Link>
+    </>
   );
 }
