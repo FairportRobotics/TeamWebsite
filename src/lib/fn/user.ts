@@ -5,48 +5,17 @@ import {
   session as dbSession,
   user as dbUser,
 } from "@/db/schema";
-import { seedUsers } from "@/db/seed/users";
+import { authenticatedMiddleware } from "@/lib/middleware/auth";
 import { createServerFn } from "@tanstack/react-start";
 import { zodValidator } from "@tanstack/zod-adapter";
 import { eq, gt, like, or } from "drizzle-orm";
 import { z } from "zod";
-import { authenticatedMiddleware } from "../middlewares";
 
 export interface AdminUser extends UserSelect {
   accounts: AccountSelect[];
   sessions: SessionSelect[];
 }
 
-// Schemas
-const banUserSchema = z.object({
-  userId: z.string(),
-  reason: z.string().trim(),
-});
-
-const unbanUserSchema = z.object({
-  userId: z.string(),
-});
-
-const getUserSchema = z.object({
-  userId: z.string(),
-});
-
-// Admin Functions
-export const banUserFn = createServerFn()
-  .middleware([authenticatedMiddleware])
-  .inputValidator(zodValidator(banUserSchema))
-  .handler(async ({ data, context }) => {
-    console.log("Ban User", data.userId, data.reason, " by ", context.user.id);
-  });
-
-export const unbanUserFn = createServerFn()
-  .middleware([authenticatedMiddleware])
-  .inputValidator(zodValidator(unbanUserSchema))
-  .handler(async ({ data, context }) => {
-    console.log("UnBan User", data.userId, " by ", context.user.id);
-  });
-
-// Retrieves all the users in the system.
 export const getUserListFn = createServerFn()
   .middleware([authenticatedMiddleware])
   .handler(async () => {
@@ -67,13 +36,6 @@ export const getUserListFn = createServerFn()
     return users;
   });
 
-export const seedUsersFn = createServerFn().handler(async () => {
-  console.log("Seeding users...");
-  seedUsers.forEach((u, i) => {
-    console.log(i, u);
-  });
-});
-
 export const getTeamMembersFn = createServerFn().handler(async () => {
   const teamMembers = await db
     .select()
@@ -81,6 +43,10 @@ export const getTeamMembersFn = createServerFn().handler(async () => {
     .where(or(like(dbUser.role, "%student%"), like(dbUser.role, "%mentor%")));
 
   return teamMembers;
+});
+
+const getUserSchema = z.object({
+  userId: z.string(),
 });
 
 export const getTeamMemberFn = createServerFn()
