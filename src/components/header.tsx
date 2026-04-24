@@ -2,6 +2,8 @@
 
 // prettier-ignore
 import { authClient } from "@/lib/auth-client";
+import { hasAnyPermission } from "@/lib/auth/utils/permissions";
+import { Permissions } from "@/lib/permissions";
 import { Link, useNavigate } from "@tanstack/react-router";
 import type { User } from "better-auth";
 import { ImpersonateButton } from "./impersonate-button";
@@ -14,6 +16,12 @@ export interface NavUserProps {
 export default function Header() {
   const navigate = useNavigate();
   const { data: session, isPending } = authClient.useSession();
+  const hasAdminPermission = hasAnyPermission(session?.user.role, [
+    Permissions.UserAdminister,
+    Permissions.EventAdminister,
+    Permissions.SponsorAdminister,
+    Permissions.GameYearAdminister,
+  ]);
 
   async function handleSignOut() {
     await authClient.signOut();
@@ -29,7 +37,7 @@ export default function Header() {
           <Link to="/games">Games</Link>
           <Link to="/calendar">Calendar</Link>
           <Link to="/sponsors">Sponsors</Link>
-          <Link to="/admin">Admin</Link>
+          {hasAdminPermission && <Link to="/admin">Admin</Link>}
         </section>
         <section className="flex items-center justify-center gap-3">
           {!isPending && (
