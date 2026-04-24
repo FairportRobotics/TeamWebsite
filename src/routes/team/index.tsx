@@ -1,15 +1,5 @@
-import {
-  PageDescription,
-  PageHeader,
-  PageTitle,
-} from "@/components/page-header";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getTeamMembersFn } from "@/lib/fn/user";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
@@ -37,19 +27,14 @@ function RouteComponent() {
         <PageTitle>
           The <span className="text-(--color-destructive)">team</span>
         </PageTitle>
-        <PageDescription className="flex flex-col gap-2">
+        <PageDescription className="flex flex-col gap-4">
           <p>
-            Get to know the coaches, mentors and students that make up our team.
-            Learn about their roles on the team, their backgrounds and their
-            contributions to our success.
+            Get to know the coaches, mentors and students that make up our team. Learn about their
+            roles on the team, their backgrounds and their contributions to our success.
           </p>
           <p>
             Inspiration for this page is{" "}
-            <a
-              href="https://1418.team/team"
-              target="_blank"
-              className="text-(--color-destructive)"
-            >
+            <a href="https://1418.team/team" target="_blank" className="text-(--color-destructive)">
               Team 1418
             </a>
             .
@@ -69,10 +54,7 @@ function RouteComponent() {
             <Card key={s.id}>
               <CardContent>
                 <Link to="/team/$id" params={{ id: s.id }}>
-                  <img
-                    src="https://placehold.co/300"
-                    className="rounded-md mb-2"
-                  />
+                  <img src="https://placehold.co/300" className="rounded-md mb-2" />
                 </Link>
               </CardContent>
               <CardHeader className="flex flex-col justify-start items-start w-full">
@@ -99,10 +81,7 @@ function RouteComponent() {
             <Card key={s.id}>
               <CardContent>
                 <Link to="/team/$id" params={{ id: s.id }}>
-                  <img
-                    src="https://placehold.co/300"
-                    className="rounded-md mb-2"
-                  />
+                  <img src="https://placehold.co/300" className="rounded-md mb-2" />
                 </Link>
               </CardContent>
               <CardHeader className="flex flex-col justify-start items-start w-full">

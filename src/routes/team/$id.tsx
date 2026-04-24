@@ -1,9 +1,5 @@
 import { BackTo } from "@/components/back-to";
-import {
-  PageDescription,
-  PageHeader,
-  PageTitle,
-} from "@/components/page-header";
+import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
 import { getTeamMemberFn } from "@/lib/fn/user";
 import { createFileRoute } from "@tanstack/react-router";
 
@@ -28,7 +24,7 @@ function RouteComponent() {
         <PageTitle>
           Team <span className="text-(--color-destructive)">Member</span>
         </PageTitle>
-        <PageDescription className="flex flex-col gap-2">
+        <PageDescription className="flex flex-col gap-4">
           <p>How about this one...</p>
         </PageDescription>
       </PageHeader>
