@@ -3,10 +3,15 @@ import {
   PageHeader,
   PageTitle,
 } from "@/components/page-header";
-import type { UserSelect } from "@/db/schema";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { getTeamMembersFn } from "@/lib/fn/user";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { MailIcon } from "lucide-react";
 
 export const Route = createFileRoute("/team/")({
   component: RouteComponent,
@@ -19,9 +24,12 @@ export const Route = createFileRoute("/team/")({
 function RouteComponent() {
   const teamMembers = Route.useLoaderData();
 
-  // TODO: Sort
-  const students = teamMembers.filter((t) => t.role?.includes("student"));
-  const moderators = teamMembers.filter((t) => t.role?.includes("mentor"));
+  const students = teamMembers
+    .filter((t) => t.role?.includes("student"))
+    .sort((a, b) => a.name.localeCompare(b.name));
+  const mentors = teamMembers
+    .filter((t) => t.role?.includes("mentor"))
+    .sort((a, b) => a.name.localeCompare(b.name));
 
   return (
     <div>
@@ -49,52 +57,63 @@ function RouteComponent() {
         </PageDescription>
       </PageHeader>
 
-      <TeamMemberSection teamMembers={students} label="Students" />
-      <TeamMemberSection teamMembers={moderators} label="Mentors" />
-    </div>
-  );
-}
-
-function TeamMemberSection({
-  teamMembers,
-  label,
-}: {
-  teamMembers: UserSelect[];
-  label: string;
-}) {
-  return (
-    <div className="mt-8">
-      <div className="flex flex-col gap-8 items-center justify-center">
-        <h2 className="text-2xl text-white uppercase font-extrabold">
-          {label}
-        </h2>
-        <div className="flex flex-row flex-wrap gap-8 items-center justify-center">
-          {teamMembers.map((person) => (
-            <PersonCard key={person.name} person={person} />
+      {/* Students */}
+      <div className="mb-20">
+        <div className="bg-(--color-destructive) text-center m-10 p-4">
+          <h2 className="text-white text-3xl font-extrabold uppercase">
+            Students ({students.length})
+          </h2>
+        </div>
+        <div className="flex flex-row flex-wrap gap-4 items-center justify-center">
+          {students.map((s) => (
+            <Card key={s.id}>
+              <CardContent>
+                <Link to="/team/$id" params={{ id: s.id }}>
+                  <img
+                    src="https://placehold.co/300"
+                    className="rounded-md mb-2"
+                  />
+                </Link>
+              </CardContent>
+              <CardHeader className="flex flex-col justify-start items-start w-full">
+                <CardTitle className="">
+                  <div className="text-2xl font-bold">{s.name}</div>
+                  <span className="text-(--color-destructive)">{s.role}</span>
+                </CardTitle>
+                <CardDescription>Lorem ipsum...</CardDescription>
+              </CardHeader>
+            </Card>
           ))}
         </div>
       </div>
-    </div>
-  );
-}
 
-// TODO: Link to individuals so we can show more details.
-// TODO: Remove role and include position on the team.
-function PersonCard({ person }: { person: UserSelect }) {
-  return (
-    <div className="flex flex-col items-center mb-4 bg-stone-700 w-80 p-4 rounded-lg">
-      <Link to="/">
-        <img src="https://placehold.co/300" className="rounded-md mb-2" />
-      </Link>
-      <div className="flex flex-row w-full items-start justify-between">
-        <div>
-          <h3 className="text-xl font-semibold text-white">{person.name} </h3>
-          <p className="text-sm text-white/75">{person.role}</p>
+      {/* Mentors */}
+      <div>
+        <div className="bg-(--color-destructive) text-center m-10 p-4">
+          <h2 className="text-white text-3xl font-extrabold uppercase">
+            Mentors ({mentors.length})
+          </h2>
         </div>
-        <div className="bg-(--color-background) p-2 rounded-md hover:bg-(--color-destructive)">
-          <a href={`mailto:${person.email}`} className="text-sm mt-2 lowercase">
-            <MailIcon />
-          </a>
+        <div className="flex flex-row flex-wrap gap-4 items-center justify-center">
+          {mentors.map((s) => (
+            <Card key={s.id}>
+              <CardContent>
+                <Link to="/team/$id" params={{ id: s.id }}>
+                  <img
+                    src="https://placehold.co/300"
+                    className="rounded-md mb-2"
+                  />
+                </Link>
+              </CardContent>
+              <CardHeader className="flex flex-col justify-start items-start w-full">
+                <CardTitle className="">
+                  <div className="text-2xl font-bold">{s.name}</div>
+                  <span className="text-(--color-destructive)">{s.role}</span>
+                </CardTitle>
+                <CardDescription>Lorem ipsum...</CardDescription>
+              </CardHeader>
+            </Card>
+          ))}
         </div>
       </div>
     </div>

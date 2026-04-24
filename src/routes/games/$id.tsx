@@ -13,7 +13,7 @@ import {
 import { getGameYearFn, getGameYearsExtentsFn } from "@/lib/fn/games";
 import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/games/{-$year}")({
+export const Route = createFileRoute("/games/$id")({
   component: RouteComponent,
   loader: async ({ params }) => {
     // Default to the current year,
@@ -25,8 +25,8 @@ export const Route = createFileRoute("/games/{-$year}")({
 
     // If params were provided, parse and assign to the game year as long as it falls
     // within the bounds of the years we have loaded.
-    if (params.year) {
-      const paramsYear = parseInt(params.year);
+    if (params.id) {
+      const paramsYear = parseInt(params.id);
 
       if (paramsYear) {
         if (
@@ -55,10 +55,10 @@ function RouteComponent() {
   const { game, minYear, maxYear } = Route.useLoaderData();
 
   return (
-    <div className="">
+    <div>
       <PageHeader>
         <PageTitle>
-          FIRST <span className="text-(--color-destructive)">games</span>
+          Game <span className="text-(--color-destructive)">details</span>
         </PageTitle>
         <PageDescription>
           This is where we can list each game year and include the robot name

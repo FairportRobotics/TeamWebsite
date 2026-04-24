@@ -22,52 +22,42 @@ import {
 } from "@/components/ui/table";
 import { seedUsers } from "@/db/seed/users";
 import { authClient } from "@/lib/auth-client";
-import { Permissions } from "@/lib/auth/permissions";
 import {
-  assertHasPermissionFn,
-  getSessionFn,
-  hasPermissionFn,
-} from "@/lib/auth/server";
+  assertHasAnyPermission,
+  hasAnyPermission,
+} from "@/lib/auth/utils/permissions";
 import { getUserListFn } from "@/lib/fn/user";
+import { Permissions } from "@/lib/permissions";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin/users")({
-  beforeLoad: async () => {
-    await assertHasPermissionFn({
-      data: {
-        requiredPermission: Permissions.UserAdminister,
-      },
-    });
+  beforeLoad: async ({ context }) => {
+    assertHasAnyPermission(context.data?.user.role, [
+      Permissions.UserAdminister,
+    ]);
   },
   component: RouteComponent,
-  loader: async () => {
-    const [
-      session,
-      users,
-      canBan,
-      canImpersonate,
-      canRevokeSessions,
-      canDelete,
-    ] = await Promise.all([
-      getSessionFn(),
-      getUserListFn(),
-      hasPermissionFn({
-        data: { requiredPermission: Permissions.UserBan },
-      }),
-      hasPermissionFn({
-        data: { requiredPermission: Permissions.UserImpersonate },
-      }),
-      hasPermissionFn({
-        data: { requiredPermission: Permissions.UserRevokeSessions },
-      }),
-      hasPermissionFn({
-        data: { requiredPermission: Permissions.UserDelete },
-      }),
+  loader: async ({ context }) => {
+    // Pull needed data from the context.
+    const userId = context.data?.user.id;
+    const userRoles = context.data?.user.role ?? "";
+
+    // Get all the users.
+    const users = await getUserListFn();
+
+    // Get fine-grained permissions for UI adjustment.
+    const canBan = hasAnyPermission(userRoles, [Permissions.UserBan]);
+    const canImpersonate = hasAnyPermission(userRoles, [
+      Permissions.UserImpersonate,
     ]);
+    const canRevokeSessions = hasAnyPermission(userRoles, [
+      Permissions.UserRevokeSessions,
+    ]);
+    const canDelete = hasAnyPermission(userRoles, [Permissions.UserDelete]);
 
     return {
       users,
-      selfId: session?.user.id,
+      selfId: userId,
       canBan,
       canImpersonate,
       canRevokeSessions,

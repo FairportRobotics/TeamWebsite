@@ -1,9 +1,11 @@
+import { validateRequest } from "@/lib/auth/utils/request";
+import { authenticatedMiddleware } from "@/lib/middleware/auth";
 import { redirect } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeaders } from "@tanstack/react-start/server";
 import { auth } from "../auth";
-import { authenticatedMiddleware } from "../middlewares";
-import { validateRequest } from "./utils";
+import type { Permission } from "../permissions";
+import { hasAnyPermission } from "./utils/permissions";
 
 export const getSessionFn = createServerFn({ method: "GET" }).handler(
   async () => {
@@ -29,7 +31,7 @@ export const assertAuthenticatedFn = createServerFn().handler(async () => {
 
 export const hasPermissionFn = createServerFn()
   .middleware([authenticatedMiddleware])
-  .handler(async ({ data }) => {
+  .handler(async ({ data, context }) => {
     return true;
   });
 
@@ -41,8 +43,9 @@ export const assertHasPermissionFn = createServerFn()
 
 export const hasAnyPermissionFn = createServerFn()
   .middleware([authenticatedMiddleware])
-  .handler(async ({ data }) => {
-    return true;
+  .inputValidator((data: { permissions: readonly Permission[] }) => data)
+  .handler(async ({ data, context }) => {
+    return hasAnyPermission(context.user.role, data.permissions);
   });
 
 export const assertHasAnyPermissionFn = createServerFn()

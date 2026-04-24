@@ -5,10 +5,17 @@ import {
   PageTitle,
 } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
+import { assertHasAnyPermission } from "@/lib/auth/utils/permissions";
 import { getSponsorsFn, seedSponsorsFn } from "@/lib/fn/sponsor";
+import { Permissions } from "@/lib/permissions";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin/sponsors")({
+  beforeLoad: async ({ context }) => {
+    assertHasAnyPermission(context.data?.user.role, [
+      Permissions.SponsorAdminister,
+    ]);
+  },
   component: RouteComponent,
   loader: async () => {
     const sponsors = await getSponsorsFn();

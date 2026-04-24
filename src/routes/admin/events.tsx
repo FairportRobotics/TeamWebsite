@@ -4,9 +4,16 @@ import {
   PageHeader,
   PageTitle,
 } from "@/components/page-header";
+import { assertHasAnyPermission } from "@/lib/auth/utils/permissions";
+import { Permissions } from "@/lib/permissions";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin/events")({
+  beforeLoad: async ({ context }) => {
+    assertHasAnyPermission(context.data?.user.role, [
+      Permissions.GameYearAdminister,
+    ]);
+  },
   component: RouteComponent,
 });
 

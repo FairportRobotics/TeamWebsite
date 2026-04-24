@@ -4,7 +4,7 @@ function PageHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card"
-      className={cn("flex flex-col items-center", className)}
+      className={cn("flex flex-col items-center mb-20", className)}
       {...props}
     />
   );

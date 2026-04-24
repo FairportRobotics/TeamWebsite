@@ -6,6 +6,7 @@ export function getRouter() {
     routeTree,
     scrollRestoration: true,
     defaultPreload: "intent",
+    defaultPreloadDelay: 300,
     defaultPreloadStaleTime: 0,
     context: {
       data: undefined!,

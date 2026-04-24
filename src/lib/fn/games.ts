@@ -1,11 +1,11 @@
 import { db } from "@/db";
 import { gameTable as dbGame, gameTable } from "@/db/schema";
 import { seedGames } from "@/db/seed/games";
+import { authenticatedMiddleware } from "@/lib/middleware/auth";
 import { createServerFn } from "@tanstack/react-start";
 import { zodValidator } from "@tanstack/zod-adapter";
 import { desc, eq, max, min } from "drizzle-orm";
 import { z } from "zod";
-import { authenticatedMiddleware } from "../middlewares";
 
 const getGameYearSchema = z.object({
   year: z.number().default(new Date().getFullYear()),
@@ -51,7 +51,6 @@ export const seedGameYearsFn = createServerFn({ method: "GET" })
   });
 
 export const getGameYearFn = createServerFn()
-  .middleware([authenticatedMiddleware])
   .inputValidator(zodValidator(getGameYearSchema))
   .handler(async ({ data }) => {
     const results = await db
