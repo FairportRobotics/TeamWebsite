@@ -36,7 +36,7 @@ function RouteComponent() {
         </PageDescription>
       </PageHeader>
 
-      <div className="flex flex-row flex-wrap gap-4 items-center justify-center">
+      <div className="flex flex-row flex-wrap gap-10 items-center justify-center">
         {games.map((g) => (
           <Card key={g.year}>
             <CardContent>

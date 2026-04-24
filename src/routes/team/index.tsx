@@ -26,8 +26,12 @@ function RouteComponent() {
   const teamMembers = Route.useLoaderData();
 
   // TODO: Sort
-  const students = teamMembers.filter((t) => t.role?.includes("student"));
-  const moderators = teamMembers.filter((t) => t.role?.includes("mentor"));
+  const students = teamMembers
+    .filter((t) => t.role?.includes("student"))
+    .sort((a, b) => a.name.localeCompare(b.name));
+  const mentors = teamMembers
+    .filter((t) => t.role?.includes("mentor"))
+    .sort((a, b) => a.name.localeCompare(b.name));
 
   return (
     <div>
@@ -55,9 +59,64 @@ function RouteComponent() {
         </PageDescription>
       </PageHeader>
 
-      <div className="w-full">
-        <TeamMemberSection teamMembers={students} label="Students" />
-        <TeamMemberSection teamMembers={moderators} label="Mentors" />
+      {/* Students */}
+      <div className="mb-20">
+        <div className="bg-(--color-destructive) text-center m-10 p-4">
+          <h2 className="text-white text-3xl font-extrabold uppercase">
+            Students ({students.length})
+          </h2>
+        </div>
+        <div className="flex flex-row flex-wrap gap-4 items-center justify-center">
+          {students.map((s) => (
+            <Card key={s.id}>
+              <CardContent>
+                <Link to="/team/$id" params={{ id: s.id }}>
+                  <img
+                    src="https://placehold.co/400"
+                    className="rounded-md mb-2"
+                  />
+                </Link>
+              </CardContent>
+              <CardHeader className="flex flex-col justify-start items-start w-full">
+                <CardTitle className="">
+                  <div className="text-2xl font-bold">{s.name}</div>
+                  <span className="text-(--color-destructive)">{s.role}</span>
+                </CardTitle>
+                <CardDescription>Lorem ipsum...</CardDescription>
+              </CardHeader>
+            </Card>
+          ))}
+        </div>
+      </div>
+
+      {/* Mentors */}
+      <div>
+        <div className="bg-(--color-destructive) text-center m-10 p-4">
+          <h2 className="text-white text-3xl font-extrabold uppercase">
+            Mentors ({mentors.length})
+          </h2>
+        </div>
+        <div className="flex flex-row flex-wrap gap-4 items-center justify-center">
+          {mentors.map((s) => (
+            <Card key={s.id}>
+              <CardContent>
+                <Link to="/team/$id" params={{ id: s.id }}>
+                  <img
+                    src="https://placehold.co/400"
+                    className="rounded-md mb-2"
+                  />
+                </Link>
+              </CardContent>
+              <CardHeader className="flex flex-col justify-start items-start w-full">
+                <CardTitle className="">
+                  <div className="text-2xl font-bold">{s.name}</div>
+                  <span className="text-(--color-destructive)">{s.role}</span>
+                </CardTitle>
+                <CardDescription>Lorem ipsum...</CardDescription>
+              </CardHeader>
+            </Card>
+          ))}
+        </div>
       </div>
     </div>
   );
