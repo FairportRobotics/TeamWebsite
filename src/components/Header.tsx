@@ -32,12 +32,58 @@ export default function Header() {
     <header className="sticky top-0 z-50 bg-(--color-accent) px-4 backdrop-blur-lg">
       <nav className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 py-3 sm:py-4">
         <section className="flex items-center justify-center gap-3">
-          <Link to="/">Home</Link>
-          <Link to="/team">Team</Link>
-          <Link to="/games">Games</Link>
-          <Link to="/calendar">Calendar</Link>
-          <Link to="/sponsors">Sponsors</Link>
-          {hasAdminPermission && <Link to="/admin">Admin</Link>}
+          <Link
+            to="/"
+            activeOptions={{ exact: false }}
+            activeProps={{ className: "font-bold text-(--color-destructive)" }}
+            inactiveProps={{ className: "text-white" }}
+          >
+            Home
+          </Link>
+          <Link
+            to="/team"
+            activeOptions={{ exact: false }}
+            activeProps={{ className: "font-bold text-(--color-destructive)" }}
+            inactiveProps={{ className: "text-white" }}
+          >
+            Team
+          </Link>
+          <Link
+            to="/games"
+            activeOptions={{ exact: false }}
+            activeProps={{ className: "font-bold text-(--color-destructive)" }}
+            inactiveProps={{ className: "text-white" }}
+          >
+            Games
+          </Link>
+          <Link
+            to="/calendar"
+            activeOptions={{ exact: false }}
+            activeProps={{ className: "font-bold text-(--color-destructive)" }}
+            inactiveProps={{ className: "text-white" }}
+          >
+            Calendar
+          </Link>
+          <Link
+            to="/sponsors"
+            className=""
+            activeOptions={{ exact: false }}
+            activeProps={{ className: "font-bold text-(--color-destructive)" }}
+            inactiveProps={{ className: "text-white" }}
+          >
+            Sponsors
+          </Link>
+
+          {hasAdminPermission && (
+            <Link
+              to="/admin"
+              activeOptions={{ exact: false }}
+              activeProps={{ className: "font-bold text-(--color-destructive)" }}
+              inactiveProps={{ className: "text-white" }}
+            >
+              Admin
+            </Link>
+          )}
         </section>
         <section className="flex items-center justify-center gap-3">
           {!isPending && (
