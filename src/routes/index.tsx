@@ -24,7 +24,15 @@ function App() {
         </PageDescription>
       </PageHeader>
 
-      <section></section>
+      <section>
+        <p>
+          Inspiration for this site is{" "}
+          <a href="https://1418.team/team" target="_blank" className="text-(--color-destructive)">
+            Team 1418
+          </a>
+          .
+        </p>
+      </section>
     </main>
   );
 }

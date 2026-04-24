@@ -32,13 +32,6 @@ function RouteComponent() {
             Get to know the coaches, mentors and students that make up our team. Learn about their
             roles on the team, their backgrounds and their contributions to our success.
           </p>
-          <p>
-            Inspiration for this page is{" "}
-            <a href="https://1418.team/team" target="_blank" className="text-(--color-destructive)">
-              Team 1418
-            </a>
-            .
-          </p>
         </PageDescription>
       </PageHeader>
 
