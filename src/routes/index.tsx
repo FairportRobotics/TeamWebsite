@@ -14,17 +14,22 @@ function App() {
     <main className="">
       <PageHeader>
         <PageTitle>
-          Team <span className="text-(--color-destructive)">578</span>
+          FRC Team <span className="text-(--color-destructive)">578</span>
         </PageTitle>
         <PageDescription>
           <div>Welcome {user ? user.name : "Guest"}!</div>
-          <p>Id: {user?.id}</p>
-          <p>Email: {user?.email}</p>
-          <p>Roles: {user?.role}</p>
         </PageDescription>
       </PageHeader>
 
-      <section></section>
+      <section>
+        <p>
+          Some of the look and feel of this site has been shamelessly stolen from the amazing{" "}
+          <a href="https://1418.team/team" target="_blank" className="text-(--color-destructive)">
+            Team 1418
+          </a>
+          .
+        </p>
+      </section>
     </main>
   );
 }
