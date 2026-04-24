@@ -1,3 +1,4 @@
+// prettier-ignore
 import { cn } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
 
@@ -8,8 +9,7 @@ export default function Footer() {
     <footer className="mt-20 p-4 py-10 flex gap-10 flex-col items-center bg-(--color-accent)">
       <div className="flex flex-col items-center justify-center">
         <div className="text-3xl uppercase text-white mb-2">
-          Thank you to our{" "}
-          <span className="uppercase text-(--color-destructive)">generous</span>{" "}
+          Thank you to our <span className="uppercase text-(--color-destructive)">generous</span>{" "}
           sponsors!
         </div>
         <div className="mb-4">
@@ -48,18 +48,13 @@ export default function Footer() {
           </h2>
         </div>
         <div>
-          <h2 className="text-2xl uppercase text-white font-semibold">
-            Get in touch
-          </h2>
+          <h2 className="text-2xl uppercase text-white font-semibold">Get in touch</h2>
           <div>Address here</div>
           <div className="hover:text-(--color-destructive)">
             <Link to="/contact">Contact us</Link>
           </div>
           <div className="flex flex-row gap-2 mt-8 overflow-hidden">
-            <SocialLinkButton
-              link="https://x.com/fairportrobotic"
-              image="/twitter.svg"
-            />
+            <SocialLinkButton link="https://x.com/fairportrobotic" image="/twitter.svg" />
             <SocialLinkButton
               link="https://www.instagram.com/fairportrobotics/"
               image="/instagram.svg"
@@ -68,21 +63,13 @@ export default function Footer() {
               link="https://www.facebook.com/fairportrobotics/"
               image="/facebook.svg"
             />
-            <SocialLinkButton
-              link="https://www.youtube.com/@team578"
-              image="/youtube.svg"
-            />
-            <SocialLinkButton
-              link="https://github.com/FairportRobotics/"
-              image="/github.svg"
-            />
+            <SocialLinkButton link="https://www.youtube.com/@team578" image="/youtube.svg" />
+            <SocialLinkButton link="https://github.com/FairportRobotics/" image="/github.svg" />
           </div>
         </div>
       </div>
       <div className="border-t-2 border-(--color-secondary) w-full mx-4" />
-      <div className="text-sm">
-        © {year} FRC Team 578 Fairport Robotics. All rights reserved.
-      </div>
+      <div className="text-sm">© {year} FRC Team 578 Fairport Robotics. All rights reserved.</div>
     </footer>
   );
 }

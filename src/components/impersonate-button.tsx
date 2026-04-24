@@ -1,3 +1,4 @@
+// prettier-ignore
 import { authClient } from "@/lib/auth-client";
 import { useNavigate } from "@tanstack/react-router";
 import { UserX } from "lucide-react";
