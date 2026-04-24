@@ -17,9 +17,11 @@ import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TeamIndexRouteImport } from './routes/team/index'
 import { Route as SponsorsIndexRouteImport } from './routes/sponsors/index'
+import { Route as GamesIndexRouteImport } from './routes/games/index'
 import { Route as CalendarIndexRouteImport } from './routes/calendar/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
-import { Route as GamesChar123YearChar125RouteImport } from './routes/games/{-$year}'
+import { Route as TeamIdRouteImport } from './routes/team/$id'
+import { Route as GamesIdRouteImport } from './routes/games/$id'
 import { Route as AuthSignupRouteImport } from './routes/auth/signup'
 import { Route as AuthSigninRouteImport } from './routes/auth/signin'
 import { Route as AuthForgotPasswordRouteImport } from './routes/auth/forgot-password'
@@ -70,6 +72,11 @@ const SponsorsIndexRoute = SponsorsIndexRouteImport.update({
   path: '/sponsors/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GamesIndexRoute = GamesIndexRouteImport.update({
+  id: '/games/',
+  path: '/games/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CalendarIndexRoute = CalendarIndexRouteImport.update({
   id: '/calendar/',
   path: '/calendar/',
@@ -80,9 +87,14 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRouteRoute,
 } as any)
-const GamesChar123YearChar125Route = GamesChar123YearChar125RouteImport.update({
-  id: '/games/{-$year}',
-  path: '/games/{-$year}',
+const TeamIdRoute = TeamIdRouteImport.update({
+  id: '/team/$id',
+  path: '/team/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GamesIdRoute = GamesIdRouteImport.update({
+  id: '/games/$id',
+  path: '/games/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthSignupRoute = AuthSignupRouteImport.update({
@@ -145,9 +157,11 @@ export interface FileRoutesByFullPath {
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/signin': typeof AuthSigninRoute
   '/auth/signup': typeof AuthSignupRoute
-  '/games/{-$year}': typeof GamesChar123YearChar125Route
+  '/games/$id': typeof GamesIdRoute
+  '/team/$id': typeof TeamIdRoute
   '/admin/': typeof AdminIndexRoute
   '/calendar/': typeof CalendarIndexRoute
+  '/games/': typeof GamesIndexRoute
   '/sponsors/': typeof SponsorsIndexRoute
   '/team/': typeof TeamIndexRoute
   '/admin/user/$id': typeof AdminUserIdRoute
@@ -166,9 +180,11 @@ export interface FileRoutesByTo {
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/signin': typeof AuthSigninRoute
   '/auth/signup': typeof AuthSignupRoute
-  '/games/{-$year}': typeof GamesChar123YearChar125Route
+  '/games/$id': typeof GamesIdRoute
+  '/team/$id': typeof TeamIdRoute
   '/admin': typeof AdminIndexRoute
   '/calendar': typeof CalendarIndexRoute
+  '/games': typeof GamesIndexRoute
   '/sponsors': typeof SponsorsIndexRoute
   '/team': typeof TeamIndexRoute
   '/admin/user/$id': typeof AdminUserIdRoute
@@ -189,9 +205,11 @@ export interface FileRoutesById {
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/signin': typeof AuthSigninRoute
   '/auth/signup': typeof AuthSignupRoute
-  '/games/{-$year}': typeof GamesChar123YearChar125Route
+  '/games/$id': typeof GamesIdRoute
+  '/team/$id': typeof TeamIdRoute
   '/admin/': typeof AdminIndexRoute
   '/calendar/': typeof CalendarIndexRoute
+  '/games/': typeof GamesIndexRoute
   '/sponsors/': typeof SponsorsIndexRoute
   '/team/': typeof TeamIndexRoute
   '/admin/user/$id': typeof AdminUserIdRoute
@@ -213,9 +231,11 @@ export interface FileRouteTypes {
     | '/auth/forgot-password'
     | '/auth/signin'
     | '/auth/signup'
-    | '/games/{-$year}'
+    | '/games/$id'
+    | '/team/$id'
     | '/admin/'
     | '/calendar/'
+    | '/games/'
     | '/sponsors/'
     | '/team/'
     | '/admin/user/$id'
@@ -234,9 +254,11 @@ export interface FileRouteTypes {
     | '/auth/forgot-password'
     | '/auth/signin'
     | '/auth/signup'
-    | '/games/{-$year}'
+    | '/games/$id'
+    | '/team/$id'
     | '/admin'
     | '/calendar'
+    | '/games'
     | '/sponsors'
     | '/team'
     | '/admin/user/$id'
@@ -256,9 +278,11 @@ export interface FileRouteTypes {
     | '/auth/forgot-password'
     | '/auth/signin'
     | '/auth/signup'
-    | '/games/{-$year}'
+    | '/games/$id'
+    | '/team/$id'
     | '/admin/'
     | '/calendar/'
+    | '/games/'
     | '/sponsors/'
     | '/team/'
     | '/admin/user/$id'
@@ -272,8 +296,10 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   UnauthenticatedRoute: typeof UnauthenticatedRoute
   UnauthorizedRoute: typeof UnauthorizedRoute
-  GamesChar123YearChar125Route: typeof GamesChar123YearChar125Route
+  GamesIdRoute: typeof GamesIdRoute
+  TeamIdRoute: typeof TeamIdRoute
   CalendarIndexRoute: typeof CalendarIndexRoute
+  GamesIndexRoute: typeof GamesIndexRoute
   SponsorsIndexRoute: typeof SponsorsIndexRoute
   TeamIndexRoute: typeof TeamIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
@@ -337,6 +363,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SponsorsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/games/': {
+      id: '/games/'
+      path: '/games'
+      fullPath: '/games/'
+      preLoaderRoute: typeof GamesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/calendar/': {
       id: '/calendar/'
       path: '/calendar'
@@ -351,11 +384,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRouteRoute
     }
-    '/games/{-$year}': {
-      id: '/games/{-$year}'
-      path: '/games/{-$year}'
-      fullPath: '/games/{-$year}'
-      preLoaderRoute: typeof GamesChar123YearChar125RouteImport
+    '/team/$id': {
+      id: '/team/$id'
+      path: '/team/$id'
+      fullPath: '/team/$id'
+      preLoaderRoute: typeof TeamIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/games/$id': {
+      id: '/games/$id'
+      path: '/games/$id'
+      fullPath: '/games/$id'
+      preLoaderRoute: typeof GamesIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth/signup': {
@@ -469,8 +509,10 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   UnauthenticatedRoute: UnauthenticatedRoute,
   UnauthorizedRoute: UnauthorizedRoute,
-  GamesChar123YearChar125Route: GamesChar123YearChar125Route,
+  GamesIdRoute: GamesIdRoute,
+  TeamIdRoute: TeamIdRoute,
   CalendarIndexRoute: CalendarIndexRoute,
+  GamesIndexRoute: GamesIndexRoute,
   SponsorsIndexRoute: SponsorsIndexRoute,
   TeamIndexRoute: TeamIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,

@@ -70,20 +70,18 @@ export const seedUsersFn = createServerFn().handler(async () => {
   });
 });
 
-export const getTeamMembersFn = createServerFn()
-  .middleware([authenticatedMiddleware])
-  .handler(async () => {
-    // Retrieve the raw data we need for team members.
-    // const teamMembers = await db
-    //   .select()
-    //   .from(dbUser)
-    //   .leftJoin(memberTable, eq(dbUser.id, memberTable.userId))
-    //   .where(or(like(dbUser.role, "%student%"), like(dbUser.role, "%mentor%")));
+export const getTeamMembersFn = createServerFn().handler(async () => {
+  // Retrieve the raw data we need for team members.
+  // const teamMembers = await db
+  //   .select()
+  //   .from(dbUser)
+  //   .leftJoin(memberTable, eq(dbUser.id, memberTable.userId))
+  //   .where(or(like(dbUser.role, "%student%"), like(dbUser.role, "%mentor%")));
 
-    const teamMembers = await db
-      .select()
-      .from(dbUser)
-      .where(or(like(dbUser.role, "%student%"), like(dbUser.role, "%mentor%")));
+  const teamMembers = await db
+    .select()
+    .from(dbUser)
+    .where(or(like(dbUser.role, "%student%"), like(dbUser.role, "%mentor%")));
 
-    return teamMembers;
-  });
+  return teamMembers;
+});

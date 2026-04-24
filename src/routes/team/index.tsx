@@ -3,10 +3,16 @@ import {
   PageHeader,
   PageTitle,
 } from "@/components/page-header";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import type { UserSelect } from "@/db/schema";
 import { getTeamMembersFn } from "@/lib/fn/user";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { MailIcon } from "lucide-react";
 
 export const Route = createFileRoute("/team/")({
   component: RouteComponent,
@@ -49,8 +55,10 @@ function RouteComponent() {
         </PageDescription>
       </PageHeader>
 
-      <TeamMemberSection teamMembers={students} label="Students" />
-      <TeamMemberSection teamMembers={moderators} label="Mentors" />
+      <div className="w-full">
+        <TeamMemberSection teamMembers={students} label="Students" />
+        <TeamMemberSection teamMembers={moderators} label="Mentors" />
+      </div>
     </div>
   );
 }
@@ -63,18 +71,16 @@ function TeamMemberSection({
   label: string;
 }) {
   return (
-    <div className="mt-8">
-      <div className="flex flex-col gap-8 items-center justify-center">
-        <h2 className="text-2xl text-white uppercase font-extrabold">
-          {label}
-        </h2>
-        <div className="flex flex-row flex-wrap gap-8 items-center justify-center">
-          {teamMembers.map((person) => (
-            <PersonCard key={person.name} person={person} />
-          ))}
-        </div>
-      </div>
-    </div>
+    <Card>
+      <CardHeader>
+        <CardTitle className="">{label}</CardTitle>
+      </CardHeader>
+      <CardContent className="flex flex-row flex-wrap gap-8 items-center justify-center">
+        {teamMembers.map((person) => (
+          <PersonCard person={person} />
+        ))}
+      </CardContent>
+    </Card>
   );
 }
 
@@ -82,21 +88,14 @@ function TeamMemberSection({
 // TODO: Remove role and include position on the team.
 function PersonCard({ person }: { person: UserSelect }) {
   return (
-    <div className="flex flex-col items-center mb-4 bg-stone-700 w-80 p-4 rounded-lg">
-      <Link to="/">
-        <img src="https://placehold.co/300" className="rounded-md mb-2" />
-      </Link>
-      <div className="flex flex-row w-full items-start justify-between">
-        <div>
-          <h3 className="text-xl font-semibold text-white">{person.name} </h3>
-          <p className="text-sm text-white/75">{person.role}</p>
-        </div>
-        <div className="bg-(--color-background) p-2 rounded-md hover:bg-(--color-destructive)">
-          <a href={`mailto:${person.email}`} className="text-sm mt-2 lowercase">
-            <MailIcon />
-          </a>
-        </div>
-      </div>
-    </div>
+    <Card key={person.id} className="w-100">
+      <CardHeader className="flex flex-col justify-center items-center w-full">
+        <Link to="/">
+          <img src="https://placehold.co/400" className="rounded-md mb-2" />
+        </Link>
+        <CardTitle className="text-2xl">{person.name}</CardTitle>
+        <CardDescription>Position {person.role}</CardDescription>
+      </CardHeader>
+    </Card>
   );
 }

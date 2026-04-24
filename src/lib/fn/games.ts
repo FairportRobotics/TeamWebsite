@@ -51,7 +51,6 @@ export const seedGameYearsFn = createServerFn({ method: "GET" })
   });
 
 export const getGameYearFn = createServerFn()
-  .middleware([authenticatedMiddleware])
   .inputValidator(zodValidator(getGameYearSchema))
   .handler(async ({ data }) => {
     const results = await db

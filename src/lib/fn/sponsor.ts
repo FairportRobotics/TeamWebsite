@@ -26,9 +26,9 @@ export const seedSponsorsFn = createServerFn({ method: "GET" })
     });
   });
 
-export const getSponsorsFn = createServerFn({ method: "GET" })
-  .middleware([authenticatedMiddleware])
-  .handler(async () => {
+export const getSponsorsFn = createServerFn({ method: "GET" }).handler(
+  async () => {
     const results = await db.select().from(sponsorTable);
     return results;
-  });
+  },
+);

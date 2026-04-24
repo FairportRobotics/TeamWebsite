@@ -1,0 +1,75 @@
+import {
+  PageDescription,
+  PageHeader,
+  PageTitle,
+} from "@/components/page-header";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { getGameYearsFn } from "@/lib/fn/games";
+import { createFileRoute, Link } from "@tanstack/react-router";
+
+export const Route = createFileRoute("/games/")({
+  component: RouteComponent,
+  loader: async () => {
+    const games = getGameYearsFn();
+    return games;
+  },
+});
+
+function RouteComponent() {
+  const games = Route.useLoaderData();
+
+  return (
+    <div>
+      <PageHeader>
+        <PageTitle>
+          FIRST <span className="text-(--color-destructive)">games</span>
+        </PageTitle>
+        <PageDescription>
+          This is where we can list each game year and include the robot name
+          and any other awards or accolades we achieved.
+        </PageDescription>
+      </PageHeader>
+
+      <div className="flex flex-row flex-wrap gap-4 items-center justify-center">
+        {games.map((g) => (
+          <Card key={g.year}>
+            <CardContent>
+              <Link to="/games/$id" params={{ id: g.year.toString() }}>
+                <img
+                  src="https://placehold.co/400"
+                  className="rounded-md mb-2"
+                />
+              </Link>
+            </CardContent>
+            <CardHeader className="flex flex-col justify-start items-start w-full">
+              <CardTitle className="flex flex-row items-start justify-between ">
+                <div className="text-2xl font-bold">
+                  {g.year}:{" "}
+                  <span className="text-(--color-destructive)">{g.name}</span>
+                </div>
+              </CardTitle>
+              <CardDescription>
+                <p>This game lorem ipsum</p>
+                <p>
+                  Learn more about the game{" "}
+                  <span className="text-(--color-destructive)">
+                    <a href={g.gameUrl ?? ""} target="_blank">
+                      here
+                    </a>
+                  </span>
+                  .
+                </p>
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
+}

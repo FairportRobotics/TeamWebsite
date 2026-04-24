@@ -32,10 +32,13 @@ function RouteComponent() {
         <PageTitle>
           Our <span className="text-(--color-destructive)">sponsors</span>
         </PageTitle>
-        <PageDescription></PageDescription>
+        <PageDescription>
+          We are fortunate to have so many generous and wonderful sponsors. We
+          cannot thank them enough for all their support.
+        </PageDescription>
       </PageHeader>
 
-      <div className="flex flex-row flex-wrap gap-4 items-start justify-around mt-10">
+      <div className="flex flex-row flex-wrap justify-center gap-4">
         {sponsors.map((sponsor) => (
           <Card key={sponsor.id} className="">
             <CardHeader>
@@ -53,7 +56,7 @@ function RouteComponent() {
           </Card>
         ))}
 
-        <div className="w-full flex flex-row justify-around mt-10">
+        <div className="w-full flex flex-row justify-center gap-4">
           <Card className="">
             <CardHeader>
               <CardTitle>Your Company Name Here</CardTitle>
