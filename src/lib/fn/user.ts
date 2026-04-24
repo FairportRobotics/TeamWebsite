@@ -8,7 +8,7 @@ import {
 import { seedUsers } from "@/db/seed/users";
 import { createServerFn } from "@tanstack/react-start";
 import { zodValidator } from "@tanstack/zod-adapter";
-import { gt, like, or } from "drizzle-orm";
+import { eq, gt, like, or } from "drizzle-orm";
 import { z } from "zod";
 import { authenticatedMiddleware } from "../middlewares";
 
@@ -24,6 +24,10 @@ const banUserSchema = z.object({
 });
 
 const unbanUserSchema = z.object({
+  userId: z.string(),
+});
+
+const getUserSchema = z.object({
   userId: z.string(),
 });
 
@@ -71,13 +75,6 @@ export const seedUsersFn = createServerFn().handler(async () => {
 });
 
 export const getTeamMembersFn = createServerFn().handler(async () => {
-  // Retrieve the raw data we need for team members.
-  // const teamMembers = await db
-  //   .select()
-  //   .from(dbUser)
-  //   .leftJoin(memberTable, eq(dbUser.id, memberTable.userId))
-  //   .where(or(like(dbUser.role, "%student%"), like(dbUser.role, "%mentor%")));
-
   const teamMembers = await db
     .select()
     .from(dbUser)
@@ -85,3 +82,14 @@ export const getTeamMembersFn = createServerFn().handler(async () => {
 
   return teamMembers;
 });
+
+export const getTeamMemberFn = createServerFn()
+  .inputValidator(zodValidator(getUserSchema))
+  .handler(async ({ data }) => {
+    const teamMember = await db
+      .select()
+      .from(dbUser)
+      .where(eq(dbUser.id, data.userId));
+
+    return teamMember[0] || null;
+  });

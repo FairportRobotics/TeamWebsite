@@ -10,7 +10,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import type { UserSelect } from "@/db/schema";
 import { getTeamMembersFn } from "@/lib/fn/user";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
@@ -25,7 +24,6 @@ export const Route = createFileRoute("/team/")({
 function RouteComponent() {
   const teamMembers = Route.useLoaderData();
 
-  // TODO: Sort
   const students = teamMembers
     .filter((t) => t.role?.includes("student"))
     .sort((a, b) => a.name.localeCompare(b.name));
@@ -72,7 +70,7 @@ function RouteComponent() {
               <CardContent>
                 <Link to="/team/$id" params={{ id: s.id }}>
                   <img
-                    src="https://placehold.co/400"
+                    src="https://placehold.co/300"
                     className="rounded-md mb-2"
                   />
                 </Link>
@@ -102,7 +100,7 @@ function RouteComponent() {
               <CardContent>
                 <Link to="/team/$id" params={{ id: s.id }}>
                   <img
-                    src="https://placehold.co/400"
+                    src="https://placehold.co/300"
                     className="rounded-md mb-2"
                   />
                 </Link>
@@ -119,42 +117,5 @@ function RouteComponent() {
         </div>
       </div>
     </div>
-  );
-}
-
-function TeamMemberSection({
-  teamMembers,
-  label,
-}: {
-  teamMembers: UserSelect[];
-  label: string;
-}) {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="">{label}</CardTitle>
-      </CardHeader>
-      <CardContent className="flex flex-row flex-wrap gap-8 items-center justify-center">
-        {teamMembers.map((person) => (
-          <PersonCard person={person} />
-        ))}
-      </CardContent>
-    </Card>
-  );
-}
-
-// TODO: Link to individuals so we can show more details.
-// TODO: Remove role and include position on the team.
-function PersonCard({ person }: { person: UserSelect }) {
-  return (
-    <Card key={person.id} className="w-100">
-      <CardHeader className="flex flex-col justify-center items-center w-full">
-        <Link to="/">
-          <img src="https://placehold.co/400" className="rounded-md mb-2" />
-        </Link>
-        <CardTitle className="text-2xl">{person.name}</CardTitle>
-        <CardDescription>Position {person.role}</CardDescription>
-      </CardHeader>
-    </Card>
   );
 }
