@@ -1,17 +1,9 @@
-import {
-  PageDescription,
-  PageHeader,
-  PageTitle,
-} from "@/components/page-header";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getGameYearFn, getGameYearsExtentsFn } from "@/lib/fn/games";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 export const Route = createFileRoute("/games/$id")({
   component: RouteComponent,
@@ -29,12 +21,7 @@ export const Route = createFileRoute("/games/$id")({
       const paramsYear = parseInt(params.id);
 
       if (paramsYear) {
-        if (
-          minYear &&
-          maxYear &&
-          paramsYear >= minYear &&
-          paramsYear <= maxYear
-        ) {
+        if (minYear && maxYear && paramsYear >= minYear && paramsYear <= maxYear) {
           gameYear = paramsYear;
         }
       }
@@ -61,17 +48,56 @@ function RouteComponent() {
           Game <span className="text-(--color-destructive)">details</span>
         </PageTitle>
         <PageDescription>
-          This is where we can list each game year and include the robot name
-          and any other awards or accolades we achieved.
+          This is where we can list each game year and include the robot name and any other awards
+          or accolades we achieved.
         </PageDescription>
       </PageHeader>
+
+      <div className="grid w-full grid-cols-3">
+        <div className="flex justify-start">
+          {game.year < (maxYear ?? game.year) && (
+            <div>
+              <Button variant="destructive">
+                <Link
+                  to="/games/$id"
+                  params={{ id: (game.year + 1).toString() }}
+                  className="flex flex-row gap-2 items-center"
+                >
+                  <ArrowLeft /> Go to {game.year + 1}
+                </Link>
+              </Button>
+            </div>
+          )}
+        </div>
+        <div className="flex justify-center">
+          <Button variant="destructive">
+            <Link to="/games" className="flex flex-row gap-2 items-center">
+              All Games
+            </Link>
+          </Button>
+        </div>
+        <div className="flex justify-end">
+          {game.year > (minYear ?? game.year) && (
+            <div>
+              <Button variant="destructive">
+                <Link
+                  to="/games/$id"
+                  params={{ id: (game.year - 1).toString() }}
+                  className="flex flex-row gap-2 items-center"
+                >
+                  Go to {game.year - 1} <ArrowRight />
+                </Link>
+              </Button>
+            </div>
+          )}
+        </div>
+      </div>
 
       <Card className="mt-8" key={game.year}>
         <CardHeader>
           <CardTitle className="flex flex-row items-start justify-between ">
             <div className="text-2xl font-bold">
-              {game.year}:{" "}
-              <span className="text-(--color-destructive)">{game.name}</span>
+              {game.year}: <span className="text-(--color-destructive)">{game.name}</span>
             </div>
           </CardTitle>
           <CardDescription>
