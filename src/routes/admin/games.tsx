@@ -1,7 +1,7 @@
 // prettier-ignore
 import { BackTo } from "@/components/back-to";
 import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
-import { Button } from "@/components/ui/button";
+import { TeamActionButton } from "@/components/team-action-buttom";
 import { assertHasAnyPermission } from "@/lib/auth/utils/permissions";
 import { seedGameYearsFn } from "@/lib/fn/games";
 import { Permissions } from "@/lib/permissions";
@@ -17,6 +17,7 @@ export const Route = createFileRoute("/admin/games")({
 function RouteComponent() {
   async function handleSeedGames() {
     await seedGameYearsFn();
+    return { error: null };
   }
 
   return (
@@ -28,9 +29,15 @@ function RouteComponent() {
         </PageTitle>
         <PageDescription>Manage game years, robots and sparketing efforts.</PageDescription>
       </PageHeader>
-      <Button className="mt-6" variant="destructive" onClick={handleSeedGames}>
+      <TeamActionButton
+        variant="destructive"
+        className="mt-4"
+        action={() => {
+          return handleSeedGames();
+        }}
+      >
         Seed Games
-      </Button>
+      </TeamActionButton>
     </div>
   );
 }

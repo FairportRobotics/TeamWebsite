@@ -2,7 +2,7 @@
 import AdminUserRow from "@/components/admin-user-row";
 import { BackTo } from "@/components/back-to";
 import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
-import { Button } from "@/components/ui/button";
+import { TeamActionButton } from "@/components/team-action-buttom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { seedUsers } from "@/db/seed/users";
@@ -68,6 +68,8 @@ function RouteComponent() {
         },
       );
     });
+
+    return { error: null };
   }
 
   return (
@@ -111,9 +113,15 @@ function RouteComponent() {
             </div>
           </CardContent>
         </Card>
-        <Button className="mt-6" variant="destructive" onClick={handleSeedUsers}>
+        <TeamActionButton
+          variant="destructive"
+          className="mt-4"
+          action={() => {
+            return handleSeedUsers();
+          }}
+        >
           Seed Users
-        </Button>
+        </TeamActionButton>
       </div>
     </div>
   );

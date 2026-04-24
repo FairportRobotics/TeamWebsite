@@ -1,7 +1,7 @@
 // prettier-ignore
 import { BackTo } from "@/components/back-to";
 import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
-import { Button } from "@/components/ui/button";
+import { TeamActionButton } from "@/components/team-action-buttom";
 import { assertHasAnyPermission } from "@/lib/auth/utils/permissions";
 import { getSponsorsFn, seedSponsorsFn } from "@/lib/fn/sponsor";
 import { Permissions } from "@/lib/permissions";
@@ -23,6 +23,7 @@ function RouteComponent() {
 
   async function handleSeedGames() {
     await seedSponsorsFn();
+    return { error: null };
   }
 
   return (
@@ -34,9 +35,15 @@ function RouteComponent() {
         </PageTitle>
         <PageDescription>Manage sponsors.</PageDescription>
       </PageHeader>
-      <Button className="mt-6" variant="destructive" onClick={handleSeedGames}>
+      <TeamActionButton
+        variant="destructive"
+        className="mt-4"
+        action={() => {
+          return handleSeedGames();
+        }}
+      >
         Seed Sponsors
-      </Button>
+      </TeamActionButton>
     </div>
   );
 }

@@ -1,18 +1,18 @@
-import { type ComponentProps, type ReactNode, useTransition } from "react"
-import { Button } from "@/components/ui/button"
-import { toast } from "sonner"
-import { LoadingSwap } from "@/components/ui/loading-swap"
 import {
   AlertDialog,
-  AlertDialogDescription,
-  AlertDialogTitle,
   AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
+  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
+  AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { LoadingSwap } from "@/components/ui/loading-swap";
+import { type ComponentProps, type ReactNode, useTransition } from "react";
+import { toast } from "sonner";
 
 export function ActionButton({
   action,
@@ -20,17 +20,17 @@ export function ActionButton({
   areYouSureDescription = "This action cannot be undone.",
   ...props
 }: ComponentProps<typeof Button> & {
-  action: () => Promise<{ error: boolean; message?: string }>
-  requireAreYouSure?: boolean
-  areYouSureDescription?: ReactNode
+  action: () => Promise<{ error: boolean; message?: string }>;
+  requireAreYouSure?: boolean;
+  areYouSureDescription?: ReactNode;
 }) {
-  const [isLoading, startTransition] = useTransition()
+  const [isLoading, startTransition] = useTransition();
 
   function performAction() {
     startTransition(async () => {
-      const data = await action()
-      if (data.error) toast.error(data.message ?? "Error")
-    })
+      const data = await action();
+      if (data.error) toast.error(data.message ?? "Error");
+    });
   }
 
   if (requireAreYouSure) {
@@ -42,9 +42,7 @@ export function ActionButton({
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              {areYouSureDescription}
-            </AlertDialogDescription>
+            <AlertDialogDescription>{areYouSureDescription}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
@@ -54,24 +52,24 @@ export function ActionButton({
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    )
+    );
   }
 
   return (
     <Button
       {...props}
       disabled={props.disabled ?? isLoading}
-      onClick={e => {
-        performAction()
-        props.onClick?.(e)
+      onClick={(e) => {
+        performAction();
+        props.onClick?.(e);
       }}
     >
       <LoadingSwap
         isLoading={isLoading}
-        className="inline-flex items-center gap-2"
+        className="inline-flex items-center gap-2 hover:cursor-pointer"
       >
         {props.children}
       </LoadingSwap>
     </Button>
-  )
+  );
 }
