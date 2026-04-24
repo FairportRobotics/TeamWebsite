@@ -53,45 +53,7 @@ function RouteComponent() {
         </PageDescription>
       </PageHeader>
 
-      <div className="grid w-full grid-cols-3">
-        <div className="flex justify-start">
-          {game.year < (maxYear ?? game.year) && (
-            <div>
-              <Button variant="destructive">
-                <Link
-                  to="/games/$id"
-                  params={{ id: (game.year + 1).toString() }}
-                  className="flex flex-row gap-2 items-center"
-                >
-                  <ArrowLeft /> Go to {game.year + 1}
-                </Link>
-              </Button>
-            </div>
-          )}
-        </div>
-        <div className="flex justify-center">
-          <Button variant="destructive">
-            <Link to="/games" className="flex flex-row gap-2 items-center">
-              All Games
-            </Link>
-          </Button>
-        </div>
-        <div className="flex justify-end">
-          {game.year > (minYear ?? game.year) && (
-            <div>
-              <Button variant="destructive">
-                <Link
-                  to="/games/$id"
-                  params={{ id: (game.year - 1).toString() }}
-                  className="flex flex-row gap-2 items-center"
-                >
-                  Go to {game.year - 1} <ArrowRight />
-                </Link>
-              </Button>
-            </div>
-          )}
-        </div>
-      </div>
+      <GamesNavigation currentYear={game.year} minYear={minYear} maxYear={maxYear} />
 
       <Card className="mt-8" key={game.year}>
         <CardHeader>
@@ -115,6 +77,58 @@ function RouteComponent() {
         </CardHeader>
         <CardContent></CardContent>
       </Card>
+    </div>
+  );
+}
+
+function GamesNavigation({
+  currentYear,
+  minYear,
+  maxYear,
+}: {
+  currentYear: number;
+  minYear: number | null;
+  maxYear: number | null;
+}) {
+  return (
+    <div className="grid w-full grid-cols-3">
+      <div className="flex justify-start">
+        {currentYear < (maxYear ?? currentYear) && (
+          <div>
+            <Button variant="destructive">
+              <Link
+                to="/games/$id"
+                params={{ id: (currentYear + 1).toString() }}
+                className="flex flex-row gap-2 items-center"
+              >
+                <ArrowLeft /> Go to {currentYear + 1}
+              </Link>
+            </Button>
+          </div>
+        )}
+      </div>
+      <div className="flex justify-center">
+        <Button variant="destructive">
+          <Link to="/games" className="flex flex-row gap-2 items-center">
+            All Games
+          </Link>
+        </Button>
+      </div>
+      <div className="flex justify-end">
+        {currentYear > (minYear ?? currentYear) && (
+          <div>
+            <Button variant="destructive">
+              <Link
+                to="/games/$id"
+                params={{ id: (currentYear - 1).toString() }}
+                className="flex flex-row gap-2 items-center"
+              >
+                Go to {currentYear - 1} <ArrowRight />
+              </Link>
+            </Button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
