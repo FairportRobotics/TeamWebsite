@@ -1,9 +1,6 @@
+// prettier-ignore
 import { BackTo } from "@/components/back-to";
-import {
-  PageDescription,
-  PageHeader,
-  PageTitle,
-} from "@/components/page-header";
+import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
 import { assertHasAnyPermission } from "@/lib/auth/utils/permissions";
 import { getSponsorsFn, seedSponsorsFn } from "@/lib/fn/sponsor";
@@ -12,9 +9,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin/sponsors")({
   beforeLoad: async ({ context }) => {
-    assertHasAnyPermission(context.data?.user.role, [
-      Permissions.SponsorAdminister,
-    ]);
+    assertHasAnyPermission(context.data?.user.role, [Permissions.SponsorAdminister]);
   },
   component: RouteComponent,
   loader: async () => {
@@ -35,8 +30,7 @@ function RouteComponent() {
       <BackTo to="/admin" label="Admin" />
       <PageHeader>
         <PageTitle>
-          Sponsor{" "}
-          <span className="text-(--color-destructive)">Administration</span>
+          Sponsor <span className="text-(--color-destructive)">Administration</span>
         </PageTitle>
         <PageDescription>Manage sponsors.</PageDescription>
       </PageHeader>

@@ -1,3 +1,4 @@
+// prettier-ignore
 import { validateRequest } from "@/lib/auth/utils/request";
 import { authenticatedMiddleware } from "@/lib/middleware/auth";
 import { redirect } from "@tanstack/react-router";
@@ -7,13 +8,11 @@ import { auth } from "../auth";
 import type { Permission } from "../permissions";
 import { hasAnyPermission } from "./utils/permissions";
 
-export const getSessionFn = createServerFn({ method: "GET" }).handler(
-  async () => {
-    const headers = getRequestHeaders();
-    const currentSession = await auth.api.getSession({ headers });
-    return currentSession ?? undefined;
-  },
-);
+export const getSessionFn = createServerFn({ method: "GET" }).handler(async () => {
+  const headers = getRequestHeaders();
+  const currentSession = await auth.api.getSession({ headers });
+  return currentSession ?? undefined;
+});
 
 export const isAuthenticatedFn = createServerFn().handler(async () => {
   const { user } = await validateRequest();

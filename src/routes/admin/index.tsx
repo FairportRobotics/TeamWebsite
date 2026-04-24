@@ -1,8 +1,5 @@
-import {
-  PageDescription,
-  PageHeader,
-  PageTitle,
-} from "@/components/page-header";
+// prettier-ignore
+import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin/")({
@@ -14,8 +11,7 @@ function RouteComponent() {
     <div>
       <PageHeader>
         <PageTitle>
-          Site{" "}
-          <span className="text-(--color-destructive)">Administration</span>
+          Site <span className="text-(--color-destructive)">Administration</span>
         </PageTitle>
         <PageDescription>Manage site content.</PageDescription>
       </PageHeader>

@@ -1,14 +1,11 @@
+// prettier-ignore
 import Footer from "@/components/footer";
 import Header from "@/components/header";
 import { Toaster } from "@/components/ui/sonner";
 import type { authClient } from "@/lib/auth-client";
 import { getSessionFn } from "@/lib/auth/server";
 import { TanStackDevtools } from "@tanstack/react-devtools";
-import {
-  createRootRouteWithContext,
-  HeadContent,
-  Scripts,
-} from "@tanstack/react-router";
+import { createRootRouteWithContext, HeadContent, Scripts } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import appCss from "../styles.css?url";
 

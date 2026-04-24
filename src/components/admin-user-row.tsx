@@ -1,3 +1,4 @@
+// prettier-ignore
 import { TableCell, TableRow } from "@/components/ui/table";
 import { authClient } from "@/lib/auth-client";
 import type { AdminUser } from "@/lib/fn/user";
@@ -103,11 +104,7 @@ export default function AdminUserRow({
   return (
     <TableRow>
       <TableCell>
-        <Link
-          to="/admin/user/$id"
-          params={{ id: user.id }}
-          className="underline"
-        >
+        <Link to="/admin/user/$id" params={{ id: user.id }} className="underline">
           {user.name}
         </Link>
         {user.banned && (
@@ -131,9 +128,7 @@ export default function AdminUserRow({
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem
-                  onClick={() => handleImpersonateUser(user.id)}
-                >
+                <DropdownMenuItem onClick={() => handleImpersonateUser(user.id)}>
                   Impersonate
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => handleRevokeSessions(user.id)}>
@@ -151,9 +146,7 @@ export default function AdminUserRow({
                 <DropdownMenuSeparator />
 
                 <AlertDialogTrigger asChild>
-                  <DropdownMenuItem variant="destructive">
-                    Delete User
-                  </DropdownMenuItem>
+                  <DropdownMenuItem variant="destructive">Delete User</DropdownMenuItem>
                 </AlertDialogTrigger>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -161,8 +154,7 @@ export default function AdminUserRow({
               <AlertDialogHeader>
                 <AlertDialogTitle>Delete User</AlertDialogTitle>
                 <AlertDialogDescription>
-                  Are you sure you want to delete this user? This action cannot
-                  be undone.
+                  Are you sure you want to delete this user? This action cannot be undone.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>

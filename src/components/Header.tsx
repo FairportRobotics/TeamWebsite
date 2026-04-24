@@ -1,5 +1,6 @@
 "use client";
 
+// prettier-ignore
 import { authClient } from "@/lib/auth-client";
 import { Link, useNavigate } from "@tanstack/react-router";
 import type { User } from "better-auth";

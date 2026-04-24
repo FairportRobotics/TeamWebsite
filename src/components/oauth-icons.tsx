@@ -1,3 +1,4 @@
+// prettier-ignore
 import type { ComponentProps } from "react";
 
 export function DiscordIcon(props: ComponentProps<"svg">) {

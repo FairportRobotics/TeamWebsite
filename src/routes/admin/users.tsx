@@ -1,40 +1,20 @@
+// prettier-ignore
 import AdminUserRow from "@/components/admin-user-row";
 import { BackTo } from "@/components/back-to";
-import {
-  PageDescription,
-  PageHeader,
-  PageTitle,
-} from "@/components/page-header";
+import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { seedUsers } from "@/db/seed/users";
 import { authClient } from "@/lib/auth-client";
-import {
-  assertHasAnyPermission,
-  hasAnyPermission,
-} from "@/lib/auth/utils/permissions";
+import { assertHasAnyPermission, hasAnyPermission } from "@/lib/auth/utils/permissions";
 import { getUserListFn } from "@/lib/fn/user";
 import { Permissions } from "@/lib/permissions";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin/users")({
   beforeLoad: async ({ context }) => {
-    assertHasAnyPermission(context.data?.user.role, [
-      Permissions.UserAdminister,
-    ]);
+    assertHasAnyPermission(context.data?.user.role, [Permissions.UserAdminister]);
   },
   component: RouteComponent,
   loader: async ({ context }) => {
@@ -47,12 +27,8 @@ export const Route = createFileRoute("/admin/users")({
 
     // Get fine-grained permissions for UI adjustment.
     const canBan = hasAnyPermission(userRoles, [Permissions.UserBan]);
-    const canImpersonate = hasAnyPermission(userRoles, [
-      Permissions.UserImpersonate,
-    ]);
-    const canRevokeSessions = hasAnyPermission(userRoles, [
-      Permissions.UserRevokeSessions,
-    ]);
+    const canImpersonate = hasAnyPermission(userRoles, [Permissions.UserImpersonate]);
+    const canRevokeSessions = hasAnyPermission(userRoles, [Permissions.UserRevokeSessions]);
     const canDelete = hasAnyPermission(userRoles, [Permissions.UserDelete]);
 
     return {
@@ -67,17 +43,10 @@ export const Route = createFileRoute("/admin/users")({
 });
 
 function RouteComponent() {
-  const {
-    users,
-    selfId,
-    canBan,
-    canImpersonate,
-    canRevokeSessions,
-    canDelete,
-  } = Route.useLoaderData();
+  const { users, selfId, canBan, canImpersonate, canRevokeSessions, canDelete } =
+    Route.useLoaderData();
 
-  const canSeeActions =
-    canBan || canImpersonate || canRevokeSessions || canDelete;
+  const canSeeActions = canBan || canImpersonate || canRevokeSessions || canDelete;
 
   async function handleSeedUsers() {
     console.log("handleSeedUsers");
@@ -107,24 +76,18 @@ function RouteComponent() {
 
       <PageHeader>
         <PageTitle>
-          User{" "}
-          <span className="text-(--color-destructive)">Administration</span>
+          User <span className="text-(--color-destructive)">Administration</span>
         </PageTitle>
         <PageDescription>
-          Manage users, roles, permissions, and other administrative tasks for
-          the website.
+          Manage users, roles, permissions, and other administrative tasks for the website.
         </PageDescription>
       </PageHeader>
 
       <div className="mx-auto container my-6 px-4">
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              Users ({users.length})
-            </CardTitle>
-            <CardDescription>
-              Manage user accounts, roles, and permissions
-            </CardDescription>
+            <CardTitle className="flex items-center gap-2">Users ({users.length})</CardTitle>
+            <CardDescription>Manage user accounts, roles, and permissions</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="rounded-md border">
@@ -134,15 +97,9 @@ function RouteComponent() {
                     <TableHead>Name</TableHead>
                     <TableHead>Email</TableHead>
                     <TableHead>Roles</TableHead>
-                    <TableHead className="text-right">
-                      Active Sessions
-                    </TableHead>
-                    <TableHead className="text-right">
-                      Related Accounts
-                    </TableHead>
-                    {canSeeActions && (
-                      <TableHead className="text-center">Actions</TableHead>
-                    )}
+                    <TableHead className="text-right">Active Sessions</TableHead>
+                    <TableHead className="text-right">Related Accounts</TableHead>
+                    {canSeeActions && <TableHead className="text-center">Actions</TableHead>}
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -154,11 +111,7 @@ function RouteComponent() {
             </div>
           </CardContent>
         </Card>
-        <Button
-          className="mt-6"
-          variant="destructive"
-          onClick={handleSeedUsers}
-        >
+        <Button className="mt-6" variant="destructive" onClick={handleSeedUsers}>
           Seed Users
         </Button>
       </div>

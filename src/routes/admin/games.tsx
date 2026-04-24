@@ -1,9 +1,6 @@
+// prettier-ignore
 import { BackTo } from "@/components/back-to";
-import {
-  PageDescription,
-  PageHeader,
-  PageTitle,
-} from "@/components/page-header";
+import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
 import { assertHasAnyPermission } from "@/lib/auth/utils/permissions";
 import { seedGameYearsFn } from "@/lib/fn/games";
@@ -12,9 +9,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin/games")({
   beforeLoad: async ({ context }) => {
-    assertHasAnyPermission(context.data?.user.role, [
-      Permissions.GameYearAdminister,
-    ]);
+    assertHasAnyPermission(context.data?.user.role, [Permissions.GameYearAdminister]);
   },
   component: RouteComponent,
 });
@@ -29,12 +24,9 @@ function RouteComponent() {
       <BackTo to="/admin" label="Admin" />
       <PageHeader>
         <PageTitle>
-          Game Year{" "}
-          <span className="text-(--color-destructive)">Administration</span>
+          Game Year <span className="text-(--color-destructive)">Administration</span>
         </PageTitle>
-        <PageDescription>
-          Manage game years, robots and sparketing efforts.
-        </PageDescription>
+        <PageDescription>Manage game years, robots and sparketing efforts.</PageDescription>
       </PageHeader>
       <Button className="mt-6" variant="destructive" onClick={handleSeedGames}>
         Seed Games

@@ -1,3 +1,4 @@
+// prettier-ignore
 import { authClient } from "@/lib/auth-client";
 import {
   SUPPORTED_AUTH_PROVIDERS,

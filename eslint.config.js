@@ -17,4 +17,7 @@ export default [
   {
     ignores: ["eslint.config.js", "prettier.config.js"],
   },
+  {
+    extends: ["eslint:recommended", "plugin:react/recommended", "prettier"],
+  },
 ];
