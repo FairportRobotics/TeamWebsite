@@ -6,3 +6,4 @@
   - [-] Count of edits pending Approval
   - [-] Last edit for each type
 - [-] Teams page: use Await or Suspense to display some placeholder while data is loading.
+- [-] Teams page: Make DRY. Turn into components.

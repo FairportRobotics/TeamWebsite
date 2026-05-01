@@ -1,5 +1,6 @@
 import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { getTeamMembersFn } from "@/lib/fn/user";
 import { Await, createFileRoute, defer, Link } from "@tanstack/react-router";
 
@@ -45,7 +46,7 @@ function RouteComponent() {
             fallback={
               <>
                 {[1, 2, 3].map((i) => (
-                  <MemberCard key={i} userId={""} name={""} role={""} image={""} />
+                  <MemberCard key={i} userId={null} name={""} role={""} image={""} />
                 ))}
               </>
             }
@@ -115,16 +116,38 @@ function MemberCard({
   role,
   image,
 }: {
-  userId: string;
-  name: string;
+  userId?: string | null;
+  name?: string | null;
   role?: string | null;
   image?: string | null;
 }) {
+  if (!userId) {
+    return (
+      <Card>
+        <CardContent>
+          <Skeleton className="w-75 h-75 rounded-md" />
+        </CardContent>
+        <CardHeader className="flex flex-col justify-start items-start w-full">
+          <CardTitle className="mt-2">
+            <Skeleton className="h-8 w-32 mb-2" />
+            <Skeleton className="h-4 w-24" />
+          </CardTitle>
+          <CardDescription>
+            <Skeleton className="h-4 w-full" />
+          </CardDescription>
+        </CardHeader>
+      </Card>
+    );
+  }
+
   return (
     <Card>
       <CardContent>
-        <Link to="/team/$id" params={{ id: userId }}>
-          <img src="https://placehold.co/300" className="rounded-md mb-2" />
+        <Link to="/team/$id" params={{ id: userId }} className="w-75 h-75">
+          <img
+            src={image ?? "https://placehold.co/300"}
+            className="rounded-md mb-2 object-contain"
+          />
         </Link>
       </CardContent>
       <CardHeader className="flex flex-col justify-start items-start w-full">
