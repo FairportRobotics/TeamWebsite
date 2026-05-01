@@ -1,21 +1,41 @@
-// prettier-ignore
-import AdminUserRow from "@/components/admin-user-row";
-import { BackTo } from "@/components/back-to";
 import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
-import { TeamActionButton } from "@/components/team-action-buttom";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { seedUsers } from "@/db/seed/users";
-import { authClient } from "@/lib/auth-client";
-import { assertHasAnyPermission, hasAnyPermission } from "@/lib/auth/utils/permissions";
-import { getUserListFn } from "@/lib/fn/user";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { hasAnyPermission } from "@/lib/auth/utils/permissions";
+import { getUserListFn, type AdminUser } from "@/lib/fn/user";
 import { Permissions } from "@/lib/permissions";
 import { createFileRoute } from "@tanstack/react-router";
+import {
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+  type ColumnDef,
+  type ColumnFiltersState,
+  type SortingState,
+} from "@tanstack/react-table";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import React from "react";
 
 export const Route = createFileRoute("/admin/users")({
-  beforeLoad: async ({ context }) => {
-    assertHasAnyPermission(context.data?.user.role, [Permissions.UserAdminister]);
-  },
   component: RouteComponent,
   loader: async ({ context }) => {
     // Pull needed data from the context.
@@ -48,34 +68,8 @@ function RouteComponent() {
 
   const canSeeActions = canBan || canImpersonate || canRevokeSessions || canDelete;
 
-  async function handleSeedUsers() {
-    console.log("handleSeedUsers");
-
-    seedUsers.forEach(async (u, i) => {
-      console.log("Creating user for ", u.name, "...");
-
-      await authClient.admin.createUser(
-        {
-          email: u.email,
-          password: "Password123!",
-          name: u.name,
-          role: "user",
-        },
-        {
-          onError: (error) => {
-            console.error("Error signing up:", error);
-          },
-        },
-      );
-    });
-
-    return { error: null };
-  }
-
   return (
     <div>
-      <BackTo to="/admin" label="Admin" />
-
       <PageHeader>
         <PageTitle>
           User <span className="text-(--color-destructive)">Administration</span>
@@ -85,43 +79,208 @@ function RouteComponent() {
         </PageDescription>
       </PageHeader>
 
-      <div className="mx-auto container my-6 px-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">Users ({users.length})</CardTitle>
-            <CardDescription>Manage user accounts, roles, and permissions</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="rounded-md border">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Email</TableHead>
-                    <TableHead>Roles</TableHead>
-                    <TableHead className="text-right">Active Sessions</TableHead>
-                    <TableHead className="text-right">Related Accounts</TableHead>
-                    {canSeeActions && <TableHead className="text-center">Actions</TableHead>}
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {users.map((user) => (
-                    <AdminUserRow user={user} key={user.id} selfId={selfId} />
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-          </CardContent>
-        </Card>
-        <TeamActionButton
-          variant="destructive"
-          className="mt-4"
-          action={() => {
-            return handleSeedUsers();
-          }}
+      <DataTable columns={columns} data={users} currentUserId={selfId} />
+    </div>
+  );
+}
+
+declare module "@tanstack/react-table" {
+  interface TableMeta<TData> {
+    currentUserId?: string;
+  }
+}
+
+interface DataTableProps<TData, TValue> {
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
+  currentUserId: string | undefined;
+}
+
+export const columns: ColumnDef<AdminUser>[] = [
+  {
+    accessorKey: "name",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Seed Users
-        </TeamActionButton>
+          Name
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const userRow = row.original;
+      return (
+        <div>
+          <div className="text-xl font-semibold text-(--color-destructive)">{userRow.name}</div>
+          <div className="">{userRow.email}</div>
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "role",
+    header: "Roles",
+    cell: ({ row }) => {
+      const role = row.original.role;
+      const roles = role?.split(",").map((item) => item.trim());
+      return <div className="capitalize">{roles?.join(", ")}</div>;
+    },
+  },
+  {
+    accessorKey: "activeSessions",
+    header: "Active Sessions",
+    cell: ({ row }) => {
+      <div>{row.original.sessions.length}</div>;
+    },
+  },
+  {
+    accessorKey: "relatedAccounts",
+    header: "Related Accounts",
+    cell: ({ row }) => {
+      <div>{row.original.accounts.length}</div>;
+    },
+  },
+  {
+    accessorKey: "isBaned",
+    header: "Banned",
+  },
+  {
+    id: "actions",
+    header: "Actions",
+    cell: ({ row, table }) => {
+      const userRow = row.original;
+
+      const isCurrentUser = row.original.id === table.options.meta?.currentUserId;
+
+      if (isCurrentUser) {
+        return <></>;
+      }
+
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem>Impersonate User</DropdownMenuItem>
+            <DropdownMenuItem>Revoke Sessions</DropdownMenuItem>
+            {userRow.banned ? (
+              <DropdownMenuItem>Unban User</DropdownMenuItem>
+            ) : (
+              <DropdownMenuItem>Ban User</DropdownMenuItem>
+            )}
+            <DropdownMenuSeparator />
+            <DropdownMenuLabel>Destructive Actions</DropdownMenuLabel>
+            <DropdownMenuItem className="text-(--color-destructive)">Delete User</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    },
+  },
+];
+
+export function DataTable<TData, TValue>({
+  columns,
+  data,
+  currentUserId,
+}: DataTableProps<TData, TValue>) {
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+
+  const table = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    state: {
+      sorting,
+      columnFilters,
+    },
+    meta: {
+      currentUserId: currentUserId || undefined,
+    },
+  });
+
+  return (
+    <div>
+      <div className="flex items-center py-4">
+        <Input
+          placeholder="Filter Names..."
+          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+          onChange={(event) => {
+            table.getColumn("name")?.setFilterValue(event.target.value);
+          }}
+          className="max-w-sm"
+        />
+      </div>
+
+      <div className="overflow-hidden rounded-md border">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(header.column.columnDef.header, header.getContext())}
+                    </TableHead>
+                  );
+                })}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="h-24 text-center">
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+
+      <div className="flex items-center justify-between space-x-2 py-4">
+        <Button
+          variant="default"
+          size="sm"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          Previous
+        </Button>
+        <Button
+          variant="default"
+          size="sm"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          Next
+        </Button>
       </div>
     </div>
   );
