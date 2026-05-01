@@ -1,13 +1,5 @@
 import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -17,6 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { RowActions } from "@/components/user-row-actions";
 import { hasAnyPermission } from "@/lib/auth/utils/permissions";
 import { getUserListFn, type AdminUser } from "@/lib/fn/user";
 import { Permissions } from "@/lib/permissions";
@@ -32,7 +25,7 @@ import {
   type ColumnFiltersState,
   type SortingState,
 } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 import React from "react";
 
 export const Route = createFileRoute("/admin/users")({
@@ -152,36 +145,13 @@ export const columns: ColumnDef<AdminUser>[] = [
     header: "Actions",
     cell: ({ row, table }) => {
       const userRow = row.original;
-
       const isCurrentUser = row.original.id === table.options.meta?.currentUserId;
 
       if (isCurrentUser) {
         return <></>;
       }
 
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>Impersonate User</DropdownMenuItem>
-            <DropdownMenuItem>Revoke Sessions</DropdownMenuItem>
-            {userRow.banned ? (
-              <DropdownMenuItem>Unban User</DropdownMenuItem>
-            ) : (
-              <DropdownMenuItem>Ban User</DropdownMenuItem>
-            )}
-            <DropdownMenuSeparator />
-            <DropdownMenuLabel>Destructive Actions</DropdownMenuLabel>
-            <DropdownMenuItem className="text-(--color-destructive)">Delete User</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
+      return <RowActions id={userRow.id} isBanned={userRow.banned ?? false} />;
     },
   },
 ];
