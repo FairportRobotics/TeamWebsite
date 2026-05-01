@@ -5,4 +5,4 @@
   - [-] Count of the different things (Events, Sponsors, Users...)
   - [-] Count of edits pending Approval
   - [-] Last edit for each type
-- [-] Use Suspense or equivilant on pages so we respond more quickly. Team and Games pages are slower than they should be and we can show something while the data is loading.
+- [-] Teams page: use Await or Suspense to display some placeholder while data is loading.
