@@ -46,7 +46,7 @@ function RouteComponent() {
             fallback={
               <>
                 {[1, 2, 3].map((i) => (
-                  <MemberCard key={i} userId={null} name={""} role={""} image={""} />
+                  <MemberCard key={i} isPending={true} />
                 ))}
               </>
             }
@@ -55,15 +55,7 @@ function RouteComponent() {
               slowData
                 .filter((t) => t.role?.includes("student"))
                 .sort((a, b) => a.name.localeCompare(b.name))
-                .map((s) => (
-                  <MemberCard
-                    key={s.id}
-                    userId={s.id}
-                    name={s.name}
-                    role={s.role}
-                    image={s.image}
-                  />
-                ))
+                .map((s) => <MemberCard key={s.id} isPending={false} {...s} />)
             }
           </Await>
         </div>
@@ -84,7 +76,7 @@ function RouteComponent() {
             fallback={
               <>
                 {[1, 2, 3].map((i) => (
-                  <MemberCard key={i} userId={""} name={""} role={""} image={""} />
+                  <MemberCard key={i} isPending={true} />
                 ))}
               </>
             }
@@ -93,15 +85,7 @@ function RouteComponent() {
               slowData
                 .filter((t) => t.role?.includes("mentor"))
                 .sort((a, b) => a.name.localeCompare(b.name))
-                .map((s) => (
-                  <MemberCard
-                    key={s.id}
-                    userId={s.id}
-                    name={s.name}
-                    role={s.role}
-                    image={s.image}
-                  />
-                ))
+                .map((s) => <MemberCard key={s.id} isPending={false} {...s} />)
             }
           </Await>
         </div>
@@ -110,18 +94,17 @@ function RouteComponent() {
   );
 }
 
-function MemberCard({
-  userId,
-  name,
-  role,
-  image,
-}: {
-  userId?: string | null;
+interface MemberCardProps {
+  isPending: boolean;
+  id?: string | null;
   name?: string | null;
   role?: string | null;
   image?: string | null;
-}) {
-  if (!userId) {
+  className?: string;
+}
+
+function MemberCard({ isPending, id, name, role, image }: MemberCardProps) {
+  if (isPending) {
     return (
       <Card>
         <CardContent>
@@ -143,17 +126,20 @@ function MemberCard({
   return (
     <Card>
       <CardContent>
-        <Link to="/team/$id" params={{ id: userId }} className="w-75 h-75">
-          <img
-            src={image ?? "https://placehold.co/300"}
-            className="rounded-md mb-2 object-contain"
-          />
-        </Link>
+        <div className="w-75 h-75 overflow-hidden flex items-center justify-center">
+          <Link to="/team/$id" params={{ id: id! }}>
+            <img
+              src={image ?? "https://placehold.co/300x300"}
+              alt={name ?? "Team Member Image"}
+              className="w-full h-full object-cover rounded-md"
+            />
+          </Link>
+        </div>
       </CardContent>
       <CardHeader className="flex flex-col justify-start items-start w-full">
         <CardTitle className="">
           <div className="text-2xl font-bold">{name}</div>
-          <span className="text-(--color-destructive)">{role}</span>
+          <span className="text-(--color-destructive) uppercase">{role}</span>
         </CardTitle>
         <CardDescription>Lorem ipsum...</CardDescription>
       </CardHeader>
