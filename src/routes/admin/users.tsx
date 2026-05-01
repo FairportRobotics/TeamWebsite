@@ -10,10 +10,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { RowActions } from "@/components/user-row-actions";
+import { authClient } from "@/lib/auth-client";
 import { hasAnyPermission } from "@/lib/auth/utils/permissions";
 import { getUserListFn, type AdminUser } from "@/lib/fn/user";
 import { Permissions } from "@/lib/permissions";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
 import {
   flexRender,
   getCoreRowModel,
@@ -27,6 +28,7 @@ import {
 } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import React from "react";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/users")({
   component: RouteComponent,
@@ -56,10 +58,73 @@ export const Route = createFileRoute("/admin/users")({
 });
 
 function RouteComponent() {
+  const { refetch } = authClient.useSession();
   const { users, selfId, canBan, canImpersonate, canRevokeSessions, canDelete } =
     Route.useLoaderData();
+  const router = useRouter();
+  const navigate = useNavigate();
 
   const canSeeActions = canBan || canImpersonate || canRevokeSessions || canDelete;
+
+  async function handleImpersonateUser(userId: string) {
+    authClient.admin.impersonateUser(
+      { userId },
+      {
+        onError: (error) => {
+          toast.error(error.error.message || "Failed to impersonate user");
+        },
+        onSuccess: () => {
+          refetch();
+          navigate({ to: "/" });
+        },
+      },
+    );
+  }
+
+  async function handleRevokeSessions(userId: string) {
+    authClient.admin.revokeUserSessions(
+      { userId },
+      {
+        onError: (error) => {
+          toast.error(error.error.message || "Failed to revoke user sessions");
+        },
+        onSuccess: () => {
+          toast.success("User sessions were revoked");
+          router.invalidate();
+        },
+      },
+    );
+  }
+  // TODO: Add the ban reason as a dialog or something.
+  async function handleBanUser(userId: string) {
+    authClient.admin.banUser(
+      { userId },
+      {
+        onError: (error) => {
+          toast.error(error.error.message || "Failed to ban user");
+        },
+        onSuccess: () => {
+          toast.success("User was banned");
+          router.invalidate();
+        },
+      },
+    );
+  }
+
+  async function handleUnbanUser(userId: string) {
+    authClient.admin.unbanUser(
+      { userId },
+      {
+        onError: (error) => {
+          toast.error(error.error.message || "Failed to unban user");
+        },
+        onSuccess: () => {
+          toast.success("User was unbanned");
+          router.invalidate();
+        },
+      },
+    );
+  }
 
   return (
     <div>

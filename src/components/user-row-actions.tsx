@@ -37,6 +37,8 @@ import { Field, FieldGroup } from "./ui/field";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 
+// TODO: This is less than idea. We do not need Alert and Dialog per row. Break them out into
+// components and wire them up at the table level In other words, we only need one on the page.
 export function RowActions({ id, isBanned }: { id: string; isBanned: boolean }) {
   const [openDialog, setOpenDialog] = useState<null | "delete" | "ban" | "unban">(null);
 
@@ -103,7 +105,7 @@ export function RowActions({ id, isBanned }: { id: string; isBanned: boolean }) 
               <DialogTitle>Ban User</DialogTitle>
               <DialogDescription>
                 Ban a User and prevent them from Signing In. Click "Continue Ban" when you&apos;re
-                done.
+                done entering the reason.
               </DialogDescription>
             </DialogHeader>
             <FieldGroup>
