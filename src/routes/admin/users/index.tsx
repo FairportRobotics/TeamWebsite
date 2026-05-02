@@ -9,12 +9,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { RowActions } from "@/components/user-row-actions";
-import { authClient } from "@/lib/auth-client";
 import { hasAnyPermission } from "@/lib/auth/utils/permissions";
 import { getUserListFn, type AdminUser } from "@/lib/fn/user";
 import { Permissions } from "@/lib/permissions";
-import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import {
   flexRender,
   getCoreRowModel,
@@ -28,9 +26,8 @@ import {
 } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import React from "react";
-import { toast } from "sonner";
 
-export const Route = createFileRoute("/admin/users")({
+export const Route = createFileRoute("/admin/users/")({
   component: RouteComponent,
   loader: async ({ context }) => {
     // Pull needed data from the context.
@@ -58,73 +55,7 @@ export const Route = createFileRoute("/admin/users")({
 });
 
 function RouteComponent() {
-  const { refetch } = authClient.useSession();
-  const { users, selfId, canBan, canImpersonate, canRevokeSessions, canDelete } =
-    Route.useLoaderData();
-  const router = useRouter();
-  const navigate = useNavigate();
-
-  const canSeeActions = canBan || canImpersonate || canRevokeSessions || canDelete;
-
-  async function handleImpersonateUser(userId: string) {
-    authClient.admin.impersonateUser(
-      { userId },
-      {
-        onError: (error) => {
-          toast.error(error.error.message || "Failed to impersonate user");
-        },
-        onSuccess: () => {
-          refetch();
-          navigate({ to: "/" });
-        },
-      },
-    );
-  }
-
-  async function handleRevokeSessions(userId: string) {
-    authClient.admin.revokeUserSessions(
-      { userId },
-      {
-        onError: (error) => {
-          toast.error(error.error.message || "Failed to revoke user sessions");
-        },
-        onSuccess: () => {
-          toast.success("User sessions were revoked");
-          router.invalidate();
-        },
-      },
-    );
-  }
-  // TODO: Add the ban reason as a dialog or something.
-  async function handleBanUser(userId: string) {
-    authClient.admin.banUser(
-      { userId },
-      {
-        onError: (error) => {
-          toast.error(error.error.message || "Failed to ban user");
-        },
-        onSuccess: () => {
-          toast.success("User was banned");
-          router.invalidate();
-        },
-      },
-    );
-  }
-
-  async function handleUnbanUser(userId: string) {
-    authClient.admin.unbanUser(
-      { userId },
-      {
-        onError: (error) => {
-          toast.error(error.error.message || "Failed to unban user");
-        },
-        onSuccess: () => {
-          toast.success("User was unbanned");
-          router.invalidate();
-        },
-      },
-    );
-  }
+  const { users, selfId } = Route.useLoaderData();
 
   return (
     <div>
@@ -142,18 +73,21 @@ function RouteComponent() {
   );
 }
 
+// This allows TypeScript to strongly type the meta data in the ColumnDef.
 declare module "@tanstack/react-table" {
   interface TableMeta<TData> {
     currentUserId?: string;
   }
 }
 
+// Define all the properties which need to be passed into the ColumnDef.
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   currentUserId: string | undefined;
 }
 
+// Describe the columns we will emit in the table.
 export const columns: ColumnDef<AdminUser>[] = [
   {
     accessorKey: "name",
@@ -168,19 +102,34 @@ export const columns: ColumnDef<AdminUser>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => {
-      const userRow = row.original;
+  },
+  {
+    accessorKey: "email",
+    header: ({ column }) => {
       return (
-        <div>
-          <div className="text-xl font-semibold text-(--color-destructive)">{userRow.name}</div>
-          <div className="">{userRow.email}</div>
-        </div>
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Email
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
       );
     },
   },
   {
     accessorKey: "role",
-    header: "Roles",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Roles
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => {
       const role = row.original.role;
       const roles = role?.split(",").map((item) => item.trim());
@@ -188,35 +137,57 @@ export const columns: ColumnDef<AdminUser>[] = [
     },
   },
   {
-    accessorKey: "activeSessions",
-    header: "Active Sessions",
+    accessorKey: "banned",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Banned
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => {
-      <div>{row.original.sessions.length}</div>;
+      const value = row.original.banned;
+      return <div>{value ? "Yes" : ""}</div>;
     },
   },
   {
-    accessorKey: "relatedAccounts",
-    header: "Related Accounts",
+    accessorKey: "createdAt",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Created At
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => {
-      <div>{row.original.accounts.length}</div>;
+      const value = row.original.createdAt;
+      return <>{value.toLocaleDateString()}</>;
     },
   },
   {
-    accessorKey: "isBaned",
-    header: "Banned",
-  },
-  {
-    id: "actions",
-    header: "Actions",
-    cell: ({ row, table }) => {
-      const userRow = row.original;
-      const isCurrentUser = row.original.id === table.options.meta?.currentUserId;
-
-      if (isCurrentUser) {
-        return <></>;
-      }
-
-      return <RowActions id={userRow.id} isBanned={userRow.banned ?? false} />;
+    accessorKey: "updatedAt",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Last Updated
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const value = row.original.updatedAt;
+      return <>{value.toLocaleDateString()}</>;
     },
   },
 ];
@@ -249,57 +220,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4">
-        <Input
-          placeholder="Filter Names..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) => {
-            table.getColumn("name")?.setFilterValue(event.target.value);
-          }}
-          className="max-w-sm"
-        />
-      </div>
-
-      <div className="overflow-hidden rounded-md border">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(header.column.columnDef.header, header.getContext())}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
-
-      <div className="flex items-center justify-between space-x-2 py-4">
+      <div className="flex flex-row items-center justify-between pb-4">
         <Button
           variant="default"
           size="sm"
@@ -316,6 +237,84 @@ export function DataTable<TData, TValue>({
         >
           Next
         </Button>
+      </div>
+
+      <div className="overflow-hidden rounded-md border">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead key={header.id} className="align-top">
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(header.column.columnDef.header, header.getContext())}
+
+                      {header.id === "name" && (
+                        <div className="pl-2 pb-3">
+                          <Input
+                            placeholder="Filter Names..."
+                            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+                            onChange={(event) => {
+                              table.getColumn("name")?.setFilterValue(event.target.value);
+                            }}
+                            className="max-w-sm"
+                          />
+                        </div>
+                      )}
+
+                      {header.id === "email" && (
+                        <div className="pl-2 pb-3">
+                          <Input
+                            placeholder="Filter Emails..."
+                            value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+                            onChange={(event) => {
+                              table.getColumn("email")?.setFilterValue(event.target.value);
+                            }}
+                            className="max-w-sm"
+                          />
+                        </div>
+                      )}
+
+                      {header.id === "role" && (
+                        <div className="pl-2 pb-3">
+                          <Input
+                            placeholder="Filter Roles..."
+                            value={(table.getColumn("role")?.getFilterValue() as string) ?? ""}
+                            onChange={(event) => {
+                              table.getColumn("role")?.setFilterValue(event.target.value);
+                            }}
+                            className="max-w-sm"
+                          />
+                        </div>
+                      )}
+                    </TableHead>
+                  );
+                })}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id} className="pl-5">
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="h-24 text-center">
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
       </div>
     </div>
   );

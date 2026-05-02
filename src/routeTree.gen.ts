@@ -25,12 +25,12 @@ import { Route as GamesIdRouteImport } from './routes/games/$id'
 import { Route as AuthSignupRouteImport } from './routes/auth/signup'
 import { Route as AuthSigninRouteImport } from './routes/auth/signin'
 import { Route as AuthForgotPasswordRouteImport } from './routes/auth/forgot-password'
-import { Route as AdminUsersRouteImport } from './routes/admin/users'
 import { Route as AdminSponsorsRouteImport } from './routes/admin/sponsors'
 import { Route as AdminGamesRouteImport } from './routes/admin/games'
 import { Route as AdminEventsRouteImport } from './routes/admin/events'
+import { Route as AdminUsersIndexRouteImport } from './routes/admin/users/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
-import { Route as AdminUserIdRouteImport } from './routes/admin/user/$id'
+import { Route as AdminUsersIdRouteImport } from './routes/admin/users/$id'
 
 const UnauthorizedRoute = UnauthorizedRouteImport.update({
   id: '/unauthorized',
@@ -112,11 +112,6 @@ const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
   path: '/forgot-password',
   getParentRoute: () => AuthRouteRoute,
 } as any)
-const AdminUsersRoute = AdminUsersRouteImport.update({
-  id: '/users',
-  path: '/users',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
 const AdminSponsorsRoute = AdminSponsorsRouteImport.update({
   id: '/sponsors',
   path: '/sponsors',
@@ -132,14 +127,19 @@ const AdminEventsRoute = AdminEventsRouteImport.update({
   path: '/events',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminUsersIndexRoute = AdminUsersIndexRouteImport.update({
+  id: '/users/',
+  path: '/users/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminUserIdRoute = AdminUserIdRouteImport.update({
-  id: '/user/$id',
-  path: '/user/$id',
+const AdminUsersIdRoute = AdminUsersIdRouteImport.update({
+  id: '/users/$id',
+  path: '/users/$id',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 
@@ -153,7 +153,6 @@ export interface FileRoutesByFullPath {
   '/admin/events': typeof AdminEventsRoute
   '/admin/games': typeof AdminGamesRoute
   '/admin/sponsors': typeof AdminSponsorsRoute
-  '/admin/users': typeof AdminUsersRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/signin': typeof AuthSigninRoute
   '/auth/signup': typeof AuthSignupRoute
@@ -164,8 +163,9 @@ export interface FileRoutesByFullPath {
   '/games/': typeof GamesIndexRoute
   '/sponsors/': typeof SponsorsIndexRoute
   '/team/': typeof TeamIndexRoute
-  '/admin/user/$id': typeof AdminUserIdRoute
+  '/admin/users/$id': typeof AdminUsersIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/admin/users/': typeof AdminUsersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -176,7 +176,6 @@ export interface FileRoutesByTo {
   '/admin/events': typeof AdminEventsRoute
   '/admin/games': typeof AdminGamesRoute
   '/admin/sponsors': typeof AdminSponsorsRoute
-  '/admin/users': typeof AdminUsersRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/signin': typeof AuthSigninRoute
   '/auth/signup': typeof AuthSignupRoute
@@ -187,8 +186,9 @@ export interface FileRoutesByTo {
   '/games': typeof GamesIndexRoute
   '/sponsors': typeof SponsorsIndexRoute
   '/team': typeof TeamIndexRoute
-  '/admin/user/$id': typeof AdminUserIdRoute
+  '/admin/users/$id': typeof AdminUsersIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/admin/users': typeof AdminUsersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -201,7 +201,6 @@ export interface FileRoutesById {
   '/admin/events': typeof AdminEventsRoute
   '/admin/games': typeof AdminGamesRoute
   '/admin/sponsors': typeof AdminSponsorsRoute
-  '/admin/users': typeof AdminUsersRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/signin': typeof AuthSigninRoute
   '/auth/signup': typeof AuthSignupRoute
@@ -212,8 +211,9 @@ export interface FileRoutesById {
   '/games/': typeof GamesIndexRoute
   '/sponsors/': typeof SponsorsIndexRoute
   '/team/': typeof TeamIndexRoute
-  '/admin/user/$id': typeof AdminUserIdRoute
+  '/admin/users/$id': typeof AdminUsersIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/admin/users/': typeof AdminUsersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -227,7 +227,6 @@ export interface FileRouteTypes {
     | '/admin/events'
     | '/admin/games'
     | '/admin/sponsors'
-    | '/admin/users'
     | '/auth/forgot-password'
     | '/auth/signin'
     | '/auth/signup'
@@ -238,8 +237,9 @@ export interface FileRouteTypes {
     | '/games/'
     | '/sponsors/'
     | '/team/'
-    | '/admin/user/$id'
+    | '/admin/users/$id'
     | '/api/auth/$'
+    | '/admin/users/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -250,7 +250,6 @@ export interface FileRouteTypes {
     | '/admin/events'
     | '/admin/games'
     | '/admin/sponsors'
-    | '/admin/users'
     | '/auth/forgot-password'
     | '/auth/signin'
     | '/auth/signup'
@@ -261,8 +260,9 @@ export interface FileRouteTypes {
     | '/games'
     | '/sponsors'
     | '/team'
-    | '/admin/user/$id'
+    | '/admin/users/$id'
     | '/api/auth/$'
+    | '/admin/users'
   id:
     | '__root__'
     | '/'
@@ -274,7 +274,6 @@ export interface FileRouteTypes {
     | '/admin/events'
     | '/admin/games'
     | '/admin/sponsors'
-    | '/admin/users'
     | '/auth/forgot-password'
     | '/auth/signin'
     | '/auth/signup'
@@ -285,8 +284,9 @@ export interface FileRouteTypes {
     | '/games/'
     | '/sponsors/'
     | '/team/'
-    | '/admin/user/$id'
+    | '/admin/users/$id'
     | '/api/auth/$'
+    | '/admin/users/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -419,13 +419,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthForgotPasswordRouteImport
       parentRoute: typeof AuthRouteRoute
     }
-    '/admin/users': {
-      id: '/admin/users'
-      path: '/users'
-      fullPath: '/admin/users'
-      preLoaderRoute: typeof AdminUsersRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
     '/admin/sponsors': {
       id: '/admin/sponsors'
       path: '/sponsors'
@@ -447,6 +440,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminEventsRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/users/': {
+      id: '/admin/users/'
+      path: '/users'
+      fullPath: '/admin/users/'
+      preLoaderRoute: typeof AdminUsersIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -454,11 +454,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/user/$id': {
-      id: '/admin/user/$id'
-      path: '/user/$id'
-      fullPath: '/admin/user/$id'
-      preLoaderRoute: typeof AdminUserIdRouteImport
+    '/admin/users/$id': {
+      id: '/admin/users/$id'
+      path: '/users/$id'
+      fullPath: '/admin/users/$id'
+      preLoaderRoute: typeof AdminUsersIdRouteImport
       parentRoute: typeof AdminRouteRoute
     }
   }
@@ -468,18 +468,18 @@ interface AdminRouteRouteChildren {
   AdminEventsRoute: typeof AdminEventsRoute
   AdminGamesRoute: typeof AdminGamesRoute
   AdminSponsorsRoute: typeof AdminSponsorsRoute
-  AdminUsersRoute: typeof AdminUsersRoute
   AdminIndexRoute: typeof AdminIndexRoute
-  AdminUserIdRoute: typeof AdminUserIdRoute
+  AdminUsersIdRoute: typeof AdminUsersIdRoute
+  AdminUsersIndexRoute: typeof AdminUsersIndexRoute
 }
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminEventsRoute: AdminEventsRoute,
   AdminGamesRoute: AdminGamesRoute,
   AdminSponsorsRoute: AdminSponsorsRoute,
-  AdminUsersRoute: AdminUsersRoute,
   AdminIndexRoute: AdminIndexRoute,
-  AdminUserIdRoute: AdminUserIdRoute,
+  AdminUsersIdRoute: AdminUsersIdRoute,
+  AdminUsersIndexRoute: AdminUsersIndexRoute,
 }
 
 const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
