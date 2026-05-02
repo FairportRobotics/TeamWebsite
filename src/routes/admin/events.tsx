@@ -1,8 +1,8 @@
 // prettier-ignore
 import { BackTo } from "@/components/back-to";
 import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
+import { Permissions } from "@/lib/auth/permissions";
 import { assertHasAnyPermission } from "@/lib/auth/utils/permissions";
-import { Permissions } from "@/lib/permissions";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin/events")({

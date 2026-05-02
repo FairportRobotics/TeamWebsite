@@ -1,9 +1,9 @@
 "use client";
 
 // prettier-ignore
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth/auth-client";
+import { Permissions } from "@/lib/auth/permissions";
 import { hasAnyPermission } from "@/lib/auth/utils/permissions";
-import { Permissions } from "@/lib/permissions";
 import { Link, useNavigate } from "@tanstack/react-router";
 import type { User } from "better-auth";
 import { ImpersonateButton } from "./impersonate-button";

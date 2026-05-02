@@ -1,4 +1,4 @@
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth/auth-client";
 import { getSessionFn } from "@/lib/auth/server";
 import { getUserListFn } from "@/lib/fn/user";
 import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";

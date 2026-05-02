@@ -1,6 +1,6 @@
 // prettier-ignore
+import { Permissions } from "@/lib/auth/permissions";
 import { assertHasAnyPermission } from "@/lib/auth/utils/permissions";
-import { Permissions } from "@/lib/permissions";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin")({

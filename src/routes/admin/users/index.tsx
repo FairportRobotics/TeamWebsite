@@ -1,4 +1,5 @@
 import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
+import { PageSection } from "@/components/page-section";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -9,9 +10,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Permissions } from "@/lib/auth/permissions";
 import { hasAnyPermission } from "@/lib/auth/utils/permissions";
 import { getUserListFn, type AdminUser } from "@/lib/fn/user";
-import { Permissions } from "@/lib/permissions";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   flexRender,
@@ -58,7 +59,7 @@ function RouteComponent() {
   const { users, selfId } = Route.useLoaderData();
 
   return (
-    <div>
+    <div className="p6">
       <PageHeader>
         <PageTitle>
           User <span className="text-(--color-destructive)">Administration</span>
@@ -67,6 +68,8 @@ function RouteComponent() {
           Manage users, roles, permissions, and other administrative tasks for the website.
         </PageDescription>
       </PageHeader>
+
+      <PageSection>Users</PageSection>
 
       <DataTable columns={columns} data={users} currentUserId={selfId} />
     </div>

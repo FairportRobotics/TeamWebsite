@@ -1,5 +1,5 @@
 // prettier-ignore
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth/auth-client";
 import { useNavigate } from "@tanstack/react-router";
 import { UserX } from "lucide-react";
 import { TeamActionButton } from "./team-action-buttom";
