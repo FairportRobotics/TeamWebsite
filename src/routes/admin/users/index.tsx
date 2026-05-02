@@ -12,7 +12,7 @@ import {
 import { hasAnyPermission } from "@/lib/auth/utils/permissions";
 import { getUserListFn, type AdminUser } from "@/lib/fn/user";
 import { Permissions } from "@/lib/permissions";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   flexRender,
   getCoreRowModel,
@@ -102,6 +102,15 @@ export const columns: ColumnDef<AdminUser>[] = [
         </Button>
       );
     },
+    cell: ({ row }) => {
+      const name = row.original.name;
+      const id = row.original.id;
+      return (
+        <Link to="/admin/users/$id" params={{ id }}>
+          {name}
+        </Link>
+      );
+    },
   },
   {
     accessorKey: "email",
@@ -131,8 +140,8 @@ export const columns: ColumnDef<AdminUser>[] = [
       );
     },
     cell: ({ row }) => {
-      const role = row.original.role;
-      const roles = role?.split(",").map((item) => item.trim());
+      const value = row.original.role;
+      const roles = value?.split(",").map((item) => item.trim());
       return <div className="capitalize">{roles?.join(", ")}</div>;
     },
   },
