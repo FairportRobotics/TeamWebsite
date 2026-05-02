@@ -10,9 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Permissions } from "@/lib/auth/permissions";
-import { hasAnyPermission } from "@/lib/auth/utils/permissions";
-import { getUserListFn, type AdminUser } from "@/lib/fn/user";
+import { getUserListFn, type UserListItem } from "@/lib/fn/user";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   flexRender,
@@ -33,24 +31,13 @@ export const Route = createFileRoute("/admin/users/")({
   loader: async ({ context }) => {
     // Pull needed data from the context.
     const userId = context.data?.user.id;
-    const userRoles = context.data?.user.role ?? "";
 
     // Get all the users.
     const users = await getUserListFn();
 
-    // Get fine-grained permissions for UI adjustment.
-    const canBan = hasAnyPermission(userRoles, [Permissions.UserBan]);
-    const canImpersonate = hasAnyPermission(userRoles, [Permissions.UserImpersonate]);
-    const canRevokeSessions = hasAnyPermission(userRoles, [Permissions.UserRevokeSessions]);
-    const canDelete = hasAnyPermission(userRoles, [Permissions.UserDelete]);
-
     return {
       users,
       selfId: userId,
-      canBan,
-      canImpersonate,
-      canRevokeSessions,
-      canDelete,
     };
   },
 });
@@ -59,7 +46,7 @@ function RouteComponent() {
   const { users, selfId } = Route.useLoaderData();
 
   return (
-    <div className="p6">
+    <div className="">
       <PageHeader>
         <PageTitle>
           User <span className="text-(--color-destructive)">Administration</span>
@@ -91,7 +78,7 @@ interface DataTableProps<TData, TValue> {
 }
 
 // Describe the columns we will emit in the table.
-export const columns: ColumnDef<AdminUser>[] = [
+export const columns: ColumnDef<UserListItem>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => {
@@ -163,7 +150,7 @@ export const columns: ColumnDef<AdminUser>[] = [
     },
     cell: ({ row }) => {
       const value = row.original.banned;
-      return <div>{value ? "Yes" : ""}</div>;
+      return <div>{value ? "Yes" : "-"}</div>;
     },
   },
   {
@@ -185,21 +172,49 @@ export const columns: ColumnDef<AdminUser>[] = [
     },
   },
   {
-    accessorKey: "updatedAt",
+    accessorKey: "accountsCount",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Last Updated
+          Accounts
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+  },
+  {
+    accessorKey: "sessionsCount",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Sessions
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+  },
+  {
+    accessorKey: "sessionsLatest",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Last Login
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
     cell: ({ row }) => {
-      const value = row.original.updatedAt;
-      return <>{value.toLocaleDateString()}</>;
+      const value = row.original.sessionsLatest;
+      return <>{value ? value.toLocaleDateString() : "-"}</>;
     },
   },
 ];
