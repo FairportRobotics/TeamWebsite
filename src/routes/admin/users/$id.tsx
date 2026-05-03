@@ -1,6 +1,9 @@
+import { AccountsTable } from "@/components/admin/users/accounts-table";
+import { SessionsTable } from "@/components/admin/users/sessions-table";
 import { BackTo } from "@/components/back-to";
 import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
 import { PageSection } from "@/components/page-section";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getUserDetailsFn } from "@/lib/fn/user";
 import { createFileRoute } from "@tanstack/react-router";
@@ -43,15 +46,9 @@ function RouteComponent() {
           <CardTitle>
             <PageSection>Accounts</PageSection>
           </CardTitle>
-          <CardDescription></CardDescription>
         </CardHeader>
         <CardContent>
-          {accounts.map((a) => (
-            <div>
-              {a.id} {a.providerId} : {a.createdAt.toISOString()} :{" "}
-              {a.accessTokenExpiresAt?.toISOString()}
-            </div>
-          ))}
+          <AccountsTable data={accounts} />
         </CardContent>
       </Card>
 
@@ -60,15 +57,12 @@ function RouteComponent() {
           <CardTitle>
             <PageSection>Sessions</PageSection>
           </CardTitle>
-          <CardDescription></CardDescription>
         </CardHeader>
         <CardContent>
-          {sessions.map((s) => (
-            <div>
-              {s.id} : {s.createdAt.toISOString()} : {s.expiresAt.toISOString()} :{" "}
-              {s.impersonatedBy} : {s.ipAddress} : {s.updatedAt.toISOString()} : {s.userAgent}
-            </div>
-          ))}
+          <SessionsTable data={sessions} />
+          <div className="mt-4">
+            <Button variant="destructive">Revoke all Sessions</Button>
+          </div>
         </CardContent>
       </Card>
     </div>
