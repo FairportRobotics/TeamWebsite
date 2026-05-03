@@ -1,87 +1,76 @@
-import { authClient } from "@/lib/auth/auth-client";
-import { getSessionFn } from "@/lib/auth/server";
-import { getUserListFn } from "@/lib/fn/user";
-import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
-import { toast } from "sonner";
+import { BackTo } from "@/components/back-to";
+import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
+import { PageSection } from "@/components/page-section";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { getUserDetailsFn } from "@/lib/fn/user";
+import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin/users/$id")({
   component: RouteComponent,
-  loader: async () => {
-    const [session, users] = await Promise.all([getSessionFn(), getUserListFn()]);
-
-    return {
-      users,
-      selfId: session?.user.id,
-    };
+  loader: async ({ params }) => {
+    const details = await getUserDetailsFn({ data: { userId: params.id } });
+    return details;
   },
 });
 
 function RouteComponent() {
-  const { refetch } = authClient.useSession();
-  // const { users, selfId, canBan, canImpersonate, canRevokeSessions, canDelete } =
-  //   Route.useLoaderData();
-  const router = useRouter();
-  const navigate = useNavigate();
+  const { user, accounts, sessions } = Route.useLoaderData();
 
-  async function handleImpersonateUser(userId: string) {
-    authClient.admin.impersonateUser(
-      { userId },
-      {
-        onError: (error) => {
-          toast.error(error.error.message || "Failed to impersonate user");
-        },
-        onSuccess: () => {
-          refetch();
-          navigate({ to: "/" });
-        },
-      },
-    );
-  }
+  return (
+    <div>
+      <BackTo to="/admin/users" label="Users" />
+      <PageHeader>
+        <PageTitle>{user.name}</PageTitle>
+        <PageDescription>
+          Manage users, roles, permissions, and other administrative tasks for the website.
+        </PageDescription>
+      </PageHeader>
 
-  async function handleRevokeSessions(userId: string) {
-    authClient.admin.revokeUserSessions(
-      { userId },
-      {
-        onError: (error) => {
-          toast.error(error.error.message || "Failed to revoke user sessions");
-        },
-        onSuccess: () => {
-          toast.success("User sessions were revoked");
-          router.invalidate();
-        },
-      },
-    );
-  }
-  // TODO: Add the ban reason as a dialog or something.
-  async function handleBanUser(userId: string) {
-    authClient.admin.banUser(
-      { userId },
-      {
-        onError: (error) => {
-          toast.error(error.error.message || "Failed to ban user");
-        },
-        onSuccess: () => {
-          toast.success("User was banned");
-          router.invalidate();
-        },
-      },
-    );
-  }
+      <Card className="mb-10">
+        <CardHeader>
+          <CardTitle>
+            <PageSection>Details</PageSection>
+          </CardTitle>
+          <CardDescription>
+            {user.name} / {user.email}
+          </CardDescription>
+        </CardHeader>
+        <CardContent></CardContent>
+      </Card>
 
-  async function handleUnbanUser(userId: string) {
-    authClient.admin.unbanUser(
-      { userId },
-      {
-        onError: (error) => {
-          toast.error(error.error.message || "Failed to unban user");
-        },
-        onSuccess: () => {
-          toast.success("User was unbanned");
-          router.invalidate();
-        },
-      },
-    );
-  }
+      <Card className="mb-10">
+        <CardHeader>
+          <CardTitle>
+            <PageSection>Accounts</PageSection>
+          </CardTitle>
+          <CardDescription></CardDescription>
+        </CardHeader>
+        <CardContent>
+          {accounts.map((a) => (
+            <div>
+              {a.id} {a.providerId} : {a.createdAt.toISOString()} :{" "}
+              {a.accessTokenExpiresAt?.toISOString()}
+            </div>
+          ))}
+        </CardContent>
+      </Card>
 
-  return <div>Hello "/admin/user/$id"!</div>;
+      <Card className="mb-10">
+        <CardHeader>
+          <CardTitle>
+            <PageSection>Sessions</PageSection>
+          </CardTitle>
+          <CardDescription></CardDescription>
+        </CardHeader>
+        <CardContent>
+          {sessions.map((s) => (
+            <div>
+              {s.id} : {s.createdAt.toISOString()} : {s.expiresAt.toISOString()} :{" "}
+              {s.impersonatedBy} : {s.ipAddress} : {s.updatedAt.toISOString()} : {s.userAgent}
+            </div>
+          ))}
+        </CardContent>
+      </Card>
+    </div>
+  );
 }
