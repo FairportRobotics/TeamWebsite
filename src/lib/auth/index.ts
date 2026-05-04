@@ -5,7 +5,7 @@ import { admin as adminPlugin } from "better-auth/plugins";
 import { tanstackStartCookies as tanstackStartCookiesPlugin } from "better-auth/tanstack-start";
 
 export const auth = betterAuth({
-  appName: "Better-Auth Tutorial",
+  appName: "Team 578",
 
   // Enable support for the database which Better-Auth will be using to store
   // auth information. This is SO much better than Clerk or the auth supported

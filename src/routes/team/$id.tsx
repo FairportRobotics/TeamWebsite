@@ -1,21 +1,21 @@
 import { BackTo } from "@/components/back-to";
 import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
-import { getTeamMemberFn } from "@/lib/fn/user";
+import { getUserDetailsFn } from "@/lib/fn/user";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/team/$id")({
   component: RouteComponent,
   loader: async ({ params }) => {
-    const teamMember = await getTeamMemberFn({
+    const { user } = await getUserDetailsFn({
       data: { userId: params.id },
     });
 
-    return teamMember;
+    return user;
   },
 });
 
 function RouteComponent() {
-  const teamMember = Route.useLoaderData();
+  const user = Route.useLoaderData();
 
   return (
     <div>
@@ -29,10 +29,10 @@ function RouteComponent() {
         </PageDescription>
       </PageHeader>
 
-      <div>{teamMember.name}</div>
-      <div>{teamMember.email}</div>
-      <div>{teamMember.role}</div>
-      <div>{teamMember.image}</div>
+      <div>{user.name}</div>
+      <div>{user.email}</div>
+      <div>{user.role}</div>
+      <div>{user.image}</div>
     </div>
   );
 }

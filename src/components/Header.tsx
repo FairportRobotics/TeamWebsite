@@ -1,9 +1,9 @@
 "use client";
 
 // prettier-ignore
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth/auth-client";
+import { Permissions } from "@/lib/auth/permissions";
 import { hasAnyPermission } from "@/lib/auth/utils/permissions";
-import { Permissions } from "@/lib/permissions";
 import { Link, useNavigate } from "@tanstack/react-router";
 import type { User } from "better-auth";
 import { ImpersonateButton } from "./impersonate-button";
@@ -33,7 +33,7 @@ export default function Header() {
       <nav className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 py-3 sm:py-4">
         <section className="flex items-center justify-center gap-2">
           <NavigationLink label="Home" link="/" />
-          <NavigationLink label="Team" link="/team" />
+          <NavigationLink label="Team Members" link="/team" />
           <NavigationLink label="Games" link="/games" />
           <NavigationLink label="Calendar" link="/calendar" />
           <NavigationLink label="Sponsors" link="/sponsors" />

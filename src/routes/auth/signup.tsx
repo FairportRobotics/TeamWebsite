@@ -1,12 +1,6 @@
 import { SocialAuthButtons } from "@/components/social-login-buttons";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -18,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { LoadingSwap } from "@/components/ui/loading-swap";
 import { PasswordInput } from "@/components/ui/password-input";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
@@ -76,10 +70,7 @@ function RouteComponent() {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form
-            className="space-y-4"
-            onSubmit={form.handleSubmit(handleSignUp)}
-          >
+          <form className="space-y-4" onSubmit={form.handleSubmit(handleSignUp)}>
             <FormField
               control={form.control}
               name="name"
@@ -87,12 +78,7 @@ function RouteComponent() {
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input
-                      type="name"
-                      autoComplete=""
-                      {...field}
-                      placeholder="First Last"
-                    />
+                    <Input type="name" autoComplete="" {...field} placeholder="First Last" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -106,12 +92,7 @@ function RouteComponent() {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input
-                      type="email"
-                      autoComplete=""
-                      {...field}
-                      placeholder="user@example.com"
-                    />
+                    <Input type="email" autoComplete="" {...field} placeholder="user@example.com" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -147,9 +128,7 @@ function RouteComponent() {
             </LoadingSwap>
             <div className="relative flex py-5 items-center">
               <div className="grow border-t border-gray-400"></div>
-              <span className="shrink mx-4 text-gray-400">
-                Or continue with
-              </span>
+              <span className="shrink mx-4 text-gray-400">Or continue with</span>
               <div className="grow border-t border-gray-400"></div>
             </div>
             <div className="grid grid-cols-3 gap-4">

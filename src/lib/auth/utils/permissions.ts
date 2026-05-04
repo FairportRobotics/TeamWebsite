@@ -1,5 +1,5 @@
-import type { Permission, Role } from "@/lib/permissions";
-import { RolePermissions, Roles } from "@/lib/permissions";
+import type { Permission, Role } from "@/lib/auth/permissions";
+import { RolePermissions, Roles } from "@/lib/auth/permissions";
 import { redirect } from "@tanstack/react-router";
 
 // Parse the delimited roles string into Role objects so we can assure type safety.
@@ -54,10 +54,7 @@ export function hasAllPermissionsTyped(
 }
 
 // Optional: check if user has ANY required permissions.
-export function hasAnyPermissionTyped(
-  userRoles: Role[],
-  required: readonly Permission[],
-): boolean {
+export function hasAnyPermissionTyped(userRoles: Role[], required: readonly Permission[]): boolean {
   const userPerms = getPermissionsForRoles(userRoles);
   return required.some((perm) => userPerms.has(perm));
 }

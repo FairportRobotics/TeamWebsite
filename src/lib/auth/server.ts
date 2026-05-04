@@ -4,8 +4,8 @@ import { authenticatedMiddleware } from "@/lib/middleware/auth";
 import { redirect } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeaders } from "@tanstack/react-start/server";
-import { auth } from "../auth";
-import type { Permission } from "../permissions";
+import { auth } from ".";
+import type { Permission } from "./permissions";
 import { hasAnyPermission } from "./utils/permissions";
 
 export const getSessionFn = createServerFn({ method: "GET" }).handler(async () => {
