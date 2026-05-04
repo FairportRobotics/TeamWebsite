@@ -1,4 +1,4 @@
-import { EventCalendar } from "@/components/event-calendar";
+import { EventCalendar, type CalendarEvent } from "@/components/event-calendar";
 import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
 import { createFileRoute } from "@tanstack/react-router";
 
@@ -8,11 +8,41 @@ export const Route = createFileRoute("/calendar/")({
 
 function RouteComponent() {
   const events = [
-    { id: "1", title: "John's Birthday", date: "05/02/2026" },
-    { id: "2", title: "Mentor Meeting at MD", date: "05/26/2026", time: "07:00PM" },
-    { id: "3", title: "Canal Days", date: "06/06/2026", time: "07:00AM" },
-    { id: "4", title: "Canal Days", date: "06/07/2026", time: "07:00AM" },
-  ];
+    { id: "john-bday", title: "John's Birthday", date: "05/02/2026", visibility: "mentor" },
+    {
+      id: "mentor-meeting",
+      title: "Mentor Meeting at MD",
+      date: "05/26/2026",
+      timeFrom: "06:00PM",
+      timeThrough: "08:00PM",
+      visibility: "all",
+    },
+    {
+      id: "canal-days-1",
+      title: "Canal Days",
+      date: "06/06/2026",
+      timeFrom: "07:00AM",
+      timeThrough: "05:00PM",
+      visibility: "all",
+    },
+    {
+      id: "canal-days-2",
+      title: "Canal Days",
+      date: "06/07/2026",
+      timeFrom: "07:00AM",
+      timeThrough: "05:00PM",
+      visibility: "all",
+    },
+    {
+      id: "team-picnic",
+      title: "Team Picnic",
+      date: "05/17/2026",
+      timeFrom: "11:00AM",
+      timeThrough: "02:00PM",
+      visibility: "team",
+      signupLink: "https://www.signupgenius.com/go/10C0A4AA5A92BA2F4C43-63860749-team",
+    },
+  ] as CalendarEvent[];
 
   return (
     <div>
@@ -33,12 +63,3 @@ function RouteComponent() {
     </div>
   );
 }
-
-/*
-export interface CalendarEvent {
-  id: string;
-  title: string;
-  date: Date | string; // Accept both for flexibility
-  time?: string;
-}
-*/
