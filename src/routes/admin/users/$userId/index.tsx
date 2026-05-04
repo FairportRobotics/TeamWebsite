@@ -38,6 +38,10 @@ function RouteComponent() {
             <div>
               {user.name} ({user.email})
             </div>
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-row items-center mt-6 gap-4">
             <div>
               {user.banned ? (
                 <div>
@@ -50,9 +54,8 @@ function RouteComponent() {
             <div>
               <Button>Impersonate</Button>
             </div>
-          </CardDescription>
-        </CardHeader>
-        <CardContent></CardContent>
+          </div>
+        </CardContent>
       </Card>
 
       <Card className="mb-10">
@@ -74,9 +77,11 @@ function RouteComponent() {
         </CardHeader>
         <CardContent>
           <SessionsTable data={sessions} />
-          <div className="mt-4">
-            <Button variant="destructive">Revoke all Sessions</Button>
-          </div>
+          {sessions.length > 0 && (
+            <div className="mt-4">
+              <Button variant="destructive">Revoke all Sessions</Button>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

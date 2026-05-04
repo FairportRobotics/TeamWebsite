@@ -34,7 +34,7 @@ function RouteComponent() {
         </PageDescription>
       </PageHeader>
 
-      <PageSection>Users</PageSection>
+      <PageSection>Users ({users.length})</PageSection>
 
       <UserListTable data={users} currentUserId={selfId!} />
     </div>

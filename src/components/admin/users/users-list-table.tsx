@@ -52,9 +52,16 @@ export function UserListTable({
         const name = row.original.name;
         const userId = row.original.id;
         return (
-          <Link to="/admin/users/$userId" params={{ userId }}>
-            {name}
-          </Link>
+          <div className="flex flex-row items-center gap-3">
+            <Link to="/admin/users/$userId" params={{ userId }}>
+              {name}
+            </Link>
+            {userId === currentUserId ? (
+              <div className="bg-(--color-destructive) px-3 py-1 rounded-full">You</div>
+            ) : (
+              <></>
+            )}
+          </div>
         );
       },
     },
@@ -294,17 +301,3 @@ export function UserListTable({
     </div>
   );
 }
-
-// // This allows TypeScript to strongly type the meta data in the ColumnDef.
-// declare module "@tanstack/react-table" {
-//   interface TableMeta<TData> {
-//     currentUserId?: string;
-//   }
-// }
-
-// // Define all the properties which need to be passed into the ColumnDef.
-// interface DataTableProps<TData, TValue> {
-//   columns: ColumnDef<TData, TValue>[];
-//   data: TData[];
-//   currentUserId: string | undefined;
-// }
