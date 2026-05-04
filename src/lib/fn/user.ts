@@ -79,12 +79,36 @@ export const getTeamMembersFn = createServerFn().handler(async () => {
 });
 
 // Revoke User Sessions
-const revokeUserSessionsSchema = z.object({
+const revokeUserSessionSchema = z.object({
+  sessionToken: z.string(),
+});
+
+export const revokeUserSessionFn = createServerFn()
+  .inputValidator(zodValidator(revokeUserSessionSchema))
+  .handler(async ({ data }) => {
+    const sessionToken = data.sessionToken;
+
+    const navigate = useNavigate();
+
+    authClient.admin.revokeUserSession(
+      { sessionToken },
+      {
+        onError: (error) => {
+          toast.error(error.error.message || "Failed to revoke user session");
+        },
+        onSuccess: () => {
+          navigate({ to: "/admin/users" });
+        },
+      },
+    );
+  });
+
+const revokeAllUserSessionsSchema = z.object({
   userId: z.string(),
 });
 
-export const revokeUserSessionsFn = createServerFn()
-  .inputValidator(zodValidator(revokeUserSessionsSchema))
+export const revokeAllUserSessionsFn = createServerFn()
+  .inputValidator(zodValidator(revokeAllUserSessionsSchema))
   .handler(async ({ data }) => {
     const userId = data.userId;
 
@@ -132,6 +156,7 @@ export const impersonateUserFn = createServerFn()
 const banUserSchema = z.object({
   userId: z.string(),
   reason: z.string(),
+  expires: z.date().nullable(),
 });
 
 export const banUserFn = createServerFn()
@@ -141,7 +166,7 @@ export const banUserFn = createServerFn()
     const router = useRouter();
 
     authClient.admin.banUser(
-      { userId },
+      { userId: userId, banReason: data.reason },
       {
         onError: (error) => {
           toast.error(error.error.message || "Failed to ban user");

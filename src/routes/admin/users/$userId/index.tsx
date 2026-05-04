@@ -8,10 +8,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { getUserDetailsFn } from "@/lib/fn/user";
 import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/admin/users/$id")({
+export const Route = createFileRoute("/admin/users/$userId/")({
   component: RouteComponent,
   loader: async ({ params }) => {
-    const details = await getUserDetailsFn({ data: { userId: params.id } });
+    const details = await getUserDetailsFn({ data: { userId: params.userId } });
     return details;
   },
 });
@@ -35,7 +35,21 @@ function RouteComponent() {
             <PageSection>Details</PageSection>
           </CardTitle>
           <CardDescription>
-            {user.name} / {user.email}
+            <div>
+              {user.name} ({user.email})
+            </div>
+            <div>
+              {user.banned ? (
+                <div>
+                  {user.banned} : {user.banReason} : {user.banExpires?.toISOString()}
+                </div>
+              ) : (
+                <Button variant="destructive">Ban</Button>
+              )}
+            </div>
+            <div>
+              <Button>Impersonate</Button>
+            </div>
           </CardDescription>
         </CardHeader>
         <CardContent></CardContent>

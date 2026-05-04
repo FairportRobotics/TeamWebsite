@@ -30,7 +30,9 @@ import { Route as AdminGamesRouteImport } from './routes/admin/games'
 import { Route as AdminEventsRouteImport } from './routes/admin/events'
 import { Route as AdminUsersIndexRouteImport } from './routes/admin/users/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
-import { Route as AdminUsersIdRouteImport } from './routes/admin/users/$id'
+import { Route as AdminUsersUserIdRouteRouteImport } from './routes/admin/users/$userId/route'
+import { Route as AdminUsersUserIdIndexRouteImport } from './routes/admin/users/$userId/index'
+import { Route as AdminUsersUserIdEditRouteImport } from './routes/admin/users/$userId/edit'
 
 const UnauthorizedRoute = UnauthorizedRouteImport.update({
   id: '/unauthorized',
@@ -137,10 +139,20 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminUsersIdRoute = AdminUsersIdRouteImport.update({
-  id: '/users/$id',
-  path: '/users/$id',
+const AdminUsersUserIdRouteRoute = AdminUsersUserIdRouteRouteImport.update({
+  id: '/users/$userId',
+  path: '/users/$userId',
   getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminUsersUserIdIndexRoute = AdminUsersUserIdIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminUsersUserIdRouteRoute,
+} as any)
+const AdminUsersUserIdEditRoute = AdminUsersUserIdEditRouteImport.update({
+  id: '/edit',
+  path: '/edit',
+  getParentRoute: () => AdminUsersUserIdRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -163,9 +175,11 @@ export interface FileRoutesByFullPath {
   '/games/': typeof GamesIndexRoute
   '/sponsors/': typeof SponsorsIndexRoute
   '/team/': typeof TeamIndexRoute
-  '/admin/users/$id': typeof AdminUsersIdRoute
+  '/admin/users/$userId': typeof AdminUsersUserIdRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/admin/users/': typeof AdminUsersIndexRoute
+  '/admin/users/$userId/edit': typeof AdminUsersUserIdEditRoute
+  '/admin/users/$userId/': typeof AdminUsersUserIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -186,9 +200,10 @@ export interface FileRoutesByTo {
   '/games': typeof GamesIndexRoute
   '/sponsors': typeof SponsorsIndexRoute
   '/team': typeof TeamIndexRoute
-  '/admin/users/$id': typeof AdminUsersIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/admin/users': typeof AdminUsersIndexRoute
+  '/admin/users/$userId/edit': typeof AdminUsersUserIdEditRoute
+  '/admin/users/$userId': typeof AdminUsersUserIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -211,9 +226,11 @@ export interface FileRoutesById {
   '/games/': typeof GamesIndexRoute
   '/sponsors/': typeof SponsorsIndexRoute
   '/team/': typeof TeamIndexRoute
-  '/admin/users/$id': typeof AdminUsersIdRoute
+  '/admin/users/$userId': typeof AdminUsersUserIdRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/admin/users/': typeof AdminUsersIndexRoute
+  '/admin/users/$userId/edit': typeof AdminUsersUserIdEditRoute
+  '/admin/users/$userId/': typeof AdminUsersUserIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -237,9 +254,11 @@ export interface FileRouteTypes {
     | '/games/'
     | '/sponsors/'
     | '/team/'
-    | '/admin/users/$id'
+    | '/admin/users/$userId'
     | '/api/auth/$'
     | '/admin/users/'
+    | '/admin/users/$userId/edit'
+    | '/admin/users/$userId/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -260,9 +279,10 @@ export interface FileRouteTypes {
     | '/games'
     | '/sponsors'
     | '/team'
-    | '/admin/users/$id'
     | '/api/auth/$'
     | '/admin/users'
+    | '/admin/users/$userId/edit'
+    | '/admin/users/$userId'
   id:
     | '__root__'
     | '/'
@@ -284,9 +304,11 @@ export interface FileRouteTypes {
     | '/games/'
     | '/sponsors/'
     | '/team/'
-    | '/admin/users/$id'
+    | '/admin/users/$userId'
     | '/api/auth/$'
     | '/admin/users/'
+    | '/admin/users/$userId/edit'
+    | '/admin/users/$userId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -454,22 +476,51 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/users/$id': {
-      id: '/admin/users/$id'
-      path: '/users/$id'
-      fullPath: '/admin/users/$id'
-      preLoaderRoute: typeof AdminUsersIdRouteImport
+    '/admin/users/$userId': {
+      id: '/admin/users/$userId'
+      path: '/users/$userId'
+      fullPath: '/admin/users/$userId'
+      preLoaderRoute: typeof AdminUsersUserIdRouteRouteImport
       parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/users/$userId/': {
+      id: '/admin/users/$userId/'
+      path: '/'
+      fullPath: '/admin/users/$userId/'
+      preLoaderRoute: typeof AdminUsersUserIdIndexRouteImport
+      parentRoute: typeof AdminUsersUserIdRouteRoute
+    }
+    '/admin/users/$userId/edit': {
+      id: '/admin/users/$userId/edit'
+      path: '/edit'
+      fullPath: '/admin/users/$userId/edit'
+      preLoaderRoute: typeof AdminUsersUserIdEditRouteImport
+      parentRoute: typeof AdminUsersUserIdRouteRoute
     }
   }
 }
+
+interface AdminUsersUserIdRouteRouteChildren {
+  AdminUsersUserIdEditRoute: typeof AdminUsersUserIdEditRoute
+  AdminUsersUserIdIndexRoute: typeof AdminUsersUserIdIndexRoute
+}
+
+const AdminUsersUserIdRouteRouteChildren: AdminUsersUserIdRouteRouteChildren = {
+  AdminUsersUserIdEditRoute: AdminUsersUserIdEditRoute,
+  AdminUsersUserIdIndexRoute: AdminUsersUserIdIndexRoute,
+}
+
+const AdminUsersUserIdRouteRouteWithChildren =
+  AdminUsersUserIdRouteRoute._addFileChildren(
+    AdminUsersUserIdRouteRouteChildren,
+  )
 
 interface AdminRouteRouteChildren {
   AdminEventsRoute: typeof AdminEventsRoute
   AdminGamesRoute: typeof AdminGamesRoute
   AdminSponsorsRoute: typeof AdminSponsorsRoute
   AdminIndexRoute: typeof AdminIndexRoute
-  AdminUsersIdRoute: typeof AdminUsersIdRoute
+  AdminUsersUserIdRouteRoute: typeof AdminUsersUserIdRouteRouteWithChildren
   AdminUsersIndexRoute: typeof AdminUsersIndexRoute
 }
 
@@ -478,7 +529,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminGamesRoute: AdminGamesRoute,
   AdminSponsorsRoute: AdminSponsorsRoute,
   AdminIndexRoute: AdminIndexRoute,
-  AdminUsersIdRoute: AdminUsersIdRoute,
+  AdminUsersUserIdRouteRoute: AdminUsersUserIdRouteRouteWithChildren,
   AdminUsersIndexRoute: AdminUsersIndexRoute,
 }
 
