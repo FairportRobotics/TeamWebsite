@@ -28,7 +28,11 @@ export const Route = createRootRouteWithContext<RouterContext>()({
         content: "width=device-width, initial-scale=1",
       },
       {
-        title: "Team 578",
+        name: "description",
+        content: "Website for Fairport Robotics Team 578",
+      },
+      {
+        title: "Fairport Robotics Team 578",
       },
     ],
     links: [

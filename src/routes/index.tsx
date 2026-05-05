@@ -14,7 +14,7 @@ function App() {
     <main className="">
       <PageHeader>
         <PageTitle>
-          FRC Team <span className="text-(--color-destructive)">578</span>
+          Fairport Robotics <span className="text-(--color-destructive)">Team 578</span>
         </PageTitle>
         <PageDescription>
           <div>Welcome {user ? user.name : "Guest"}!</div>
@@ -28,6 +28,16 @@ function App() {
             Team 1418
           </a>
           .
+        </p>
+        <p>
+          Trying to replace{" "}
+          <a
+            href="https://fairportrobotics.org/prod/wp/"
+            target="_blank"
+            className="text-(--color-destructive)"
+          >
+            the legacy team website.
+          </a>
         </p>
       </section>
     </main>
