@@ -31,7 +31,7 @@ function RouteComponent() {
         </PageDescription>
       </PageHeader>
 
-      <div className="flex flex-col items-center justify-center gap-20">
+      <div className="flex flex-col items-center justify-center gap-24">
         <section className="w-3/4">
           <PageSection title="Sponsorship Levels">
             Choose the level that best fits your organization, or, choose your own type and level of
@@ -139,7 +139,7 @@ function RouteComponent() {
         </section>
 
         <section>
-          <PageSection title="Get Involved">
+          <PageSection title="Our Sponsors">
             Take a chance on us and help our team out. If you're still not sure about what you can
             do you help, please reach out to us. We'd love to have a conversaion with you.
           </PageSection>
