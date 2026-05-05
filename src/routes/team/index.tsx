@@ -1,5 +1,5 @@
 import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
-import { PageSection } from "@/components/page-section";
+import { SectionHeader } from "@/components/section-header";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getTeamMembersFn } from "@/lib/fn/user";
@@ -33,11 +33,11 @@ function RouteComponent() {
       </PageHeader>
 
       <div className="mb-20">
-        <PageSection>
+        <SectionHeader>
           <Await promise={slowData} fallback={<>Students (Loading...)</>}>
             {(slowData) => <>Students ({slowData.length})</>}
           </Await>
-        </PageSection>
+        </SectionHeader>
 
         <div className="flex flex-row flex-wrap gap-4 items-center justify-center">
           <Await
@@ -61,11 +61,11 @@ function RouteComponent() {
       </div>
 
       <div className="mb-20">
-        <PageSection>
+        <SectionHeader>
           <Await promise={slowData} fallback={<>Mentors (Loading...)</>}>
             {(slowData) => <>Mentors ({slowData.length})</>}
           </Await>
-        </PageSection>
+        </SectionHeader>
 
         <div className="flex flex-row flex-wrap gap-4 items-center justify-center">
           <Await

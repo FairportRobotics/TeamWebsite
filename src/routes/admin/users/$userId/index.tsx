@@ -2,7 +2,7 @@ import { AccountsTable } from "@/components/admin/users/accounts-table";
 import { SessionsTable } from "@/components/admin/users/sessions-table";
 import { BackTo } from "@/components/back-to";
 import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
-import { PageSection } from "@/components/page-section";
+import { SectionHeader } from "@/components/section-header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getUserDetailsFn } from "@/lib/fn/user";
@@ -32,7 +32,7 @@ function RouteComponent() {
       <Card className="mb-10">
         <CardHeader>
           <CardTitle>
-            <PageSection>Details</PageSection>
+            <SectionHeader>Details</SectionHeader>
           </CardTitle>
           <CardDescription>
             <div>
@@ -61,7 +61,7 @@ function RouteComponent() {
       <Card className="mb-10">
         <CardHeader>
           <CardTitle>
-            <PageSection>Accounts</PageSection>
+            <SectionHeader>Accounts</SectionHeader>
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -72,7 +72,7 @@ function RouteComponent() {
       <Card className="mb-10">
         <CardHeader>
           <CardTitle>
-            <PageSection>Sessions</PageSection>
+            <SectionHeader>Sessions</SectionHeader>
           </CardTitle>
         </CardHeader>
         <CardContent>
