@@ -1,48 +1,20 @@
-import { EventCalendar, type CalendarEvent } from "@/components/event-calendar";
+import { EventCalendar } from "@/components/event-calendar";
 import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
+import { Button } from "@/components/ui/button";
+import { seedEvents } from "@/db/seed/events";
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 
 export const Route = createFileRoute("/calendar/")({
   component: RouteComponent,
+  loader: () => {
+    return seedEvents;
+  },
 });
 
 function RouteComponent() {
-  const events = [
-    { id: "john-bday", title: "John's Birthday", date: "05/02/2026", visibility: "mentor" },
-    {
-      id: "mentor-meeting",
-      title: "Mentor Meeting at MD",
-      date: "05/26/2026",
-      timeFrom: "06:00PM",
-      timeThrough: "08:00PM",
-      visibility: "all",
-    },
-    {
-      id: "canal-days-1",
-      title: "Canal Days",
-      date: "06/06/2026",
-      timeFrom: "07:00AM",
-      timeThrough: "05:00PM",
-      visibility: "all",
-    },
-    {
-      id: "canal-days-2",
-      title: "Canal Days",
-      date: "06/07/2026",
-      timeFrom: "07:00AM",
-      timeThrough: "05:00PM",
-      visibility: "all",
-    },
-    {
-      id: "team-picnic",
-      title: "Team Picnic",
-      date: "05/17/2026",
-      timeFrom: "11:00AM",
-      timeThrough: "02:00PM",
-      visibility: "team",
-      signupLink: "https://www.signupgenius.com/go/10C0A4AA5A92BA2F4C43-63860749-team",
-    },
-  ] as CalendarEvent[];
+  const [mode, setMode] = useState<"calendar" | "list">("calendar");
+  const seedEvents = Route.useLoaderData();
 
   return (
     <div>
@@ -51,15 +23,29 @@ function RouteComponent() {
           Team <span className="text-(--color-destructive)">events</span>
         </PageTitle>
         <PageDescription>
-          This is where we can display information about upcoming events
+          Here's where you can find out what the team is up to. We'll display upcoming events and
+          provide details about where we'll be and when.
         </PageDescription>
       </PageHeader>
 
-      {/* <EventCalendar date={new Date("05/01/2026")} events={["a", "b", "c"]} />
-      <EventCalendar date={new Date("05/02/2026")} events={["a", "b", "c"]} />
-      <EventCalendar date={new Date("05/03/2026")} events={["a", "b", "c"]} />
-      <EventCalendar date={new Date("05/04/2026")} events={["a", "b", "c"]} /> */}
-      <EventCalendar initialMonth={new Date()} events={events} />
+      {mode === "calendar" ? (
+        <div>
+          <Button onClick={() => setMode("list")}>View as List</Button>
+          <EventCalendar initialMonth={new Date()} events={seedEvents} />
+        </div>
+      ) : (
+        <div>
+          <Button onClick={() => setMode("calendar")}>View as Calendar</Button>
+          <div className="w-full max-w-6xl mx-auto  rounded-xl shadow-sm border overflow-hidden">
+            {seedEvents.map((e, i) => (
+              <div key={i}>
+                {e.date.toLocaleString()} : {e.title}{" "}
+                {!!e.location ? <div>at {e.location}</div> : <></>}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
