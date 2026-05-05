@@ -1,15 +1,5 @@
-import {
-  PageDescription,
-  PageHeader,
-  PageTitle,
-} from "@/components/page-header";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getSponsorsFn } from "@/lib/fn/sponsor";
 import { createFileRoute } from "@tanstack/react-router";
 
@@ -33,13 +23,13 @@ function RouteComponent() {
           Our <span className="text-(--color-destructive)">sponsors</span>
         </PageTitle>
         <PageDescription>
-          We are fortunate to have so many generous and wonderful sponsors. We
-          cannot thank them enough for all their support.
+          We are fortunate to have so many generous and wonderful sponsors. We cannot thank them
+          enough for all their support.
         </PageDescription>
       </PageHeader>
 
       <div className="flex flex-row flex-wrap justify-center gap-4">
-        {sponsors.map((sponsor) => (
+        {sponsors.map((sponsor, i) => (
           <Card key={sponsor.id} className="">
             <CardHeader>
               <CardTitle>{sponsor.name}</CardTitle>
@@ -61,10 +51,7 @@ function RouteComponent() {
             <CardHeader>
               <CardTitle>Your Company Name Here</CardTitle>
               <CardDescription className="flex flex-col gap-2">
-                <p>
-                  Small gift cards, swag or other contributions are always
-                  appreciated!
-                </p>
+                <p>Small gift cards, swag or other contributions are always appreciated!</p>
                 <p>No amount is too small to make a difference.</p>
               </CardDescription>
             </CardHeader>

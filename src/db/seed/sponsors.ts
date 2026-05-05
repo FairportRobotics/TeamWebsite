@@ -16,12 +16,11 @@ export const seedSponsors = [
     fromYear: 2000,
   },
   {
-    name: "Wegmans",
-    imageUrl:
-      "https://www.wegmans.com/_next/static/media/logo.0ckgqa_ldnzpt.svg",
-    sponsorUrl: "https://www.microsoft.com/",
+    name: "Tool Thrift Shop",
+    imageUrl: "https://toolthriftshop.org/wp-content/uploads/2018/07/logo-2.png",
+    sponsorUrl: "https://toolthriftshop.org/",
     provided:
-      "Wegmans has generously provided the team with financial donations and delicious foods. Our students develop big appetites when building.",
-    fromYear: 2000,
+      "This is a great little shop for finding tools, nails, screws, pipe fittings and so many other odds and ends that negate a need to drive to one of the big box stores.",
+    fromYear: 2026,
   },
 ];
