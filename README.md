@@ -71,3 +71,7 @@ Drizzle Studio is a useful UI for interacting with the database configured for u
 ```shell
 pnpm run db:studio
 ```
+
+```shell
+pnpm dlx shadcn@latest apply --preset b6WK0xowQq
+```

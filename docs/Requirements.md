@@ -404,7 +404,6 @@ TBD
   - Event Title
   - Partial Description
 - Order descending by date (most recent events are first).
-- Display UI element to switch to List mode
 - Display UI element to switch to List mode. Clicking on the UI element will switch to the List mode
 
 ### 3.5.3. Create
@@ -420,7 +419,7 @@ TBD
 
 Future:
 
-How can we show edit history of Events? It would be useful to support a change history to track who and when edited an
+How can we show edit history of Events? It would be useful to support a change history to track when and who edited an
 Event.
 
 The system shall allow the management of:
