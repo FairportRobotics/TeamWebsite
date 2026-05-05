@@ -1,6 +1,6 @@
 import { UserListTable } from "@/components/admin/users/users-list-table";
 import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
-import { PageSection } from "@/components/page-section";
+import { SectionHeader } from "@/components/section-header";
 import { getUserListFn } from "@/lib/fn/user";
 import { createFileRoute } from "@tanstack/react-router";
 
@@ -34,7 +34,7 @@ function RouteComponent() {
         </PageDescription>
       </PageHeader>
 
-      <PageSection>Users ({users.length})</PageSection>
+      <SectionHeader>Users ({users.length})</SectionHeader>
 
       <UserListTable data={users} currentUserId={selfId!} />
     </div>
