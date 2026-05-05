@@ -6,6 +6,7 @@ import { Permissions } from "@/lib/auth/permissions";
 import { hasAnyPermission } from "@/lib/auth/utils/permissions";
 import { Link, useNavigate } from "@tanstack/react-router";
 import type { User } from "better-auth";
+import { HeaderLink } from "./header-link";
 import { ImpersonateButton } from "./impersonate-button";
 import { Button } from "./ui/button";
 
@@ -32,11 +33,11 @@ export default function Header() {
     <header className="sticky top-0 z-50 bg-(--color-accent) px-4 backdrop-blur-lg">
       <nav className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 py-3 sm:py-4">
         <section className="flex items-center justify-center gap-2">
-          <NavigationLink label="Home" link="/" />
-          <NavigationLink label="Team Members" link="/team" />
-          <NavigationLink label="Games" link="/games" />
-          <NavigationLink label="Calendar" link="/calendar" />
-          <NavigationLink label="Sponsors" link="/sponsors" />
+          <HeaderLink label="Home" to="/" />
+          <HeaderLink label="Team Members" to="/team" />
+          <HeaderLink label="Games" to="/games" />
+          <HeaderLink label="Calendar" to="/calendar" />
+          <HeaderLink label="Sponsors" to="/sponsors" />
 
           {hasAdminPermission && <NavigationLink label="Admin" link="/admin" />}
         </section>
