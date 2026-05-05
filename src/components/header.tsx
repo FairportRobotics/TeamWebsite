@@ -39,7 +39,7 @@ export default function Header() {
           <HeaderLink label="Calendar" to="/calendar" />
           <HeaderLink label="Sponsors" to="/sponsors" />
 
-          {hasAdminPermission && <NavigationLink label="Admin" link="/admin" />}
+          {hasAdminPermission && <HeaderLink label="Admin" to="/admin" />}
         </section>
         <section className="flex items-center justify-center gap-3">
           {!isPending && (
@@ -63,26 +63,5 @@ export default function Header() {
         </section>
       </nav>
     </header>
-  );
-}
-
-function NavigationLink({ label, link }: { label: string; link: string }) {
-  return (
-    <>
-      <Link
-        to={link}
-        activeOptions={{ exact: false }}
-        activeProps={{
-          className:
-            "uppercase px-4 py-2 text-white font-extrabold rounded-md bg-(--color-destructive)",
-        }}
-        inactiveProps={{
-          className:
-            "uppercase px-4 py-2 text-white font-extrabold rounded-md hover:bg-(--color-secondary) hover:text-(--color-destructive)",
-        }}
-      >
-        {label}
-      </Link>
-    </>
   );
 }
