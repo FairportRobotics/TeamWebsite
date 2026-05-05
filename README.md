@@ -26,7 +26,7 @@ Once you have cloned the source from GitHub, install the dependencies.
 pnpm i
 ```
 
-### Get the database up and running in Docker
+### Get the database up and running in Docker if you want to run locally
 
 We are using a Postgres instance hosted in Docker for local development work. Execute the following command to initialize and start the instance.
 
