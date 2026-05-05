@@ -126,7 +126,7 @@ function MemberCard({ isPending, id, name, role, image }: MemberCardProps) {
         <div className="w-75 h-75 overflow-hidden flex items-center justify-center">
           <Link to="/team/$id" params={{ id: id! }}>
             <img
-              src={image ?? "https://placehold.co/300x300"}
+              src={image ?? "person-placeholder.png"}
               alt={name ?? "Team Member Image"}
               className="w-full h-full object-cover rounded-md"
             />

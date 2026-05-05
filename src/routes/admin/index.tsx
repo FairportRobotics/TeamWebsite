@@ -13,7 +13,10 @@ function RouteComponent() {
         <PageTitle>
           Site <span className="text-(--color-destructive)">Administration</span>
         </PageTitle>
-        <PageDescription>Manage site content.</PageDescription>
+        <PageDescription>
+          Manage site content. Maybe counts of interesting things like total, number waiting to be
+          approved...
+        </PageDescription>
       </PageHeader>
 
       <ul>

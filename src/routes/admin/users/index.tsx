@@ -1,4 +1,5 @@
 import { UserListTable } from "@/components/admin/users/users-list-table";
+import { BackTo } from "@/components/back-to";
 import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
 import { SectionHeader } from "@/components/section-header";
 import { getUserListFn } from "@/lib/fn/user";
@@ -25,6 +26,7 @@ function RouteComponent() {
 
   return (
     <div className="">
+      <BackTo to="/admin" label="Admin" />
       <PageHeader>
         <PageTitle>
           User <span className="text-(--color-destructive)">Administration</span>
