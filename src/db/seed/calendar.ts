@@ -1,3 +1,5 @@
+import type { CalendarInsertItem } from "../schema";
+
 export const seedCalendar = [
   {
     title: "Team Picnic",
@@ -57,4 +59,4 @@ export const seedCalendar = [
     startAt: new Date(2026, 6, 6, 8, 0, 0),
     endAt: new Date(2026, 6, 7, 17, 0, 0),
   },
-] as const;
+] as CalendarInsertItem[];

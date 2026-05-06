@@ -15,6 +15,12 @@ export const seedCalendarFn = createServerFn()
         await db.insert(calendarTable).values({
           id: crypto.randomUUID(),
           title: s.title,
+          description: s.description,
+          startAt: s.startAt,
+          endAt: s.endAt,
+
+          informationLink: s.informationLink,
+          signupLink: s.signupLink,
         });
       } catch (error) {
         console.log("⚠️ Failed to seed calendar item", s.title);

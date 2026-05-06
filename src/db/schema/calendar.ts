@@ -1,15 +1,40 @@
 // drizzle/schema/items.ts
-import { integer, pgTable, text, uuid, type AnyPgColumn } from "drizzle-orm/pg-core";
+import {
+  integer,
+  pgEnum,
+  pgTable,
+  text,
+  timestamp,
+  uuid,
+  type AnyPgColumn,
+} from "drizzle-orm/pg-core";
 import { statusEnum } from "./_common";
+
+export const visibleEnum = pgEnum("calendar_visible", [
+  "all",
+  "team_members",
+  "team_members_and_parents",
+]);
 
 export const calendarTable = pgTable("calendar", {
   id: uuid("id").primaryKey().defaultRandom(),
   rootId: uuid("root_id").references((): AnyPgColumn => calendarTable.id), // Links to original version
   parentId: uuid("parent_id").references((): AnyPgColumn => calendarTable.id), // Links to previous version
   version: integer("version").notNull().default(1),
+
   status: statusEnum("status").notNull().default("draft"),
+  visibleTo: visibleEnum("visible_to").notNull().default("team_members"),
+
   title: text("title").notNull(),
   description: text("description").array(),
+  startAt: timestamp("start_at").notNull(),
+  endAt: timestamp("end_at").notNull(),
+
+  informationLink: text("information_link"),
+
+  signupLink: text("signup_link"),
+  // signupLinkVisibleTo: visibleEnum("signup_link_visible_to").notNull().default("team_members"),
+
   // createdBy: text("created_by").notNull(),
   // approvedBy: text("approved_by"),
   // publishedAt: timestamp("published_at"),
@@ -17,8 +42,7 @@ export const calendarTable = pgTable("calendar", {
   // updatedAt: timestamp("updated_at").defaultNow(),
 });
 
-// export type CalendarSelectItem = typeof calendarTable.$inferSelect;
-// export type CalendarInsertItem = typeof calendarTable.$inferInsert;
-
-// export const calendarInsertSchema = createInsertSchema(calendarTable);
-// export const calendarSelectSchema = createSelectSchema(calendarTable);
+export type CalendarSelectItem = typeof calendarTable.$inferSelect;
+export type CalendarInsertItem = typeof calendarTable.$inferInsert;
+export type CalendarItemStatus = typeof calendarTable.$inferSelect.status;
+export type CalendarItemVisibleTo = typeof calendarTable.$inferSelect.visibleTo;
