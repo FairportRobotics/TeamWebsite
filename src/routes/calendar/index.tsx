@@ -21,7 +21,7 @@ function RouteComponent() {
     <div>
       <PageHeader>
         <PageTitle>
-          Team <span className="text-(--color-destructive)">events</span>
+          Team <span className="text-(--color-destructive)">calendar</span>
         </PageTitle>
         <PageDescription>
           Here's where you can find out what the team is up to. We'll display upcoming events and
@@ -40,7 +40,7 @@ function RouteComponent() {
           <div className="w-full max-w-6xl mx-auto  rounded-xl shadow-sm border overflow-hidden">
             {calendarEvents.map((e, i) => (
               <div key={i}>
-                {e.startAt.toTimeString()} : {e.title}{" "}
+                {e.startAt.toLocaleTimeString()} : {e.title}{" "}
                 {/* {!!e.location ? <div>at {e.location}</div> : <></>} */}
               </div>
             ))}
