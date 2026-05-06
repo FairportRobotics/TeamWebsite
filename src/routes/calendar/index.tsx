@@ -40,7 +40,7 @@ function RouteComponent() {
           <div className="w-full max-w-6xl mx-auto  rounded-xl shadow-sm border overflow-hidden">
             {calendarEvents.map((e, i) => (
               <div key={i}>
-                {e.startAt.toLocaleString()} : {e.title}{" "}
+                {e.startAt.toTimeString()} : {e.title}{" "}
                 {/* {!!e.location ? <div>at {e.location}</div> : <></>} */}
               </div>
             ))}

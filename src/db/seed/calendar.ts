@@ -8,8 +8,8 @@ export const seedCalendar = [
     visibleTo: "team_members_and_parents",
     signupLink: "https://www.fairportcanaldays.com/canal-days/",
     signupLinkVisibleTo: "team_members_and_parents",
-    startAt: new Date("2026-05-17T11:00:00Z"),
-    endAt: new Date("2026-05-17T14:00:00Z"),
+    startAt: new Date("2026-05-17T11:00:00"),
+    endAt: new Date("2026-05-17T14:00:00"),
   },
   {
     title: "Chicken BBQ",
@@ -19,8 +19,8 @@ export const seedCalendar = [
     signupLink:
       "https://docs.google.com/document/d/1_PRVoHSkZooYqhKoe5y_CzNP81IDup8ZX0r8gNaCdyE/edit?tab=t.0",
     signupLinkVisibleTo: "team_members_and_parents",
-    startAt: new Date("2026-06-18T15:00:00Z"),
-    endAt: new Date("2026-06-18T19:30:00Z"),
+    startAt: new Date("2026-06-18T15:00:00"),
+    endAt: new Date("2026-06-18T19:30:00"),
   },
   {
     title: "Summer STEM - Session 1",
@@ -29,8 +29,8 @@ export const seedCalendar = [
     visibleTo: "team_members_and_parents",
     signupLink: "https://docs.google.com/document/d/1ywDMMYkyJ2sHhaRnDX1E3wkYxrGx03Q8/edit",
     signupLinkVisibleTo: "team_members_and_parents",
-    startAt: new Date("2026-07-15T17:30:00Z"),
-    endAt: new Date("2026-07-15T20:00:00Z"),
+    startAt: new Date("2026-07-15T17:30:00"),
+    endAt: new Date("2026-07-15T20:00:00"),
   },
   {
     title: "Summer STEM - Session 2",
@@ -39,8 +39,8 @@ export const seedCalendar = [
     visibleTo: "team_members_and_parents",
     signupLink: "https://docs.google.com/document/d/1ywDMMYkyJ2sHhaRnDX1E3wkYxrGx03Q8/edit",
     signupLinkVisibleTo: "team_members_and_parents",
-    startAt: new Date("2026-08-11T17:30:00Z"),
-    endAt: new Date("2026-08-11T20:00:00Z"),
+    startAt: new Date("2026-08-11T17:30:00"),
+    endAt: new Date("2026-08-11T20:00:00"),
   },
   {
     title: "FLL Info",
@@ -49,8 +49,8 @@ export const seedCalendar = [
     visibleTo: "team_members_and_parents",
     signupLink: "https://docs.google.com/document/d/1ywDMMYkyJ2sHhaRnDX1E3wkYxrGx03Q8/edit",
     signupLinkVisibleTo: "team_members_and_parents",
-    startAt: new Date("2026-08-16T17:30:00Z"),
-    endAt: new Date("2026-08-16T19:45:00Z"),
+    startAt: new Date("2026-08-16T17:30:00"),
+    endAt: new Date("2026-08-16T19:45:00"),
   },
   {
     title: "Canal Days - Day 1",
@@ -62,7 +62,7 @@ export const seedCalendar = [
     location: "Fairport Village",
     visibleTo: "all",
     informationLink: "https://www.fairportcanaldays.com/canal-days/",
-    startAt: new Date("2026-06-06T08:00:00Z"),
-    endAt: new Date("2026-08-17T17:00:00Z"),
+    startAt: new Date("2026-06-06T08:00:00"),
+    endAt: new Date("2026-08-17T17:00:00"),
   },
 ] as CalendarInsertItem[];
