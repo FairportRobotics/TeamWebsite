@@ -21,7 +21,7 @@ function RouteComponent() {
 
       <ul>
         <li>
-          <Link to="/admin/events">Manage Events</Link>
+          <Link to="/admin/calendar">Manage Calendar</Link>
         </li>
         <li>
           <Link to="/admin/games">Manage Game Years</Link>
