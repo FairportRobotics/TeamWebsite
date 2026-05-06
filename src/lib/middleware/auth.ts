@@ -3,8 +3,11 @@ import { logMiddleware } from "@/lib/middleware/log";
 import { redirect } from "@tanstack/react-router";
 import { createMiddleware } from "@tanstack/react-start";
 
-// Handles checking whether the request is part of an authenticated pipeline and adds context for
-// downstream consumers.
+/**
+ * Handles checking whether the request is part of an authenticated pipeline and adds context for downstream consumers.
+ * @throws {redirect} Throws a redirect to the /unauthenticated route when not authenticated.
+ * @returns {next} Adds user to the context for downstream consumers.
+ */
 export const authenticatedMiddleware = createMiddleware({
   type: "function",
 })
