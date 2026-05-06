@@ -5,7 +5,6 @@ import { SectionHeader } from "@/components/section-header";
 import { Button } from "@/components/ui/button";
 import { Permissions } from "@/lib/auth/permissions";
 import { assertHasAnyPermissionFn } from "@/lib/auth/server";
-import { getEventsForAdminFn, type EventInsertProps } from "@/lib/fn/calendar";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin/calendar/")({
@@ -15,8 +14,8 @@ export const Route = createFileRoute("/admin/calendar/")({
     });
   },
   loader: async () => {
-    const calendar = await getEventsForAdminFn();
-    return calendar;
+    // const calendar = await getEventsForAdminFn();
+    // return calendar;
   },
   component: RouteComponent,
 });
