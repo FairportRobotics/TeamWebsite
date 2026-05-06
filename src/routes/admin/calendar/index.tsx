@@ -6,7 +6,6 @@ import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin/calendar/")({
   beforeLoad: async () => {
-    console.log("Events beforeLoad()...");
     await assertHasAnyPermissionFn({ data: { permissions: [Permissions.EventAdminister] } });
   },
   component: RouteComponent,

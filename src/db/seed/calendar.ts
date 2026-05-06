@@ -1,6 +1,6 @@
 import type { CalendarEvent } from "@/components/event-calendar";
 
-export const seedEvents = [
+export const seedCalendar = [
   {
     id: "team-picnic",
     title: "Team Picnic",

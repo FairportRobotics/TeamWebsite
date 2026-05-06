@@ -1,14 +1,14 @@
 import { EventCalendar } from "@/components/event-calendar";
 import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
-import { seedEvents } from "@/db/seed/events";
+import { seedCalendar } from "@/db/seed/calendar";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
 export const Route = createFileRoute("/calendar/")({
   component: RouteComponent,
   loader: () => {
-    return seedEvents;
+    return seedCalendar;
   },
 });
 
