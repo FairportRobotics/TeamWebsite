@@ -8,6 +8,7 @@ import {
   uuid,
   type AnyPgColumn,
 } from "drizzle-orm/pg-core";
+import { user } from "../schema";
 import { statusEnum } from "./_common";
 
 export const visibleEnum = pgEnum("calendar_visible", [
@@ -33,13 +34,20 @@ export const calendarTable = pgTable("calendar", {
   informationLink: text("information_link"),
 
   signupLink: text("signup_link"),
-  // signupLinkVisibleTo: visibleEnum("signup_link_visible_to").notNull().default("team_members"),
+  signupLinkVisibleTo: visibleEnum("signup_link_visible_to").notNull().default("team_members"),
 
-  // createdBy: text("created_by").notNull(),
-  // approvedBy: text("approved_by"),
-  // publishedAt: timestamp("published_at"),
-  // createdAt: timestamp("created_at").defaultNow(),
-  // updatedAt: timestamp("updated_at").defaultNow(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  createdBy: text("created_by_user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "no action" }),
+
+  approvedAt: timestamp("approved_at"),
+  approvedBy: text("approved_by_user_id").references(() => user.id, { onDelete: "no action" }),
+
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => /* @__PURE__ */ new Date())
+    .notNull(),
 });
 
 export type CalendarSelectItem = typeof calendarTable.$inferSelect;

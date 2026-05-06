@@ -7,7 +7,7 @@ import { authenticatedMiddleware } from "../middleware/auth";
 
 export const seedCalendarFn = createServerFn()
   .middleware([authenticatedMiddleware])
-  .handler(async () => {
+  .handler(async ({ context }) => {
     seedCalendar.forEach(async (s) => {
       console.log("🌱 Seeding Calendar", s.title);
 
@@ -21,6 +21,9 @@ export const seedCalendarFn = createServerFn()
 
           informationLink: s.informationLink,
           signupLink: s.signupLink,
+          signupLinkVisibleTo: s.signupLinkVisibleTo,
+
+          createdBy: context.user.id,
         });
       } catch (error) {
         console.log("⚠️ Failed to seed calendar item", s.title);
