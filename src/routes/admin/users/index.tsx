@@ -3,13 +3,13 @@ import { BackTo } from "@/components/back-to";
 import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
 import { SectionHeader } from "@/components/section-header";
 import { Permissions } from "@/lib/auth/permissions";
-import { assertHasPermissionFn } from "@/lib/auth/server";
+import { assertHasAnyPermissionFn } from "@/lib/auth/server";
 import { getUserListFn } from "@/lib/fn/user";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin/users/")({
   beforeLoad: async () => {
-    await assertHasPermissionFn({ data: { permission: Permissions.UserAdminister } });
+    await assertHasAnyPermissionFn({ data: { permissions: [Permissions.UserAdminister] } });
   },
   component: RouteComponent,
   loader: async ({ context }) => {

@@ -2,13 +2,13 @@
 import { BackTo } from "@/components/back-to";
 import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
 import { Permissions } from "@/lib/auth/permissions";
-import { assertHasPermissionFn } from "@/lib/auth/server";
+import { assertHasAnyPermissionFn } from "@/lib/auth/server";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin/events")({
   beforeLoad: async () => {
     console.log("Events beforeLoad()...");
-    await assertHasPermissionFn({ data: { permission: Permissions.EventAdminister } });
+    await assertHasAnyPermissionFn({ data: { permissions: [Permissions.EventAdminister] } });
   },
   component: RouteComponent,
 });

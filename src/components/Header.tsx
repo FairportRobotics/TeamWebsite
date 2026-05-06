@@ -3,9 +3,11 @@
 // prettier-ignore
 import { authClient } from "@/lib/auth/auth-client";
 import { Permissions } from "@/lib/auth/permissions";
-import { hasAnyPermission } from "@/lib/auth/utils/permissions";
+import { hasAnyPermissionFn } from "@/lib/auth/server";
 import { Link, useNavigate } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import type { User } from "better-auth";
+import { useState } from "react";
 import { HeaderLink } from "./header-link";
 import { ImpersonateButton } from "./impersonate-button";
 import { Button } from "./ui/button";
@@ -17,12 +19,20 @@ export interface NavUserProps {
 export default function Header() {
   const navigate = useNavigate();
   const { data: session, isPending } = authClient.useSession();
-  const hasAdminPermission = hasAnyPermission(session?.user.role, [
-    Permissions.UserAdminister,
-    Permissions.EventAdminister,
-    Permissions.SponsorAdminister,
-    Permissions.GameYearAdminister,
-  ]);
+  const [hasAdmin, setHasAdmin] = useState<boolean>(false);
+
+  const checkPermissions = useServerFn(hasAnyPermissionFn);
+
+  checkPermissions({
+    data: {
+      permissions: [
+        Permissions.EventAdminister,
+        Permissions.GameYearAdminister,
+        Permissions.SponsorAdminister,
+        Permissions.UserAdminister,
+      ],
+    },
+  }).then((result) => setHasAdmin(result));
 
   async function handleSignOut() {
     await authClient.signOut();
@@ -39,7 +49,7 @@ export default function Header() {
           <HeaderLink label="Calendar" to="/calendar" />
           <HeaderLink label="Sponsors" to="/sponsors" />
 
-          {hasAdminPermission && <HeaderLink label="Admin" to="/admin" />}
+          {hasAdmin && <HeaderLink label="Admin" to="/admin" />}
         </section>
         <section className="flex items-center justify-center gap-3">
           {!isPending && (

@@ -2,12 +2,6 @@ import { validateRequest } from "@/lib/auth/utils/request";
 import { logMiddleware } from "@/lib/middleware/log";
 import { redirect } from "@tanstack/react-router";
 import { createMiddleware } from "@tanstack/react-start";
-import type { Permission, Role } from "../auth/permissions";
-import {
-  hasAllPermissionsTyped,
-  hasAnyPermissionTyped,
-  parseRoles,
-} from "../auth/utils/permissions";
 
 // Handles checking whether the request is part of an authenticated pipeline and adds context for
 // downstream consumers.
@@ -27,35 +21,3 @@ export const authenticatedMiddleware = createMiddleware({
     // Add desired properties to the context.
     return next({ context: { user: user } });
   });
-
-// Choose behavior: "all" or "any"
-type Mode = "all" | "any";
-
-export function requirePermissionsMiddleware(required: readonly Permission[], mode: Mode = "all") {
-  return async ({ context, next }: any) => {
-    const user = context.user;
-
-    if (!user) {
-      throw new Error("Unauthorized");
-    }
-
-    const roles: Role[] = parseRoles(user.role);
-
-    const allowed =
-      mode === "all"
-        ? hasAllPermissionsTyped(roles, required)
-        : hasAnyPermissionTyped(roles, required);
-
-    if (!allowed) {
-      throw new Error("Forbidden");
-    }
-
-    // Continue to handler
-    return next({
-      context: {
-        ...context,
-        roles, // optional: pass parsed roles forward
-      },
-    });
-  };
-}

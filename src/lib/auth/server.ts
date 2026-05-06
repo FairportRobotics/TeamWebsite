@@ -8,8 +8,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeaders } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { auth } from ".";
-import { PermissionsArraySchema, PermissionSchema } from "./permissions";
-import { hasAnyPermission } from "./utils/permissions";
+import { PermissionsArraySchema } from "./permissions";
 
 /**************************************************************************************************
  * Permission and auth helper functions. Note that these should NOT be exposed for use outside this
@@ -47,6 +46,26 @@ function getPermissionsForRoles(roles: Role[]): Set<Permission> {
   }
 
   return perms;
+}
+
+function hasAllPermissionsTyped(userRoles: Role[], required: readonly Permission[]): boolean {
+  const userPerms = getPermissionsForRoles(userRoles);
+  return required.every((perm) => userPerms.has(perm));
+}
+
+function hasAnyPermissionsTyped(userRoles: Role[], required: readonly Permission[]): boolean {
+  const userPerms = getPermissionsForRoles(userRoles);
+  return required.some((perm) => userPerms.has(perm));
+}
+
+function hasAllPermissions(roleString: string | null | undefined, required: readonly Permission[]) {
+  const roles = parseRoles(roleString);
+  return hasAllPermissionsTyped(roles, required);
+}
+
+function hasAnyPermission(roleString: string | null | undefined, required: readonly Permission[]) {
+  const roles = parseRoles(roleString);
+  return hasAnyPermissionsTyped(roles, required);
 }
 
 /**************************************************************************************************
@@ -93,11 +112,6 @@ export const assertAuthenticatedFn = createServerFn().handler(async () => {
   return user;
 });
 
-// Validates that a single Permission was supplied.
-const singlePermissionSchema = z.object({
-  permission: PermissionSchema,
-});
-
 // Validates that one or more Permissions were supplied.
 const multiPermissionSchema = z.object({
   permissions: PermissionsArraySchema,
@@ -106,32 +120,21 @@ const multiPermissionSchema = z.object({
 /**
  *
  */
-export const hasPermissionFn = createServerFn()
-  .middleware([authenticatedMiddleware])
-  .inputValidator((data) => singlePermissionSchema.parse(data))
-  .handler(async ({ data, context }) => {
-    return hasAnyPermission(context.user.role, [data.permission]);
-  });
-
-/**
- *
- */
-export const assertHasPermissionFn = createServerFn()
-  .middleware([authenticatedMiddleware])
-  .inputValidator((data) => singlePermissionSchema.parse(data))
-  .handler(async ({ data, context }) => {
-    if (!hasAnyPermission(context.user.role, [data.permission])) {
-      throw redirect({ to: "/unauthorized" });
-    }
-
-    return true;
-  });
-
 export const hasAnyPermissionFn = createServerFn()
   .middleware([authenticatedMiddleware])
   .inputValidator((data) => multiPermissionSchema.parse(data))
   .handler(async ({ data, context }) => {
     return hasAnyPermission(context.user.role, data.permissions);
+  });
+
+/**
+ *
+ */
+export const hasAllPermissionsFn = createServerFn()
+  .middleware([authenticatedMiddleware])
+  .inputValidator((data) => multiPermissionSchema.parse(data))
+  .handler(async ({ data, context }) => {
+    return hasAllPermissions(context.user.role, data.permissions);
   });
 
 /**
@@ -151,14 +154,13 @@ export const assertHasAnyPermissionFn = createServerFn()
 /**
  *
  */
-export const canAdministerUsersFn = createServerFn()
+export const assertHasAllPermissionsFn = createServerFn()
   .middleware([authenticatedMiddleware])
-  .handler(async ({ context }) => {
-    const allowed = await auth.api.userHasPermission({
-      body: {
-        userId: context.user.id,
-        permissions: { user: ["impersonate"] },
-      },
-    });
+  .inputValidator((data) => multiPermissionSchema.parse(data))
+  .handler(async ({ data, context }) => {
+    if (!hasAllPermissions(context.user.role, data.permissions)) {
+      throw redirect({ to: "/unauthorized" });
+    }
+
     return true;
   });
