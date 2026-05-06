@@ -1,20 +1,21 @@
 import { EventCalendar } from "@/components/event-calendar";
 import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
-import { seedEvents } from "@/db/seed/events";
+import { getCalendarListFn } from "@/lib/fn/calendar";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
 export const Route = createFileRoute("/calendar/")({
   component: RouteComponent,
-  loader: () => {
-    return seedEvents;
+  loader: async () => {
+    const calendarEvents = await getCalendarListFn();
+    return calendarEvents;
   },
 });
 
 function RouteComponent() {
   const [mode, setMode] = useState<"calendar" | "list">("calendar");
-  const seedEvents = Route.useLoaderData();
+  const calendarEvents = Route.useLoaderData();
 
   return (
     <div>
@@ -31,16 +32,16 @@ function RouteComponent() {
       {mode === "calendar" ? (
         <div>
           <Button onClick={() => setMode("list")}>View as List</Button>
-          <EventCalendar initialMonth={new Date()} events={seedEvents} />
+          <EventCalendar initialMonth={new Date()} events={calendarEvents} />
         </div>
       ) : (
         <div>
           <Button onClick={() => setMode("calendar")}>View as Calendar</Button>
           <div className="w-full max-w-6xl mx-auto  rounded-xl shadow-sm border overflow-hidden">
-            {seedEvents.map((e, i) => (
+            {calendarEvents.map((e, i) => (
               <div key={i}>
-                {e.date.toLocaleString()} : {e.title}{" "}
-                {!!e.location ? <div>at {e.location}</div> : <></>}
+                {e.startAt.toLocaleString()} : {e.title}{" "}
+                {/* {!!e.location ? <div>at {e.location}</div> : <></>} */}
               </div>
             ))}
           </div>

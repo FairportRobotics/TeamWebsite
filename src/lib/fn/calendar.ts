@@ -5,6 +5,16 @@ import { seedCalendar } from "@/db/seed/calendar";
 import { createServerFn } from "@tanstack/react-start";
 import { authenticatedMiddleware } from "../middleware/auth";
 
+// TODO: Restrict to Admins.
+export const getCalendarListFn = createServerFn()
+  .middleware([authenticatedMiddleware])
+  .handler(async () => {
+    const results = db.select().from(calendarTable); //.where(eq(calendarTable.status, "published"));
+    return results;
+  });
+
+export type CalendarListItem = Awaited<ReturnType<typeof getCalendarListFn>>[0];
+
 export const seedCalendarFn = createServerFn()
   .middleware([authenticatedMiddleware])
   .handler(async ({ context }) => {
