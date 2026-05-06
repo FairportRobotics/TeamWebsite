@@ -1,8 +1,6 @@
 import { relations } from "drizzle-orm";
-import { boolean, index, integer, pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { boolean, index, integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { user } from "./better-auth";
-
-export const statusEnum = pgEnum("status", ["draft", "pending_review", "published", "archived"]);
 
 export const memberTable = pgTable(
   "member",

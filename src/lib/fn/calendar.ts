@@ -1,10 +1,27 @@
 // prettier-ignore
 import { db } from "@/db";
-import { calendarTable } from "@/db/schema/calendar";
+import { calendarTable } from "@/db/schema";
+import { seedCalendar } from "@/db/seed/calendar";
+import { createServerFn } from "@tanstack/react-start";
+import { authenticatedMiddleware } from "../middleware/auth";
 
-export async function getPublishedWithDrafts() {
-  return db.select().from(calendarTable).orderBy(calendarTable.version);
-}
+export const seedCalendarFn = createServerFn()
+  .middleware([authenticatedMiddleware])
+  .handler(async () => {
+    seedCalendar.forEach(async (s) => {
+      console.log("🌱 Seeding Calendar", s.title);
+
+      try {
+        await db.insert(calendarTable).values({
+          id: crypto.randomUUID(),
+          title: s.title,
+        });
+      } catch (error) {
+        console.log("⚠️ Failed to seed calendar item", s.title);
+        console.error(error);
+      }
+    });
+  });
 
 // export async function approveItem(itemIds: string[], reviewerId: string) {
 //   return db.transaction(async (tx) => {
