@@ -27,7 +27,7 @@ function getPermissionsForRoles(roles: Role[]): Set<Permission> {
   return perms;
 }
 
-export function withPermissions<TArgs, TResult>(
+function withPermissions<TArgs, TResult>(
   required: readonly Permission[],
   handler: (ctx: { user: { roles: Role[] } } & TArgs) => Promise<TResult>,
 ) {

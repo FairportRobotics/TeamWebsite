@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 // Define the permissions and their names.
 export const Permissions = {
   EventAdminister: "event:administer",
@@ -35,7 +37,13 @@ export const Permissions = {
   UserRevokeSessions: "user:revoke:sessions",
 } as const;
 
-export type Permission = (typeof Permissions)[keyof typeof Permissions];
+export const PermissionSchema = z.enum(Permissions);
+
+// 🔑 Array validator (matches your `readonly Permission[]` type)
+export const PermissionsArraySchema = z.array(PermissionSchema).min(1);
+
+// 🔑 Extract the validated type for TypeScript
+export type Permission = z.infer<typeof PermissionSchema>;
 
 // Define Roles and their names.
 export const Roles = {
