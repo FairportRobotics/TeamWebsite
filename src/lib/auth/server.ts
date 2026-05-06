@@ -118,7 +118,16 @@ const multiPermissionSchema = z.object({
 });
 
 /**
- *
+ * Checks to see if the current user has any one of the specified permissions
+ * @params {Permission[]} Array of Permissions.
+ * @returns {boolean} Boolean indicating the user does have one or more of the specified permissions.
+ * @example
+ * const hasPermission = await hasAnyPermissionFn(
+ * {
+ *  body: {
+ *    permissions: [Permissions.UserAdminister, Permissions.EventsAdminister]
+ *  }
+ * });
  */
 export const hasAnyPermissionFn = createServerFn()
   .middleware([authenticatedMiddleware])
@@ -128,7 +137,16 @@ export const hasAnyPermissionFn = createServerFn()
   });
 
 /**
- *
+ * Checks to see if the current user has all of the specified permissions
+ * @params {Permission[]} Array of Permissions.
+ * @returns {boolean} Boolean indicating the user does have all of the specified permissions.
+ * @example
+ * const hasPermission = await hasAllPermissionsFn(
+ * {
+ *  body: {
+ *    permissions: [Permissions.UserAdminister, Permissions.EventsAdminister]
+ *  }
+ * });
  */
 export const hasAllPermissionsFn = createServerFn()
   .middleware([authenticatedMiddleware])
@@ -138,7 +156,17 @@ export const hasAllPermissionsFn = createServerFn()
   });
 
 /**
- *
+ * Checks to see if the current user has any one of the specified permissions
+ * @params {Permission[]} Array of Permissions.
+ * @returns {boolean} Boolean indicating the user does have one or more of the specified permissions.
+ * @throws {redirect} Throws a redirect to the /unauthorized route.
+ * @example
+ * const hasPermission = await assertHasAnyPermissionFn(
+ * {
+ *  body: {
+ *    permissions: [Permissions.UserAdminister, Permissions.EventsAdminister]
+ *  }
+ * });
  */
 export const assertHasAnyPermissionFn = createServerFn()
   .middleware([authenticatedMiddleware])
@@ -152,7 +180,17 @@ export const assertHasAnyPermissionFn = createServerFn()
   });
 
 /**
- *
+ * Checks to see if the current user has all of the specified permissions
+ * @params {Permission[]} Array of Permissions.
+ * @returns {boolean} Boolean indicating the user does have all of the specified permissions.
+ * @throws {redirect} Throws a redirect to the /unauthorized route.
+ * @example
+ * const hasPermission = await assertHasAllPermissionsFn(
+ * {
+ *  body: {
+ *    permissions: [Permissions.UserAdminister, Permissions.EventsAdminister]
+ *  }
+ * });
  */
 export const assertHasAllPermissionsFn = createServerFn()
   .middleware([authenticatedMiddleware])
