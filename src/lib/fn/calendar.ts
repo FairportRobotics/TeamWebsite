@@ -3,18 +3,32 @@ import { db } from "@/db";
 import { calendarTable } from "@/db/schema";
 import { seedCalendar } from "@/db/seed/calendar";
 import { createServerFn } from "@tanstack/react-start";
+import { eq, isNull, or } from "drizzle-orm";
 import { authenticatedMiddleware } from "../middleware/auth";
 
-// TODO: Restrict to Admins.
-export const getCalendarListFn = createServerFn()
-  .middleware([authenticatedMiddleware])
-  .handler(async () => {
-    const results = db.select().from(calendarTable); //.where(eq(calendarTable.status, "published"));
-    return results;
-  });
+// TODO: Add support for optional date filtering.
+export const getCalendarListFn = createServerFn().handler(async () => {
+  const results = db.select().from(calendarTable).where(eq(calendarTable.status, "published"));
+  return results;
+});
 
 export type CalendarListItem = Awaited<ReturnType<typeof getCalendarListFn>>[0];
 
+// TODO: Add support for optional date filtering.
+// TODO: Restrict with permissions.
+export const getCalendarListForAdminFn = createServerFn()
+  .middleware([authenticatedMiddleware])
+  .handler(async () => {
+    const results = await db
+      .select()
+      .from(calendarTable)
+      .where(or(eq(calendarTable.status, "published"), isNull(calendarTable.rootId)));
+
+    return results;
+  });
+export type CalendarListForAdminItem = Awaited<ReturnType<typeof getCalendarListForAdminFn>>[0];
+
+// TODO: Remove when live.
 export const seedCalendarFn = createServerFn()
   .middleware([authenticatedMiddleware])
   .handler(async ({ context }) => {

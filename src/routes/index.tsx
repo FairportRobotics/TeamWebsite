@@ -39,6 +39,16 @@ function App() {
             the legacy team website.
           </a>
         </p>
+        <p>
+          Live{" "}
+          <a
+            href="https://team-website-pi.vercel.app/"
+            target="_blank"
+            className="text-(--color-destructive)"
+          >
+            site deployed to Vercel.
+          </a>
+        </p>
       </section>
     </main>
   );
