@@ -10,13 +10,13 @@ export const Route = createFileRoute("/team/")({
   loader: async () => {
     const teamMembersPromise = defer(getTeamMembersFn());
     return {
-      slowData: teamMembersPromise,
+      teamMembers: teamMembersPromise,
     };
   },
 });
 
 function RouteComponent() {
-  const { slowData } = Route.useLoaderData();
+  const { teamMembers } = Route.useLoaderData();
 
   return (
     <div>
@@ -34,14 +34,14 @@ function RouteComponent() {
 
       <div className="mb-20">
         <SectionHeader>
-          <Await promise={slowData} fallback={<>Students (Loading...)</>}>
+          <Await promise={teamMembers} fallback={<>Students (Loading...)</>}>
             {(slowData) => <>Students ({slowData.length})</>}
           </Await>
         </SectionHeader>
 
         <div className="flex flex-row flex-wrap gap-4 items-center justify-center">
           <Await
-            promise={slowData}
+            promise={teamMembers}
             fallback={
               <>
                 {[1, 2, 3].map((i) => (
@@ -62,14 +62,14 @@ function RouteComponent() {
 
       <div className="mb-20">
         <SectionHeader>
-          <Await promise={slowData} fallback={<>Mentors (Loading...)</>}>
+          <Await promise={teamMembers} fallback={<>Mentors (Loading...)</>}>
             {(slowData) => <>Mentors ({slowData.length})</>}
           </Await>
         </SectionHeader>
 
         <div className="flex flex-row flex-wrap gap-4 items-center justify-center">
           <Await
-            promise={slowData}
+            promise={teamMembers}
             fallback={
               <>
                 {[1, 2, 3].map((i) => (
