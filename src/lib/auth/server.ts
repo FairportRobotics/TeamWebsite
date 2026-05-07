@@ -2,12 +2,12 @@
 import type { Permission, Role } from "@/lib/auth/permissions";
 import { RolePermissions, Roles } from "@/lib/auth/permissions";
 import { validateRequest } from "@/lib/auth/utils/request";
-import { authenticatedMiddleware } from "@/lib/middleware/auth";
 import { redirect } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeaders } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { auth } from ".";
+import { authenticatedMiddleware } from "../middleware/authenticatedMiddleware";
 import { PermissionsArraySchema } from "./permissions";
 
 /**************************************************************************************************
@@ -133,6 +133,7 @@ export const hasAnyPermissionFn = createServerFn()
   .middleware([authenticatedMiddleware])
   .inputValidator((data) => multiPermissionSchema.parse(data))
   .handler(async ({ data, context }) => {
+    if (!context.user) return false;
     return hasAnyPermission(context.user.role, data.permissions);
   });
 
@@ -152,6 +153,7 @@ export const hasAllPermissionsFn = createServerFn()
   .middleware([authenticatedMiddleware])
   .inputValidator((data) => multiPermissionSchema.parse(data))
   .handler(async ({ data, context }) => {
+    if (!context.user) return false;
     return hasAllPermissions(context.user.role, data.permissions);
   });
 
@@ -172,6 +174,7 @@ export const assertHasAnyPermissionFn = createServerFn()
   .middleware([authenticatedMiddleware])
   .inputValidator((data) => multiPermissionSchema.parse(data))
   .handler(async ({ data, context }) => {
+    if (!context.user) return false;
     if (!hasAnyPermission(context.user.role, data.permissions)) {
       throw redirect({ to: "/unauthorized" });
     }
@@ -196,6 +199,7 @@ export const assertHasAllPermissionsFn = createServerFn()
   .middleware([authenticatedMiddleware])
   .inputValidator((data) => multiPermissionSchema.parse(data))
   .handler(async ({ data, context }) => {
+    if (!context.user) return false;
     if (!hasAllPermissions(context.user.role, data.permissions)) {
       throw redirect({ to: "/unauthorized" });
     }

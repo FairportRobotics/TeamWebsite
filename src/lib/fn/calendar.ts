@@ -4,7 +4,7 @@ import { calendarTable } from "@/db/schema";
 import { seedCalendar } from "@/db/seed/calendar";
 import { createServerFn } from "@tanstack/react-start";
 import { eq, isNull, or } from "drizzle-orm";
-import { authenticatedMiddleware } from "../middleware/auth";
+import { authenticatedMiddleware } from "../middleware/authenticatedMiddleware";
 
 // TODO: Add support for optional date filtering.
 export const getCalendarListFn = createServerFn().handler(async () => {
@@ -32,6 +32,9 @@ export type CalendarListForAdminItem = Awaited<ReturnType<typeof getCalendarList
 export const seedCalendarFn = createServerFn()
   .middleware([authenticatedMiddleware])
   .handler(async ({ context }) => {
+    if (!context.user || context.user === undefined) return;
+
+    const currentUserId = context.user.id;
     seedCalendar.forEach(async (s) => {
       console.log("🌱 Seeding Calendar", s.title);
 
@@ -49,7 +52,7 @@ export const seedCalendarFn = createServerFn()
           signupLink: s.signupLink,
           signupLinkVisibleTo: s.signupLinkVisibleTo,
 
-          createdBy: context.user.id,
+          createdBy: currentUserId,
         });
       } catch (error) {
         console.log("⚠️ Failed to seed calendar item", s.title);

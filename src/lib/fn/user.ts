@@ -1,7 +1,6 @@
 // prettier-ignore
 import { db } from "@/db";
 import { account as dbAccounts, session as dbSessions, user as dbUsers } from "@/db/schema";
-import { authenticatedMiddleware } from "@/lib/middleware/auth";
 import { useNavigate, useRouter } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { zodValidator } from "@tanstack/zod-adapter";
@@ -9,6 +8,7 @@ import { count, eq, like, max, or } from "drizzle-orm";
 import { toast } from "sonner";
 import { z } from "zod";
 import { authClient } from "../auth/auth-client";
+import { authenticatedMiddleware } from "../middleware/authenticatedMiddleware";
 
 // Gets a list of all users.
 export const getUserListFn = createServerFn()
