@@ -22,7 +22,7 @@ function RouteComponent() {
 
   return (
     <div>
-      <BackTo to="/admin" label="Admin" />
+      <BackTo to="/admin" label="Back to Admin" />
       <PageHeader>
         <PageTitle>
           Game Year <span className="text-(--color-destructive)">Administration</span>

@@ -31,7 +31,7 @@ function RouteComponent() {
 
   return (
     <div className="">
-      <BackTo to="/admin" label="Admin" />
+      <BackTo to="/admin" label="Back to Admin" />
       <PageHeader>
         <PageTitle>
           User <span className="text-(--color-destructive)">Administration</span>
