@@ -4,11 +4,11 @@ import { getGameYearsFn } from "@/lib/fn/games";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/games/")({
-  component: RouteComponent,
   loader: async () => {
     const games = getGameYearsFn();
     return games;
   },
+  component: RouteComponent,
 });
 
 function RouteComponent() {

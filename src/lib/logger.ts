@@ -1,11 +1,3 @@
-import type { ClassValue } from "clsx";
-import { clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-
 // lib/logger.ts
 const isDev = process.env.NODE_ENV === "development";
 const logLevel = process.env.LOG_LEVEL ?? (isDev ? "debug" : "info");
