@@ -56,21 +56,23 @@ function RouteComponent() {
       </PageHeader>
 
       <SectionHeader>Calendar</SectionHeader>
-      <section className="flex flex-col gap-6 mt-4">
+      <p>TODO: Add filtering by name of event, date range, status</p>
+      <section className="flex flex-col gap-10 mt-12">
         {sorted.map((c) => (
           <Card key={c.id}>
             <CardHeader>
               <CardTitle className="text-3xl">{c.title}</CardTitle>
-              <CardDescription>
-                <p>
-                  When: {c.startAt.toLocaleString()} - {c.endAt.toLocaleString()}
-                </p>
-                <p>Where: {c.location}</p>
-              </CardDescription>
+              <Separator className="my-4 p-1" />
+              <CardDescription></CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-4 gap-6">
-                <CalendarSection title="Details">TBD</CalendarSection>
+                <CalendarSection title="Details">
+                  <p>
+                    When: {c.startAt.toLocaleString()} - {c.endAt.toLocaleString()}
+                  </p>
+                  <p>Where: {c.location}</p>
+                </CalendarSection>
 
                 <CalendarSection title="Description">
                   <div className="space-y-2">
@@ -212,6 +214,7 @@ function RouteComponent() {
             </CardContent>
             <CardFooter>
               <div className="flex flex-row gap-4 mt-8">
+                <Button disabled={c.status !== "draft"}>Request Approval</Button>
                 <Button disabled={c.status === "published"}>Publish</Button>
                 <Button>Edit</Button>
                 <Button disabled={c.status === "archived"}>Archive</Button>
