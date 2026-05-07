@@ -1,3 +1,4 @@
+import { TeamActionButton } from "@/components/team-action-buttom";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -7,8 +8,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { AccountSelect } from "@/db/schema";
-import { useClipboard } from "@/hooks/useClipboard";
+import type { CalendarListForAdminItem } from "@/lib/fn/calendar";
+import { Link } from "@tanstack/react-router";
 import {
   flexRender,
   getCoreRowModel,
@@ -20,25 +21,90 @@ import {
   type ColumnFiltersState,
   type SortingState,
 } from "@tanstack/react-table";
-import { CopyIcon } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 import React from "react";
 
-export function AccountsTable({ data }: { data: AccountSelect[] }) {
+export function CalendarEventTable({
+  data,
+  actionLabel,
+  onAction,
+}: {
+  data: CalendarListForAdminItem[];
+  actionLabel?: string;
+  onAction: (id: string) => Promise<{ error: null | { message?: string } }>;
+}) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
-  const { copyToClipboard } = useClipboard();
 
-  const columns: ColumnDef<AccountSelect>[] = [
+  const columns: ColumnDef<CalendarListForAdminItem>[] = [
     {
-      accessorKey: "providerId",
-      header: "Provider",
+      accessorKey: "title",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Title
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => {
+        const value = row.original.title;
+        const id = row.original.id;
+
+        return (
+          <div>
+            <Link to="/admin/calendar/$id" params={{ id }}>
+              {value}
+            </Link>
+          </div>
+        );
+      },
     },
     {
-      accessorKey: "createdAt",
-      header: "Created",
+      accessorKey: "startAt",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            From
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
       cell: ({ row }) => {
-        const value = row.original.createdAt;
-        return <div>{value.toISOString()}</div>;
+        const value = row.original.startAt;
+        return <div>{value.toLocaleString()}</div>;
+      },
+    },
+    {
+      accessorKey: "endAt",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Through
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => {
+        const value = row.original.endAt;
+        return <div>{value.toLocaleString()}</div>;
+      },
+    },
+    {
+      accessorKey: "visibleTo",
+      header: "Visible To",
+      cell: ({ row }) => {
+        const value = row.original.visibleTo;
+        return <div>{value?.join(", ")}</div>;
       },
     },
     {
@@ -50,28 +116,18 @@ export function AccountsTable({ data }: { data: AccountSelect[] }) {
       },
     },
     {
-      accessorKey: "idToken",
-      header: "JWT",
-      cell: ({ row }) => {
-        const value = row.original.idToken ?? "";
-        return (
-          <div className="py-2">
-            <Button onClick={() => copyToClipboard(value)} variant="outline">
-              <CopyIcon />
-            </Button>
-          </div>
-        );
+      accessorKey: "id",
+      header: ({ column }) => {
+        return <div className="text-right">Actions</div>;
       },
-    },
-    {
-      header: "JSON",
       cell: ({ row }) => {
-        const value = JSON.stringify(row.original, null, 2);
+        const id = row.original.id;
+
         return (
-          <div className="py-2">
-            <Button onClick={() => copyToClipboard(value)} variant="outline">
-              <CopyIcon />
-            </Button>
+          <div className="text-right py-2">
+            <TeamActionButton action={() => onAction(id)} variant="destructive">
+              {actionLabel}
+            </TeamActionButton>
           </div>
         );
       },

@@ -32,6 +32,7 @@ import { Route as AdminCalendarIndexRouteImport } from './routes/admin/calendar/
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as AdminUsersUserIdRouteRouteImport } from './routes/admin/users/$userId/route'
 import { Route as AdminUsersUserIdIndexRouteImport } from './routes/admin/users/$userId/index'
+import { Route as AdminCalendarIdIndexRouteImport } from './routes/admin/calendar/$id/index'
 import { Route as AdminUsersUserIdEditRouteImport } from './routes/admin/users/$userId/edit'
 
 const UnauthorizedRoute = UnauthorizedRouteImport.update({
@@ -149,6 +150,11 @@ const AdminUsersUserIdIndexRoute = AdminUsersUserIdIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminUsersUserIdRouteRoute,
 } as any)
+const AdminCalendarIdIndexRoute = AdminCalendarIdIndexRouteImport.update({
+  id: '/calendar/$id/',
+  path: '/calendar/$id/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminUsersUserIdEditRoute = AdminUsersUserIdEditRouteImport.update({
   id: '/edit',
   path: '/edit',
@@ -179,6 +185,7 @@ export interface FileRoutesByFullPath {
   '/admin/calendar/': typeof AdminCalendarIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
   '/admin/users/$userId/edit': typeof AdminUsersUserIdEditRoute
+  '/admin/calendar/$id/': typeof AdminCalendarIdIndexRoute
   '/admin/users/$userId/': typeof AdminUsersUserIdIndexRoute
 }
 export interface FileRoutesByTo {
@@ -203,6 +210,7 @@ export interface FileRoutesByTo {
   '/admin/calendar': typeof AdminCalendarIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
   '/admin/users/$userId/edit': typeof AdminUsersUserIdEditRoute
+  '/admin/calendar/$id': typeof AdminCalendarIdIndexRoute
   '/admin/users/$userId': typeof AdminUsersUserIdIndexRoute
 }
 export interface FileRoutesById {
@@ -230,6 +238,7 @@ export interface FileRoutesById {
   '/admin/calendar/': typeof AdminCalendarIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
   '/admin/users/$userId/edit': typeof AdminUsersUserIdEditRoute
+  '/admin/calendar/$id/': typeof AdminCalendarIdIndexRoute
   '/admin/users/$userId/': typeof AdminUsersUserIdIndexRoute
 }
 export interface FileRouteTypes {
@@ -258,6 +267,7 @@ export interface FileRouteTypes {
     | '/admin/calendar/'
     | '/admin/users/'
     | '/admin/users/$userId/edit'
+    | '/admin/calendar/$id/'
     | '/admin/users/$userId/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -282,6 +292,7 @@ export interface FileRouteTypes {
     | '/admin/calendar'
     | '/admin/users'
     | '/admin/users/$userId/edit'
+    | '/admin/calendar/$id'
     | '/admin/users/$userId'
   id:
     | '__root__'
@@ -308,6 +319,7 @@ export interface FileRouteTypes {
     | '/admin/calendar/'
     | '/admin/users/'
     | '/admin/users/$userId/edit'
+    | '/admin/calendar/$id/'
     | '/admin/users/$userId/'
   fileRoutesById: FileRoutesById
 }
@@ -490,6 +502,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsersUserIdIndexRouteImport
       parentRoute: typeof AdminUsersUserIdRouteRoute
     }
+    '/admin/calendar/$id/': {
+      id: '/admin/calendar/$id/'
+      path: '/calendar/$id'
+      fullPath: '/admin/calendar/$id/'
+      preLoaderRoute: typeof AdminCalendarIdIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/users/$userId/edit': {
       id: '/admin/users/$userId/edit'
       path: '/edit'
@@ -522,6 +541,7 @@ interface AdminRouteRouteChildren {
   AdminUsersUserIdRouteRoute: typeof AdminUsersUserIdRouteRouteWithChildren
   AdminCalendarIndexRoute: typeof AdminCalendarIndexRoute
   AdminUsersIndexRoute: typeof AdminUsersIndexRoute
+  AdminCalendarIdIndexRoute: typeof AdminCalendarIdIndexRoute
 }
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
@@ -531,6 +551,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminUsersUserIdRouteRoute: AdminUsersUserIdRouteRouteWithChildren,
   AdminCalendarIndexRoute: AdminCalendarIndexRoute,
   AdminUsersIndexRoute: AdminUsersIndexRoute,
+  AdminCalendarIdIndexRoute: AdminCalendarIdIndexRoute,
 }
 
 const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(

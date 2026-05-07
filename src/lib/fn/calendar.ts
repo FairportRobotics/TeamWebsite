@@ -49,7 +49,6 @@ export const getCalendarListForAdminFn = createServerFn()
         updatedByName: updatedByUser.name,
       })
       .from(calendarTable)
-      .where(eq(calendarTable.status, "published"))
       .innerJoin(createdByUser, eq(createdByUser.id, calendarTable.createdBy))
       .innerJoin(updatedByUser, eq(updatedByUser.id, calendarTable.updatedBy));
 

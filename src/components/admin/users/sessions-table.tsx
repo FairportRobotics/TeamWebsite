@@ -118,7 +118,7 @@ export function SessionsTable({ data }: { data: SessionSelect[] }) {
         ) : (
           <TableRow>
             <TableCell colSpan={columns.length} className="h-24 text-center">
-              No results.
+              No records.
             </TableCell>
           </TableRow>
         )}
