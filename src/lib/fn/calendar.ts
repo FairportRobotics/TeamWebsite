@@ -1,64 +1,126 @@
 // prettier-ignore
 import { db } from "@/db";
-import { calendarTable } from "@/db/schema";
+import { calendarTable, user } from "@/db/schema";
 import { seedCalendar } from "@/db/seed/calendar";
 import { createServerFn } from "@tanstack/react-start";
-import { eq, isNull, or } from "drizzle-orm";
+import { zodValidator } from "@tanstack/zod-adapter";
+import { eq } from "drizzle-orm";
+import { alias } from "drizzle-orm/pg-core";
+import { z } from "zod";
+import { assertAuthenticatedFn } from "../auth/server";
 import { authenticatedMiddleware } from "../middleware/authenticatedMiddleware";
 
 // TODO: Add support for optional date filtering.
+export type CalendarListItem = Awaited<ReturnType<typeof getCalendarListFn>>[0];
 export const getCalendarListFn = createServerFn().handler(async () => {
   const results = db.select().from(calendarTable).where(eq(calendarTable.status, "published"));
   return results;
 });
 
-export type CalendarListItem = Awaited<ReturnType<typeof getCalendarListFn>>[0];
-
 // TODO: Add support for optional date filtering.
 // TODO: Restrict with permissions.
+export type CalendarListForAdminItem = Awaited<ReturnType<typeof getCalendarListForAdminFn>>[0];
 export const getCalendarListForAdminFn = createServerFn()
   .middleware([authenticatedMiddleware])
   .handler(async () => {
+    const createdByUser = alias(user, "createdByUser");
+    const updatedByUser = alias(user, "updatedByUser");
+
     const results = await db
-      .select()
+      .select({
+        id: calendarTable.id,
+        status: calendarTable.status,
+        visibleTo: calendarTable.visibleTo,
+        title: calendarTable.title,
+        description: calendarTable.description,
+        location: calendarTable.location,
+        startAt: calendarTable.startAt,
+        endAt: calendarTable.endAt,
+        informationLink: calendarTable.informationLink,
+        signupLink: calendarTable.signupLink,
+        signupLinkVisibleTo: calendarTable.signupLinkVisibleTo,
+
+        createdAt: calendarTable.createdAt,
+        createdBy: calendarTable.createdBy,
+        createdByName: createdByUser.name,
+
+        updatedBy: calendarTable.updatedBy,
+        updatedAt: calendarTable.updatedAt,
+        updatedByName: updatedByUser.name,
+      })
       .from(calendarTable)
-      .where(or(eq(calendarTable.status, "published"), isNull(calendarTable.rootId)));
+      .where(eq(calendarTable.status, "published"))
+      .innerJoin(createdByUser, eq(createdByUser.id, calendarTable.createdBy))
+      .innerJoin(updatedByUser, eq(updatedByUser.id, calendarTable.updatedBy));
 
     return results;
   });
-export type CalendarListForAdminItem = Awaited<ReturnType<typeof getCalendarListForAdminFn>>[0];
 
-// TODO: Remove when live.
-export const seedCalendarFn = createServerFn()
+const calendarIdSchema = z.object({
+  id: z.string(),
+});
+
+export const requestApprovalCalendarFn = createServerFn()
   .middleware([authenticatedMiddleware])
-  .handler(async ({ context }) => {
-    if (!context.user || context.user === undefined) return;
+  .inputValidator(zodValidator(calendarIdSchema))
+  .handler(async ({ data, context }) => {
+    assertAuthenticatedFn();
 
-    const currentUserId = context.user.id;
-    seedCalendar.forEach(async (s) => {
-      console.log("🌱 Seeding Calendar", s.title);
+    if (!context.user) {
+      return false;
+    }
 
-      try {
-        await db.insert(calendarTable).values({
-          id: crypto.randomUUID(),
-          title: s.title,
-          description: s.description,
-          visibleTo: s.visibleTo,
-          location: s.location,
-          startAt: s.startAt,
-          endAt: s.endAt,
+    await db
+      .update(calendarTable)
+      .set({
+        updatedBy: context.user.id,
+        status: "pending_review",
+      })
+      .where(eq(calendarTable.id, data.id));
 
-          informationLink: s.informationLink,
-          signupLink: s.signupLink,
-          signupLinkVisibleTo: s.signupLinkVisibleTo,
+    return true;
+  });
 
-          createdBy: currentUserId,
-        });
-      } catch (error) {
-        console.log("⚠️ Failed to seed calendar item", s.title);
-        console.error(error);
-      }
-    });
+export const approveCalendarFn = createServerFn()
+  .middleware([authenticatedMiddleware])
+  .inputValidator(zodValidator(calendarIdSchema))
+  .handler(async ({ data, context }) => {
+    assertAuthenticatedFn();
+
+    if (!context.user) {
+      return false;
+    }
+
+    await db
+      .update(calendarTable)
+      .set({
+        updatedBy: context.user.id,
+        status: "published",
+      })
+      .where(eq(calendarTable.id, data.id));
+
+    return true;
+  });
+
+export const archiveCalendarFn = createServerFn()
+  .middleware([authenticatedMiddleware])
+  .inputValidator(zodValidator(calendarIdSchema))
+  .handler(async ({ data, context }) => {
+    assertAuthenticatedFn();
+
+    if (!context.user) {
+      return false;
+    }
+
+    await db
+      .update(calendarTable)
+      .set({
+        updatedBy: context.user.id,
+        status: "archived",
+      })
+      .where(eq(calendarTable.id, data.id));
+
+    return true;
   });
 
 // export async function approveItem(itemIds: string[], reviewerId: string) {
@@ -195,3 +257,39 @@ export const seedCalendarFn = createServerFn()
 //   .handler(async ({ data }) => {
 //     console.log("");
 //   });
+
+// TODO: Remove when live.
+export const seedCalendarFn = createServerFn()
+  .middleware([authenticatedMiddleware])
+  .handler(async ({ context }) => {
+    if (!context.user || context.user === undefined) return;
+
+    const currentUserId = context.user.id;
+    seedCalendar.forEach(async (s) => {
+      console.log("🌱 Seeding Calendar", s.title);
+
+      try {
+        let id = crypto.randomUUID();
+
+        await db.insert(calendarTable).values({
+          id: id,
+          title: s.title,
+          description: s.description,
+          visibleTo: s.visibleTo,
+          location: s.location,
+          startAt: s.startAt,
+          endAt: s.endAt,
+
+          informationLink: s.informationLink,
+          signupLink: s.signupLink,
+          signupLinkVisibleTo: s.signupLinkVisibleTo,
+
+          createdBy: currentUserId,
+          updatedBy: currentUserId,
+        });
+      } catch (error) {
+        console.log("⚠️ Failed to seed calendar item", s.title);
+        console.error(error);
+      }
+    });
+  });

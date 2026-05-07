@@ -1,13 +1,5 @@
 // drizzle/schema/items.ts
-import {
-  integer,
-  pgEnum,
-  pgTable,
-  text,
-  timestamp,
-  uuid,
-  type AnyPgColumn,
-} from "drizzle-orm/pg-core";
+import { pgEnum, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { user } from "../schema";
 import { statusEnum } from "./_common";
 
@@ -20,9 +12,9 @@ export const visibleEnum = pgEnum("calendar_visible", [
 
 export const calendarTable = pgTable("calendar", {
   id: uuid("id").primaryKey().defaultRandom(),
-  rootId: uuid("root_id").references((): AnyPgColumn => calendarTable.id), // Links to original version
-  parentId: uuid("parent_id").references((): AnyPgColumn => calendarTable.id), // Links to previous version
-  version: integer("version").notNull().default(1),
+  // rootId: uuid("root_id").references((): AnyPgColumn => calendarTable.id), // Links to original version
+  // parentId: uuid("parent_id").references((): AnyPgColumn => calendarTable.id), // Links to previous version
+  //version: integer("version").notNull().default(1),
 
   status: statusEnum("status").notNull().default("draft"),
   visibleTo: visibleEnum("visible_to").array().default(["everyone"]),
@@ -45,9 +37,7 @@ export const calendarTable = pgTable("calendar", {
     .notNull()
     .references(() => user.id, { onDelete: "no action" }),
 
-  approvedAt: timestamp("approved_at"),
-  approvedBy: text("approved_by_user_id").references(() => user.id, { onDelete: "no action" }),
-
+  updatedBy: text("updated_by_user_id").references(() => user.id, { onDelete: "no action" }),
   updatedAt: timestamp("updated_at")
     .defaultNow()
     .$onUpdate(() => /* @__PURE__ */ new Date())
