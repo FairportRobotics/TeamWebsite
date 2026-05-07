@@ -40,6 +40,7 @@ export const seedCalendarFn = createServerFn()
           id: crypto.randomUUID(),
           title: s.title,
           description: s.description,
+          visibleTo: s.visibleTo,
           location: s.location,
           startAt: s.startAt,
           endAt: s.endAt,

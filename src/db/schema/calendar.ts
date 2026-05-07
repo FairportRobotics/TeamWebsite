@@ -12,9 +12,10 @@ import { user } from "../schema";
 import { statusEnum } from "./_common";
 
 export const visibleEnum = pgEnum("calendar_visible", [
-  "all",
-  "team_members",
-  "team_members_and_parents",
+  "everyone",
+  "students",
+  "mentors",
+  "parents",
 ]);
 
 export const calendarTable = pgTable("calendar", {
@@ -24,7 +25,7 @@ export const calendarTable = pgTable("calendar", {
   version: integer("version").notNull().default(1),
 
   status: statusEnum("status").notNull().default("draft"),
-  visibleTo: visibleEnum("visible_to").notNull().default("team_members"),
+  visibleTo: visibleEnum("visible_to").array().default(["everyone"]),
 
   title: text("title").notNull(),
   description: text("description").array(),
@@ -35,7 +36,9 @@ export const calendarTable = pgTable("calendar", {
   informationLink: text("information_link"),
 
   signupLink: text("signup_link"),
-  signupLinkVisibleTo: visibleEnum("signup_link_visible_to").notNull().default("team_members"),
+  signupLinkVisibleTo: visibleEnum("signup_link_visible_to")
+    .array()
+    .default(["students", "mentors"]),
 
   createdAt: timestamp("created_at").defaultNow().notNull(),
   createdBy: text("created_by_user_id")

@@ -47,7 +47,7 @@ function RouteComponent() {
 
   return (
     <div>
-      <BackTo to="/admin" label="Admin" />
+      <BackTo to="/admin" label="Back to Admin" />
       <PageHeader>
         <PageTitle>
           Event <span className="text-(--color-destructive)">Administration</span>
@@ -66,12 +66,16 @@ function RouteComponent() {
               <CardDescription></CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-4 gap-6">
+              <div className="grid grid-cols-4 gap-6 mb-10">
                 <CalendarSection title="Details">
-                  <p>
-                    When: {c.startAt.toLocaleString()} - {c.endAt.toLocaleString()}
-                  </p>
-                  <p>Where: {c.location}</p>
+                  <div className="grid grid-cols-2 shrink gap-y-2">
+                    <div>From:</div>
+                    <div>{c.startAt.toLocaleString()}</div>
+                    <div>Through:</div>
+                    <div>{c.endAt.toLocaleString()}</div>
+                    <div>Where:</div>
+                    <div>{c.location}</div>
+                  </div>
                 </CalendarSection>
 
                 <CalendarSection title="Description">
@@ -82,14 +86,14 @@ function RouteComponent() {
                   </div>
                 </CalendarSection>
 
-                <CalendarSection title="Who can see?">
+                <CalendarSection title="Who can see calendar entry?">
                   <div className={cn("flex flex-col items-start grow gap-4", "text-muted")}>
                     <div className="flex items-start">
                       <div>
                         <SquareCheck
                           className={cn(
                             " w-8 h-8 mr-2 mt-0.5",
-                            c.visibleTo === "all" ? "text-orange-500" : "",
+                            c.visibleTo?.includes("everyone") ? "text-orange-500" : "",
                           )}
                         />
                       </div>
@@ -100,70 +104,38 @@ function RouteComponent() {
                         <SquareCheck
                           className={cn(
                             " w-8 h-8 mr-2 mt-0.5",
-                            c.visibleTo === "team_members" ? "text-orange-500" : "",
+                            c.visibleTo?.includes("students") ? "text-orange-500" : "",
                           )}
                         />
                       </div>
-                      <span>Team Members Only</span>
+                      <span>Students</span>
                     </div>
                     <div className="flex items-start">
                       <div>
                         <SquareCheck
                           className={cn(
                             " w-8 h-8 mr-2 mt-0.5",
-                            c.visibleTo === "team_members_and_parents" ? "text-orange-500" : "",
+                            c.visibleTo?.includes("mentors") ? "text-orange-500" : "",
                           )}
                         />
                       </div>
-                      <span>Team Members and Parents Only</span>
+                      <span>Mentors</span>
+                    </div>
+                    <div className="flex items-start">
+                      <div>
+                        <SquareCheck
+                          className={cn(
+                            " w-8 h-8 mr-2 mt-0.5",
+                            c.visibleTo?.includes("parents") ? "text-orange-500" : "",
+                          )}
+                        />
+                      </div>
+                      <span>Parents</span>
                     </div>
                   </div>
                 </CalendarSection>
 
-                <CalendarSection title="Status">
-                  <div className="flex flex-row items-center justify-between">
-                    <span
-                      className={
-                        c.status === "draft" ? "text-orange-500 font-semibold" : "text-muted"
-                      }
-                    >
-                      Draft
-                    </span>
-                    <ChevronRight />
-                    <span
-                      className={
-                        c.status === "pending_review"
-                          ? "text-orange-500 font-semibold"
-                          : "text-muted"
-                      }
-                    >
-                      Pending
-                    </span>
-                    <ChevronRight />
-                    <span
-                      className={
-                        c.status === "published" ? "text-orange-500 font-semibold" : "text-muted"
-                      }
-                    >
-                      Published
-                    </span>
-                    <ChevronRight />
-                    <span
-                      className={
-                        c.status === "archived" ? "text-orange-500 font-semibold" : "text-muted"
-                      }
-                    >
-                      Archived
-                    </span>
-                  </div>
-                </CalendarSection>
-
-                <CalendarSection title="Additional Information Link">
-                  Show an icon that takes you to the external link which hopefully supplies more
-                  information.
-                </CalendarSection>
-
-                <CalendarSection title="Sign Up Link">
+                <CalendarSection title="Sign up link">
                   [ SIGN UP LINK (X)]
                   {c.signupLink && (
                     <div className={cn("flex flex-col items-start grow gap-4", "text-muted")}>
@@ -172,7 +144,7 @@ function RouteComponent() {
                           <SquareCheck
                             className={cn(
                               " w-8 h-8 mr-2 mt-0.5",
-                              c.signupLinkVisibleTo === "all" ? "text-orange-500" : "",
+                              c.signupLinkVisibleTo?.includes("everyone") ? "text-orange-500" : "",
                             )}
                           />
                         </div>
@@ -183,34 +155,77 @@ function RouteComponent() {
                           <SquareCheck
                             className={cn(
                               " w-8 h-8 mr-2 mt-0.5",
-                              c.signupLinkVisibleTo === "team_members" ? "text-orange-500" : "",
+                              c.signupLinkVisibleTo?.includes("students") ? "text-orange-500" : "",
                             )}
                           />
                         </div>
-                        <span>Team Members Only</span>
+                        <span>Students</span>
                       </div>
                       <div className="flex items-start">
                         <div>
                           <SquareCheck
                             className={cn(
                               " w-8 h-8 mr-2 mt-0.5",
-                              c.signupLinkVisibleTo === "team_members_and_parents"
-                                ? "text-orange-500"
-                                : "",
+                              c.signupLinkVisibleTo?.includes("mentors") ? "text-orange-500" : "",
                             )}
                           />
                         </div>
-                        <span>Team Members and Parents Only</span>
+                        <span>Mentors</span>
+                      </div>
+                      <div className="flex items-start">
+                        <div>
+                          <SquareCheck
+                            className={cn(
+                              " w-8 h-8 mr-2 mt-0.5",
+                              c.signupLinkVisibleTo?.includes("parents") ? "text-orange-500" : "",
+                            )}
+                          />
+                        </div>
+                        <span>Parents</span>
                       </div>
                     </div>
                   )}
                 </CalendarSection>
-
-                <CalendarSection title="History">
-                  List some high-level information about who has made edits and when. List date,
-                  person and their final status.
-                </CalendarSection>
               </div>
+
+              <CalendarSection title="Status">
+                <div className="flex flex-row items-center">
+                  <span
+                    className={
+                      c.status === "draft" ? "text-orange-500 font-semibold" : "text-muted"
+                    }
+                  >
+                    Draft
+                  </span>
+                  <ChevronRight />
+                  <span
+                    className={
+                      c.status === "pending_review" ? "text-orange-500 font-semibold" : "text-muted"
+                    }
+                  >
+                    Pending
+                  </span>
+                  <ChevronRight />
+                  <span
+                    className={
+                      c.status === "published" ? "text-orange-500 font-semibold" : "text-muted"
+                    }
+                  >
+                    Published
+                  </span>
+                  <ChevronRight />
+                  <span
+                    className={
+                      c.status === "archived" ? "text-orange-500 font-semibold" : "text-muted"
+                    }
+                  >
+                    Archived
+                  </span>
+                </div>
+
+                <div className="mt-4">History...</div>
+                <div></div>
+              </CalendarSection>
             </CardContent>
             <CardFooter>
               <div className="flex flex-row gap-4 mt-8">
@@ -223,10 +238,6 @@ function RouteComponent() {
             </CardFooter>
           </Card>
         ))}
-      </section>
-
-      <section>
-        <pre>{JSON.stringify(calendar, null, 2)}</pre>
       </section>
 
       <TeamActionButton

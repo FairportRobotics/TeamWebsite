@@ -54,7 +54,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <body className="font-sans antialiased wrap-anywhere">
         <div className="flex flex-col min-h-screen">
           <Header />
-          <main className="p-4">{children}</main>
+          <main className="p-10">{children}</main>
         </div>
         <Footer />
         <TanStackDevtools
