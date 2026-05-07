@@ -11,11 +11,11 @@ export const Route = createFileRoute("/admin/sponsors")({
   beforeLoad: async () => {
     await assertHasAnyPermissionFn({ data: { permissions: [Permissions.SponsorAdminister] } });
   },
-  component: RouteComponent,
   loader: async () => {
     const sponsors = await getSponsorsFn();
     return sponsors;
   },
+  component: RouteComponent,
 });
 
 function RouteComponent() {

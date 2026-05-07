@@ -6,11 +6,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
 export const Route = createFileRoute("/calendar/")({
-  component: RouteComponent,
   loader: async () => {
     const calendarEvents = await getCalendarListFn();
     return calendarEvents;
   },
+  component: RouteComponent,
 });
 
 function RouteComponent() {

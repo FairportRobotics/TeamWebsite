@@ -9,7 +9,7 @@ export function getRouter() {
     defaultPreloadDelay: 300,
     defaultPreloadStaleTime: 0,
     context: {
-      data: undefined!,
+      session: undefined!,
     },
   });
 

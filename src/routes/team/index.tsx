@@ -6,13 +6,13 @@ import { getTeamMembersFn } from "@/lib/fn/user";
 import { Await, createFileRoute, defer, Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/team/")({
-  component: RouteComponent,
   loader: async () => {
     const teamMembersPromise = defer(getTeamMembersFn());
     return {
       teamMembers: teamMembersPromise,
     };
   },
+  component: RouteComponent,
 });
 
 function RouteComponent() {

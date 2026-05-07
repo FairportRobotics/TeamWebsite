@@ -9,11 +9,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Building2, Download, Heart, SquareCheck, SquareUser } from "lucide-react";
 
 export const Route = createFileRoute("/sponsors/")({
-  component: RouteComponent,
   loader: async () => {
     const sponsors = await getSponsorsFn();
     return sponsors;
   },
+  component: RouteComponent,
 });
 
 function RouteComponent() {

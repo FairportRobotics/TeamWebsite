@@ -4,7 +4,6 @@ import { getUserDetailsFn } from "@/lib/fn/user";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/team/$id")({
-  component: RouteComponent,
   loader: async ({ params }) => {
     const { user } = await getUserDetailsFn({
       data: { userId: params.id },
@@ -12,6 +11,7 @@ export const Route = createFileRoute("/team/$id")({
 
     return user;
   },
+  component: RouteComponent,
 });
 
 function RouteComponent() {

@@ -20,7 +20,6 @@ export const Route = createRootRouteWithContext<RouterContext>()({
   loader: async ({ context }) => {
     return { session: context.session };
   },
-
   head: () => ({
     meta: [
       {
