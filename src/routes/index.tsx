@@ -4,7 +4,7 @@ import { createFileRoute } from "@tanstack/react-router";
 export const Route = createFileRoute("/")({
   component: App,
   loader: async ({ context }) => {
-    return context.data?.user || null;
+    return context.session?.user ?? null;
   },
 });
 
@@ -37,16 +37,6 @@ function App() {
             className="text-(--color-destructive)"
           >
             the legacy team website.
-          </a>
-        </p>
-        <p>
-          Live{" "}
-          <a
-            href="https://team-website-pi.vercel.app/"
-            target="_blank"
-            className="text-(--color-destructive)"
-          >
-            site deployed to Vercel.
           </a>
         </p>
       </section>
