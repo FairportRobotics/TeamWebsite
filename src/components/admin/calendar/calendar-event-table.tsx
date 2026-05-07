@@ -1,3 +1,4 @@
+import { TeamActionButton } from "@/components/team-action-buttom";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -8,6 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { CalendarListForAdminItem } from "@/lib/fn/calendar";
+import { Link } from "@tanstack/react-router";
 import {
   flexRender,
   getCoreRowModel,
@@ -29,7 +31,7 @@ export function CalendarEventTable({
 }: {
   data: CalendarListForAdminItem[];
   actionLabel?: string;
-  onAction: (id: string) => void;
+  onAction: (id: string) => Promise<{ error: null | { message?: string } }>;
 }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -46,6 +48,18 @@ export function CalendarEventTable({
             Title
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
+        );
+      },
+      cell: ({ row }) => {
+        const value = row.original.title;
+        const id = row.original.id;
+
+        return (
+          <div>
+            <Link to="/admin/calendar/$id" params={{ id }}>
+              {value}
+            </Link>
+          </div>
         );
       },
     },
@@ -102,14 +116,18 @@ export function CalendarEventTable({
       },
     },
     {
-      header: "Actions",
+      accessorKey: "id",
+      header: ({ column }) => {
+        return <div className="text-right">Actions</div>;
+      },
       cell: ({ row }) => {
         const id = row.original.id;
 
         return (
-          <div>
-            <Button onClick={() => onAction(id)}>{actionLabel}</Button>
-            {/* <TeamActionButton action={() => action(id)}>{actionLabel}</TeamActionButton> */}
+          <div className="text-right py-2">
+            <TeamActionButton action={() => onAction(id)} variant="destructive">
+              {actionLabel}
+            </TeamActionButton>
           </div>
         );
       },

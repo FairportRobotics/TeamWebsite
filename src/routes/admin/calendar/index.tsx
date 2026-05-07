@@ -31,17 +31,12 @@ export const Route = createFileRoute("/admin/calendar/")({
 function RouteComponent() {
   const router = useRouter();
 
+  // Get the entire list of calendar entries and filter according to type.
   const calendar = Route.useLoaderData();
   const pendingApproval = calendar.filter((c) => c.status === "pending_review");
   const drafts = calendar.filter((c) => c.status === "draft");
   const published = calendar.filter((c) => c.status === "published");
   const archived = calendar.filter((c) => c.status === "archived");
-
-  console.log("calendar", calendar.length);
-  console.log("pendingApproval", pendingApproval.length);
-  console.log("drafts", drafts.length);
-  console.log("published", published.length);
-  console.log("archived", archived.length);
 
   async function handleSeedCalendar() {
     await seedCalendarFn();
@@ -66,6 +61,13 @@ function RouteComponent() {
   const handleArchive = async (id: string) => {
     console.log("handleArchive", id);
     await archiveCalendarFn({ data: { id } });
+    router.invalidate();
+    return { error: null };
+  };
+
+  const handleEdit = async (id: string) => {
+    console.log("handleEdit", id);
+    //await archiveCalendarFn({ data: { id } });
     router.invalidate();
     return { error: null };
   };
@@ -118,7 +120,7 @@ function RouteComponent() {
           subTitle={`(${archived.length} records)`}
           initialState="collapsed"
         >
-          <CalendarEventTable data={archived} onAction={() => console.log()} />
+          <CalendarEventTable data={archived} actionLabel="Edit" onAction={handleEdit} />
         </PageSectionContainer>
       </div>
 
