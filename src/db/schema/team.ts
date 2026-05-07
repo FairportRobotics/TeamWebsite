@@ -1,12 +1,5 @@
 import { relations } from "drizzle-orm";
-import {
-  boolean,
-  index,
-  integer,
-  pgTable,
-  text,
-  timestamp,
-} from "drizzle-orm/pg-core";
+import { boolean, index, integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { user } from "./better-auth";
 
 export const memberTable = pgTable(
@@ -14,7 +7,7 @@ export const memberTable = pgTable(
   {
     userId: text("user_id")
       .notNull()
-      .references(() => user.id, { onDelete: "cascade" }),
+      .references(() => user.id, { onDelete: "no action" }),
     positions: text("position"),
     bio: text("bio"),
     active: boolean("active").default(true),
@@ -51,7 +44,7 @@ export const robotTable = pgTable(
     name: text("name").notNull(),
     gameYear: integer("game_year")
       .notNull()
-      .references(() => gameTable.year, { onDelete: "cascade" }),
+      .references(() => gameTable.year, { onDelete: "no action" }),
     imageUrl: text("image_url"),
     specifications: text("specifications"),
     awards: text("awards"),
@@ -83,6 +76,7 @@ export const sponsorTable = pgTable(
   (table) => [index("sponsor_name_idx").on(table.name)],
 );
 
+// Define relationships.
 export const gameRelations = relations(gameTable, ({ many }) => ({
   robots: many(robotTable),
 }));

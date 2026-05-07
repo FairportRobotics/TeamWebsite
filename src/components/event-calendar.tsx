@@ -1,3 +1,4 @@
+import type { CalendarListItem } from "@/lib/fn/calendar";
 import {
   addMonths,
   eachDayOfInterval,
@@ -14,33 +15,25 @@ import { enUS } from "date-fns/locale";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 
-export type CalendarEvent = {
-  id: string;
-  title: string;
-  date: Date | string;
-  location?: string;
-  timeFrom?: string;
-  timeThrough?: string;
-  visibility: "all" | "team" | "student" | "mentor" | "flagship";
-  signupLink?: string;
-};
-
 export interface CalendarDay {
   date: Date;
   day: number;
   month: number;
   year: number;
   isCurrentMonth: boolean;
-  events: CalendarEvent[];
+  events: CalendarListItem[];
 }
 
 interface CalendarProps {
   initialMonth: Date;
-  events: CalendarEvent[];
+  events: CalendarListItem[];
   onDateSelect?: (date: Date) => void;
 }
 
-export function buildCalendarData(referenceDate: Date, events: CalendarEvent[]): CalendarDay[][] {
+export function buildCalendarData(
+  referenceDate: Date,
+  events: CalendarListItem[],
+): CalendarDay[][] {
   // 1. Define the visible range (includes padding days)
   const monthStart = startOfMonth(referenceDate);
   const monthEnd = endOfMonth(referenceDate);
@@ -48,9 +41,9 @@ export function buildCalendarData(referenceDate: Date, events: CalendarEvent[]):
   const endDate = endOfWeek(monthEnd, { locale: enUS });
 
   // 2. Pre-index events by date string for O(1) lookup
-  const eventsByDate = new Map<string, CalendarEvent[]>();
+  const eventsByDate = new Map<string, CalendarListItem[]>();
   for (const event of events) {
-    const dateKey = format(new Date(event.date), "yyyy-MM-dd");
+    const dateKey = format(new Date(event.startAt), "yyyy-MM-dd");
     if (!eventsByDate.has(dateKey)) eventsByDate.set(dateKey, []);
     eventsByDate.get(dateKey)!.push(event);
   }
@@ -152,23 +145,24 @@ export function EventCalendar({ initialMonth, events, onDateSelect }: CalendarPr
                     <div
                       key={event.id}
                       className="px-1 py-0.5 bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 rounded truncate font-medium"
-                      title={`${event.title}${event.timeFrom ? `(${event.timeFrom})` : ""}`}
+                      title={`${event.title}${event.startAt ? `(${event.startAt.toLocaleTimeString()})` : ""}`}
                     >
                       {event.title}
                       <div className="flex flex-row items-center text-xs">
-                        {event.timeFrom && event.timeThrough && (
-                          <span className="block opacity-75">
-                            {event.timeFrom} - {event.timeThrough}
-                          </span>
-                        )}
-                        {event.timeFrom && !event.timeThrough && (
-                          <span className="block opacity-75">{event.timeFrom}</span>
-                        )}
+                        <span className="block opacity-75">
+                          {event.startAt.toLocaleTimeString()} - {event.endAt.toLocaleTimeString()}
+                        </span>
                       </div>
                       <div className="flex flex-row items-center justify-between mt-2 text-xs">
-                        <a href={event.signupLink} target="_blank" className="hover:underline">
-                          Details
-                        </a>
+                        {event.informationLink && (
+                          <a
+                            href={event.informationLink}
+                            target="_blank"
+                            className="hover:underline"
+                          >
+                            Details
+                          </a>
+                        )}
                         {event.signupLink && (
                           <a href={event.signupLink} target="_blank" className="hover:underline">
                             Signup

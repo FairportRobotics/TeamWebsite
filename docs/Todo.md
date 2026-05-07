@@ -5,5 +5,9 @@
   - [-] Count of the different things (Events, Sponsors, Users...)
   - [-] Count of edits pending Approval
   - [-] Last edit for each type
-- [-] Teams page: use Await or Suspense to display some placeholder while data is loading.
-- [-] Teams page: Make DRY. Turn into components.
+- [x] Teams page: use Await or Suspense to display some placeholder while data is loading.
+- [x] Teams page: Make DRY. Turn into components.
+- [-] Branding
+  - [-] Colors
+  - [-] Typefaces
+  - [-] Style standards (button and text sizes for example)
