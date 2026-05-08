@@ -1,6 +1,7 @@
 import { EventCalendar } from "@/components/event-calendar";
 import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { getPublishedCalendarItemsFn } from "@/lib/fn/calendar";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
@@ -31,20 +32,26 @@ function RouteComponent() {
 
       {mode === "calendar" ? (
         <div>
-          <Button onClick={() => setMode("list")}>View as List</Button>
           <EventCalendar initialMonth={new Date()} events={calendarEvents} />
+          <Button onClick={() => setMode("list")} className="mt-6">
+            View as List
+          </Button>
         </div>
       ) : (
         <div>
-          <Button onClick={() => setMode("calendar")}>View as Calendar</Button>
-          <div className="w-full max-w-6xl mx-auto  rounded-xl shadow-sm border overflow-hidden">
-            {calendarEvents.map((e, i) => (
-              <div key={i}>
-                {e.startAt.toLocaleTimeString()} : {e.title}{" "}
-                {/* {!!e.location ? <div>at {e.location}</div> : <></>} */}
-              </div>
-            ))}
-          </div>
+          <Card>
+            <div className="w-full max-w-6xl mx-auto  rounded-xl shadow-sm border overflow-hidden">
+              {calendarEvents.map((e, i) => (
+                <div key={i}>
+                  {e.startAt.toLocaleTimeString()} : {e.title}{" "}
+                  {/* {!!e.location ? <div>at {e.location}</div> : <></>} */}
+                </div>
+              ))}
+            </div>
+          </Card>
+          <Button onClick={() => setMode("calendar")} className="mt-6">
+            View as Calendar
+          </Button>
         </div>
       )}
     </div>

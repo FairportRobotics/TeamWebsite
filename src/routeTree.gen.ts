@@ -27,6 +27,7 @@ import { Route as AuthSigninRouteImport } from './routes/auth/signin'
 import { Route as AuthForgotPasswordRouteImport } from './routes/auth/forgot-password'
 import { Route as AdminSponsorsRouteImport } from './routes/admin/sponsors'
 import { Route as AdminGamesRouteImport } from './routes/admin/games'
+import { Route as CalendarIdIndexRouteImport } from './routes/calendar/$id/index'
 import { Route as AdminUsersIndexRouteImport } from './routes/admin/users/index'
 import { Route as AdminCalendarIndexRouteImport } from './routes/admin/calendar/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
@@ -125,6 +126,11 @@ const AdminGamesRoute = AdminGamesRouteImport.update({
   path: '/games',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const CalendarIdIndexRoute = CalendarIdIndexRouteImport.update({
+  id: '/calendar/$id/',
+  path: '/calendar/$id/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminUsersIndexRoute = AdminUsersIndexRouteImport.update({
   id: '/users/',
   path: '/users/',
@@ -184,6 +190,7 @@ export interface FileRoutesByFullPath {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/admin/calendar/': typeof AdminCalendarIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
+  '/calendar/$id/': typeof CalendarIdIndexRoute
   '/admin/users/$userId/edit': typeof AdminUsersUserIdEditRoute
   '/admin/calendar/$id/': typeof AdminCalendarIdIndexRoute
   '/admin/users/$userId/': typeof AdminUsersUserIdIndexRoute
@@ -209,6 +216,7 @@ export interface FileRoutesByTo {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/admin/calendar': typeof AdminCalendarIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
+  '/calendar/$id': typeof CalendarIdIndexRoute
   '/admin/users/$userId/edit': typeof AdminUsersUserIdEditRoute
   '/admin/calendar/$id': typeof AdminCalendarIdIndexRoute
   '/admin/users/$userId': typeof AdminUsersUserIdIndexRoute
@@ -237,6 +245,7 @@ export interface FileRoutesById {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/admin/calendar/': typeof AdminCalendarIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
+  '/calendar/$id/': typeof CalendarIdIndexRoute
   '/admin/users/$userId/edit': typeof AdminUsersUserIdEditRoute
   '/admin/calendar/$id/': typeof AdminCalendarIdIndexRoute
   '/admin/users/$userId/': typeof AdminUsersUserIdIndexRoute
@@ -266,6 +275,7 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/admin/calendar/'
     | '/admin/users/'
+    | '/calendar/$id/'
     | '/admin/users/$userId/edit'
     | '/admin/calendar/$id/'
     | '/admin/users/$userId/'
@@ -291,6 +301,7 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/admin/calendar'
     | '/admin/users'
+    | '/calendar/$id'
     | '/admin/users/$userId/edit'
     | '/admin/calendar/$id'
     | '/admin/users/$userId'
@@ -318,6 +329,7 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/admin/calendar/'
     | '/admin/users/'
+    | '/calendar/$id/'
     | '/admin/users/$userId/edit'
     | '/admin/calendar/$id/'
     | '/admin/users/$userId/'
@@ -337,6 +349,7 @@ export interface RootRouteChildren {
   SponsorsIndexRoute: typeof SponsorsIndexRoute
   TeamIndexRoute: typeof TeamIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  CalendarIdIndexRoute: typeof CalendarIdIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -467,6 +480,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminGamesRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/calendar/$id/': {
+      id: '/calendar/$id/'
+      path: '/calendar/$id'
+      fullPath: '/calendar/$id/'
+      preLoaderRoute: typeof CalendarIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/users/': {
       id: '/admin/users/'
       path: '/users'
@@ -588,6 +608,7 @@ const rootRouteChildren: RootRouteChildren = {
   SponsorsIndexRoute: SponsorsIndexRoute,
   TeamIndexRoute: TeamIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  CalendarIdIndexRoute: CalendarIdIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
