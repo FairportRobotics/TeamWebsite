@@ -46,7 +46,7 @@ export const seedCalendar = [
   {
     title: "Team Picnic",
     description: ["Let's get together and have some food."],
-    location: "VA",
+    location: "VFW @ 300 Macedon Center Rd, Fairport, NY 14450",
     visibleTo: ["students", "mentors", "parents"],
     informationLink: null,
     signupLink: "https://www.signupgenius.com/go/10C0A4AA5A92BA2F4C43-63860749-team",
@@ -129,6 +129,9 @@ export const seedCalendar = [
     location: "Fairport Village",
     visibleTo: ["everyone"],
     informationLink: "https://www.fairportcanaldays.com/canal-days/",
+    signupLink:
+      "https://docs.google.com/document/d/1zyqPueBU-cLDkouemeDWvjXCspJA4boGk3WCFClHgoc/edit?tab=t.0",
+    signupLinkVisibleTo: ["mentors", "students", "parents"],
     dates: [
       {
         startAt: new Date("2026-06-06T08:00:00"),
@@ -147,7 +150,7 @@ export const seedCalendar = [
     ],
     location: "Minerva Deland",
     visibleTo: ["mentors"],
-    informationLink: "https://www.fairportcanaldays.com/canal-days/",
+    informationLink: null,
     signupLink: null,
     signupLinkVisibleTo: null,
     dates: [

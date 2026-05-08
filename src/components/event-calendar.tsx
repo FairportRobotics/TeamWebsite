@@ -12,8 +12,8 @@ import {
   subMonths,
 } from "date-fns";
 import { enUS } from "date-fns/locale";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useState } from "react";
+import { ChevronLeft, ChevronRight, Ellipsis } from "lucide-react";
+import { useState, type ReactNode } from "react";
 import { Card } from "./ui/card";
 
 export interface CalendarDay {
@@ -29,6 +29,24 @@ interface CalendarProps {
   initialMonth: Date;
   events: CalendarListItem[];
   onDateSelect?: (date: Date) => void;
+}
+
+function getDateRangeString(startDate: Date, endDate: Date) {
+  // If start and end dates are the same, we do not need to repeate the date portion.
+  if (isSameDay(startDate, endDate)) {
+    return [
+      `${format(startDate, "M/d/yy")}`,
+      `${format(startDate, "h:MMaaaaa")}`,
+      `${format(endDate, "h:MMaaaaa")}`,
+    ];
+  } else {
+    return [
+      `${format(startDate, "M/d/yy")}`,
+      `${format(startDate, "h:MMaaaaa")}`,
+      `${format(endDate, "M/d/yy")}`,
+      `${format(endDate, "h:MMaaaaa")}`,
+    ];
+  }
 }
 
 export function buildCalendarData(
@@ -81,24 +99,6 @@ export function EventCalendar({ initialMonth, events, onDateSelect }: CalendarPr
 
   const prevMonth = () => setCurrentDate((d) => subMonths(d, 1));
   const nextMonth = () => setCurrentDate((d) => addMonths(d, 1));
-
-  function getDateRangeString(startDate: Date, endDate: Date) {
-    // If start and end dates are the same, we do not need to repeate the date portion.
-    if (isSameDay(startDate, endDate)) {
-      return [
-        `${format(startDate, "M/d/yy")}`,
-        `${format(startDate, "h:MMaaaaa")}`,
-        `${format(endDate, "h:MMaaaaa")}`,
-      ];
-    } else {
-      return [
-        `${format(startDate, "M/d/yy")}`,
-        `${format(startDate, "h:MMaaaaa")}`,
-        `${format(endDate, "M/d/yy")}`,
-        `${format(endDate, "h:MMaaaaa")}`,
-      ];
-    }
-  }
 
   return (
     <Card>
@@ -158,74 +158,16 @@ export function EventCalendar({ initialMonth, events, onDateSelect }: CalendarPr
                   data-date={format(day.date, "yyyy-MM-dd")}
                 >
                   <span
-                    className={`text-sm font-medium w-full text-center ${isSameDay(day.date, new Date()) ? "bg-blue-900" : ""}`}
+                    className={`text-sm font-medium w-full ${isSameDay(day.date, new Date()) ? "bg-blue-900" : ""}`}
                   >
                     {day.day}
                   </span>
 
                   {/* Events */}
                   <div className="mt-1 w-full flex flex-col gap-0.5">
-                    {day.events.map((event) => {
-                      // Cache per event: called exactly once per render cycle per item
-                      const dateParts = getDateRangeString(event.startAt, event.endAt);
-
-                      return (
-                        <>
-                          <div
-                            key={event.id}
-                            className="px-1 py-0.5 bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 rounded truncate font-medium"
-                            title={`${event.title}${event.startAt ? `(${event.startAt.toLocaleTimeString()})` : ""}`}
-                          >
-                            {event.title}
-                            <div className="flex flex-row items-center text-xs">
-                              <span className="w-full block opacity-75">
-                                {dateParts.length === 3 ? (
-                                  <div className="flex flex-row items-center justify-between">
-                                    <div>{dateParts[0]}</div>
-                                    <div>
-                                      {dateParts[1]} - {dateParts[2]}
-                                    </div>
-                                  </div>
-                                ) : (
-                                  <>
-                                    <div>
-                                      {dateParts[0]} {dateParts[1]}
-                                    </div>
-                                    <div>
-                                      {dateParts[2]} {dateParts[3]}
-                                    </div>
-                                  </>
-                                )}
-                              </span>
-                            </div>
-                            <div className="flex flex-row justify-between mt-2 text-xs">
-                              <div className="">
-                                {event.informationLink && (
-                                  <a
-                                    href={event.informationLink}
-                                    target="_blank"
-                                    className="hover:underline"
-                                  >
-                                    Details
-                                  </a>
-                                )}
-                              </div>
-                              <div className="">
-                                {event.signupLink && (
-                                  <a
-                                    href={event.signupLink}
-                                    target="_blank"
-                                    className="hover:underline"
-                                  >
-                                    Signup
-                                  </a>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        </>
-                      );
-                    })}
+                    {day.events.map((event) => (
+                      <CalendarItem item={event} key={event.id} />
+                    ))}
                   </div>
                 </div>
               ))}
@@ -234,5 +176,85 @@ export function EventCalendar({ initialMonth, events, onDateSelect }: CalendarPr
         </div>
       </div>
     </Card>
+  );
+}
+
+function CalendarDay() {
+  return <></>;
+}
+
+/**
+ * Emits a single Calendar event.
+ * @param {item} CalendarListItem
+ * @returns DOM representing the basics of a Calendar event.
+ */
+function CalendarItem({ item }: { item: CalendarListItem }): ReactNode {
+  const [state, setState] = useState<"expanded" | "collapsed">("collapsed");
+  const dateParts = getDateRangeString(item.startAt, item.endAt);
+
+  function toggleState() {
+    setState((prev) => (prev === "expanded" ? "collapsed" : "expanded"));
+  }
+
+  return (
+    <div className="border border-amber-600 rounded-sm overflow-hidden">
+      <div className="flex flex-row items-center justify-between bg-amber-600 p-1">
+        <div className="line-clamp-1 font-semibold">{item.title}</div>
+        <div>
+          <Ellipsis onClick={() => toggleState()} />
+        </div>
+      </div>
+
+      {state === "expanded" && (
+        <div className="p-1">
+          {item.location && (
+            <div className="line-clamp-1 text-sm text-muted">@ {item.location}</div>
+          )}
+
+          {/* Dates */}
+          <div className="text-sm text-muted mt-2">
+            {dateParts.length === 3 ? (
+              <div className="flex flex-row items-center justify-between">
+                <div>{dateParts[0]}</div>
+                <div>
+                  {dateParts[1]} - {dateParts[2]}
+                </div>
+              </div>
+            ) : (
+              <>
+                <div>
+                  {dateParts[0]} {dateParts[1]}
+                </div>
+                <div>
+                  {dateParts[2]} {dateParts[3]}
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* Information and signup links */}
+          <div className="flex flex-row items-center justify-between">
+            <div>
+              {item.informationLink && (
+                <div>
+                  <a href={item.informationLink} target="_blank" className="underline">
+                    Info
+                  </a>
+                </div>
+              )}
+            </div>
+            <div>
+              {item.signupLink && (
+                <div>
+                  <a href={item.signupLink} target="_blank" className="underline">
+                    Signup
+                  </a>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
