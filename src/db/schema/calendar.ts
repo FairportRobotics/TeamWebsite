@@ -61,12 +61,12 @@ export const calendarDateRelations = relations(calendarTable, ({ many }) => ({
   dates: many(calendarDates),
 }));
 
-// export const eventDatesRelations = relations(calendarDates, ({ one }) => ({
-//   event: one(calendarTable, {
-//     fields: [calendarDates.calendarId],
-//     references: [calendarTable.id],
-//   }),
-// }));
+export const eventDatesRelations = relations(calendarDates, ({ one }) => ({
+  event: one(calendarTable, {
+    fields: [calendarDates.calendarId],
+    references: [calendarTable.id],
+  }),
+}));
 
 // export const userCalendarCreatedRelations = relations(calendarTable, ({ one }) => ({
 //   user: one(user, {

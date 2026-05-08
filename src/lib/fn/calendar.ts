@@ -168,7 +168,7 @@ export const seedCalendarFn = createServerFn()
           s.dates.forEach(async (d) => {
             await tx.insert(calendarDates).values({
               calendarId: id,
-              startAt: d.endAt,
+              startAt: d.startAt,
               endAt: d.endAt,
             });
           });

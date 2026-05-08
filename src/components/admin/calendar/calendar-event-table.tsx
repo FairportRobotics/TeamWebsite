@@ -9,6 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { CalendarListForAdminItem } from "@/lib/fn/calendar";
+import { getDateRangeParts } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
 import {
   flexRender,
@@ -64,39 +65,21 @@ export function CalendarEventTable({
       },
     },
     {
-      accessorKey: "startAt",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            From
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
+      accessorKey: "dates",
+      header: "Dates",
       cell: ({ row }) => {
-        const value = row.original.startAt;
-        return <div>{value.toLocaleString()}</div>;
-      },
-    },
-    {
-      accessorKey: "endAt",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Through
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => {
-        const value = row.original.endAt;
-        return <div>{value.toLocaleString()}</div>;
+        const dates = row.original.dates;
+        return dates.map((d) => {
+          const parts = getDateRangeParts(d.startAt, d.endAt);
+          if (parts.length === 3) {
+            return (
+              <div key={d.id}>
+                {parts[0]}: {parts[1]} - {parts[2]}
+              </div>
+            );
+          } else {
+          }
+        });
       },
     },
     {
@@ -117,7 +100,7 @@ export function CalendarEventTable({
     },
     {
       accessorKey: "id",
-      header: ({ column }) => {
+      header: () => {
         return <div className="text-right">Actions</div>;
       },
       cell: ({ row }) => {
