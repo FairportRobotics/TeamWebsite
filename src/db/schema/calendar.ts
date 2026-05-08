@@ -12,9 +12,6 @@ export const visibleEnum = pgEnum("calendar_visible", [
 
 export const calendarTable = pgTable("calendar", {
   id: uuid("id").primaryKey().defaultRandom(),
-  // rootId: uuid("root_id").references((): AnyPgColumn => calendarTable.id), // Links to original version
-  // parentId: uuid("parent_id").references((): AnyPgColumn => calendarTable.id), // Links to previous version
-  //version: integer("version").notNull().default(1),
 
   status: statusEnum("status").notNull().default("draft"),
   visibleTo: visibleEnum("visible_to").array().default(["everyone"]),

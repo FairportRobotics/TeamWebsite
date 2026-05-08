@@ -10,9 +10,14 @@ import { z } from "zod";
 import { assertAuthenticatedFn } from "../auth/server";
 import { authenticatedMiddleware } from "../middleware/authenticatedMiddleware";
 
+const calendarIdSchema = z.object({
+  id: z.string(),
+});
+
 // TODO: Add support for optional date filtering.
-export type CalendarListItem = Awaited<ReturnType<typeof getCalendarListFn>>[0];
-export const getCalendarListFn = createServerFn().handler(async () => {
+// TODO: Add support for filtering by audience.
+export type CalendarListItem = Awaited<ReturnType<typeof getPublishedCalendarItemsFn>>[0];
+export const getPublishedCalendarItemsFn = createServerFn().handler(async () => {
   const results = db.select().from(calendarTable).where(eq(calendarTable.status, "published"));
   return results;
 });
@@ -55,9 +60,43 @@ export const getCalendarListForAdminFn = createServerFn()
     return results;
   });
 
-const calendarIdSchema = z.object({
-  id: z.string(),
-});
+export type CalendarListDetailItem = Awaited<ReturnType<typeof getCalendarListDetailsFn>>;
+export const getCalendarListDetailsFn = createServerFn()
+  .middleware([authenticatedMiddleware])
+  .inputValidator(zodValidator(calendarIdSchema))
+  .handler(async ({ data }) => {
+    const createdByUser = alias(user, "createdByUser");
+    const updatedByUser = alias(user, "updatedByUser");
+
+    const results = await db
+      .select({
+        id: calendarTable.id,
+        status: calendarTable.status,
+        visibleTo: calendarTable.visibleTo,
+        title: calendarTable.title,
+        description: calendarTable.description,
+        location: calendarTable.location,
+        startAt: calendarTable.startAt,
+        endAt: calendarTable.endAt,
+        informationLink: calendarTable.informationLink,
+        signupLink: calendarTable.signupLink,
+        signupLinkVisibleTo: calendarTable.signupLinkVisibleTo,
+
+        createdAt: calendarTable.createdAt,
+        createdBy: calendarTable.createdBy,
+        createdByName: createdByUser.name,
+
+        updatedBy: calendarTable.updatedBy,
+        updatedAt: calendarTable.updatedAt,
+        updatedByName: updatedByUser.name,
+      })
+      .from(calendarTable)
+      .where(eq(calendarTable.id, data.id))
+      .innerJoin(createdByUser, eq(createdByUser.id, calendarTable.createdBy))
+      .innerJoin(updatedByUser, eq(updatedByUser.id, calendarTable.updatedBy))
+      .then((res) => res[0] || null);
+    return results;
+  });
 
 export const requestApprovalCalendarFn = createServerFn()
   .middleware([authenticatedMiddleware])

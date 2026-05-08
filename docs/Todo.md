@@ -11,3 +11,8 @@
   - [-] Colors
   - [-] Typefaces
   - [-] Style standards (button and text sizes for example)
+- [-] Add a means of indicating that you are interested in joining the team. A signup for students and mentors.
+- [-] Make sure 1787 cart changes are shared with the Team.
+- [-]
+- [-]
+-

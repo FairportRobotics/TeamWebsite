@@ -1,4 +1,3 @@
-import { relations } from "drizzle-orm";
 import { boolean, index, integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { user } from "./better-auth";
 
@@ -75,11 +74,6 @@ export const sponsorTable = pgTable(
   },
   (table) => [index("sponsor_name_idx").on(table.name)],
 );
-
-// Define relationships.
-export const gameRelations = relations(gameTable, ({ many }) => ({
-  robots: many(robotTable),
-}));
 
 // Export types for select queries.
 export type GameSelect = typeof gameTable.$inferSelect;
