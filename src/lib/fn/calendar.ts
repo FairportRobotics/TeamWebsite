@@ -18,7 +18,26 @@ const calendarIdSchema = z.object({
 // TODO: Add support for filtering by audience.
 export type CalendarListItem = Awaited<ReturnType<typeof getPublishedCalendarItemsFn>>[0];
 export const getPublishedCalendarItemsFn = createServerFn().handler(async () => {
-  const results = db.select().from(calendarTable).where(eq(calendarTable.status, "published"));
+  const results = await db
+    .select({
+      id: calendarTable.id,
+      status: calendarTable.status,
+      visibleTo: calendarTable.visibleTo,
+      title: calendarTable.title,
+      description: calendarTable.description,
+      location: calendarTable.location,
+      informationLink: calendarTable.informationLink,
+      signupLink: calendarTable.signupLink,
+      signupLinkVisibleTo: calendarTable.signupLinkVisibleTo,
+
+      startAt: calendarDates.startAt,
+      endAt: calendarDates.endAt,
+    })
+    .from(calendarTable)
+    .innerJoin(calendarDates, eq(calendarTable.id, calendarDates.calendarId))
+    .where(eq(calendarTable.status, "published"))
+    .orderBy(calendarDates.startAt);
+
   return results;
 });
 
@@ -28,6 +47,7 @@ export type CalendarListForAdminItem = Awaited<ReturnType<typeof getCalendarList
 export const getCalendarListForAdminFn = createServerFn()
   .middleware([authenticatedMiddleware])
   .handler(async () => {
+    // Query the calendar table and include the child dates.
     const results = await db.query.calendarTable.findMany({
       with: {
         dates: true,
