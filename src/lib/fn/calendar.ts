@@ -1,6 +1,6 @@
 // prettier-ignore
 import { db } from "@/db";
-import { calendarTable, user } from "@/db/schema";
+import { calendarDates, calendarTable, user } from "@/db/schema";
 import { seedCalendar } from "@/db/seed/calendar";
 import { createServerFn } from "@tanstack/react-start";
 import { zodValidator } from "@tanstack/zod-adapter";
@@ -28,34 +28,11 @@ export type CalendarListForAdminItem = Awaited<ReturnType<typeof getCalendarList
 export const getCalendarListForAdminFn = createServerFn()
   .middleware([authenticatedMiddleware])
   .handler(async () => {
-    const createdByUser = alias(user, "createdByUser");
-    const updatedByUser = alias(user, "updatedByUser");
-
-    const results = await db
-      .select({
-        id: calendarTable.id,
-        status: calendarTable.status,
-        visibleTo: calendarTable.visibleTo,
-        title: calendarTable.title,
-        description: calendarTable.description,
-        location: calendarTable.location,
-        startAt: calendarTable.startAt,
-        endAt: calendarTable.endAt,
-        informationLink: calendarTable.informationLink,
-        signupLink: calendarTable.signupLink,
-        signupLinkVisibleTo: calendarTable.signupLinkVisibleTo,
-
-        createdAt: calendarTable.createdAt,
-        createdBy: calendarTable.createdBy,
-        createdByName: createdByUser.name,
-
-        updatedBy: calendarTable.updatedBy,
-        updatedAt: calendarTable.updatedAt,
-        updatedByName: updatedByUser.name,
-      })
-      .from(calendarTable)
-      .innerJoin(createdByUser, eq(createdByUser.id, calendarTable.createdBy))
-      .innerJoin(updatedByUser, eq(updatedByUser.id, calendarTable.updatedBy));
+    const results = await db.query.calendarTable.findMany({
+      with: {
+        dates: true,
+      },
+    });
 
     return results;
   });
@@ -76,8 +53,6 @@ export const getCalendarListDetailsFn = createServerFn()
         title: calendarTable.title,
         description: calendarTable.description,
         location: calendarTable.location,
-        startAt: calendarTable.startAt,
-        endAt: calendarTable.endAt,
         informationLink: calendarTable.informationLink,
         signupLink: calendarTable.signupLink,
         signupLinkVisibleTo: calendarTable.signupLinkVisibleTo,
@@ -161,169 +136,42 @@ export const archiveCalendarFn = createServerFn()
     return true;
   });
 
-// export async function approveItem(itemIds: string[], reviewerId: string) {
-//   return db.transaction(async (tx) => {
-//     await tx
-//       .update(eventsTable)
-//       .set({ status: "published", approvedBy: reviewerId, approvedAt: new Date() })
-//       .where(and(eq(eventsTable.status, "pending_review"), inArray(eventsTable.id, itemIds)));
-//   });
-// }
-
-// export async function getPublishedWithDrafts(rootId: string) {
-//   return db
-//     .select()
-//     .from(eventsTable)
-//     .where(eq(eventsTable.rootId, rootId))
-//     .orderBy(eventsTable.version);
-// }
-
-// /******************************************************************************
-//  * Handle retrieving Events and Event Drafts
-//  *****************************************************************************/
-// export const getPublishedEventsFn = createServerFn()
-//   .middleware([authenticatedMiddleware])
-//   .handler(async () => {
-//     // TODO: Filter events based on date.
-//     // TODO: Filter events based on visibility.
-//     const results = await db.select().from(eventsTable).where(eq(eventsTable.status, "published"));
-//     return results;
-//   });
-
-// export type EventsPublishedItem = Awaited<ReturnType<typeof getPublishedEventsFn>>[0];
-
-// /******************************************************************************
-//  * Handle retrieving Events and Event Drafts
-//  *****************************************************************************/
-// export const getEventsForAdminFn = createServerFn()
-//   .middleware([authenticatedMiddleware])
-//   .handler(async () => {
-//     const history = alias(eventsTable, "drafts");
-
-//     const results = await db
-//       .select({
-//         id: eventsTable.id,
-//         version: eventsTable.version,
-//         status: eventsTable.status,
-//         title: eventsTable.title,
-//         description: eventsTable.description,
-//         startAt: eventsTable.startAt,
-//         endAt: eventsTable.endAt,
-//         visibleTo: eventsTable.visibleTo,
-//         informationLink: eventsTable.informationLink,
-//         signupLink: eventsTable.signupLink,
-//         signupLinkVisibleTo: eventsTable.signupLinkVisibleTo,
-//         createdAt: eventsTable.createdAt,
-//         createdBy: eventsTable.createdBy,
-//         approvedAt: eventsTable.approvedAt,
-//         approvedBy: eventsTable.approvedBy,
-//         updatedAt: eventsTable.updatedAt,
-//         history: history,
-//       })
-//       .from(eventsTable)
-//       .where(isNull(eventsTable.parentId))
-//       .leftJoin(history, eq(history.parentId, eventsTable.id));
-
-//     return results;
-//   });
-
-// export type EventsForAdminItem = Awaited<ReturnType<typeof getEventsForAdminFn>>[0];
-
-// /******************************************************************************
-//  * Handle creating Event Drafts
-//  *****************************************************************************/
-// const EventInputSchema = z.object({
-//   title: z.string(),
-//   description: z.array(z.string()),
-//   startAt: z.coerce.date(),
-//   endAt: z.coerce.date(),
-//   visibleTo: z.enum(["all", "team_members", "team_members_and_parents"]),
-
-//   informationLink: z.url().optional(),
-//   signupLink: z.url().optional(),
-//   signupLinkVisibleTo: z.enum(["all", "team_members", "team_members_and_parents"]).optional(),
-// });
-
-// export type EventInsertProps = z.infer<typeof EventInputSchema>;
-
-// export const createEventDraftFn = createServerFn()
-//   .middleware([authenticatedMiddleware])
-//   .inputValidator(zodValidator(EventInputSchema))
-//   .handler(async ({ data, context }) => {
-//     // TODO: Make sure the caller has permission to do this.
-
-//     // Create the Event and return the new result.
-//     const result = await db
-//       .insert(eventsTable)
-//       .values([
-//         {
-//           id: crypto.randomUUID(),
-//           rootId: null,
-//           parentId: null,
-//           version: 1,
-//           status: "draft",
-//           title: data.title,
-//           description: data.description,
-//           startAt: data.startAt,
-//           endAt: data.endAt,
-//           visibleTo: data.visibleTo,
-//           informationLink: data.informationLink,
-//           signupLink: data.signupLink,
-//           signupLinkVisibleTo: data.signupLinkVisibleTo,
-//           createdBy: context.user.id,
-//         },
-//       ])
-//       .returning();
-
-//     return result;
-//   });
-
-// /******************************************************************************
-//  * Handle updating Events and Event Drafts
-//  *****************************************************************************/
-// export const updateEventFn = createServerFn()
-//   .middleware([authenticatedMiddleware])
-//   .handler(async ({ data }) => {
-//     console.log("");
-//   });
-
-// /******************************************************************************
-//  * Handle approving Event Drafts
-//  *****************************************************************************/
-// export const approveEventFn = createServerFn()
-//   .middleware([authenticatedMiddleware])
-//   .handler(async ({ data }) => {
-//     console.log("");
-//   });
-
 // TODO: Remove when live.
 export const seedCalendarFn = createServerFn()
   .middleware([authenticatedMiddleware])
   .handler(async ({ context }) => {
-    if (!context.user || context.user === undefined) return;
-
-    const currentUserId = context.user.id;
+    const currentUserId = context!.user!.id;
     seedCalendar.forEach(async (s) => {
       console.log("🌱 Seeding Calendar", s.title);
 
       try {
-        let id = crypto.randomUUID();
+        // Declare a UUID we can use for the calendar and the date children.
+        const id = crypto.randomUUID();
 
-        await db.insert(calendarTable).values({
-          id: id,
-          title: s.title,
-          description: s.description,
-          visibleTo: s.visibleTo,
-          location: s.location,
-          startAt: s.startAt,
-          endAt: s.endAt,
+        // Insert records in a transaction so we can rollback if anything goes sideways.
+        await db.transaction(async (tx) => {
+          await tx.insert(calendarTable).values({
+            id: id,
+            title: s.title,
+            description: s.description,
+            visibleTo: s.visibleTo,
+            location: s.location,
 
-          informationLink: s.informationLink,
-          signupLink: s.signupLink,
-          signupLinkVisibleTo: s.signupLinkVisibleTo,
+            informationLink: s.informationLink,
+            signupLink: s.signupLink,
+            signupLinkVisibleTo: s.signupLinkVisibleTo,
 
-          createdBy: currentUserId,
-          updatedBy: currentUserId,
+            createdBy: currentUserId,
+            updatedBy: currentUserId,
+          });
+
+          s.dates.forEach(async (d) => {
+            await tx.insert(calendarDates).values({
+              calendarId: id,
+              startAt: d.endAt,
+              endAt: d.endAt,
+            });
+          });
         });
       } catch (error) {
         console.log("⚠️ Failed to seed calendar item", s.title);
