@@ -16,6 +16,9 @@ Better-Auth provides APIS and hooks for us to code all the functiions necessary 
 
 Drizzle is the ORM (Object Relational Mapper) that allows our application to communicate with the database.
 
+[date-fns](https://date-fns.org/v4.1.0/docs/format)
+Date processing and formatting.
+
 # FAQ
 
 ### Install dependencies
@@ -71,6 +74,8 @@ Drizzle Studio is a useful UI for interacting with the database configured for u
 ```shell
 pnpm run db:studio
 ```
+
+### Apply a shadcn preset to apply colors and other styles.
 
 ```shell
 pnpm dlx shadcn@latest apply --preset b6WK0xowQq
