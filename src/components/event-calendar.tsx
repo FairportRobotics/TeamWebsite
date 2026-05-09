@@ -1,4 +1,5 @@
 import type { CalendarListItem } from "@/lib/fn/calendar";
+import { Link } from "@tanstack/react-router";
 import {
   addMonths,
   eachDayOfInterval,
@@ -12,9 +13,10 @@ import {
   subMonths,
 } from "date-fns";
 import { enUS } from "date-fns/locale";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useState } from "react";
+import { ChevronLeft, ChevronRight, Ellipsis } from "lucide-react";
+import { useState, type ReactNode } from "react";
 import { Card } from "./ui/card";
+import { Separator } from "./ui/separator";
 
 export interface CalendarDay {
   date: Date;
@@ -29,6 +31,24 @@ interface CalendarProps {
   initialMonth: Date;
   events: CalendarListItem[];
   onDateSelect?: (date: Date) => void;
+}
+
+function getDateRangeString(startDate: Date, endDate: Date) {
+  // If start and end dates are the same, we do not need to repeate the date portion.
+  if (isSameDay(startDate, endDate)) {
+    return [
+      `${format(startDate, "M/d/yy")}`,
+      `${format(startDate, "h:MMaaaaa")}`,
+      `${format(endDate, "h:MMaaaaa")}`,
+    ];
+  } else {
+    return [
+      `${format(startDate, "M/d/yy")}`,
+      `${format(startDate, "h:MMaaaaa")}`,
+      `${format(endDate, "M/d/yy")}`,
+      `${format(endDate, "h:MMaaaaa")}`,
+    ];
+  }
 }
 
 export function buildCalendarData(
@@ -82,68 +102,91 @@ export function EventCalendar({ initialMonth, events, onDateSelect }: CalendarPr
   const prevMonth = () => setCurrentDate((d) => subMonths(d, 1));
   const nextMonth = () => setCurrentDate((d) => addMonths(d, 1));
 
-  function getDateRangeString(startDate: Date, endDate: Date) {
-    // If start and end dates are the same, we do not need to repeate the date portion.
-    if (isSameDay(startDate, endDate)) {
-      return [
-        `${format(startDate, "M/d/yy")}`,
-        `${format(startDate, "h:MMaaaaa")}`,
-        `${format(endDate, "h:MMaaaaa")}`,
-      ];
-    } else {
-      return [
-        `${format(startDate, "M/d/yy")}`,
-        `${format(startDate, "h:MMaaaaa")}`,
-        `${format(endDate, "M/d/yy")}`,
-        `${format(endDate, "h:MMaaaaa")}`,
-      ];
-    }
-  }
-
   return (
     <Card>
-      <div className="">
-        {/* Month Navigation Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-          <button
-            onClick={prevMonth}
-            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
-            aria-label="Previous month"
-          >
-            <ChevronLeft />
-          </button>
-          <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
-            {format(currentDate, "MMMM yyyy")}
-          </h2>
-          <button
-            onClick={nextMonth}
-            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
-            aria-label="Next month"
-          >
-            <ChevronRight />
-          </button>
-        </div>
+      <MonthHeader currentDate={currentDate} prevMonth={prevMonth} nextMonth={nextMonth} />
+      <CalendarGrid weekDays={weekDays} calendarData={calendarData} />
+    </Card>
+  );
+}
 
-        {/* Calendar Grid */}
-        <div className="grid grid-cols-7 gap-px bg-gray-200 dark:bg-gray-800">
-          {/* Weekday Headers */}
-          {weekDays.map((day) => (
-            <div
-              key={day}
-              className="bg-gray-50 dark:bg-gray-800 text-center text-xs font-medium text-gray-500 dark:text-gray-400 py-2"
-            >
-              {day}
-            </div>
-          ))}
+function MonthHeader({
+  currentDate,
+  prevMonth,
+  nextMonth,
+}: {
+  currentDate: Date;
+  prevMonth: () => void;
+  nextMonth: () => void;
+}) {
+  return (
+    <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+      <button
+        onClick={prevMonth}
+        className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+        aria-label="Previous month"
+      >
+        <ChevronLeft />
+      </button>
+      <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
+        {format(currentDate, "MMMM yyyy")}
+      </h2>
+      <button
+        onClick={nextMonth}
+        className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+        aria-label="Next month"
+      >
+        <ChevronRight />
+      </button>
+    </div>
+  );
+}
 
-          {/* Days */}
-          {calendarData.map((week, weekIdx) => (
-            <div key={weekIdx} className="contents">
-              {week.map((day, dayIdx) => (
-                <div
-                  key={dayIdx}
-                  onClick={() => onDateSelect?.(day.date)}
-                  className={`
+function CalendarGrid({
+  weekDays,
+  calendarData,
+}: {
+  weekDays: string[];
+  calendarData: CalendarDay[][];
+}) {
+  return (
+    <div className="grid grid-cols-7 gap-px">
+      {/* Weekday Headers */}
+      {weekDays.map((day) => (
+        <WeekdayHeader day={day} />
+      ))}
+
+      {/* Days */}
+      {calendarData.map((week, weekIndex) => (
+        <CalendarWeek week={week} weekIndex={weekIndex} />
+      ))}
+    </div>
+  );
+}
+
+function WeekdayHeader({ day }: { day: string }) {
+  return (
+    <div key={day} className=" dark:bg-gray-800 text-center text-xs font-medium text-gray-500 py-2">
+      {day}
+    </div>
+  );
+}
+
+function CalendarWeek({ week, weekIndex }: { week: CalendarDay[]; weekIndex: number }): ReactNode {
+  return (
+    <div key={weekIndex} className="contents">
+      {week.map((day, dayIndex) => (
+        <CalendarDay day={day} dayIndex={dayIndex} />
+      ))}
+    </div>
+  );
+}
+
+function CalendarDay({ day, dayIndex }: { day: CalendarDay; dayIndex: number }) {
+  return (
+    <div
+      key={dayIndex}
+      className={`
                   focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:ring-offset-1 dark:focus:ring-offset-gray-900
                   relative flex flex-col items-center justify-start p-2 min-h-16 cursor-pointer
                   select-none transition-colors duration-150
@@ -155,84 +198,105 @@ export function EventCalendar({ initialMonth, events, onDateSelect }: CalendarPr
                   ${day.events.length > 0 ? "ring-1 ring-inset ring-blue-200 dark:ring-blue-700" : ""}
                   ${isSameDay(day.date, new Date()) ? "border-orange-400" : ""}
                 `}
-                  data-date={format(day.date, "yyyy-MM-dd")}
-                >
-                  <span
-                    className={`text-sm font-medium w-full text-center ${isSameDay(day.date, new Date()) ? "bg-blue-900" : ""}`}
-                  >
-                    {day.day}
-                  </span>
+      data-date={format(day.date, "yyyy-MM-dd")}
+    >
+      <span
+        className={`text-sm font-medium w-full ${isSameDay(day.date, new Date()) ? "bg-blue-900" : ""}`}
+      >
+        {day.day}
+      </span>
 
-                  {/* Events */}
-                  <div className="mt-1 w-full flex flex-col gap-0.5">
-                    {day.events.map((event) => {
-                      // Cache per event: called exactly once per render cycle per item
-                      const dateParts = getDateRangeString(event.startAt, event.endAt);
+      {/* Events */}
+      <div className="mt-1 w-full flex flex-col gap-0.5">
+        {day.events.map((event) => (
+          <CalendarItem item={event} canSignup={false} key={event.id} />
+        ))}
+      </div>
+    </div>
+  );
+}
 
-                      return (
-                        <>
-                          <div
-                            key={event.id}
-                            className="px-1 py-0.5 bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 rounded truncate font-medium"
-                            title={`${event.title}${event.startAt ? `(${event.startAt.toLocaleTimeString()})` : ""}`}
-                          >
-                            {event.title}
-                            <div className="flex flex-row items-center text-xs">
-                              <span className="w-full block opacity-75">
-                                {dateParts.length === 3 ? (
-                                  <div className="flex flex-row items-center justify-between">
-                                    <div>{dateParts[0]}</div>
-                                    <div>
-                                      {dateParts[1]} - {dateParts[2]}
-                                    </div>
-                                  </div>
-                                ) : (
-                                  <>
-                                    <div>
-                                      {dateParts[0]} {dateParts[1]}
-                                    </div>
-                                    <div>
-                                      {dateParts[2]} {dateParts[3]}
-                                    </div>
-                                  </>
-                                )}
-                              </span>
-                            </div>
-                            <div className="flex flex-row justify-between mt-2 text-xs">
-                              <div className="">
-                                {event.informationLink && (
-                                  <a
-                                    href={event.informationLink}
-                                    target="_blank"
-                                    className="hover:underline"
-                                  >
-                                    Details
-                                  </a>
-                                )}
-                              </div>
-                              <div className="">
-                                {event.signupLink && (
-                                  <a
-                                    href={event.signupLink}
-                                    target="_blank"
-                                    className="hover:underline"
-                                  >
-                                    Signup
-                                  </a>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        </>
-                      );
-                    })}
-                  </div>
-                </div>
-              ))}
-            </div>
-          ))}
+function CalendarItem({
+  item,
+  canSignup,
+}: {
+  item: CalendarListItem;
+  canSignup: boolean;
+}): ReactNode {
+  const [state, setState] = useState<"expanded" | "collapsed">("collapsed");
+  const dateParts = getDateRangeString(item.startAt, item.endAt);
+
+  function toggleState() {
+    setState((prev) => (prev === "expanded" ? "collapsed" : "expanded"));
+  }
+
+  return (
+    <div className="border border-amber-600 rounded-sm overflow-hidden">
+      <div className="flex flex-row items-center justify-between bg-amber-600 p-1">
+        <div className="line-clamp-1 font-semibold">{item.title}</div>
+        <div>
+          <Ellipsis onClick={() => toggleState()} />
         </div>
       </div>
-    </Card>
+
+      {state === "expanded" && (
+        <div className="p-1">
+          {item.location && (
+            <div className="line-clamp-1 text-sm">
+              <span className="text-muted">at</span> {item.location}
+            </div>
+          )}
+
+          {/* Dates */}
+          <div className="text-sm mt-2">
+            {dateParts.length === 3 ? (
+              <div className="flex flex-row items-center justify-between">
+                <div>{dateParts[0]}</div>
+                <div>
+                  {dateParts[1]} - {dateParts[2]}
+                </div>
+              </div>
+            ) : (
+              <>
+                <div>
+                  {dateParts[0]} {dateParts[1]}
+                </div>
+                <div>
+                  {dateParts[2]} {dateParts[3]}
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* Information and signup links */}
+          <Separator className="p-0.5 my-2" />
+          <div className="grid grid-cols-3 text-sm">
+            <div>
+              {item.informationLink && (
+                <a href={item.informationLink} target="_blank" className="underline">
+                  Info
+                </a>
+              )}
+            </div>
+            <div>
+              <Link to="/calendar/$id" params={{ id: item.id }} className="underline">
+                Details
+              </Link>
+            </div>
+            <div>
+              {item.signupLink && (
+                <div>
+                  {canSignup && (
+                    <a href={item.signupLink} target="_blank" className="underline">
+                      Signup
+                    </a>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }

@@ -47,6 +47,7 @@ export type Permission = z.infer<typeof PermissionSchema>;
 
 // Define Roles and their names.
 export const Roles = {
+  Everyone: "everyone",
   Admin: "admin",
   EventModerator: "eventModerator",
   GameYearModerator: "gameYearModerator",
@@ -65,6 +66,8 @@ export const RolePermissions: Record<Role, Permission[]> = {
   // inflexible. All we really need to userstand is that in order to use the Admin functions
   // like ban, impersonate and revoke sessions, we just need to assign users to the "admin" role.
   admin: Object.values(Permissions),
+
+  everyone: [],
 
   mentor: [
     Permissions.EventAdminister,

@@ -84,26 +84,26 @@ function RouteComponent() {
 
       <div className="flex flex-col gap-10">
         <PageSectionContainer
-          title="Pending Approval"
-          subTitle={`(${pendingApproval.length} records)`}
-          initialState="expanded"
-        >
-          <CalendarEventTable
-            data={pendingApproval}
-            actionLabel="Approve"
-            onAction={handleApprove}
-          />
-        </PageSectionContainer>
-
-        <PageSectionContainer
           title="Drafts"
           subTitle={`(${drafts.length} records)`}
-          initialState="expanded"
+          initialState="collapsed"
         >
           <CalendarEventTable
             data={drafts}
             actionLabel="Request Approval"
             onAction={handleRequestApproval}
+          />
+        </PageSectionContainer>
+
+        <PageSectionContainer
+          title="Pending Approval"
+          subTitle={`(${pendingApproval.length} records)`}
+          initialState="collapsed"
+        >
+          <CalendarEventTable
+            data={pendingApproval}
+            actionLabel="Approve"
+            onAction={handleApprove}
           />
         </PageSectionContainer>
 

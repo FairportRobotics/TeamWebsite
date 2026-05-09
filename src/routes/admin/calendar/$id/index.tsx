@@ -10,7 +10,7 @@ export const Route = createFileRoute("/admin/calendar/$id/")({
 function RouteComponent() {
   return (
     <div>
-      <BackTo to="/admin/calendar" label="Calendar Items" />
+      <BackTo to="/calendar" label="Calendar" />
       <PageHeader>
         <PageTitle>
           Calendar <span className="text-(--color-destructive)">Details</span>
