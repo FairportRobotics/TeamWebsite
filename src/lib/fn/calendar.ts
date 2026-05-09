@@ -1,12 +1,13 @@
 // prettier-ignore
 import { db } from "@/db";
-import { calendarDates, calendarTable, user } from "@/db/schema";
+import { calendarDates, calendarTable, user, visibleEnum, type VisibleEnumType } from "@/db/schema";
 import { seedCalendar } from "@/db/seed/calendar";
 import { createServerFn } from "@tanstack/react-start";
 import { zodValidator } from "@tanstack/zod-adapter";
-import { eq } from "drizzle-orm";
+import { and, arrayOverlaps, eq } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 import { z } from "zod";
+import { Roles } from "../auth/permissions";
 import { assertAuthenticatedFn } from "../auth/server";
 import { authenticatedMiddleware } from "../middleware/authenticatedMiddleware";
 
@@ -15,31 +16,47 @@ const calendarIdSchema = z.object({
 });
 
 // TODO: Add support for optional date filtering.
-// TODO: Add support for filtering by audience.
 export type CalendarListItem = Awaited<ReturnType<typeof getPublishedCalendarItemsFn>>[0];
-export const getPublishedCalendarItemsFn = createServerFn().handler(async () => {
-  const results = await db
-    .select({
-      id: calendarTable.id,
-      status: calendarTable.status,
-      visibleTo: calendarTable.visibleTo,
-      title: calendarTable.title,
-      description: calendarTable.description,
-      location: calendarTable.location,
-      informationLink: calendarTable.informationLink,
-      signupLink: calendarTable.signupLink,
-      signupLinkVisibleTo: calendarTable.signupLinkVisibleTo,
+export const getPublishedCalendarItemsFn = createServerFn()
+  .middleware([authenticatedMiddleware])
+  .handler(async ({ context }) => {
+    // Default to everyone.
+    let visibleTo: VisibleEnumType[] = [Roles.Everyone];
 
-      startAt: calendarDates.startAt,
-      endAt: calendarDates.endAt,
-    })
-    .from(calendarTable)
-    .innerJoin(calendarDates, eq(calendarTable.id, calendarDates.calendarId))
-    .where(eq(calendarTable.status, "published"))
-    .orderBy(calendarDates.startAt);
+    // Split the user's roles and add the overlapping roles to an array we can pass to the database.
+    if (context.user) {
+      const userRoles = context.user.role.split(",");
+      const commonElements = visibleEnum.enumValues.filter((item) => userRoles.includes(item));
+      visibleTo = [...visibleTo, ...commonElements] as VisibleEnumType[];
+    }
 
-  return results;
-});
+    const results = await db
+      .select({
+        id: calendarTable.id,
+        status: calendarTable.status,
+        visibleTo: calendarTable.visibleTo,
+        title: calendarTable.title,
+        description: calendarTable.description,
+        location: calendarTable.location,
+        informationLink: calendarTable.informationLink,
+        signupLink: calendarTable.signupLink,
+        signupLinkVisibleTo: calendarTable.signupLinkVisibleTo,
+
+        startAt: calendarDates.startAt,
+        endAt: calendarDates.endAt,
+      })
+      .from(calendarTable)
+      .innerJoin(calendarDates, eq(calendarTable.id, calendarDates.calendarId))
+      .where(
+        and(
+          eq(calendarTable.status, "published"),
+          arrayOverlaps(calendarTable.visibleTo, visibleTo),
+        ),
+      )
+      .orderBy(calendarDates.startAt);
+
+    return results;
+  });
 
 // TODO: Add support for optional date filtering.
 // TODO: Restrict with permissions.

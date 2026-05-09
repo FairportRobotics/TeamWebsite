@@ -241,7 +241,11 @@ function CalendarItem({
 
       {state === "expanded" && (
         <div className="p-1">
-          {item.location && <div className="line-clamp-1 text-sm">at {item.location}</div>}
+          {item.location && (
+            <div className="line-clamp-1 text-sm">
+              <span className="text-muted">at</span> {item.location}
+            </div>
+          )}
 
           {/* Dates */}
           <div className="text-sm mt-2">

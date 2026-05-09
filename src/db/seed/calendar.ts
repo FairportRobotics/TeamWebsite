@@ -25,6 +25,7 @@ SignUpGenius sign up form
  
 */
 
+import { Roles } from "@/lib/auth/permissions";
 import type { CalendarWithDatesSelect } from "../schema";
 
 export const seedCalendar = [
@@ -47,10 +48,10 @@ export const seedCalendar = [
     title: "Team Picnic",
     description: ["Let's get together and have some food."],
     location: "VFW @ 300 Macedon Center Rd, Fairport, NY 14450",
-    visibleTo: ["students", "mentors", "parents"],
+    visibleTo: [Roles.Student, Roles.Mentor, Roles.Parent],
     informationLink: null,
     signupLink: "https://www.signupgenius.com/go/10C0A4AA5A92BA2F4C43-63860749-team",
-    signupLinkVisibleTo: ["students", "mentors", "parents"],
+    signupLinkVisibleTo: [Roles.Student, Roles.Mentor, Roles.Parent],
     dates: [
       {
         startAt: new Date("2026-05-17T11:00:00"),
@@ -62,11 +63,11 @@ export const seedCalendar = [
     title: "Chicken BBQ",
     description: ["Our biggest fundraising event of the year!"],
     location: "Fairport Hight School",
-    visibleTo: ["students", "mentors", "parents"],
+    visibleTo: [Roles.Student, Roles.Mentor, Roles.Parent],
     informationLink: null,
     signupLink:
       "https://docs.google.com/document/d/1_PRVoHSkZooYqhKoe5y_CzNP81IDup8ZX0r8gNaCdyE/edit?tab=t.0",
-    signupLinkVisibleTo: ["students", "mentors", "parents"],
+    signupLinkVisibleTo: [Roles.Student, Roles.Mentor, Roles.Parent],
     dates: [
       {
         startAt: new Date("2026-06-18T15:00:00"),
@@ -78,10 +79,10 @@ export const seedCalendar = [
     title: "Summer STEM - Session 1",
     description: ["Shape some minds"],
     location: "Perinton Rec Center",
-    visibleTo: ["students", "mentors", "parents"],
+    visibleTo: [Roles.Student, Roles.Mentor, Roles.Parent],
     informationLink: null,
     signupLink: "https://docs.google.com/document/d/1ywDMMYkyJ2sHhaRnDX1E3wkYxrGx03Q8/edit",
-    signupLinkVisibleTo: ["students", "mentors", "parents"],
+    signupLinkVisibleTo: [Roles.Student, Roles.Mentor, Roles.Parent],
     dates: [
       {
         startAt: new Date("2026-07-15T17:30:00"),
@@ -93,10 +94,10 @@ export const seedCalendar = [
     title: "Summer STEM - Session 2",
     description: ["Shape some minds"],
     location: "Perinton Rec Center",
-    visibleTo: ["students", "mentors", "parents"],
+    visibleTo: [Roles.Student, Roles.Mentor, Roles.Parent],
     informationLink: null,
     signupLink: "https://docs.google.com/document/d/1ywDMMYkyJ2sHhaRnDX1E3wkYxrGx03Q8/edit",
-    signupLinkVisibleTo: ["students", "mentors", "parents"],
+    signupLinkVisibleTo: [Roles.Student, Roles.Mentor, Roles.Parent],
     dates: [
       {
         startAt: new Date("2026-08-11T17:30:00"),
@@ -108,10 +109,10 @@ export const seedCalendar = [
     title: "FLL Info",
     description: ["Shape some minds"],
     location: "Perinton Rec Center",
-    visibleTo: ["students", "mentors", "parents"],
+    visibleTo: [Roles.Student, Roles.Mentor, Roles.Parent],
     informationLink: null,
     signupLink: "https://docs.google.com/document/d/1ywDMMYkyJ2sHhaRnDX1E3wkYxrGx03Q8/edit",
-    signupLinkVisibleTo: ["students", "mentors", "parents"],
+    signupLinkVisibleTo: [Roles.Student, Roles.Mentor, Roles.Parent],
     dates: [
       {
         startAt: new Date("2026-08-16T17:30:00"),
@@ -131,7 +132,7 @@ export const seedCalendar = [
     informationLink: "https://www.fairportcanaldays.com/canal-days/",
     signupLink:
       "https://docs.google.com/document/d/1zyqPueBU-cLDkouemeDWvjXCspJA4boGk3WCFClHgoc/edit?tab=t.0",
-    signupLinkVisibleTo: ["mentors", "students", "parents"],
+    signupLinkVisibleTo: [Roles.Mentor, Roles.Student, Roles.Parent],
     dates: [
       {
         startAt: new Date("2026-06-06T08:00:00"),
@@ -149,7 +150,7 @@ export const seedCalendar = [
       "Mentors - please join us for the end of the year review and discussion on plans for next year.",
     ],
     location: "Minerva Deland",
-    visibleTo: ["mentors"],
+    visibleTo: [Roles.Mentor],
     informationLink: null,
     signupLink: null,
     signupLinkVisibleTo: null,

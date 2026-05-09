@@ -1,23 +1,26 @@
 // drizzle/schema/items.ts
+import { Roles } from "@/lib/auth/permissions";
 import { relations } from "drizzle-orm";
 import { index, pgEnum, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { user } from "../schema";
 import { statusEnum, type InferResultType } from "./_common";
 
-// Define enumbs specific to the Calendar-related tables.
+// Define enums specific to the Calendar-related tables.
 export const visibleEnum = pgEnum("calendar_visible", [
-  "everyone",
-  "students",
-  "mentors",
-  "parents",
+  Roles.Everyone,
+  Roles.Student,
+  Roles.Mentor,
+  Roles.Parent,
 ]);
+
+export type VisibleEnumType = (typeof visibleEnum.enumValues)[number];
 
 // Define table schemas.
 export const calendarTable = pgTable("calendar", {
   id: uuid("id").primaryKey().defaultRandom(),
 
   status: statusEnum("status").notNull().default("draft"),
-  visibleTo: visibleEnum("visible_to").array().default(["everyone"]),
+  visibleTo: visibleEnum("visible_to").array().default([Roles.Everyone]),
 
   title: text("title").notNull(),
   description: text("description").array(),
@@ -28,7 +31,7 @@ export const calendarTable = pgTable("calendar", {
   signupLink: text("signup_link"),
   signupLinkVisibleTo: visibleEnum("signup_link_visible_to")
     .array()
-    .default(["students", "mentors"]),
+    .default([Roles.Student, Roles.Mentor]),
 
   createdAt: timestamp("created_at").defaultNow().notNull(),
   createdBy: text("created_by_user_id")
