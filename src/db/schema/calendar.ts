@@ -1,19 +1,8 @@
 // drizzle/schema/items.ts
 import { Roles } from "@/lib/auth/permissions";
-import { relations } from "drizzle-orm";
-import { index, pgEnum, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { index, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { user } from "../schema";
-import { statusEnum, type InferResultType } from "./_common";
-
-// Define enums specific to the Calendar-related tables.
-export const visibleEnum = pgEnum("calendar_visible", [
-  Roles.Everyone,
-  Roles.Student,
-  Roles.Mentor,
-  Roles.Parent,
-]);
-
-export type VisibleEnumType = (typeof visibleEnum.enumValues)[number];
+import { statusEnum, visibleEnum, type InferResultType } from "./_common";
 
 // Define table schemas.
 export const calendarTable = pgTable("calendar", {
@@ -58,32 +47,6 @@ export const calendarDates = pgTable(
     index("idx_event_dates_range").on(table.startAt, table.endAt),
   ],
 );
-
-// Define relationships between tables.
-export const calendarDateRelations = relations(calendarTable, ({ many }) => ({
-  dates: many(calendarDates),
-}));
-
-export const eventDatesRelations = relations(calendarDates, ({ one }) => ({
-  event: one(calendarTable, {
-    fields: [calendarDates.calendarId],
-    references: [calendarTable.id],
-  }),
-}));
-
-// export const userCalendarCreatedRelations = relations(calendarTable, ({ one }) => ({
-//   user: one(user, {
-//     fields: [calendarTable.createdBy],
-//     references: [user.id],
-//   }),
-// }));
-
-// export const userCalendarUpdatedRelations = relations(calendarTable, ({ one }) => ({
-//   user: one(user, {
-//     fields: [calendarTable.updatedBy],
-//     references: [user.id],
-//   }),
-// }));
 
 // Export inferred types so they can be used throughout the application.
 export type CalendarSelectItem = typeof calendarTable.$inferSelect;
