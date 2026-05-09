@@ -1,4 +1,5 @@
 import type { CalendarListItem } from "@/lib/fn/calendar";
+import { cn } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
 import {
   addMonths,
@@ -13,7 +14,7 @@ import {
   subMonths,
 } from "date-fns";
 import { enUS } from "date-fns/locale";
-import { ChevronLeft, ChevronRight, Ellipsis } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { Card } from "./ui/card";
 import { Separator } from "./ui/separator";
@@ -153,12 +154,12 @@ function CalendarGrid({
     <div className="grid grid-cols-7 gap-px">
       {/* Weekday Headers */}
       {weekDays.map((day) => (
-        <WeekdayHeader day={day} />
+        <WeekdayHeader day={day} key={day} />
       ))}
 
       {/* Days */}
       {calendarData.map((week, weekIndex) => (
-        <CalendarWeek week={week} weekIndex={weekIndex} />
+        <CalendarWeek week={week} weekIndex={weekIndex} key={weekIndex} />
       ))}
     </div>
   );
@@ -174,9 +175,9 @@ function WeekdayHeader({ day }: { day: string }) {
 
 function CalendarWeek({ week, weekIndex }: { week: CalendarDay[]; weekIndex: number }): ReactNode {
   return (
-    <div key={weekIndex} className="contents">
+    <div className="contents" key={weekIndex} data-week-index={weekIndex}>
       {week.map((day, dayIndex) => (
-        <CalendarDay day={day} dayIndex={dayIndex} />
+        <CalendarDay day={day} dayIndex={dayIndex} key={`${weekIndex}-${dayIndex}`} />
       ))}
     </div>
   );
@@ -207,7 +208,7 @@ function CalendarDay({ day, dayIndex }: { day: CalendarDay; dayIndex: number }) 
       </span>
 
       {/* Events */}
-      <div className="mt-1 w-full flex flex-col gap-0.5">
+      <div className="mt-3 w-full flex flex-col gap-0.5">
         {day.events.map((event) => (
           <CalendarItem item={event} canSignup={false} key={event.id} />
         ))}
@@ -234,13 +235,22 @@ function CalendarItem({
     <div className="border border-amber-600 rounded-sm overflow-hidden">
       <div className="flex flex-row items-center justify-between bg-amber-600 p-1">
         <div className="line-clamp-1 font-semibold">{item.title}</div>
-        <div>
-          <Ellipsis onClick={() => toggleState()} />
+        <div className="">
+          {state === "expanded" ? (
+            <ChevronUp onClick={() => toggleState()} className="" />
+          ) : (
+            <ChevronDown onClick={() => toggleState()} className="" />
+          )}
         </div>
       </div>
 
       {state === "expanded" && (
-        <div className="p-1">
+        <div
+          className={cn(
+            "p-1 transition duration-500 ease-in-out",
+            state === "expanded" ? "" : "hidden",
+          )}
+        >
           {item.location && (
             <div className="line-clamp-1 text-sm">
               <span className="text-muted">at</span> {item.location}
