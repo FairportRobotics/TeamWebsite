@@ -30,6 +30,7 @@ export const getPublishedCalendarItemsFn = createServerFn()
       visibleTo = [...visibleTo, ...commonElements] as VisibleEnumType[];
     }
 
+    // Retrieve calendar events.
     const results = await db
       .select({
         id: calendarTable.id,
