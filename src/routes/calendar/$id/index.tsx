@@ -1,6 +1,6 @@
 import { BackTo } from "@/components/back-to";
 import { PageHeader, PageTitle } from "@/components/page-header";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { getCalendarListDetailsFn } from "@/lib/fn/calendar";
 import { getDateRangeString } from "@/lib/utils";
 import { createFileRoute, redirect } from "@tanstack/react-router";
@@ -32,9 +32,9 @@ function RouteComponent() {
       </PageHeader>
 
       <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl">{data.title}</CardTitle>
-          <CardDescription>
+        <CardHeader></CardHeader>
+        <CardContent>
+          <DetailsSection title={data.title} icon={InfoIcon}>
             <div>
               {data.description?.map((d, i) => (
                 <div key={i} className="my-2 flex flex-row gap-2">
@@ -42,93 +42,95 @@ function RouteComponent() {
                 </div>
               ))}
             </div>
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="p-4 grid grid-cols-2 gap-8">
-          {data.dates.length > 0 && (
-            <DetailsSection title="When?" icon={Clock}>
-              <div>
-                <div className="">
-                  {data.dates.map((d, i) => {
-                    const dateParts = getDateRangeString(d.startAt, d.endAt);
+          </DetailsSection>
+          <div className="grid grid-cols-2 gap-8 mt-8">
+            {data.dates.length > 0 && (
+              <DetailsSection title="When?" icon={Clock}>
+                <div>
+                  <div className="">
+                    {data.dates.map((d, i) => {
+                      const dateParts = getDateRangeString(d.startAt, d.endAt);
 
-                    return (
-                      <div key={i}>
-                        {dateParts.length === 3 ? (
-                          <div className="flex flex-row items-center gap-2">
-                            <CircleSmall />
-                            <div>
-                              {format(d.startAt, "EEE")}, {dateParts[0]} from {dateParts[1]} to{" "}
-                              {dateParts[2]}
+                      return (
+                        <div key={i}>
+                          {dateParts.length === 3 ? (
+                            <div className="flex flex-row items-center gap-2">
+                              <CircleSmall />
+                              <div>
+                                {format(d.startAt, "EEE")}, {dateParts[0]} from {dateParts[1]} to{" "}
+                                {dateParts[2]}
+                              </div>
                             </div>
-                          </div>
-                        ) : (
-                          <div className="flex flex-row items-center gap-2">
-                            <CircleSmall />
-                            <div>
-                              {dateParts[0]} {dateParts[1]}
+                          ) : (
+                            <div className="flex flex-row items-center gap-2">
+                              <CircleSmall />
+                              <div>
+                                {dateParts[0]} {dateParts[1]}
+                              </div>
+                              <div>
+                                {dateParts[2]} {dateParts[3]}
+                              </div>
                             </div>
-                            <div>
-                              {dateParts[2]} {dateParts[3]}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-            </DetailsSection>
-          )}
+              </DetailsSection>
+            )}
 
-          {data.location && (
-            <DetailsSection title="Where?" icon={MapPin}>
-              <div>
-                <a
-                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(data.location)}`}
-                  target="_blank"
-                  className="underline text-red-500"
-                >
-                  {data.location}
-                </a>
-              </div>
-            </DetailsSection>
-          )}
+            {data.location && (
+              <DetailsSection title="Where?" icon={MapPin}>
+                <div>
+                  <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(data.location)}`}
+                    target="_blank"
+                    className="underline text-red-500"
+                  >
+                    {data.location}
+                  </a>
+                </div>
+              </DetailsSection>
+            )}
 
-          {data.informationLink && (
-            <DetailsSection title="For more information..." icon={InfoIcon}>
-              <div>
-                Please{" "}
-                <a href={data.informationLink} target="_blank" className="underline text-red-500">
-                  visit this link.
-                </a>
-              </div>
-            </DetailsSection>
-          )}
+            {data.informationLink && (
+              <DetailsSection title="For more information..." icon={InfoIcon}>
+                <div>
+                  Please{" "}
+                  <a href={data.informationLink} target="_blank" className="underline text-red-500">
+                    visit this link.
+                  </a>
+                </div>
+              </DetailsSection>
+            )}
 
-          {data.signupLink && (
-            <DetailsSection title="To sign up..." icon={Signature}>
-              <div>
-                Please{" "}
-                <a href={data.signupLink} target="_blank" className="underline text-red-500">
-                  visit this link.
-                </a>
-              </div>
-            </DetailsSection>
-          )}
+            {data.signupLink && (
+              <DetailsSection title="To sign up..." icon={Signature}>
+                <div>
+                  Please{" "}
+                  <a href={data.signupLink} target="_blank" className="underline text-red-500">
+                    visit this link.
+                  </a>
+                </div>
+              </DetailsSection>
+            )}
+          </div>
         </CardContent>
       </Card>
     </div>
   );
 }
 
-type DetailsSectionProps = {
+function DetailsSection({
+  title,
+  icon: Icon,
+  children,
+}: {
   title: string;
   icon: ComponentType<LucideProps>;
   children: ReactNode;
-};
-
-function DetailsSection({ title, icon: Icon, children }: DetailsSectionProps) {
+}) {
   return (
     <div className="border-2 border-amber-600 rounded-sm overflow-hidden">
       <div className="flex flex-row items-center justify-between bg-amber-600 p-2">
