@@ -1,16 +1,16 @@
 // prettier-ignore
 import { db } from "@/db";
-import { calendarDates, calendarTable, user, visibleEnum, type VisibleEnumType } from "@/db/schema";
+import { calendarDates, calendarTable, visibleEnum, type VisibleEnumType } from "@/db/schema";
 import { seedCalendar } from "@/db/seed/calendar";
 import { createServerFn } from "@tanstack/react-start";
 import { zodValidator } from "@tanstack/zod-adapter";
 import { and, arrayOverlaps, eq } from "drizzle-orm";
-import { alias } from "drizzle-orm/pg-core";
 import { z } from "zod";
 import { Roles } from "../auth/permissions";
 import { assertAuthenticatedFn } from "../auth/server";
 import { authenticatedMiddleware } from "../middleware/authenticatedMiddleware";
 
+// Create a schema for operations where we need to pass a calendar identifier.
 const calendarIdSchema = z.object({
   id: z.string(),
 });
@@ -30,7 +30,9 @@ export const getPublishedCalendarItemsFn = createServerFn()
       visibleTo = [...visibleTo, ...commonElements] as VisibleEnumType[];
     }
 
-    // Retrieve calendar events.
+    // Retrieve calendar events flattened. In other words, we want a record per combination
+    // of calendar and date. We do not want to roll the dates into a collection under each
+    // calendar record.
     const results = await db
       .select({
         id: calendarTable.id,
@@ -69,6 +71,8 @@ export const getCalendarListForAdminFn = createServerFn()
     const results = await db.query.calendarTable.findMany({
       with: {
         dates: true,
+        createdBy: true,
+        updatedBy: true,
       },
     });
 
@@ -80,34 +84,16 @@ export const getCalendarListDetailsFn = createServerFn()
   .middleware([authenticatedMiddleware])
   .inputValidator(zodValidator(calendarIdSchema))
   .handler(async ({ data }) => {
-    const createdByUser = alias(user, "createdByUser");
-    const updatedByUser = alias(user, "updatedByUser");
+    // Retrieve the calendar, the dates and the users who have touched the record.
+    const results = await db.query.calendarTable.findFirst({
+      where: eq(calendarTable.id, data.id),
+      with: {
+        dates: true,
+        createdBy: true,
+        updatedBy: true,
+      },
+    });
 
-    const results = await db
-      .select({
-        id: calendarTable.id,
-        status: calendarTable.status,
-        visibleTo: calendarTable.visibleTo,
-        title: calendarTable.title,
-        description: calendarTable.description,
-        location: calendarTable.location,
-        informationLink: calendarTable.informationLink,
-        signupLink: calendarTable.signupLink,
-        signupLinkVisibleTo: calendarTable.signupLinkVisibleTo,
-
-        createdAt: calendarTable.createdAt,
-        createdBy: calendarTable.createdBy,
-        createdByName: createdByUser.name,
-
-        updatedBy: calendarTable.updatedBy,
-        updatedAt: calendarTable.updatedAt,
-        updatedByName: updatedByUser.name,
-      })
-      .from(calendarTable)
-      .where(eq(calendarTable.id, data.id))
-      .innerJoin(createdByUser, eq(createdByUser.id, calendarTable.createdBy))
-      .innerJoin(updatedByUser, eq(updatedByUser.id, calendarTable.updatedBy))
-      .then((res) => res[0] || null);
     return results;
   });
 

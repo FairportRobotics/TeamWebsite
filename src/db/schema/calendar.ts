@@ -4,7 +4,7 @@ import { index, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { user } from "../schema";
 import { statusEnum, visibleEnum, type InferResultType } from "./_common";
 
-// Define table schemas.
+// Stores all the events in which the team will host or participate.
 export const calendarTable = pgTable("calendar", {
   id: uuid("id").primaryKey().defaultRandom(),
 
@@ -34,6 +34,7 @@ export const calendarTable = pgTable("calendar", {
     .notNull(),
 });
 
+// Stores the date ranges of events. In most cases, there will be a single date range.
 export const calendarDates = pgTable(
   "calendar_dates",
   {
