@@ -10,11 +10,17 @@ import { Textarea } from "./ui/textarea";
 
 const VisibleToOptions = [Roles.Everyone, Roles.Student, Roles.Mentor, Roles.Parent] as const;
 
+interface CalendarDate {
+  startAt: Date;
+  endAt: Date;
+}
+
 interface Calendar {
   title: string;
   description: string;
   location: string;
   visibleTo: Array<string>;
+  dates: Array<CalendarDate>;
   signupLink?: string | undefined;
   signupLinkVisibleTo: Array<string>;
 }
@@ -24,8 +30,14 @@ const defaultCalendar: Calendar = {
   description: "",
   location: "",
   visibleTo: [Roles.Everyone],
+  dates: [] as CalendarDate[],
   signupLinkVisibleTo: [Roles.Student, Roles.Mentor],
 };
+
+const dateSchema = z.object({
+  startAt: z.date(),
+  endAt: z.date(),
+});
 
 const calendarSchema = z
   .object({
@@ -35,6 +47,8 @@ const calendarSchema = z
     visibleTo: z
       .array(z.enum(VisibleToOptions))
       .min(1, "At least one visibility option must be selected"),
+
+    dates: z.array(dateSchema).min(1, "At least one date range is required"),
 
     signupLink: z.url().optional().or(z.literal("")),
     signupLinkVisibleTo: z
@@ -67,7 +81,7 @@ export const TestForm = () => {
     defaultValues: defaultCalendar,
     onSubmit: async ({ value }) => {
       // Do something with form data
-      console.log(value);
+      console.log("onSubmit", value);
     },
     validators: {
       onSubmit: calendarSchema,
@@ -75,8 +89,9 @@ export const TestForm = () => {
   });
 
   function handleShow() {
-    console.log(form.state.values);
-    console.log(JSON.stringify(form.state.errorMap, null, 2));
+    //console.log(form.state.values);
+    console.log("form.state.values:", JSON.stringify(form.state.values, null, 2));
+    console.log("form.state.errorMap:", JSON.stringify(form.state.errorMap, null, 2));
   }
 
   function handleToggleHasSignup(checked: boolean) {
@@ -85,6 +100,14 @@ export const TestForm = () => {
       form.state.values.signupLink = "";
       form.state.values.signupLinkVisibleTo = [Roles.Student, Roles.Mentor];
     }
+  }
+
+  const dates = form.getFieldValue("dates") ?? [];
+  function handleAddDate() {
+    form.setFieldValue("dates", [
+      ...form.getFieldValue("dates"),
+      { startAt: new Date(), endAt: new Date() },
+    ]);
   }
 
   return (
@@ -123,6 +146,61 @@ export const TestForm = () => {
             </div>
           )}
         />
+
+        {/* Dates */}
+        <div>
+          <Label className="mb-3 font-bold text-lg">Dates:</Label>
+          <div>
+            [Date] [Time From] - [Time Through] <Button onClick={() => handleAddDate()}>Add</Button>
+          </div>
+        </div>
+        <form.Subscribe
+          selector={(state) => state.values.dates}
+          children={(date) => (
+            <form.Field name="dates" mode="array">
+              {(field) => (
+                <div>
+                  {field.state.value.map((date, index) => (
+                    <div key={index}>
+                      {date.startAt.toISOString()} - {date.endAt.toISOString()}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </form.Field>
+          )}
+        />
+
+        {/* 
+        <form.Field
+          name="dates"
+          children={(field) => (
+            <div>
+              <Label className="mb-3 font-bold text-lg">Dates:</Label>
+              <div>
+                [Date] [Time From] - [Time Through]{" "}
+                <Button onClick={() => handleAddDate(new Date(), new Date())}>Add</Button>
+              </div>
+
+              <div>
+                {form.state.values.dates.map((date) => (
+                  <div>
+                    {date.startAt.toISOString()} - {date.endAt.toISOString()}
+                  </div>
+                ))}
+              </div>
+              <ul className="text-red-600 list-disc list-inside">
+                {field.state.meta.errors.map((e) => {
+                  return (
+                    <li className="" key={e?.message}>
+                      {e?.message}
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          )}
+        /> */}
 
         {/* Location */}
         <form.Field
@@ -221,7 +299,7 @@ export const TestForm = () => {
           )}
         />
 
-        {/* Signup Link */}
+        {/* Signup Options */}
         <div className="flex flex-col my-6">
           <div className="flex flex-row">
             <Checkbox
@@ -312,7 +390,7 @@ export const TestForm = () => {
       {/* Form buttons */}
       <div className="mt-8 space-x-4">
         <Button type="submit">Submit</Button>
-        <Button onClick={handleShow}>Show</Button>
+        <Button onClick={handleShow}>Show Current</Button>
       </div>
     </form>
   );
