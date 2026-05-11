@@ -12,7 +12,7 @@ interface Calendar {
   title: string;
   description: string;
   visibleTo: Array<string>;
-  signupLink?: string | null;
+  signupLink?: string | undefined;
 }
 const defaultCalendar: Calendar = {
   title: "",
@@ -27,7 +27,7 @@ const calendarSchema = z.object({
     .array(z.enum(VisibleToOptions))
     .min(1, "At least one visibility option must be selected"),
 
-  signupLink: z.url().optional(),
+  signupLink: z.url().optional().or(z.literal("")),
 });
 
 export const TestForm = () => {
@@ -156,7 +156,7 @@ export const TestForm = () => {
               <Label className="mb-3">Signup Link (optional)</Label>
               <Input
                 name={field.name}
-                value={field.state.value}
+                value={field.state.value ?? ""}
                 onBlur={field.handleBlur}
                 placeholder="Enter link (optional)"
                 autoComplete="off"
