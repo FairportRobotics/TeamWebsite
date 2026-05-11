@@ -102,12 +102,16 @@ export const TestForm = () => {
     }
   }
 
-  const dates = form.getFieldValue("dates") ?? [];
   function handleAddDate() {
     form.setFieldValue("dates", [
       ...form.getFieldValue("dates"),
       { startAt: new Date(), endAt: new Date() },
     ]);
+  }
+
+  function handleRemoveDate(index: number) {
+    const newDates = form.getFieldValue("dates").filter((_, i) => i !== index);
+    form.setFieldValue("dates", newDates);
   }
 
   return (
@@ -153,54 +157,24 @@ export const TestForm = () => {
           <div>
             [Date] [Time From] - [Time Through] <Button onClick={() => handleAddDate()}>Add</Button>
           </div>
+          <form.Subscribe
+            selector={(state) => state.values.dates}
+            children={(date) => (
+              <form.Field name="dates" mode="array">
+                {(field) => (
+                  <>
+                    {field.state.value.map((date, index) => (
+                      <div key={index}>
+                        {date.startAt.toISOString()} - {date.endAt.toISOString()}{" "}
+                        <Button onClick={() => handleRemoveDate(index)}>[X]</Button>
+                      </div>
+                    ))}
+                  </>
+                )}
+              </form.Field>
+            )}
+          />
         </div>
-        <form.Subscribe
-          selector={(state) => state.values.dates}
-          children={(date) => (
-            <form.Field name="dates" mode="array">
-              {(field) => (
-                <div>
-                  {field.state.value.map((date, index) => (
-                    <div key={index}>
-                      {date.startAt.toISOString()} - {date.endAt.toISOString()}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </form.Field>
-          )}
-        />
-
-        {/* 
-        <form.Field
-          name="dates"
-          children={(field) => (
-            <div>
-              <Label className="mb-3 font-bold text-lg">Dates:</Label>
-              <div>
-                [Date] [Time From] - [Time Through]{" "}
-                <Button onClick={() => handleAddDate(new Date(), new Date())}>Add</Button>
-              </div>
-
-              <div>
-                {form.state.values.dates.map((date) => (
-                  <div>
-                    {date.startAt.toISOString()} - {date.endAt.toISOString()}
-                  </div>
-                ))}
-              </div>
-              <ul className="text-red-600 list-disc list-inside">
-                {field.state.meta.errors.map((e) => {
-                  return (
-                    <li className="" key={e?.message}>
-                      {e?.message}
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          )}
-        /> */}
 
         {/* Location */}
         <form.Field
