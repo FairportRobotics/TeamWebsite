@@ -39,15 +39,18 @@ export const TestForm = () => {
           }}
           children={(field) => (
             <div>
-              <Label>Title</Label>
+              <Label className="mb-3">Title</Label>
               <Input
                 name={field.name}
                 value={field.state.value}
                 onBlur={field.handleBlur}
+                placeholder="Enter title"
                 type="text"
                 onChange={(e) => field.handleChange(e.target.value)}
               />
-              {!field.state.meta.isValid && <em>{field.state.meta.errors.join(",")}</em>}
+              <div className="text-red-600">
+                {!field.state.meta.isValid && <em>{field.state.meta.errors.join(",")}</em>}
+              </div>
             </div>
           )}
         />
@@ -60,15 +63,18 @@ export const TestForm = () => {
           }}
           children={(field) => (
             <div>
-              <Label>Description</Label>
+              <Label className="mb-3">Description</Label>
               <Textarea
                 name={field.name}
                 value={field.state.value}
                 onBlur={field.handleBlur}
+                placeholder="Enter a longer description. Multiple lines are supported."
                 rows={10}
                 onChange={(e) => field.handleChange(e.target.value)}
               />
-              {!field.state.meta.isValid && <em>{field.state.meta.errors.join(",")}</em>}
+              <div className="text-red-600">
+                {!field.state.meta.isValid && <em>{field.state.meta.errors.join(",")}</em>}
+              </div>
             </div>
           )}
         />
@@ -83,27 +89,32 @@ export const TestForm = () => {
           }}
           children={(field) => (
             <div>
-              <Label>Visible To</Label>
-              {VisibleToOptions.map((option) => (
-                <div key={option}>
-                  <label>
-                    <input
-                      type="checkbox"
-                      name={field.name}
-                      value={option}
-                      checked={field.state.value.includes(option)}
-                      onChange={(e) => {
-                        const newValue = e.target.checked
-                          ? [...field.state.value, option]
-                          : field.state.value.filter((v) => v !== option);
-                        field.handleChange(newValue);
-                      }}
-                    />
-                    {option}
-                  </label>
-                </div>
-              ))}
-              {!field.state.meta.isValid && <em>{field.state.meta.errors.join(",")}</em>}
+              <Label className="mb-3">Visible To</Label>
+              <div className="space-y-2">
+                {VisibleToOptions.map((option) => (
+                  <div key={option}>
+                    <label className="flex flex-row gap-3 cursor-pointer select-none uppercase">
+                      <input
+                        type="checkbox"
+                        name={field.name}
+                        value={option}
+                        checked={field.state.value.includes(option)}
+                        onChange={(e) => {
+                          const newValue = e.target.checked
+                            ? [...field.state.value, option]
+                            : field.state.value.filter((v) => v !== option);
+                          field.handleChange(newValue);
+                        }}
+                        className="w-6 h-6"
+                      />
+                      {option}
+                    </label>
+                  </div>
+                ))}
+              </div>
+              <div className="text-red-600">
+                {!field.state.meta.isValid && <em>{field.state.meta.errors.join(",")}</em>}
+              </div>
             </div>
           )}
         />
