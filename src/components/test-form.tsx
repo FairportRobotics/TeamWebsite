@@ -30,7 +30,7 @@ interface Calendar {
   dates: Array<CalendarDate>;
   informationLink?: string | undefined;
   signupLink?: string | undefined;
-  signupLinkVisibleTo?: Array<string>;
+  signupLinkVisibleTo: Array<string>;
 }
 
 const defaultCalendar: Calendar = {
@@ -41,7 +41,7 @@ const defaultCalendar: Calendar = {
   dates: [] as CalendarDate[],
   informationLink: undefined,
   signupLink: undefined,
-  signupLinkVisibleTo: [] as Array<string>,
+  signupLinkVisibleTo: [],
 };
 
 const dateSchema = z.object({
@@ -67,7 +67,7 @@ const calendarSchema = z
       // TODO: This is messy but easy to follow.
       if (data.signupLink === undefined) {
         return true;
-      } else if (data.signupLink.trim() !== "") {
+      } else if (data.signupLink.trim() === "") {
         return true;
       } else if (data.signupLinkVisibleTo.length > 0) {
         return true;
@@ -89,7 +89,7 @@ export const TestForm = () => {
     defaultValues: defaultCalendar,
     onSubmit: async ({ value }) => {
       // Do something with form data
-      console.log("onSubmit", value);
+      console.log("Submitting form with value:", value);
     },
     validators: {
       onSubmit: calendarSchema,
