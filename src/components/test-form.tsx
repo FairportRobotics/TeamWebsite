@@ -13,13 +13,16 @@ const VisibleToOptions = [Roles.Everyone, Roles.Student, Roles.Mentor, Roles.Par
 interface Calendar {
   title: string;
   description: string;
+  location: string;
   visibleTo: Array<string>;
   signupLink?: string | undefined;
   signupLinkVisibleTo: Array<string>;
 }
+
 const defaultCalendar: Calendar = {
   title: "",
   description: "",
+  location: "",
   visibleTo: [Roles.Everyone],
   signupLinkVisibleTo: [Roles.Student, Roles.Mentor],
 };
@@ -28,6 +31,7 @@ const calendarSchema = z
   .object({
     title: z.string().trim().min(1, "Title is required"),
     description: z.string().trim().min(1, "Description is required"),
+    location: z.string().trim().min(1, "Location is required"),
     visibleTo: z
       .array(z.enum(VisibleToOptions))
       .min(1, "At least one visibility option must be selected"),
@@ -39,6 +43,7 @@ const calendarSchema = z
   })
   .refine(
     (data) => {
+      // TODO: This is messy but easy to follow.
       if (data.signupLink === undefined) {
         return true;
       } else if (data.signupLink.trim() !== "") {
@@ -65,13 +70,21 @@ export const TestForm = () => {
       console.log(value);
     },
     validators: {
-      onChange: calendarSchema,
+      onSubmit: calendarSchema,
     },
   });
 
   function handleShow() {
     console.log(form.state.values);
     console.log(JSON.stringify(form.state.errorMap, null, 2));
+  }
+
+  function handleToggleHasSignup(checked: boolean) {
+    setShowSignup(checked);
+    if (!checked) {
+      form.state.values.signupLink = "";
+      form.state.values.signupLinkVisibleTo = [Roles.Student, Roles.Mentor];
+    }
   }
 
   return (
@@ -88,12 +101,40 @@ export const TestForm = () => {
           name="title"
           children={(field) => (
             <div>
-              <Label className="mb-3">Title</Label>
+              <Label className="mb-3 font-bold text-lg">Title:</Label>
               <Input
                 name={field.name}
                 value={field.state.value}
                 onBlur={field.handleBlur}
-                placeholder="Enter title"
+                placeholder="Enter the title"
+                autoComplete="off"
+                type="text"
+                onChange={(e) => field.handleChange(e.target.value)}
+              />
+              <ul className="text-red-600 list-disc list-inside">
+                {field.state.meta.errors.map((e) => {
+                  return (
+                    <li className="" key={e?.message}>
+                      {e?.message}
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          )}
+        />
+
+        {/* Location */}
+        <form.Field
+          name="location"
+          children={(field) => (
+            <div>
+              <Label className="mb-3 font-bold text-lg">Location:</Label>
+              <Input
+                name={field.name}
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                placeholder="Enter the location"
                 autoComplete="off"
                 type="text"
                 onChange={(e) => field.handleChange(e.target.value)}
@@ -116,14 +157,14 @@ export const TestForm = () => {
           name="description"
           children={(field) => (
             <div>
-              <Label className="mb-3">Description</Label>
+              <Label className="mb-3 font-bold text-lg">Description:</Label>
               <Textarea
                 name={field.name}
                 value={field.state.value}
                 onBlur={field.handleBlur}
-                placeholder="Enter a longer description. Multiple lines are supported."
+                placeholder="Enter a description. Multiple lines are supported."
                 autoComplete="off"
-                rows={10}
+                rows={5}
                 onChange={(e) => field.handleChange(e.target.value)}
               />
               <ul className="text-red-600 list-disc list-inside">
@@ -144,18 +185,18 @@ export const TestForm = () => {
           name="visibleTo"
           children={(field) => (
             <div>
-              <Label className="mb-3">Visible To</Label>
+              <Label className="mb-3 font-bold text-lg">Calendar event will be visible to:</Label>
               <div className="space-y-2">
                 {VisibleToOptions.map((option) => (
                   <div key={option}>
                     <label className="flex flex-row gap-3 cursor-pointer select-none capitalize">
-                      <Input
-                        type="checkbox"
+                      <Checkbox
                         name={field.name}
                         value={option}
+                        key={`calendar-visibleTo-${option}`}
                         checked={field.state.value.includes(option)}
-                        onChange={(e) => {
-                          const newValue = e.target.checked
+                        onCheckedChange={(checked) => {
+                          const newValue = checked
                             ? [...field.state.value, option]
                             : field.state.value.filter((v) => v !== option);
                           field.handleChange(newValue);
@@ -179,88 +220,93 @@ export const TestForm = () => {
             </div>
           )}
         />
-        <div className="flex flex-row items-center gap-2">
-          <Checkbox
-            id="has-signup"
-            onCheckedChange={(checked) => setShowSignup((prev) => !prev)}
-            className="data-[state=checked]:bg-blue-600"
-          />
-          <Label htmlFor="has-signup" className="ml-2 cursor-pointer">
-            Has Signup
-          </Label>
-        </div>
-        {showSignup && (
-          <div className="space-y-4">
-            {/* Signup Link */}
-            <form.Field
-              name="signupLink"
-              children={(field) => (
-                <div>
-                  <Label className="mb-3">Signup URL</Label>
-                  <Input
-                    name={field.name}
-                    value={field.state.value ?? ""}
-                    onBlur={field.handleBlur}
-                    placeholder="Enter link"
-                    autoComplete="off"
-                    type="text"
-                    onChange={(e) => field.handleChange(e.target.value)}
-                  />
-                  <ul className="text-red-600 list-disc list-inside">
-                    {field.state.meta.errors.map((e) => {
-                      return (
-                        <li className="" key={e?.message}>
-                          {e?.message}
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
-              )}
-            />
 
-            {/* Signup Link Visible To */}
-            <form.Field
-              name="signupLinkVisibleTo"
-              children={(field) => (
-                <div>
-                  <Label className="mb-3">Signup URL Visible To</Label>
-                  <div className="space-y-2">
-                    {VisibleToOptions.map((option) => (
-                      <div key={option}>
-                        <label className="flex flex-row gap-3 cursor-pointer select-none capitalize">
-                          <Input
-                            type="checkbox"
-                            name={field.name}
-                            value={option}
-                            checked={field.state.value.includes(option)}
-                            onChange={(e) => {
-                              const newValue = e.target.checked
-                                ? [...field.state.value, option]
-                                : field.state.value.filter((v) => v !== option);
-                              field.handleChange(newValue);
-                            }}
-                            className="w-6 h-6"
-                          />
-                          {option}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                  <ul className="text-red-600 list-disc list-inside">
-                    {field.state.meta.errors.map((e) => {
-                      return (
-                        <li className="" key={e?.message}>
-                          {e?.message}
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
-              )}
+        {/* Signup Link */}
+        <div className="flex flex-col my-6">
+          <div className="flex flex-row">
+            <Checkbox
+              id="has-signup"
+              checked={showSignup}
+              onCheckedChange={(checked) => handleToggleHasSignup(checked ? true : false)}
+              className="data-[state=checked]:bg-blue-600 w-6 h-6"
             />
+            <Label htmlFor="has-signup" className="ml-2 cursor-pointer font-bold text-lg">
+              Has a Signup Form
+            </Label>
           </div>
-        )}
+
+          {showSignup && (
+            <div className="space-y-4 pl-6 mt-3">
+              {/* Signup Link */}
+              <form.Field
+                name="signupLink"
+                children={(field) => (
+                  <div>
+                    <Label className="mb-3 font-bold text-lg">Signup URL:</Label>
+                    <Input
+                      name={field.name}
+                      value={field.state.value ?? ""}
+                      onBlur={field.handleBlur}
+                      placeholder="Enter link"
+                      autoComplete="off"
+                      type="text"
+                      onChange={(e) => field.handleChange(e.target.value)}
+                    />
+                    <ul className="text-red-600 list-disc list-inside">
+                      {field.state.meta.errors.map((e) => {
+                        return (
+                          <li className="" key={e?.message}>
+                            {e?.message}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                )}
+              />
+
+              {/* Signup Link Visible To */}
+              <form.Field
+                name="signupLinkVisibleTo"
+                children={(field) => (
+                  <div>
+                    <Label className="mb-3 font-bold text-lg">Signup URL will be visible to:</Label>
+                    <div className="space-y-2">
+                      {VisibleToOptions.map((option) => (
+                        <div key={option}>
+                          <label className="flex flex-row gap-3 cursor-pointer select-none capitalize">
+                            <Checkbox
+                              name={field.name}
+                              value={option}
+                              checked={field.state.value.includes(option)}
+                              onCheckedChange={(checked) => {
+                                const newValue = checked
+                                  ? [...field.state.value, option]
+                                  : field.state.value.filter((v) => v !== option);
+                                field.handleChange(newValue);
+                              }}
+                              className="w-6 h-6"
+                            />
+                            {option}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                    <ul className="text-red-600 list-disc list-inside">
+                      {field.state.meta.errors.map((e) => {
+                        return (
+                          <li className="" key={e?.message}>
+                            {e?.message}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                )}
+              />
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Form buttons */}
