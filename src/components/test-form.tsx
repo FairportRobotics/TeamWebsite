@@ -1,5 +1,6 @@
 import { Roles } from "@/lib/auth/permissions";
 import { useForm } from "@tanstack/react-form";
+import z from "zod";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
@@ -14,12 +15,27 @@ interface Calendar {
 }
 const defaultCalendar: Calendar = { title: "", description: "", visibleTo: [Roles.Everyone] };
 
+const calendarSchema = z.object({
+  title: z
+    .string()
+    .min(1, "Title is required")
+    .max(10, "Title must be at most 10 characters")
+    .startsWith("A", "Title must start with 'A'"),
+  description: z.string().min(1, "Description is required"),
+  visibleTo: z
+    .array(z.enum(VisibleToOptions))
+    .min(1, "At least one visibility option must be selected"),
+});
+
 export const TestForm = () => {
   const form = useForm({
     defaultValues: defaultCalendar,
     onSubmit: async ({ value }) => {
       // Do something with form data
       console.log(value);
+    },
+    validators: {
+      onChange: calendarSchema,
     },
   });
 
@@ -34,9 +50,6 @@ export const TestForm = () => {
         {/* Title */}
         <form.Field
           name="title"
-          validators={{
-            onBlur: ({ value }) => (value.trim() === "" ? "Title is required" : undefined),
-          }}
           children={(field) => (
             <div>
               <Label className="mb-3">Title</Label>
@@ -48,9 +61,11 @@ export const TestForm = () => {
                 type="text"
                 onChange={(e) => field.handleChange(e.target.value)}
               />
-              <div className="text-red-600">
-                {!field.state.meta.isValid && <em>{field.state.meta.errors.join(",")}</em>}
-              </div>
+              <ul className="text-red-600 list-disc list-inside">
+                {field.state.meta.errors.map((e) => {
+                  return <li className="">{e?.message}</li>;
+                })}
+              </ul>
             </div>
           )}
         />
@@ -58,9 +73,6 @@ export const TestForm = () => {
         {/* Description */}
         <form.Field
           name="description"
-          validators={{
-            onBlur: ({ value }) => (value.trim() === "" ? "Description is required" : undefined),
-          }}
           children={(field) => (
             <div>
               <Label className="mb-3">Description</Label>
@@ -72,9 +84,11 @@ export const TestForm = () => {
                 rows={10}
                 onChange={(e) => field.handleChange(e.target.value)}
               />
-              <div className="text-red-600">
-                {!field.state.meta.isValid && <em>{field.state.meta.errors.join(",")}</em>}
-              </div>
+              <ul className="text-red-600 list-disc list-inside">
+                {field.state.meta.errors.map((e) => {
+                  return <li className="">{e?.message}</li>;
+                })}
+              </ul>
             </div>
           )}
         />
@@ -82,11 +96,6 @@ export const TestForm = () => {
         {/* Visible To */}
         <form.Field
           name="visibleTo"
-          validators={{
-            // We can choose between form-wide and field-specific validators
-            onBlur: ({ value }) =>
-              value.length === 0 ? "At least one visibility option must be selected" : undefined,
-          }}
           children={(field) => (
             <div>
               <Label className="mb-3">Visible To</Label>
@@ -94,7 +103,7 @@ export const TestForm = () => {
                 {VisibleToOptions.map((option) => (
                   <div key={option}>
                     <label className="flex flex-row gap-3 cursor-pointer select-none uppercase">
-                      <input
+                      <Input
                         type="checkbox"
                         name={field.name}
                         value={option}
@@ -112,9 +121,11 @@ export const TestForm = () => {
                   </div>
                 ))}
               </div>
-              <div className="text-red-600">
-                {!field.state.meta.isValid && <em>{field.state.meta.errors.join(",")}</em>}
-              </div>
+              <ul className="text-red-600 list-disc list-inside">
+                {field.state.meta.errors.map((e) => {
+                  return <li className="">{e?.message}</li>;
+                })}
+              </ul>
             </div>
           )}
         />
