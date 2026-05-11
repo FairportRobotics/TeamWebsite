@@ -12,19 +12,23 @@ interface Calendar {
   title: string;
   description: string;
   visibleTo: Array<string>;
+  signupLink: string;
 }
-const defaultCalendar: Calendar = { title: "", description: "", visibleTo: [Roles.Everyone] };
+const defaultCalendar: Calendar = {
+  title: "",
+  description: "",
+  visibleTo: [Roles.Everyone],
+  signupLink: "",
+};
 
 const calendarSchema = z.object({
-  title: z
-    .string()
-    .min(1, "Title is required")
-    .max(10, "Title must be at most 10 characters")
-    .startsWith("A", "Title must start with 'A'"),
-  description: z.string().min(1, "Description is required"),
+  title: z.string().trim().min(1, "Title is required"),
+  description: z.string().trim().min(1, "Description is required"),
   visibleTo: z
     .array(z.enum(VisibleToOptions))
     .min(1, "At least one visibility option must be selected"),
+
+  signupLink: z.url(),
 });
 
 export const TestForm = () => {
@@ -45,6 +49,7 @@ export const TestForm = () => {
         e.preventDefault();
         form.handleSubmit();
       }}
+      className="max-w-1/2 mx-auto"
     >
       <div className="flex flex-col gap-6">
         {/* Title */}
@@ -58,12 +63,17 @@ export const TestForm = () => {
                 value={field.state.value}
                 onBlur={field.handleBlur}
                 placeholder="Enter title"
+                autoComplete="off"
                 type="text"
                 onChange={(e) => field.handleChange(e.target.value)}
               />
               <ul className="text-red-600 list-disc list-inside">
                 {field.state.meta.errors.map((e) => {
-                  return <li className="">{e?.message}</li>;
+                  return (
+                    <li className="" key={e?.message}>
+                      {e?.message}
+                    </li>
+                  );
                 })}
               </ul>
             </div>
@@ -81,12 +91,17 @@ export const TestForm = () => {
                 value={field.state.value}
                 onBlur={field.handleBlur}
                 placeholder="Enter a longer description. Multiple lines are supported."
+                autoComplete="off"
                 rows={10}
                 onChange={(e) => field.handleChange(e.target.value)}
               />
               <ul className="text-red-600 list-disc list-inside">
                 {field.state.meta.errors.map((e) => {
-                  return <li className="">{e?.message}</li>;
+                  return (
+                    <li className="" key={e?.message}>
+                      {e?.message}
+                    </li>
+                  );
                 })}
               </ul>
             </div>
@@ -102,7 +117,7 @@ export const TestForm = () => {
               <div className="space-y-2">
                 {VisibleToOptions.map((option) => (
                   <div key={option}>
-                    <label className="flex flex-row gap-3 cursor-pointer select-none uppercase">
+                    <label className="flex flex-row gap-3 cursor-pointer select-none capitalize">
                       <Input
                         type="checkbox"
                         name={field.name}
@@ -123,7 +138,39 @@ export const TestForm = () => {
               </div>
               <ul className="text-red-600 list-disc list-inside">
                 {field.state.meta.errors.map((e) => {
-                  return <li className="">{e?.message}</li>;
+                  return (
+                    <li className="" key={e?.message}>
+                      {e?.message}
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          )}
+        />
+
+        {/* Signup Link */}
+        <form.Field
+          name="signupLink"
+          children={(field) => (
+            <div>
+              <Label className="mb-3">Signup Link (optional)</Label>
+              <Input
+                name={field.name}
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                placeholder="Enter link (optional)"
+                autoComplete="off"
+                type="text"
+                onChange={(e) => field.handleChange(e.target.value)}
+              />
+              <ul className="text-red-600 list-disc list-inside">
+                {field.state.meta.errors.map((e) => {
+                  return (
+                    <li className="" key={e?.message}>
+                      {e?.message}
+                    </li>
+                  );
                 })}
               </ul>
             </div>
