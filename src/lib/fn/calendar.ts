@@ -10,6 +10,50 @@ import { Roles } from "../auth/permissions";
 import { assertAuthenticatedFn } from "../auth/server";
 import { authenticatedMiddleware } from "../middleware/authenticatedMiddleware";
 
+export const VisibleToOptions = [
+  Roles.Everyone,
+  Roles.Student,
+  Roles.Mentor,
+  Roles.Parent,
+] as const;
+
+export const calendarDateInsertSchema = z.object({
+  startAt: z.date(),
+  endAt: z.date(),
+});
+
+export const calendarInsertSchema = z
+  .object({
+    title: z.string().trim().min(1, "Title is required"),
+    description: z.string().trim().min(1, "Description is required"),
+    location: z.string().trim().min(1, "Location is required"),
+    visibleTo: z
+      .array(z.enum(VisibleToOptions))
+      .min(1, "At least one visibility option must be selected"),
+    dates: z.array(calendarDateInsertSchema).min(1, "At least one date range is required"),
+    informationLink: z.url().optional().or(z.literal("")),
+    signupLink: z.url().optional().or(z.literal("")),
+    signupLinkVisibleTo: z.array(z.enum(VisibleToOptions)),
+  })
+  .refine(
+    (data) => {
+      // TODO: This is messy but easy to follow.
+      if (data.signupLink === undefined) {
+        return true;
+      } else if (data.signupLink.trim() === "") {
+        return true;
+      } else if (data.signupLinkVisibleTo.length > 0) {
+        return true;
+      }
+
+      return false;
+    },
+    {
+      message: "Must select visibility options if signup link is provided",
+      path: ["signupLinkVisibleTo"],
+    },
+  );
+
 // Create a schema for operations where we need to pass a calendar identifier.
 const calendarIdSchema = z.object({
   id: z.string(),
@@ -176,6 +220,46 @@ export const archiveCalendarFn = createServerFn()
       .where(eq(calendarTable.id, data.id));
 
     return true;
+  });
+
+export const saveCalendarFn = createServerFn()
+  .middleware([authenticatedMiddleware])
+  .inputValidator(zodValidator(calendarInsertSchema))
+  .handler(async ({ data, context }) => {
+    console.log("saveCalendarFn", data);
+
+    try {
+      const currentUserId = context!.user!.id;
+      const id = crypto.randomUUID();
+
+      // Insert records in a transaction so we can rollback if anything goes sideways.
+      await db.transaction(async (tx) => {
+        await tx.insert(calendarTable).values({
+          id: id,
+          title: data.title,
+          description: data.description ? data.description.split("\n") : undefined,
+          visibleTo: data.visibleTo,
+          location: data.location,
+
+          informationLink: data.informationLink,
+          signupLink: data.signupLink,
+          signupLinkVisibleTo: data.signupLinkVisibleTo,
+
+          createdBy: currentUserId,
+          updatedBy: currentUserId,
+        });
+
+        data.dates.forEach(async (d) => {
+          await tx.insert(calendarDates).values({
+            calendarId: id,
+            startAt: d.startAt,
+            endAt: d.endAt,
+          });
+        });
+      });
+    } catch (error) {
+      console.error(error);
+    }
   });
 
 // TODO: Remove when live.
