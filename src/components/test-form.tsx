@@ -1,5 +1,8 @@
 import { Roles } from "@/lib/auth/permissions";
 import { useForm } from "@tanstack/react-form";
+import { format } from "date-fns";
+import { ChevronDownIcon, Plus, Trash2 } from "lucide-react";
+import * as React from "react";
 import { useState } from "react";
 import z from "zod";
 import { Button } from "./ui/button";
@@ -7,6 +10,10 @@ import { Checkbox } from "./ui/checkbox";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
+
+import { Calendar } from "@/components/ui/calendar";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 const VisibleToOptions = [Roles.Everyone, Roles.Student, Roles.Mentor, Roles.Parent] as const;
 
@@ -102,11 +109,8 @@ export const TestForm = () => {
     }
   }
 
-  function handleAddDate() {
-    form.setFieldValue("dates", [
-      ...form.getFieldValue("dates"),
-      { startAt: new Date(), endAt: new Date() },
-    ]);
+  function handleAddDate(startAt: Date, endAt: Date) {
+    form.setFieldValue("dates", [...form.getFieldValue("dates"), { startAt, endAt }]);
   }
 
   function handleRemoveDate(index: number) {
@@ -154,22 +158,34 @@ export const TestForm = () => {
         {/* Dates */}
         <div>
           <Label className="mb-3 font-bold text-lg">Dates:</Label>
-          <div>
-            [Date] [Time From] - [Time Through] <Button onClick={() => handleAddDate()}>Add</Button>
+          <div className="flex flex-row items-center gap-2">
+            <DateTimePicker
+              dateSelected={(startDate, endDate) => handleAddDate(startDate, endDate)}
+            />
           </div>
           <form.Subscribe
             selector={(state) => state.values.dates}
-            children={(date) => (
+            children={() => (
               <form.Field name="dates" mode="array">
                 {(field) => (
-                  <>
+                  <div className="gap-2 flex flex-col">
                     {field.state.value.map((date, index) => (
-                      <div key={index}>
-                        {date.startAt.toISOString()} - {date.endAt.toISOString()}{" "}
-                        <Button onClick={() => handleRemoveDate(index)}>[X]</Button>
+                      <div
+                        key={index}
+                        className="flex flex-row items-center hover:bg-slate-800 rounded-md p-2"
+                      >
+                        <Button
+                          onClick={() => handleRemoveDate(index)}
+                          variant="destructive"
+                          className="hover:cursor-pointer mr-3"
+                        >
+                          <Trash2 />
+                        </Button>
+                        {date.startAt.toLocaleDateString()} from {date.startAt.toLocaleTimeString()}{" "}
+                        to {date.endAt.toLocaleTimeString()}
                       </div>
                     ))}
-                  </>
+                  </div>
                 )}
               </form.Field>
             )}
@@ -369,3 +385,82 @@ export const TestForm = () => {
     </form>
   );
 };
+
+export function DateTimePicker({
+  dateSelected,
+}: {
+  dateSelected: (startAt: Date, endAt: Date) => void;
+}) {
+  const [open, setOpen] = React.useState(false);
+  const [date, setDate] = React.useState<Date | undefined>(undefined);
+  const [startAt, setStartAt] = React.useState<string>("08:00:00");
+  const [endAt, setEndAt] = React.useState<string>("17:00:00");
+
+  function handleAdd() {
+    console.log("handleAdd called");
+    console.log(date, " : ", startAt, " - ", endAt);
+
+    const dateOnly = date?.toISOString().substring(0, 11);
+    const startDate = new Date(dateOnly + startAt);
+    const endDate = new Date(dateOnly + endAt);
+
+    console.log(startDate, " through ", endDate);
+
+    dateSelected(startDate, endDate);
+  }
+
+  return (
+    <FieldGroup className="max-w-xs flex-row">
+      <Field>
+        <FieldLabel htmlFor="date-picker">Date</FieldLabel>
+        <Popover open={open} onOpenChange={setOpen}>
+          <PopoverTrigger asChild>
+            <Button variant="outline" id="date-picker" className="w-40 justify-between font-normal">
+              {date ? format(date, "PPP") : "Select date"}
+              <ChevronDownIcon />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+            <Calendar
+              mode="single"
+              selected={date}
+              captionLayout="dropdown"
+              defaultMonth={date}
+              onSelect={(date) => {
+                setDate(date);
+                setOpen(false);
+              }}
+            />
+          </PopoverContent>
+        </Popover>
+      </Field>
+      <Field className="w-36">
+        <FieldLabel htmlFor="time-from">Start Time</FieldLabel>
+        <Input
+          type="time"
+          id="time-from"
+          step="1"
+          value={startAt}
+          onChange={(value) => setStartAt(value.target.value)}
+          className="appearance-none bg-background [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+        />
+      </Field>
+      <Field className="w-36">
+        <FieldLabel htmlFor="time-through">End Time</FieldLabel>
+        <Input
+          type="time"
+          id="time-through"
+          step="1"
+          value={endAt}
+          onChange={(value) => setEndAt(value.target.value)}
+          className="appearance-none bg-background [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+        />
+      </Field>
+      <Field className="items-end justify-end">
+        <Button onClick={() => handleAdd()} className="" variant="secondary">
+          <Plus className="" />
+        </Button>
+      </Field>
+    </FieldGroup>
+  );
+}
