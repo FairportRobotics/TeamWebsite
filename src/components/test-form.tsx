@@ -231,33 +231,24 @@ export const TestForm = () => {
                   })}
                 </ul>
               </div>
-              <form.Subscribe
-                selector={(state) => state.values.dates}
-                children={() => (
-                  <form.Field name="dates" mode="array">
-                    {(field) => (
-                      <div className="gap-2 flex flex-col">
-                        {field.state.value.map((date, index) => (
-                          <div
-                            key={index}
-                            className="flex flex-row items-center hover:bg-slate-800 rounded-md p-1"
-                          >
-                            <Button
-                              onClick={() => handleRemoveDate(index)}
-                              variant="destructive"
-                              className="hover:cursor-pointer mr-3 w-8 h-8"
-                            >
-                              <Trash2 className="" />
-                            </Button>
-                            {date.startAt.toLocaleDateString()} from{" "}
-                            {date.startAt.toLocaleTimeString()} to {date.endAt.toLocaleTimeString()}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </form.Field>
-                )}
-              />
+              <div className="gap-2 flex flex-col mt-4">
+                {field.state.value.map((date, index) => (
+                  <div
+                    key={index}
+                    className="flex flex-row items-center hover:bg-slate-800 rounded-md p-1"
+                  >
+                    <Button
+                      onClick={() => handleRemoveDate(index)}
+                      variant="destructive"
+                      className="hover:cursor-pointer mr-3 w-8 h-8"
+                    >
+                      <Trash2 className="" />
+                    </Button>
+                    {date.startAt.toLocaleDateString()} from {date.startAt.toLocaleTimeString()} to{" "}
+                    {date.endAt.toLocaleTimeString()}
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         />
