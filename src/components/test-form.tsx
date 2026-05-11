@@ -12,13 +12,12 @@ interface Calendar {
   title: string;
   description: string;
   visibleTo: Array<string>;
-  signupLink: string;
+  signupLink?: string | null;
 }
 const defaultCalendar: Calendar = {
   title: "",
   description: "",
   visibleTo: [Roles.Everyone],
-  signupLink: "",
 };
 
 const calendarSchema = z.object({
@@ -28,7 +27,7 @@ const calendarSchema = z.object({
     .array(z.enum(VisibleToOptions))
     .min(1, "At least one visibility option must be selected"),
 
-  signupLink: z.url(),
+  signupLink: z.url().optional(),
 });
 
 export const TestForm = () => {
