@@ -248,6 +248,7 @@ export const TestForm = () => {
                       className="flex flex-row items-center hover:bg-slate-800 rounded-md p-1"
                     >
                       <Button
+                        type="button"
                         onClick={() => handleRemoveDate(index)}
                         variant="destructive"
                         className="hover:cursor-pointer mr-3 w-8 h-8"
@@ -464,14 +465,10 @@ export function DateTimeRangePicker({
   function handleAdd() {
     if (!date) return;
 
-    console.log("handleAdd called");
-    console.log(date, " : ", startAt, " - ", endAt);
-
+    // Build the start and end dates.
     const dateOnly = date?.toISOString().substring(0, 11);
     const startDate = new Date(dateOnly + startAt);
     const endDate = new Date(dateOnly + endAt);
-
-    console.log(startDate, " through ", endDate);
 
     dateSelected(startDate, endDate);
   }
@@ -524,7 +521,7 @@ export function DateTimeRangePicker({
         />
       </Field>
       <Field className="items-end justify-end">
-        <Button onClick={() => handleAdd()} className="" variant="secondary">
+        <Button onClick={() => handleAdd()} className="" variant="secondary" type="button">
           <Plus className="" />
         </Button>
       </Field>
