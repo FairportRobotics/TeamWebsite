@@ -214,9 +214,25 @@ export const TestForm = () => {
         {/* Dates */}
         <div>
           <Label className="mb-3 font-bold text-lg">Event dates:</Label>
-          <div className="flex flex-row items-center gap-2 space-y-4 pl-6 mt-3">
+          <div className="space-y-4 pl-6 mt-3">
             <DateTimeRangePicker
               dateSelected={(startDate, endDate) => handleAddDate(startDate, endDate)}
+            />
+            <form.Field
+              name="dates"
+              children={(field) => (
+                <div>
+                  <ul className="text-red-600 list-disc list-inside">
+                    {field.state.meta.errors.map((e) => {
+                      return (
+                        <li className="" key={e?.message}>
+                          {e?.message}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              )}
             />
           </div>
           <div className="space-y-4 pl-6 mt-3">
