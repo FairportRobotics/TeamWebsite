@@ -31,10 +31,12 @@ import { Route as CalendarIdIndexRouteImport } from './routes/calendar/$id/index
 import { Route as AdminUsersIndexRouteImport } from './routes/admin/users/index'
 import { Route as AdminCalendarIndexRouteImport } from './routes/admin/calendar/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as AdminCalendarTestRouteImport } from './routes/admin/calendar/test'
 import { Route as AdminUsersUserIdRouteRouteImport } from './routes/admin/users/$userId/route'
 import { Route as AdminUsersUserIdIndexRouteImport } from './routes/admin/users/$userId/index'
 import { Route as AdminCalendarIdIndexRouteImport } from './routes/admin/calendar/$id/index'
 import { Route as AdminUsersUserIdEditRouteImport } from './routes/admin/users/$userId/edit'
+import { Route as AdminCalendarIdEditRouteImport } from './routes/admin/calendar/$id/edit'
 
 const UnauthorizedRoute = UnauthorizedRouteImport.update({
   id: '/unauthorized',
@@ -146,6 +148,11 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminCalendarTestRoute = AdminCalendarTestRouteImport.update({
+  id: '/calendar/test',
+  path: '/calendar/test',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminUsersUserIdRouteRoute = AdminUsersUserIdRouteRouteImport.update({
   id: '/users/$userId',
   path: '/users/$userId',
@@ -165,6 +172,11 @@ const AdminUsersUserIdEditRoute = AdminUsersUserIdEditRouteImport.update({
   id: '/edit',
   path: '/edit',
   getParentRoute: () => AdminUsersUserIdRouteRoute,
+} as any)
+const AdminCalendarIdEditRoute = AdminCalendarIdEditRouteImport.update({
+  id: '/calendar/$id/edit',
+  path: '/calendar/$id/edit',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -187,10 +199,12 @@ export interface FileRoutesByFullPath {
   '/sponsors/': typeof SponsorsIndexRoute
   '/team/': typeof TeamIndexRoute
   '/admin/users/$userId': typeof AdminUsersUserIdRouteRouteWithChildren
+  '/admin/calendar/test': typeof AdminCalendarTestRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/admin/calendar/': typeof AdminCalendarIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
   '/calendar/$id/': typeof CalendarIdIndexRoute
+  '/admin/calendar/$id/edit': typeof AdminCalendarIdEditRoute
   '/admin/users/$userId/edit': typeof AdminUsersUserIdEditRoute
   '/admin/calendar/$id/': typeof AdminCalendarIdIndexRoute
   '/admin/users/$userId/': typeof AdminUsersUserIdIndexRoute
@@ -213,10 +227,12 @@ export interface FileRoutesByTo {
   '/games': typeof GamesIndexRoute
   '/sponsors': typeof SponsorsIndexRoute
   '/team': typeof TeamIndexRoute
+  '/admin/calendar/test': typeof AdminCalendarTestRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/admin/calendar': typeof AdminCalendarIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
   '/calendar/$id': typeof CalendarIdIndexRoute
+  '/admin/calendar/$id/edit': typeof AdminCalendarIdEditRoute
   '/admin/users/$userId/edit': typeof AdminUsersUserIdEditRoute
   '/admin/calendar/$id': typeof AdminCalendarIdIndexRoute
   '/admin/users/$userId': typeof AdminUsersUserIdIndexRoute
@@ -242,10 +258,12 @@ export interface FileRoutesById {
   '/sponsors/': typeof SponsorsIndexRoute
   '/team/': typeof TeamIndexRoute
   '/admin/users/$userId': typeof AdminUsersUserIdRouteRouteWithChildren
+  '/admin/calendar/test': typeof AdminCalendarTestRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/admin/calendar/': typeof AdminCalendarIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
   '/calendar/$id/': typeof CalendarIdIndexRoute
+  '/admin/calendar/$id/edit': typeof AdminCalendarIdEditRoute
   '/admin/users/$userId/edit': typeof AdminUsersUserIdEditRoute
   '/admin/calendar/$id/': typeof AdminCalendarIdIndexRoute
   '/admin/users/$userId/': typeof AdminUsersUserIdIndexRoute
@@ -272,10 +290,12 @@ export interface FileRouteTypes {
     | '/sponsors/'
     | '/team/'
     | '/admin/users/$userId'
+    | '/admin/calendar/test'
     | '/api/auth/$'
     | '/admin/calendar/'
     | '/admin/users/'
     | '/calendar/$id/'
+    | '/admin/calendar/$id/edit'
     | '/admin/users/$userId/edit'
     | '/admin/calendar/$id/'
     | '/admin/users/$userId/'
@@ -298,10 +318,12 @@ export interface FileRouteTypes {
     | '/games'
     | '/sponsors'
     | '/team'
+    | '/admin/calendar/test'
     | '/api/auth/$'
     | '/admin/calendar'
     | '/admin/users'
     | '/calendar/$id'
+    | '/admin/calendar/$id/edit'
     | '/admin/users/$userId/edit'
     | '/admin/calendar/$id'
     | '/admin/users/$userId'
@@ -326,10 +348,12 @@ export interface FileRouteTypes {
     | '/sponsors/'
     | '/team/'
     | '/admin/users/$userId'
+    | '/admin/calendar/test'
     | '/api/auth/$'
     | '/admin/calendar/'
     | '/admin/users/'
     | '/calendar/$id/'
+    | '/admin/calendar/$id/edit'
     | '/admin/users/$userId/edit'
     | '/admin/calendar/$id/'
     | '/admin/users/$userId/'
@@ -508,6 +532,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/calendar/test': {
+      id: '/admin/calendar/test'
+      path: '/calendar/test'
+      fullPath: '/admin/calendar/test'
+      preLoaderRoute: typeof AdminCalendarTestRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/users/$userId': {
       id: '/admin/users/$userId'
       path: '/users/$userId'
@@ -536,6 +567,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsersUserIdEditRouteImport
       parentRoute: typeof AdminUsersUserIdRouteRoute
     }
+    '/admin/calendar/$id/edit': {
+      id: '/admin/calendar/$id/edit'
+      path: '/calendar/$id/edit'
+      fullPath: '/admin/calendar/$id/edit'
+      preLoaderRoute: typeof AdminCalendarIdEditRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
   }
 }
 
@@ -559,8 +597,10 @@ interface AdminRouteRouteChildren {
   AdminSponsorsRoute: typeof AdminSponsorsRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminUsersUserIdRouteRoute: typeof AdminUsersUserIdRouteRouteWithChildren
+  AdminCalendarTestRoute: typeof AdminCalendarTestRoute
   AdminCalendarIndexRoute: typeof AdminCalendarIndexRoute
   AdminUsersIndexRoute: typeof AdminUsersIndexRoute
+  AdminCalendarIdEditRoute: typeof AdminCalendarIdEditRoute
   AdminCalendarIdIndexRoute: typeof AdminCalendarIdIndexRoute
 }
 
@@ -569,8 +609,10 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminSponsorsRoute: AdminSponsorsRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminUsersUserIdRouteRoute: AdminUsersUserIdRouteRouteWithChildren,
+  AdminCalendarTestRoute: AdminCalendarTestRoute,
   AdminCalendarIndexRoute: AdminCalendarIndexRoute,
   AdminUsersIndexRoute: AdminUsersIndexRoute,
+  AdminCalendarIdEditRoute: AdminCalendarIdEditRoute,
   AdminCalendarIdIndexRoute: AdminCalendarIdIndexRoute,
 }
 

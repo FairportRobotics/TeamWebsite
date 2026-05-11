@@ -97,6 +97,24 @@ export const getCalendarListDetailsFn = createServerFn()
     return results;
   });
 
+export type CalendarForEdit = Awaited<ReturnType<typeof getCalendarForEditFn>>;
+export const getCalendarForEditFn = createServerFn()
+  .middleware([authenticatedMiddleware])
+  .inputValidator(zodValidator(calendarIdSchema))
+  .handler(async ({ data }) => {
+    // Retrieve the calendar, the dates and the users who have touched the record.
+    const results = await db.query.calendarTable.findFirst({
+      where: eq(calendarTable.id, data.id),
+      with: {
+        dates: true,
+        createdBy: true,
+        updatedBy: true,
+      },
+    });
+
+    return results;
+  });
+
 export const requestApprovalCalendarFn = createServerFn()
   .middleware([authenticatedMiddleware])
   .inputValidator(zodValidator(calendarIdSchema))
