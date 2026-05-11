@@ -5,34 +5,35 @@ import { user } from "../schema";
 import { statusEnum, visibleEnum, type InferResultType } from "./_common";
 
 // Stores all the events in which the team will host or participate.
-export const calendarTable = pgTable("calendar", {
-  id: uuid("id").primaryKey().defaultRandom(),
-
-  status: statusEnum("status").notNull().default("draft"),
-  visibleTo: visibleEnum("visible_to").array().default([Roles.Everyone]),
-
-  title: text("title").notNull(),
-  description: text("description").array(),
-  location: text("location").notNull(),
-
-  informationLink: text("information_link"),
-
-  signupLink: text("signup_link"),
-  signupLinkVisibleTo: visibleEnum("signup_link_visible_to")
-    .array()
-    .default([Roles.Student, Roles.Mentor]),
-
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  createdBy: text("created_by_user_id")
-    .notNull()
-    .references(() => user.id, { onDelete: "no action" }),
-
-  updatedBy: text("updated_by_user_id").references(() => user.id, { onDelete: "no action" }),
-  updatedAt: timestamp("updated_at")
-    .defaultNow()
-    .$onUpdate(() => /* @__PURE__ */ new Date())
-    .notNull(),
-});
+export const calendarTable = pgTable(
+  "calendar",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    status: statusEnum("status").notNull().default("draft"),
+    visibleTo: visibleEnum("visible_to").array().default([Roles.Everyone]),
+    title: text("title").notNull(),
+    description: text("description").array(),
+    location: text("location").notNull(),
+    informationLink: text("information_link"),
+    signupLink: text("signup_link"),
+    signupLinkVisibleTo: visibleEnum("signup_link_visible_to")
+      .array()
+      .default([Roles.Student, Roles.Mentor]),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    createdBy: text("created_by_user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "no action" }),
+    updatedBy: text("updated_by_user_id").references(() => user.id, { onDelete: "no action" }),
+    updatedAt: timestamp("updated_at")
+      .defaultNow()
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  },
+  (table) => [
+    index("idx_calendar_status").on(table.status),
+    index("idx_calendar_visibleTo").on(table.visibleTo),
+  ],
+);
 
 // Stores the date ranges of events. In most cases, there will be a single date range.
 export const calendarDates = pgTable(
@@ -54,6 +55,4 @@ export type CalendarSelectItem = typeof calendarTable.$inferSelect;
 export type CalendarInsertItem = typeof calendarTable.$inferInsert;
 export type CalendarItemStatus = typeof calendarTable.$inferSelect.status;
 export type CalendarItemVisibleTo = typeof calendarTable.$inferSelect.visibleTo;
-
-// Example Usage:
 export type CalendarWithDatesSelect = InferResultType<"calendarTable", { dates: true }>;
