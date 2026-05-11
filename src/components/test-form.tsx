@@ -212,59 +212,55 @@ export const TestForm = () => {
         />
 
         {/* Dates */}
-        <div>
-          <Label className="mb-3 font-bold text-lg">Event dates:</Label>
-          <div className="space-y-4 pl-6 mt-3">
-            <DateTimeRangePicker
-              dateSelected={(startDate, endDate) => handleAddDate(startDate, endDate)}
-            />
-            <form.Field
-              name="dates"
-              children={(field) => (
-                <div>
-                  <ul className="text-red-600 list-disc list-inside">
-                    {field.state.meta.errors.map((e) => {
-                      return (
-                        <li className="" key={e?.message}>
-                          {e?.message}
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
-              )}
-            />
-          </div>
-          <div className="space-y-4 pl-6 mt-3">
-            <form.Subscribe
-              selector={(state) => state.values.dates}
-              children={() => (
-                <form.Field name="dates" mode="array">
-                  {(field) => (
-                    <div className="gap-2 flex flex-col">
-                      {field.state.value.map((date, index) => (
-                        <div
-                          key={index}
-                          className="flex flex-row items-center hover:bg-slate-800 rounded-md p-1"
-                        >
-                          <Button
-                            onClick={() => handleRemoveDate(index)}
-                            variant="destructive"
-                            className="hover:cursor-pointer mr-3 w-8 h-8"
+        <form.Field
+          name="dates"
+          children={(field) => (
+            <div>
+              <Label className="mb-3 font-bold text-lg">Event dates:</Label>
+              <DateTimeRangePicker
+                dateSelected={(startDate, endDate) => handleAddDate(startDate, endDate)}
+              />
+              <div>
+                <ul className="text-red-600 list-disc list-inside">
+                  {field.state.meta.errors.map((e) => {
+                    return (
+                      <li className="" key={e?.message}>
+                        {e?.message}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+              <form.Subscribe
+                selector={(state) => state.values.dates}
+                children={() => (
+                  <form.Field name="dates" mode="array">
+                    {(field) => (
+                      <div className="gap-2 flex flex-col">
+                        {field.state.value.map((date, index) => (
+                          <div
+                            key={index}
+                            className="flex flex-row items-center hover:bg-slate-800 rounded-md p-1"
                           >
-                            <Trash2 className="" />
-                          </Button>
-                          {date.startAt.toLocaleDateString()} from{" "}
-                          {date.startAt.toLocaleTimeString()} to {date.endAt.toLocaleTimeString()}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </form.Field>
-              )}
-            />
-          </div>
-        </div>
+                            <Button
+                              onClick={() => handleRemoveDate(index)}
+                              variant="destructive"
+                              className="hover:cursor-pointer mr-3 w-8 h-8"
+                            >
+                              <Trash2 className="" />
+                            </Button>
+                            {date.startAt.toLocaleDateString()} from{" "}
+                            {date.startAt.toLocaleTimeString()} to {date.endAt.toLocaleTimeString()}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </form.Field>
+                )}
+              />
+            </div>
+          )}
+        />
 
         {/* Visible To */}
         <form.Field
