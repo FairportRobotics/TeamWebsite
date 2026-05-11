@@ -30,7 +30,7 @@ interface Calendar {
   dates: Array<CalendarDate>;
   informationLink?: string | undefined;
   signupLink?: string | undefined;
-  signupLinkVisibleTo: Array<string>;
+  signupLinkVisibleTo?: Array<string>;
 }
 
 const defaultCalendar: Calendar = {
@@ -41,7 +41,7 @@ const defaultCalendar: Calendar = {
   dates: [] as CalendarDate[],
   informationLink: undefined,
   signupLink: undefined,
-  signupLinkVisibleTo: [Roles.Student, Roles.Mentor],
+  signupLinkVisibleTo: [] as Array<string>,
 };
 
 const dateSchema = z.object({
@@ -60,9 +60,7 @@ const calendarSchema = z
     dates: z.array(dateSchema).min(1, "At least one date range is required"),
     informationLink: z.url().optional().or(z.literal("")),
     signupLink: z.url().optional().or(z.literal("")),
-    signupLinkVisibleTo: z
-      .array(z.enum(VisibleToOptions))
-      .min(1, "At least one visibility option must be selected"),
+    signupLinkVisibleTo: z.array(z.enum(VisibleToOptions)),
   })
   .refine(
     (data) => {
@@ -115,7 +113,7 @@ export const TestForm = () => {
     setShowSignup(checked);
     if (!checked) {
       form.state.values.signupLink = "";
-      form.state.values.signupLinkVisibleTo = [Roles.Student, Roles.Mentor];
+      form.state.values.signupLinkVisibleTo = [];
     }
   }
 
