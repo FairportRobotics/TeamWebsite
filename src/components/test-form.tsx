@@ -155,42 +155,33 @@ export const TestForm = () => {
           )}
         />
 
-        {/* Dates */}
-        <div>
-          <Label className="mb-3 font-bold text-lg">Dates:</Label>
-          <div className="flex flex-row items-center gap-2">
-            <DateTimePicker
-              dateSelected={(startDate, endDate) => handleAddDate(startDate, endDate)}
-            />
-          </div>
-          <form.Subscribe
-            selector={(state) => state.values.dates}
-            children={() => (
-              <form.Field name="dates" mode="array">
-                {(field) => (
-                  <div className="gap-2 flex flex-col">
-                    {field.state.value.map((date, index) => (
-                      <div
-                        key={index}
-                        className="flex flex-row items-center hover:bg-slate-800 rounded-md p-2"
-                      >
-                        <Button
-                          onClick={() => handleRemoveDate(index)}
-                          variant="destructive"
-                          className="hover:cursor-pointer mr-3"
-                        >
-                          <Trash2 />
-                        </Button>
-                        {date.startAt.toLocaleDateString()} from {date.startAt.toLocaleTimeString()}{" "}
-                        to {date.endAt.toLocaleTimeString()}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </form.Field>
-            )}
-          />
-        </div>
+        {/* Description */}
+        <form.Field
+          name="description"
+          children={(field) => (
+            <div>
+              <Label className="mb-3 font-bold text-lg">Description:</Label>
+              <Textarea
+                name={field.name}
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                placeholder="Enter a description. Multiple lines are supported."
+                autoComplete="off"
+                rows={5}
+                onChange={(e) => field.handleChange(e.target.value)}
+              />
+              <ul className="text-red-600 list-disc list-inside">
+                {field.state.meta.errors.map((e) => {
+                  return (
+                    <li className="" key={e?.message}>
+                      {e?.message}
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          )}
+        />
 
         {/* Location */}
         <form.Field
@@ -220,33 +211,44 @@ export const TestForm = () => {
           )}
         />
 
-        {/* Description */}
-        <form.Field
-          name="description"
-          children={(field) => (
-            <div>
-              <Label className="mb-3 font-bold text-lg">Description:</Label>
-              <Textarea
-                name={field.name}
-                value={field.state.value}
-                onBlur={field.handleBlur}
-                placeholder="Enter a description. Multiple lines are supported."
-                autoComplete="off"
-                rows={5}
-                onChange={(e) => field.handleChange(e.target.value)}
-              />
-              <ul className="text-red-600 list-disc list-inside">
-                {field.state.meta.errors.map((e) => {
-                  return (
-                    <li className="" key={e?.message}>
-                      {e?.message}
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          )}
-        />
+        {/* Dates */}
+        <div>
+          <Label className="mb-3 font-bold text-lg">Event dates:</Label>
+          <div className="flex flex-row items-center gap-2 space-y-4 pl-6 mt-3">
+            <DateTimeRangePicker
+              dateSelected={(startDate, endDate) => handleAddDate(startDate, endDate)}
+            />
+          </div>
+          <div className="space-y-4 pl-6 mt-3">
+            <form.Subscribe
+              selector={(state) => state.values.dates}
+              children={() => (
+                <form.Field name="dates" mode="array">
+                  {(field) => (
+                    <div className="gap-2 flex flex-col">
+                      {field.state.value.map((date, index) => (
+                        <div
+                          key={index}
+                          className="flex flex-row items-center hover:bg-slate-800 rounded-md p-1"
+                        >
+                          <Button
+                            onClick={() => handleRemoveDate(index)}
+                            variant="destructive"
+                            className="hover:cursor-pointer mr-3 w-8 h-8"
+                          >
+                            <Trash2 className="" />
+                          </Button>
+                          {date.startAt.toLocaleDateString()} from{" "}
+                          {date.startAt.toLocaleTimeString()} to {date.endAt.toLocaleTimeString()}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </form.Field>
+              )}
+            />
+          </div>
+        </div>
 
         {/* Visible To */}
         <form.Field
@@ -386,7 +388,7 @@ export const TestForm = () => {
   );
 };
 
-export function DateTimePicker({
+export function DateTimeRangePicker({
   dateSelected,
 }: {
   dateSelected: (startAt: Date, endAt: Date) => void;
@@ -397,6 +399,8 @@ export function DateTimePicker({
   const [endAt, setEndAt] = React.useState<string>("17:00:00");
 
   function handleAdd() {
+    if (!date) return;
+
     console.log("handleAdd called");
     console.log(date, " : ", startAt, " - ", endAt);
 
