@@ -25,16 +25,25 @@ export const Permissions = {
   SponsorDelete: "sponsor:delete",
   SponsorUpdate: "sponsor:update",
 
-  UserAdminister: "user:administer",
-  UserApprove: "user:approve",
   UserAssociateParent: "user:associate:parent",
   UserAssociateStudent: "user:associate:student",
   UserBan: "user:ban",
   UserCreate: "user:create",
-  UserDelete: "user:delete",
+  UserEditAny: "user:edit:any",
   UserImpersonate: "user:impersonate",
-  UserUpdate: "user:update",
   UserRevokeSessions: "user:revoke:sessions",
+  UserUnban: "user:unban",
+  UserViewAll: "user:view:all",
+
+  // EventApprovePending: "event:approve:pending",
+  // EventCreate: "event:create",
+  // EventEditAny: "event:edit:any",
+  // EventEditOwn: "event:edit:own",
+  // EventViewAll: "event:view:all",
+  // EventViewAllPending: "event:view:all:pending",
+  // EventViewOwnPending: "event:view:own:pending",
+  // EventViewPublished: "event:view:published",
+  // EventViewPublished: "event:view:published",
 } as const;
 
 export const PermissionSchema = z.enum(Permissions);

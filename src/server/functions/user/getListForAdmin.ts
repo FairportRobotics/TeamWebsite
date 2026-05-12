@@ -1,6 +1,8 @@
 // prettier-ignore
 import { db } from "@/db";
 import { account as dbAccounts, session as dbSessions, user as dbUsers } from "@/db/schema";
+import { Permissions } from "@/lib/auth/permissions";
+import { anyPermissionMiddleware } from "@/server/middleware/anyPermission";
 import { authenticatedMiddleware } from "@/server/middleware/authenticated";
 import { createServerFn } from "@tanstack/react-start";
 import { count, eq, max } from "drizzle-orm";
@@ -8,7 +10,7 @@ import { count, eq, max } from "drizzle-orm";
 // Gets a list of all users.
 export type UserListItem = Awaited<ReturnType<typeof getListForAdminFn>>[0];
 export const getListForAdminFn = createServerFn()
-  .middleware([authenticatedMiddleware])
+  .middleware([authenticatedMiddleware, anyPermissionMiddleware([Permissions.UserViewAll])])
   .handler(async () => {
     // Get Users and some associated details.
     const users = await db

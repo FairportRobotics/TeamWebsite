@@ -5,8 +5,10 @@ import { PageDescription, PageHeader, PageTitle } from "@/components/page-header
 import { SectionHeader } from "@/components/section-header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { authClient } from "@/lib/auth/auth-client";
 import { getUserDetailsFn } from "@/server/functions/user/getUserDetails";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/users/$userId/")({
   component: RouteComponent,
@@ -18,6 +20,36 @@ export const Route = createFileRoute("/admin/users/$userId/")({
 
 function RouteComponent() {
   const { user, accounts, sessions } = Route.useLoaderData();
+  const router = useRouter();
+
+  async function handleUnbanUser() {
+    await authClient.admin.unbanUser(
+      { userId: user.id },
+      {
+        onError: (error) => {
+          toast.error(error.error.message || "Failed to unban user");
+        },
+        onSuccess: () => {
+          toast.success("User was unbanned");
+          router.invalidate();
+        },
+      },
+    );
+  }
+
+  async function handleBanUser() {
+    await authClient.admin.banUser(
+      { userId: user.id, banReason: "testing 1..2..3.." },
+      {
+        onError: (error) => {
+          toast.error(error.error.message || "Failed to ban user");
+        },
+        onSuccess: () => {
+          toast.success("User was banned");
+        },
+      },
+    );
+  }
 
   return (
     <div>
@@ -44,11 +76,13 @@ function RouteComponent() {
           <div className="flex flex-row items-center mt-6 gap-4">
             <div>
               {user.banned ? (
-                <div>
-                  {user.banned} : {user.banReason} : {user.banExpires?.toISOString()}
-                </div>
+                <Button variant="destructive" onClick={handleUnbanUser}>
+                  Unban
+                </Button>
               ) : (
-                <Button variant="destructive">Ban</Button>
+                <Button variant="destructive" onClick={handleBanUser}>
+                  Ban
+                </Button>
               )}
             </div>
             <div>

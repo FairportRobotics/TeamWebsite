@@ -29,7 +29,7 @@ export const RolePermissions: Record<Role, Permission[]> = {
     Permissions.EventAdminister,
     Permissions.GameYearAdminister,
     Permissions.SponsorAdminister,
-    Permissions.UserAdminister,
+    Permissions.UserViewAll,
     Permissions.UserAssociateStudent,
     Permissions.EventReadPrivate,
     Permissions.UserImpersonate,
@@ -69,15 +69,14 @@ export const RolePermissions: Record<Role, Permission[]> = {
   ],
 
   userModerator: [
-    Permissions.UserAdminister,
-    Permissions.UserApprove,
     Permissions.UserAssociateParent,
     Permissions.UserAssociateStudent,
     Permissions.UserBan,
     Permissions.UserCreate,
-    Permissions.UserDelete,
+    Permissions.UserEditAny,
     Permissions.UserImpersonate,
-    Permissions.UserUpdate,
     Permissions.UserRevokeSessions,
+    Permissions.UserUnban,
+    Permissions.UserViewAll,
   ],
 };

@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { UserListItem } from "@/lib/fn/user";
+import type { UserListItem } from "@/server/functions/user/getListForAdmin";
 import { Link } from "@tanstack/react-router";
 import {
   flexRender,
