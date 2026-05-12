@@ -4,6 +4,7 @@ import { BackTo } from "@/components/back-to";
 import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
 import { PageSectionContainer } from "@/components/page-section-container";
 import { TeamActionButton } from "@/components/team-action-buttom";
+import { Button } from "@/components/ui/button";
 import { Permissions } from "@/lib/auth/permissions";
 import { assertHasAnyPermissionFn } from "@/lib/auth/server";
 import {
@@ -13,7 +14,7 @@ import {
   requestApprovalCalendarFn,
   seedCalendarFn,
 } from "@/lib/fn/calendar";
-import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin/calendar/")({
   beforeLoad: async () => {
@@ -124,9 +125,13 @@ function RouteComponent() {
         </PageSectionContainer>
       </div>
 
+      <Button asChild variant="default">
+        <Link to="/admin/calendar/new">Create New Event</Link>
+      </Button>
+
       <TeamActionButton
         variant="destructive"
-        className="mt-10"
+        className="mt-10 ml-6"
         action={() => {
           return handleSeedCalendar();
         }}
