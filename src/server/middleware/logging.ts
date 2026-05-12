@@ -1,5 +1,5 @@
+import { logger } from "@/lib/logger";
 import { createMiddleware } from "@tanstack/react-start";
-import { logger } from "../logger";
 
 const generateRequestId = () => `req_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
 
