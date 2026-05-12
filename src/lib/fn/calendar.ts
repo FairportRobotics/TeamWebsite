@@ -10,6 +10,9 @@ import { Roles } from "../auth/permissions";
 import { assertAuthenticatedFn } from "../auth/server";
 import { authenticatedMiddleware } from "../middleware/authenticatedMiddleware";
 
+// TODO: Refactor to use the InferResultType utility type from _common.ts for better type safety and
+// consistency across database query results. This will help ensure that the types of the results we
+// get from our database queries are accurate and consistent with our schema definitions.
 export const VisibleToOptions = [
   Roles.Everyone,
   Roles.Student,
@@ -17,11 +20,15 @@ export const VisibleToOptions = [
   Roles.Parent,
 ] as const;
 
+// Create a schema for validating the date ranges for calendar events. We will use this as a
+// nested schema in the main calendar insert and update schema.
 export const calendarDateInsertSchema = z.object({
   startAt: z.date(),
   endAt: z.date(),
 });
 
+// Create a schema for validating calendar insert and update operations. We can reuse this for
+// both operations since they have the same requirements.
 export const calendarInsertSchema = z
   .object({
     title: z.string().trim().min(1, "Title is required"),
@@ -222,12 +229,12 @@ export const archiveCalendarFn = createServerFn()
     return true;
   });
 
+// TODO: Validate that the user has permission to perform this action based on the visibility options
+// of the calendar item and the user's roles.
 export const saveCalendarFn = createServerFn()
   .middleware([authenticatedMiddleware])
   .inputValidator(zodValidator(calendarInsertSchema))
   .handler(async ({ data, context }) => {
-    console.log("saveCalendarFn", data);
-
     try {
       const currentUserId = context!.user!.id;
       const id = crypto.randomUUID();

@@ -31,7 +31,6 @@ import { Route as CalendarIdIndexRouteImport } from './routes/calendar/$id/index
 import { Route as AdminUsersIndexRouteImport } from './routes/admin/users/index'
 import { Route as AdminCalendarIndexRouteImport } from './routes/admin/calendar/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
-import { Route as AdminCalendarTestRouteImport } from './routes/admin/calendar/test'
 import { Route as AdminCalendarNewRouteImport } from './routes/admin/calendar/new'
 import { Route as AdminUsersUserIdRouteRouteImport } from './routes/admin/users/$userId/route'
 import { Route as AdminUsersUserIdIndexRouteImport } from './routes/admin/users/$userId/index'
@@ -149,11 +148,6 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminCalendarTestRoute = AdminCalendarTestRouteImport.update({
-  id: '/calendar/test',
-  path: '/calendar/test',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
 const AdminCalendarNewRoute = AdminCalendarNewRouteImport.update({
   id: '/calendar/new',
   path: '/calendar/new',
@@ -206,7 +200,6 @@ export interface FileRoutesByFullPath {
   '/team/': typeof TeamIndexRoute
   '/admin/users/$userId': typeof AdminUsersUserIdRouteRouteWithChildren
   '/admin/calendar/new': typeof AdminCalendarNewRoute
-  '/admin/calendar/test': typeof AdminCalendarTestRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/admin/calendar/': typeof AdminCalendarIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
@@ -235,7 +228,6 @@ export interface FileRoutesByTo {
   '/sponsors': typeof SponsorsIndexRoute
   '/team': typeof TeamIndexRoute
   '/admin/calendar/new': typeof AdminCalendarNewRoute
-  '/admin/calendar/test': typeof AdminCalendarTestRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/admin/calendar': typeof AdminCalendarIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
@@ -267,7 +259,6 @@ export interface FileRoutesById {
   '/team/': typeof TeamIndexRoute
   '/admin/users/$userId': typeof AdminUsersUserIdRouteRouteWithChildren
   '/admin/calendar/new': typeof AdminCalendarNewRoute
-  '/admin/calendar/test': typeof AdminCalendarTestRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/admin/calendar/': typeof AdminCalendarIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
@@ -300,7 +291,6 @@ export interface FileRouteTypes {
     | '/team/'
     | '/admin/users/$userId'
     | '/admin/calendar/new'
-    | '/admin/calendar/test'
     | '/api/auth/$'
     | '/admin/calendar/'
     | '/admin/users/'
@@ -329,7 +319,6 @@ export interface FileRouteTypes {
     | '/sponsors'
     | '/team'
     | '/admin/calendar/new'
-    | '/admin/calendar/test'
     | '/api/auth/$'
     | '/admin/calendar'
     | '/admin/users'
@@ -360,7 +349,6 @@ export interface FileRouteTypes {
     | '/team/'
     | '/admin/users/$userId'
     | '/admin/calendar/new'
-    | '/admin/calendar/test'
     | '/api/auth/$'
     | '/admin/calendar/'
     | '/admin/users/'
@@ -544,13 +532,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/calendar/test': {
-      id: '/admin/calendar/test'
-      path: '/calendar/test'
-      fullPath: '/admin/calendar/test'
-      preLoaderRoute: typeof AdminCalendarTestRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
     '/admin/calendar/new': {
       id: '/admin/calendar/new'
       path: '/calendar/new'
@@ -617,7 +598,6 @@ interface AdminRouteRouteChildren {
   AdminIndexRoute: typeof AdminIndexRoute
   AdminUsersUserIdRouteRoute: typeof AdminUsersUserIdRouteRouteWithChildren
   AdminCalendarNewRoute: typeof AdminCalendarNewRoute
-  AdminCalendarTestRoute: typeof AdminCalendarTestRoute
   AdminCalendarIndexRoute: typeof AdminCalendarIndexRoute
   AdminUsersIndexRoute: typeof AdminUsersIndexRoute
   AdminCalendarIdEditRoute: typeof AdminCalendarIdEditRoute
@@ -630,7 +610,6 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminIndexRoute: AdminIndexRoute,
   AdminUsersUserIdRouteRoute: AdminUsersUserIdRouteRouteWithChildren,
   AdminCalendarNewRoute: AdminCalendarNewRoute,
-  AdminCalendarTestRoute: AdminCalendarTestRoute,
   AdminCalendarIndexRoute: AdminCalendarIndexRoute,
   AdminUsersIndexRoute: AdminUsersIndexRoute,
   AdminCalendarIdEditRoute: AdminCalendarIdEditRoute,
