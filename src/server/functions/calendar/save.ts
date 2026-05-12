@@ -62,6 +62,7 @@ export const calendarInsertSchema = z
 
 // TODO: Validate that the user has permission to perform this action based on the visibility options
 // of the calendar item and the user's roles.
+// TODO: Refactor this so it will work for new and edited calendar events.
 export const saveCalendarFn = createServerFn()
   .middleware([authenticatedMiddleware, anyPermissionMiddleware([Permissions.EventUpdate])])
   .inputValidator(zodValidator(calendarInsertSchema))
