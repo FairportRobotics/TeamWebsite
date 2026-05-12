@@ -5,7 +5,7 @@ import { PageDescription, PageHeader, PageTitle } from "@/components/page-header
 import { SectionHeader } from "@/components/section-header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getUserDetailsFn } from "@/lib/fn/user";
+import { getUserDetailsFn } from "@/server/functions/user/getUserDetails";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin/users/$userId/")({

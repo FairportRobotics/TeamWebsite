@@ -1,6 +1,6 @@
 import { BackTo } from "@/components/back-to";
 import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
-import { getUserDetailsFn } from "@/lib/fn/user";
+import { getUserDetailsFn } from "@/server/functions/user/getUserDetails";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/team/$id")({

@@ -2,7 +2,7 @@ import { UserListTable } from "@/components/admin/users/users-list-table";
 import { BackTo } from "@/components/back-to";
 import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
 import { SectionHeader } from "@/components/section-header";
-import { getUserListFn } from "@/lib/fn/user";
+import { getListForAdminFn } from "@/server/functions/user/getListForAdmin";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin/users/")({
@@ -13,7 +13,7 @@ export const Route = createFileRoute("/admin/users/")({
     const userId = context.session?.user.id;
 
     // Get all the users.
-    const users = await getUserListFn();
+    const users = await getListForAdminFn();
 
     return {
       users,
