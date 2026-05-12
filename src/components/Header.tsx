@@ -1,35 +1,28 @@
-"use client";
-
 // prettier-ignore
+import { Permissions } from "@/lib/auth//permissions";
 import { authClient } from "@/lib/auth/auth-client";
+import { hasAnyPermission } from "@/lib/auth/guard";
 import { Link, useNavigate } from "@tanstack/react-router";
-import type { User } from "better-auth";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HeaderLink } from "./header-link";
 import { ImpersonateButton } from "./impersonate-button";
 import { Button } from "./ui/button";
 
-export interface NavUserProps {
-  user?: User | undefined;
-}
-
 export default function Header() {
   const navigate = useNavigate();
   const { data: session, isPending } = authClient.useSession();
-  const [hasAdmin, setHasAdmin] = useState<boolean>(true);
+  const [hasAdmin, setHasAdmin] = useState<boolean>(false);
 
-  // const checkPermissions = useServerFn(hasAnyPermissionFn);
+  useEffect(() => {
+    const result = hasAnyPermission(session?.user.role, [
+      Permissions.EventAdminister,
+      Permissions.GameYearAdminister,
+      Permissions.SponsorAdminister,
+      Permissions.UserAdminister,
+    ]);
 
-  // checkPermissions({
-  //   data: {
-  //     permissions: [
-  //       Permissions.EventAdminister,
-  //       Permissions.GameYearAdminister,
-  //       Permissions.SponsorAdminister,
-  //       Permissions.UserAdminister,
-  //     ],
-  //   },
-  // }).then((result) => setHasAdmin(result));
+    setHasAdmin(result);
+  }, [session, isPending]);
 
   async function handleSignOut() {
     await authClient.signOut();
