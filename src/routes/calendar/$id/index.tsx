@@ -1,8 +1,8 @@
 import { BackTo } from "@/components/back-to";
 import { PageHeader, PageTitle } from "@/components/page-header";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { getCalendarListDetailsFn } from "@/lib/fn/calendar";
 import { getDateRangeString } from "@/lib/utils";
+import { getCalendarListDetailsFn } from "@/server/functions/calendar/getCalendarDetails";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { format } from "date-fns";
 import { CircleSmall, Clock, InfoIcon, MapPin, Signature, type LucideProps } from "lucide-react";

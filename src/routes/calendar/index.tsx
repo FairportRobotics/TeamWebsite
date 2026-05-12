@@ -2,7 +2,7 @@ import { EventCalendar } from "@/components/event-calendar";
 import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { getPublishedCalendarFn } from "@/server/functions/calendar-list-get-published";
+import { getPublishedCalendarFn } from "@/server/functions/calendar/getPublishedCalendar";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 

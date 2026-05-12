@@ -1,11 +1,13 @@
 // prettier-ignore
 import { db } from "@/db";
 import { calendarDates, calendarTable } from "@/db/schema";
+import { Permissions } from "@/lib/auth/permissions";
 import { Roles } from "@/lib/auth/roles";
+import { anyPermissionMiddleware } from "@/server/middleware/anyPermission";
+import { authenticatedMiddleware } from "@/server/middleware/authenticated";
 import { createServerFn } from "@tanstack/react-start";
 import { zodValidator } from "@tanstack/zod-adapter";
 import { z } from "zod";
-import { authenticatedMiddleware } from "../middleware/authenticatedMiddleware";
 
 // TODO: Refactor to use the InferResultType utility type from _common.ts for better type safety and
 // consistency across database query results. This will help ensure that the types of the results we
@@ -58,15 +60,10 @@ export const calendarInsertSchema = z
     },
   );
 
-// Create a schema for operations where we need to pass a calendar identifier.
-const calendarIdSchema = z.object({
-  id: z.string(),
-});
-
 // TODO: Validate that the user has permission to perform this action based on the visibility options
 // of the calendar item and the user's roles.
 export const saveCalendarFn = createServerFn()
-  .middleware([authenticatedMiddleware])
+  .middleware([authenticatedMiddleware, anyPermissionMiddleware([Permissions.EventUpdate])])
   .inputValidator(zodValidator(calendarInsertSchema))
   .handler(async ({ data, context }) => {
     try {

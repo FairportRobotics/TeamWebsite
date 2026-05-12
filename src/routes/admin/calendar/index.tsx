@@ -7,13 +7,11 @@ import { TeamActionButton } from "@/components/team-action-buttom";
 import { Button } from "@/components/ui/button";
 import { Permissions } from "@/lib/auth/permissions";
 import { assertHasAnyPermission } from "@/lib/auth/server";
-import {
-  approveCalendarFn,
-  archiveCalendarFn,
-  requestApprovalCalendarFn,
-  seedCalendarFn,
-} from "@/lib/fn/calendar";
-import { getCalendarListForAdminFn } from "@/server/functions/calendar-list-get-for-admin";
+import { approveRequest } from "@/server/functions/calendar/approveRequest";
+import { archiveFn } from "@/server/functions/calendar/archive";
+import { getCalendarListForAdminFn } from "@/server/functions/calendar/getCalendarListForAdmin";
+import { requestApprovalCalendarFn } from "@/server/functions/calendar/requestApproval";
+import { seedEventsFn } from "@/server/functions/calendar/seed";
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin/calendar/")({
@@ -38,7 +36,7 @@ function RouteComponent() {
   const archived = calendar.filter((c) => c.status === "archived");
 
   async function handleSeedCalendar() {
-    await seedCalendarFn();
+    await seedEventsFn();
     router.invalidate();
     return { error: null };
   }
@@ -52,14 +50,14 @@ function RouteComponent() {
 
   async function handleApprove(id: string) {
     console.log("handleApprove", id);
-    await approveCalendarFn({ data: { id } });
+    await approveRequest({ data: { id } });
     router.invalidate();
     return { error: null };
   }
 
   const handleArchive = async (id: string) => {
     console.log("handleArchive", id);
-    await archiveCalendarFn({ data: { id } });
+    await archiveFn({ data: { id } });
     router.invalidate();
     return { error: null };
   };

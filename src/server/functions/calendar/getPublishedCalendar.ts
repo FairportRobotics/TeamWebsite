@@ -2,9 +2,9 @@
 import { db } from "@/db";
 import { calendarDates, calendarTable, visibleEnum, type VisibleEnumType } from "@/db/schema";
 import { Roles } from "@/lib/auth/roles";
+import { sessionMiddleware } from "@/server/middleware/session";
 import { createServerFn } from "@tanstack/react-start";
 import { and, arrayOverlaps, eq } from "drizzle-orm";
-import { sessionMiddleware } from "../middleware/session";
 
 // TODO: Add support for optional date filtering.
 export type CalendarListItem = Awaited<ReturnType<typeof getPublishedCalendarFn>>[0];

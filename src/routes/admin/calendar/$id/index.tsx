@@ -1,6 +1,6 @@
 import { BackTo } from "@/components/back-to";
 import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
-import { getCalendarListDetailsFn } from "@/lib/fn/calendar";
+import { getCalendarListDetailsFn } from "@/server/functions/calendar/getCalendarDetails";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin/calendar/$id/")({
