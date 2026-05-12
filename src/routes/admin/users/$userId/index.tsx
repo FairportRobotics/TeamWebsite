@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { authClient } from "@/lib/auth/auth-client";
 import { getUserDetailsFn } from "@/server/functions/user/getUserDetails";
-import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/users/$userId/")({
@@ -21,9 +21,10 @@ export const Route = createFileRoute("/admin/users/$userId/")({
 function RouteComponent() {
   const { user, accounts, sessions } = Route.useLoaderData();
   const router = useRouter();
+  const navigate = useNavigate();
 
-  async function handleUnbanUser() {
-    await authClient.admin.unbanUser(
+  function handleUnbanUser() {
+    authClient.admin.unbanUser(
       { userId: user.id },
       {
         onError: (error) => {
@@ -37,8 +38,8 @@ function RouteComponent() {
     );
   }
 
-  async function handleBanUser() {
-    await authClient.admin.banUser(
+  function handleBanUser() {
+    authClient.admin.banUser(
       { userId: user.id, banReason: "testing 1..2..3.." },
       {
         onError: (error) => {
@@ -46,6 +47,21 @@ function RouteComponent() {
         },
         onSuccess: () => {
           toast.success("User was banned");
+        },
+      },
+    );
+  }
+
+  function handleImpersonate() {
+    authClient.admin.impersonateUser(
+      { userId: user.id },
+      {
+        onError: (error) => {
+          toast.error(error.error.message || "Failed to impersonate user");
+        },
+        onSuccess: () => {
+          router.invalidate();
+          navigate({ to: "/" });
         },
       },
     );
@@ -86,7 +102,7 @@ function RouteComponent() {
               )}
             </div>
             <div>
-              <Button>Impersonate</Button>
+              <Button onClick={handleImpersonate}>Impersonate</Button>
             </div>
           </div>
         </CardContent>

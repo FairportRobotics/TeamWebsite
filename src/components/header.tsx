@@ -18,7 +18,7 @@ export default function Header() {
       Permissions.EventAdminister,
       Permissions.GameYearAdminister,
       Permissions.SponsorAdminister,
-      Permissions.UserAdminister,
+      Permissions.UserViewAll,
     ]);
 
     setHasAdmin(result);
