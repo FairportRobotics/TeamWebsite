@@ -2,7 +2,6 @@
 import { db } from "@/db";
 import { calendarTable } from "@/db/schema";
 import { Permissions } from "@/lib/auth/permissions";
-import { assertAuthenticatedFn } from "@/lib/auth/server";
 import { anyPermissionMiddleware } from "@/server/middleware/anyPermission";
 import { authenticatedMiddleware } from "@/server/middleware/authenticated";
 import { createServerFn } from "@tanstack/react-start";
@@ -14,8 +13,6 @@ export const archiveFn = createServerFn()
   .middleware([authenticatedMiddleware, anyPermissionMiddleware([Permissions.EventAdminister])])
   .inputValidator(zodValidator(calendarIdSchema))
   .handler(async ({ data, context }) => {
-    assertAuthenticatedFn();
-
     if (!context.user) {
       return false;
     }

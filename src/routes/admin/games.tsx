@@ -2,15 +2,11 @@
 import { BackTo } from "@/components/back-to";
 import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
 import { TeamActionButton } from "@/components/team-action-buttom";
-import { Permissions } from "@/lib/auth/permissions";
-import { assertHasAnyPermission } from "@/lib/auth/server";
 import { seedGameYearsFn } from "@/lib/fn/games";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin/games")({
-  beforeLoad: async ({ context }) => {
-    assertHasAnyPermission(context.session?.user.role, [Permissions.GameYearAdminister]);
-  },
+  beforeLoad: async ({ context }) => {},
   component: RouteComponent,
 });
 

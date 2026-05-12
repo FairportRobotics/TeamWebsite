@@ -5,8 +5,6 @@ import { PageDescription, PageHeader, PageTitle } from "@/components/page-header
 import { PageSectionContainer } from "@/components/page-section-container";
 import { TeamActionButton } from "@/components/team-action-buttom";
 import { Button } from "@/components/ui/button";
-import { Permissions } from "@/lib/auth/permissions";
-import { assertHasAnyPermission } from "@/lib/auth/server";
 import { approveRequest } from "@/server/functions/calendar/approveRequest";
 import { archiveFn } from "@/server/functions/calendar/archive";
 import { getCalendarListForAdminFn } from "@/server/functions/calendar/getCalendarListForAdmin";
@@ -15,9 +13,7 @@ import { seedEventsFn } from "@/server/functions/calendar/seed";
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin/calendar/")({
-  beforeLoad: async ({ context }) => {
-    assertHasAnyPermission(context.session?.user.role, [Permissions.EventAdminister]);
-  },
+  beforeLoad: async ({ context }) => {},
   loader: async () => {
     const calendar = await getCalendarListForAdminFn();
     return calendar;
