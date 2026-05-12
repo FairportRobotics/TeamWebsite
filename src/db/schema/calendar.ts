@@ -1,50 +1,41 @@
 // drizzle/schema/items.ts
 import { Roles } from "@/lib/auth/permissions";
-import { relations } from "drizzle-orm";
-import { index, pgEnum, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { index, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { user } from "../schema";
-import { statusEnum, type InferResultType } from "./_common";
+import { statusEnum, visibleEnum, type InferResultType } from "./_common";
 
-// Define enums specific to the Calendar-related tables.
-export const visibleEnum = pgEnum("calendar_visible", [
-  Roles.Everyone,
-  Roles.Student,
-  Roles.Mentor,
-  Roles.Parent,
-]);
+// Stores all the events in which the team will host or participate.
+export const calendarTable = pgTable(
+  "calendar",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    status: statusEnum("status").notNull().default("draft"),
+    visibleTo: visibleEnum("visible_to").array().default([Roles.Everyone]),
+    title: text("title").notNull(),
+    description: text("description").array(),
+    location: text("location").notNull(),
+    informationLink: text("information_link"),
+    signupLink: text("signup_link"),
+    signupLinkVisibleTo: visibleEnum("signup_link_visible_to")
+      .array()
+      .default([Roles.Student, Roles.Mentor]),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    createdBy: text("created_by_user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "no action" }),
+    updatedBy: text("updated_by_user_id").references(() => user.id, { onDelete: "no action" }),
+    updatedAt: timestamp("updated_at")
+      .defaultNow()
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  },
+  (table) => [
+    index("idx_calendar_status").on(table.status),
+    index("idx_calendar_visibleTo").on(table.visibleTo),
+  ],
+);
 
-export type VisibleEnumType = (typeof visibleEnum.enumValues)[number];
-
-// Define table schemas.
-export const calendarTable = pgTable("calendar", {
-  id: uuid("id").primaryKey().defaultRandom(),
-
-  status: statusEnum("status").notNull().default("draft"),
-  visibleTo: visibleEnum("visible_to").array().default([Roles.Everyone]),
-
-  title: text("title").notNull(),
-  description: text("description").array(),
-  location: text("location").notNull(),
-
-  informationLink: text("information_link"),
-
-  signupLink: text("signup_link"),
-  signupLinkVisibleTo: visibleEnum("signup_link_visible_to")
-    .array()
-    .default([Roles.Student, Roles.Mentor]),
-
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  createdBy: text("created_by_user_id")
-    .notNull()
-    .references(() => user.id, { onDelete: "no action" }),
-
-  updatedBy: text("updated_by_user_id").references(() => user.id, { onDelete: "no action" }),
-  updatedAt: timestamp("updated_at")
-    .defaultNow()
-    .$onUpdate(() => /* @__PURE__ */ new Date())
-    .notNull(),
-});
-
+// Stores the date ranges of events. In most cases, there will be a single date range.
 export const calendarDates = pgTable(
   "calendar_dates",
   {
@@ -59,37 +50,9 @@ export const calendarDates = pgTable(
   ],
 );
 
-// Define relationships between tables.
-export const calendarDateRelations = relations(calendarTable, ({ many }) => ({
-  dates: many(calendarDates),
-}));
-
-export const eventDatesRelations = relations(calendarDates, ({ one }) => ({
-  event: one(calendarTable, {
-    fields: [calendarDates.calendarId],
-    references: [calendarTable.id],
-  }),
-}));
-
-// export const userCalendarCreatedRelations = relations(calendarTable, ({ one }) => ({
-//   user: one(user, {
-//     fields: [calendarTable.createdBy],
-//     references: [user.id],
-//   }),
-// }));
-
-// export const userCalendarUpdatedRelations = relations(calendarTable, ({ one }) => ({
-//   user: one(user, {
-//     fields: [calendarTable.updatedBy],
-//     references: [user.id],
-//   }),
-// }));
-
 // Export inferred types so they can be used throughout the application.
 export type CalendarSelectItem = typeof calendarTable.$inferSelect;
 export type CalendarInsertItem = typeof calendarTable.$inferInsert;
 export type CalendarItemStatus = typeof calendarTable.$inferSelect.status;
 export type CalendarItemVisibleTo = typeof calendarTable.$inferSelect.visibleTo;
-
-// Example Usage:
 export type CalendarWithDatesSelect = InferResultType<"calendarTable", { dates: true }>;

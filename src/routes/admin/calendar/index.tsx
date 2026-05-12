@@ -4,8 +4,9 @@ import { BackTo } from "@/components/back-to";
 import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
 import { PageSectionContainer } from "@/components/page-section-container";
 import { TeamActionButton } from "@/components/team-action-buttom";
+import { Button } from "@/components/ui/button";
 import { Permissions } from "@/lib/auth/permissions";
-import { assertHasAnyPermissionFn } from "@/lib/auth/server";
+import { assertHasAnyPermission } from "@/lib/auth/server";
 import {
   approveCalendarFn,
   archiveCalendarFn,
@@ -13,13 +14,11 @@ import {
   requestApprovalCalendarFn,
   seedCalendarFn,
 } from "@/lib/fn/calendar";
-import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin/calendar/")({
-  beforeLoad: async () => {
-    await assertHasAnyPermissionFn({
-      data: { permissions: [Permissions.EventAdminister, Permissions.EventCreate] },
-    });
+  beforeLoad: async ({ context }) => {
+    assertHasAnyPermission(context.session?.user.role, [Permissions.EventAdminister]);
   },
   loader: async () => {
     const calendar = await getCalendarListForAdminFn();
@@ -124,9 +123,13 @@ function RouteComponent() {
         </PageSectionContainer>
       </div>
 
+      <Button asChild variant="default">
+        <Link to="/admin/calendar/new">Create New Event</Link>
+      </Button>
+
       <TeamActionButton
         variant="destructive"
-        className="mt-10"
+        className="mt-10 ml-6"
         action={() => {
           return handleSeedCalendar();
         }}

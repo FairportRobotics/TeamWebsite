@@ -68,6 +68,28 @@ function hasAnyPermission(roleString: string | null | undefined, required: reado
   return hasAnyPermissionsTyped(roles, required);
 }
 
+export function assertHasAnyPermission(
+  roleString: string | null | undefined,
+  permissions: readonly Permission[],
+) {
+  if (!hasAnyPermission(roleString, permissions)) {
+    throw redirect({ to: "/unauthorized" });
+  }
+
+  return;
+}
+
+export function assertHasAllPermissions(
+  roleString: string | null | undefined,
+  permissions: readonly Permission[],
+) {
+  if (!hasAllPermissions(roleString, permissions)) {
+    throw redirect({ to: "/unauthorized" });
+  }
+
+  return;
+}
+
 /**************************************************************************************************
  * Permission and auth server functions.
  **************************************************************************************************/

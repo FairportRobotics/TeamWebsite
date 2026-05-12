@@ -1,5 +1,5 @@
 import type { CalendarListItem } from "@/lib/fn/calendar";
-import { cn } from "@/lib/utils";
+import { cn, getDateRangeString } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
 import {
   addMonths,
@@ -32,24 +32,6 @@ interface CalendarProps {
   initialMonth: Date;
   events: CalendarListItem[];
   onDateSelect?: (date: Date) => void;
-}
-
-function getDateRangeString(startDate: Date, endDate: Date) {
-  // If start and end dates are the same, we do not need to repeate the date portion.
-  if (isSameDay(startDate, endDate)) {
-    return [
-      `${format(startDate, "M/d/yy")}`,
-      `${format(startDate, "h:MMaaaaa")}`,
-      `${format(endDate, "h:MMaaaaa")}`,
-    ];
-  } else {
-    return [
-      `${format(startDate, "M/d/yy")}`,
-      `${format(startDate, "h:MMaaaaa")}`,
-      `${format(endDate, "M/d/yy")}`,
-      `${format(endDate, "h:MMaaaaa")}`,
-    ];
-  }
 }
 
 export function buildCalendarData(
