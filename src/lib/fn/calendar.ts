@@ -2,12 +2,12 @@
 import { db } from "@/db";
 import { calendarDates, calendarTable, visibleEnum, type VisibleEnumType } from "@/db/schema";
 import { seedCalendar } from "@/db/seed/calendar";
+import { Roles } from "@/lib/auth/roles";
+import { assertAuthenticatedFn } from "@/lib/auth/server";
 import { createServerFn } from "@tanstack/react-start";
 import { zodValidator } from "@tanstack/zod-adapter";
 import { and, arrayOverlaps, eq } from "drizzle-orm";
 import { z } from "zod";
-import { Roles } from "../auth/permissions";
-import { assertAuthenticatedFn } from "../auth/server";
 import { authenticatedMiddleware } from "../middleware/authenticatedMiddleware";
 
 // TODO: Refactor to use the InferResultType utility type from _common.ts for better type safety and

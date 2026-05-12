@@ -10,7 +10,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { LoadingSwap } from "@/components/ui/loading-swap";
-import { Permissions, Roles } from "@/lib/auth/permissions";
+import { Permissions } from "@/lib/auth/permissions";
+import { Roles } from "@/lib/auth/roles";
 import { assertHasAnyPermission } from "@/lib/auth/server";
 import { getCalendarForEditFn } from "@/lib/fn/calendar";
 import { zodResolver } from "@hookform/resolvers/zod";

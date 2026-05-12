@@ -1,6 +1,6 @@
 // prettier-ignore
-import type { Permission, Role } from "@/lib/auth/permissions";
-import { RolePermissions, Roles } from "@/lib/auth/permissions";
+import type { Permission } from "@/lib/auth/permissions";
+import { RolePermissions, Roles, type Role } from "@/lib/auth/roles";
 import { validateRequest } from "@/lib/auth/utils/request";
 import { redirect } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
