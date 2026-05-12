@@ -3,13 +3,13 @@ import { BackTo } from "@/components/back-to";
 import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
 import { TeamActionButton } from "@/components/team-action-buttom";
 import { Permissions } from "@/lib/auth/permissions";
-import { assertHasAnyPermissionFn } from "@/lib/auth/server";
+import { assertHasAnyPermission } from "@/lib/auth/server";
 import { getSponsorsFn, seedSponsorsFn } from "@/lib/fn/sponsor";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin/sponsors")({
-  beforeLoad: async () => {
-    await assertHasAnyPermissionFn({ data: { permissions: [Permissions.SponsorAdminister] } });
+  beforeLoad: async ({ context }) => {
+    assertHasAnyPermission(context.session?.user.role, [Permissions.SponsorAdminister]);
   },
   loader: async () => {
     const sponsors = await getSponsorsFn();

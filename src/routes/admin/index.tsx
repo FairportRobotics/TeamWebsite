@@ -1,15 +1,25 @@
 // prettier-ignore
 import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Permissions } from "@/lib/auth/permissions";
+import { assertHasAnyPermission } from "@/lib/auth/server";
 import { getAdminSummaryFn } from "@/lib/fn/admin";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin/")({
-  component: RouteComponent,
+  beforeLoad: async ({ context }) => {
+    assertHasAnyPermission(context.session?.user.role, [
+      Permissions.EventAdminister,
+      Permissions.GameYearAdminister,
+      Permissions.SponsorAdminister,
+      Permissions.UserAdminister,
+    ]);
+  },
   loader: async () => {
     const metrics = await getAdminSummaryFn();
     return metrics;
   },
+  component: RouteComponent,
 });
 
 function RouteComponent() {

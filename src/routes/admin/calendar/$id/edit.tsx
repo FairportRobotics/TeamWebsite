@@ -10,7 +10,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { LoadingSwap } from "@/components/ui/loading-swap";
-import { Roles } from "@/lib/auth/permissions";
+import { Permissions, Roles } from "@/lib/auth/permissions";
+import { assertHasAnyPermission } from "@/lib/auth/server";
 import { getCalendarForEditFn } from "@/lib/fn/calendar";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createFileRoute, redirect } from "@tanstack/react-router";
@@ -18,6 +19,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 export const Route = createFileRoute("/admin/calendar/$id/edit")({
+  beforeLoad: async ({ context }) => {
+    assertHasAnyPermission(context.session?.user.role, [Permissions.EventUpdate]);
+  },
   component: RouteComponent,
   loader: async ({ params }) => {
     const results = await getCalendarForEditFn({ data: { id: params.id } });

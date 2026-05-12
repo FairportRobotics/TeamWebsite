@@ -3,18 +3,18 @@ import { BackTo } from "@/components/back-to";
 import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
 import { SectionHeader } from "@/components/section-header";
 import { Permissions } from "@/lib/auth/permissions";
-import { assertHasAnyPermissionFn } from "@/lib/auth/server";
+import { assertHasAnyPermission } from "@/lib/auth/server";
 import { getUserListFn } from "@/lib/fn/user";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin/users/")({
-  beforeLoad: async () => {
-    await assertHasAnyPermissionFn({ data: { permissions: [Permissions.UserAdminister] } });
+  beforeLoad: async ({ context }) => {
+    assertHasAnyPermission(context.session?.user.role, [Permissions.UserAdminister]);
   },
   component: RouteComponent,
   loader: async ({ context }) => {
     // Pull needed data from the context.
-    const userId = context.data?.user.id;
+    const userId = context.session?.user.id;
 
     // Get all the users.
     const users = await getUserListFn();

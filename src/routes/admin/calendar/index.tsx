@@ -6,7 +6,7 @@ import { PageSectionContainer } from "@/components/page-section-container";
 import { TeamActionButton } from "@/components/team-action-buttom";
 import { Button } from "@/components/ui/button";
 import { Permissions } from "@/lib/auth/permissions";
-import { assertHasAnyPermissionFn } from "@/lib/auth/server";
+import { assertHasAnyPermission } from "@/lib/auth/server";
 import {
   approveCalendarFn,
   archiveCalendarFn,
@@ -17,10 +17,8 @@ import {
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin/calendar/")({
-  beforeLoad: async () => {
-    await assertHasAnyPermissionFn({
-      data: { permissions: [Permissions.EventAdminister, Permissions.EventCreate] },
-    });
+  beforeLoad: async ({ context }) => {
+    assertHasAnyPermission(context.session?.user.role, [Permissions.EventAdminister]);
   },
   loader: async () => {
     const calendar = await getCalendarListForAdminFn();
