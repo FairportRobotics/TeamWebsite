@@ -10,10 +10,10 @@ import { assertHasAnyPermission } from "@/lib/auth/server";
 import {
   approveCalendarFn,
   archiveCalendarFn,
-  getCalendarListForAdminFn,
   requestApprovalCalendarFn,
   seedCalendarFn,
 } from "@/lib/fn/calendar";
+import { getCalendarListForAdminFn } from "@/server/functions/calendar-list-get-for-admin";
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin/calendar/")({
