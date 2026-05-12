@@ -1,9 +1,10 @@
 // prettier-ignore
 import { authClient } from "@/lib/auth/auth-client";
+
 import {
   SUPPORTED_AUTH_PROVIDERS,
   SUPPORTED_OAUTH_PROVIDER_DETAILS,
-} from "@/lib/auth/oauth-providers";
+} from "@/lib/auth/utils/oauth-providers";
 import { TeamActionButton } from "./team-action-buttom";
 
 export function SocialAuthButtons() {
