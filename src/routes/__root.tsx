@@ -2,7 +2,7 @@
 import Footer from "@/components/footer";
 import Header from "@/components/header";
 import { Toaster } from "@/components/ui/sonner";
-import { getSessionFn } from "@/lib/auth/utils/session";
+import { getSessionFn } from "@/lib/auth/getSession";
 import type { RouterContext } from "@/router";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import { createRootRouteWithContext, HeadContent, Scripts } from "@tanstack/react-router";
