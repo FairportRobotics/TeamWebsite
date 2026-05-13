@@ -1,4 +1,3 @@
-// lib/logger.ts
 const isDev = process.env.NODE_ENV === "development";
 const logLevel = process.env.LOG_LEVEL ?? (isDev ? "debug" : "info");
 

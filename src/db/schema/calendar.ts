@@ -1,5 +1,5 @@
 // drizzle/schema/items.ts
-import { Roles } from "@/lib/auth/permissions";
+import { Roles } from "@/lib/auth/roles";
 import { index, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { user } from "../schema";
 import { statusEnum, visibleEnum, type InferResultType } from "./_common";

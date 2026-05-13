@@ -11,32 +11,32 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UnauthorizedRouteImport } from './routes/unauthorized'
 import { Route as UnauthenticatedRouteImport } from './routes/unauthenticated'
-import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AuthRouteRouteImport } from './routes/auth/route'
-import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as TeamIndexRouteImport } from './routes/team/index'
-import { Route as SponsorsIndexRouteImport } from './routes/sponsors/index'
-import { Route as GamesIndexRouteImport } from './routes/games/index'
-import { Route as CalendarIndexRouteImport } from './routes/calendar/index'
-import { Route as AdminIndexRouteImport } from './routes/admin/index'
-import { Route as TeamIdRouteImport } from './routes/team/$id'
-import { Route as GamesIdRouteImport } from './routes/games/$id'
 import { Route as AuthSignupRouteImport } from './routes/auth/signup'
 import { Route as AuthSigninRouteImport } from './routes/auth/signin'
 import { Route as AuthForgotPasswordRouteImport } from './routes/auth/forgot-password'
-import { Route as AdminSponsorsRouteImport } from './routes/admin/sponsors'
-import { Route as AdminGamesRouteImport } from './routes/admin/games'
-import { Route as CalendarIdIndexRouteImport } from './routes/calendar/$id/index'
-import { Route as AdminUsersIndexRouteImport } from './routes/admin/users/index'
-import { Route as AdminCalendarIndexRouteImport } from './routes/admin/calendar/index'
+import { Route as UnauthenticatedContactRouteImport } from './routes/_unauthenticated/contact'
+import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authenticated/admin/route'
+import { Route as UnauthenticatedTeamIndexRouteImport } from './routes/_unauthenticated/team/index'
+import { Route as UnauthenticatedSponsorsIndexRouteImport } from './routes/_unauthenticated/sponsors/index'
+import { Route as UnauthenticatedGamesIndexRouteImport } from './routes/_unauthenticated/games/index'
+import { Route as UnauthenticatedCalendarIndexRouteImport } from './routes/_unauthenticated/calendar/index'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
-import { Route as AdminCalendarNewRouteImport } from './routes/admin/calendar/new'
-import { Route as AdminUsersUserIdRouteRouteImport } from './routes/admin/users/$userId/route'
-import { Route as AdminUsersUserIdIndexRouteImport } from './routes/admin/users/$userId/index'
-import { Route as AdminCalendarIdIndexRouteImport } from './routes/admin/calendar/$id/index'
-import { Route as AdminUsersUserIdEditRouteImport } from './routes/admin/users/$userId/edit'
-import { Route as AdminCalendarIdEditRouteImport } from './routes/admin/calendar/$id/edit'
+import { Route as UnauthenticatedTeamIdRouteImport } from './routes/_unauthenticated/team/$id'
+import { Route as UnauthenticatedGamesIdRouteImport } from './routes/_unauthenticated/games/$id'
+import { Route as AuthenticatedAdminSponsorsRouteImport } from './routes/_authenticated/admin/sponsors'
+import { Route as AuthenticatedAdminGamesRouteImport } from './routes/_authenticated/admin/games'
+import { Route as UnauthenticatedCalendarIdIndexRouteImport } from './routes/_unauthenticated/calendar/$id/index'
+import { Route as AuthenticatedAdminUsersIndexRouteImport } from './routes/_authenticated/admin/users/index'
+import { Route as AuthenticatedAdminCalendarIndexRouteImport } from './routes/_authenticated/admin/calendar/index'
+import { Route as AuthenticatedAdminCalendarNewRouteImport } from './routes/_authenticated/admin/calendar/new'
+import { Route as AuthenticatedAdminUsersUserIdRouteRouteImport } from './routes/_authenticated/admin/users/$userId/route'
+import { Route as AuthenticatedAdminUsersUserIdIndexRouteImport } from './routes/_authenticated/admin/users/$userId/index'
+import { Route as AuthenticatedAdminCalendarIdIndexRouteImport } from './routes/_authenticated/admin/calendar/$id/index'
+import { Route as AuthenticatedAdminUsersUserIdEditRouteImport } from './routes/_authenticated/admin/users/$userId/edit'
+import { Route as AuthenticatedAdminCalendarIdEditRouteImport } from './routes/_authenticated/admin/calendar/$id/edit'
 
 const UnauthorizedRoute = UnauthorizedRouteImport.update({
   id: '/unauthorized',
@@ -48,59 +48,14 @@ const UnauthenticatedRoute = UnauthenticatedRouteImport.update({
   path: '/unauthenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ContactRoute = ContactRouteImport.update({
-  id: '/contact',
-  path: '/contact',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuthRouteRoute = AuthRouteRouteImport.update({
   id: '/auth',
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminRouteRoute = AdminRouteRouteImport.update({
-  id: '/admin',
-  path: '/admin',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TeamIndexRoute = TeamIndexRouteImport.update({
-  id: '/team/',
-  path: '/team/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SponsorsIndexRoute = SponsorsIndexRouteImport.update({
-  id: '/sponsors/',
-  path: '/sponsors/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GamesIndexRoute = GamesIndexRouteImport.update({
-  id: '/games/',
-  path: '/games/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CalendarIndexRoute = CalendarIndexRouteImport.update({
-  id: '/calendar/',
-  path: '/calendar/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminIndexRoute = AdminIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const TeamIdRoute = TeamIdRouteImport.update({
-  id: '/team/$id',
-  path: '/team/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GamesIdRoute = GamesIdRouteImport.update({
-  id: '/games/$id',
-  path: '/games/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthSignupRoute = AuthSignupRouteImport.update({
@@ -118,172 +73,232 @@ const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
   path: '/forgot-password',
   getParentRoute: () => AuthRouteRoute,
 } as any)
-const AdminSponsorsRoute = AdminSponsorsRouteImport.update({
-  id: '/sponsors',
-  path: '/sponsors',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminGamesRoute = AdminGamesRouteImport.update({
-  id: '/games',
-  path: '/games',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const CalendarIdIndexRoute = CalendarIdIndexRouteImport.update({
-  id: '/calendar/$id/',
-  path: '/calendar/$id/',
+const UnauthenticatedContactRoute = UnauthenticatedContactRouteImport.update({
+  id: '/_unauthenticated/contact',
+  path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminUsersIndexRoute = AdminUsersIndexRouteImport.update({
-  id: '/users/',
-  path: '/users/',
-  getParentRoute: () => AdminRouteRoute,
+const AuthenticatedAdminRouteRoute = AuthenticatedAdminRouteRouteImport.update({
+  id: '/_authenticated/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const AdminCalendarIndexRoute = AdminCalendarIndexRouteImport.update({
-  id: '/calendar/',
-  path: '/calendar/',
-  getParentRoute: () => AdminRouteRoute,
+const UnauthenticatedTeamIndexRoute =
+  UnauthenticatedTeamIndexRouteImport.update({
+    id: '/_unauthenticated/team/',
+    path: '/team/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const UnauthenticatedSponsorsIndexRoute =
+  UnauthenticatedSponsorsIndexRouteImport.update({
+    id: '/_unauthenticated/sponsors/',
+    path: '/sponsors/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const UnauthenticatedGamesIndexRoute =
+  UnauthenticatedGamesIndexRouteImport.update({
+    id: '/_unauthenticated/games/',
+    path: '/games/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const UnauthenticatedCalendarIndexRoute =
+  UnauthenticatedCalendarIndexRouteImport.update({
+    id: '/_unauthenticated/calendar/',
+    path: '/calendar/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedAdminRouteRoute,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminCalendarNewRoute = AdminCalendarNewRouteImport.update({
-  id: '/calendar/new',
-  path: '/calendar/new',
-  getParentRoute: () => AdminRouteRoute,
+const UnauthenticatedTeamIdRoute = UnauthenticatedTeamIdRouteImport.update({
+  id: '/_unauthenticated/team/$id',
+  path: '/team/$id',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const AdminUsersUserIdRouteRoute = AdminUsersUserIdRouteRouteImport.update({
-  id: '/users/$userId',
-  path: '/users/$userId',
-  getParentRoute: () => AdminRouteRoute,
+const UnauthenticatedGamesIdRoute = UnauthenticatedGamesIdRouteImport.update({
+  id: '/_unauthenticated/games/$id',
+  path: '/games/$id',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const AdminUsersUserIdIndexRoute = AdminUsersUserIdIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AdminUsersUserIdRouteRoute,
+const AuthenticatedAdminSponsorsRoute =
+  AuthenticatedAdminSponsorsRouteImport.update({
+    id: '/sponsors',
+    path: '/sponsors',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminGamesRoute = AuthenticatedAdminGamesRouteImport.update({
+  id: '/games',
+  path: '/games',
+  getParentRoute: () => AuthenticatedAdminRouteRoute,
 } as any)
-const AdminCalendarIdIndexRoute = AdminCalendarIdIndexRouteImport.update({
-  id: '/calendar/$id/',
-  path: '/calendar/$id/',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminUsersUserIdEditRoute = AdminUsersUserIdEditRouteImport.update({
-  id: '/edit',
-  path: '/edit',
-  getParentRoute: () => AdminUsersUserIdRouteRoute,
-} as any)
-const AdminCalendarIdEditRoute = AdminCalendarIdEditRouteImport.update({
-  id: '/calendar/$id/edit',
-  path: '/calendar/$id/edit',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
+const UnauthenticatedCalendarIdIndexRoute =
+  UnauthenticatedCalendarIdIndexRouteImport.update({
+    id: '/_unauthenticated/calendar/$id/',
+    path: '/calendar/$id/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AuthenticatedAdminUsersIndexRoute =
+  AuthenticatedAdminUsersIndexRouteImport.update({
+    id: '/users/',
+    path: '/users/',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminCalendarIndexRoute =
+  AuthenticatedAdminCalendarIndexRouteImport.update({
+    id: '/calendar/',
+    path: '/calendar/',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminCalendarNewRoute =
+  AuthenticatedAdminCalendarNewRouteImport.update({
+    id: '/calendar/new',
+    path: '/calendar/new',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminUsersUserIdRouteRoute =
+  AuthenticatedAdminUsersUserIdRouteRouteImport.update({
+    id: '/users/$userId',
+    path: '/users/$userId',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminUsersUserIdIndexRoute =
+  AuthenticatedAdminUsersUserIdIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedAdminUsersUserIdRouteRoute,
+  } as any)
+const AuthenticatedAdminCalendarIdIndexRoute =
+  AuthenticatedAdminCalendarIdIndexRouteImport.update({
+    id: '/calendar/$id/',
+    path: '/calendar/$id/',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminUsersUserIdEditRoute =
+  AuthenticatedAdminUsersUserIdEditRouteImport.update({
+    id: '/edit',
+    path: '/edit',
+    getParentRoute: () => AuthenticatedAdminUsersUserIdRouteRoute,
+  } as any)
+const AuthenticatedAdminCalendarIdEditRoute =
+  AuthenticatedAdminCalendarIdEditRouteImport.update({
+    id: '/calendar/$id/edit',
+    path: '/calendar/$id/edit',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
-  '/contact': typeof ContactRoute
   '/unauthenticated': typeof UnauthenticatedRoute
   '/unauthorized': typeof UnauthorizedRoute
-  '/admin/games': typeof AdminGamesRoute
-  '/admin/sponsors': typeof AdminSponsorsRoute
+  '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
+  '/contact': typeof UnauthenticatedContactRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/signin': typeof AuthSigninRoute
   '/auth/signup': typeof AuthSignupRoute
-  '/games/$id': typeof GamesIdRoute
-  '/team/$id': typeof TeamIdRoute
-  '/admin/': typeof AdminIndexRoute
-  '/calendar/': typeof CalendarIndexRoute
-  '/games/': typeof GamesIndexRoute
-  '/sponsors/': typeof SponsorsIndexRoute
-  '/team/': typeof TeamIndexRoute
-  '/admin/users/$userId': typeof AdminUsersUserIdRouteRouteWithChildren
-  '/admin/calendar/new': typeof AdminCalendarNewRoute
+  '/admin/games': typeof AuthenticatedAdminGamesRoute
+  '/admin/sponsors': typeof AuthenticatedAdminSponsorsRoute
+  '/games/$id': typeof UnauthenticatedGamesIdRoute
+  '/team/$id': typeof UnauthenticatedTeamIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/admin/calendar/': typeof AdminCalendarIndexRoute
-  '/admin/users/': typeof AdminUsersIndexRoute
-  '/calendar/$id/': typeof CalendarIdIndexRoute
-  '/admin/calendar/$id/edit': typeof AdminCalendarIdEditRoute
-  '/admin/users/$userId/edit': typeof AdminUsersUserIdEditRoute
-  '/admin/calendar/$id/': typeof AdminCalendarIdIndexRoute
-  '/admin/users/$userId/': typeof AdminUsersUserIdIndexRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/calendar/': typeof UnauthenticatedCalendarIndexRoute
+  '/games/': typeof UnauthenticatedGamesIndexRoute
+  '/sponsors/': typeof UnauthenticatedSponsorsIndexRoute
+  '/team/': typeof UnauthenticatedTeamIndexRoute
+  '/admin/users/$userId': typeof AuthenticatedAdminUsersUserIdRouteRouteWithChildren
+  '/admin/calendar/new': typeof AuthenticatedAdminCalendarNewRoute
+  '/admin/calendar/': typeof AuthenticatedAdminCalendarIndexRoute
+  '/admin/users/': typeof AuthenticatedAdminUsersIndexRoute
+  '/calendar/$id/': typeof UnauthenticatedCalendarIdIndexRoute
+  '/admin/calendar/$id/edit': typeof AuthenticatedAdminCalendarIdEditRoute
+  '/admin/users/$userId/edit': typeof AuthenticatedAdminUsersUserIdEditRoute
+  '/admin/calendar/$id/': typeof AuthenticatedAdminCalendarIdIndexRoute
+  '/admin/users/$userId/': typeof AuthenticatedAdminUsersUserIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
-  '/contact': typeof ContactRoute
   '/unauthenticated': typeof UnauthenticatedRoute
   '/unauthorized': typeof UnauthorizedRoute
-  '/admin/games': typeof AdminGamesRoute
-  '/admin/sponsors': typeof AdminSponsorsRoute
+  '/contact': typeof UnauthenticatedContactRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/signin': typeof AuthSigninRoute
   '/auth/signup': typeof AuthSignupRoute
-  '/games/$id': typeof GamesIdRoute
-  '/team/$id': typeof TeamIdRoute
-  '/admin': typeof AdminIndexRoute
-  '/calendar': typeof CalendarIndexRoute
-  '/games': typeof GamesIndexRoute
-  '/sponsors': typeof SponsorsIndexRoute
-  '/team': typeof TeamIndexRoute
-  '/admin/calendar/new': typeof AdminCalendarNewRoute
+  '/admin/games': typeof AuthenticatedAdminGamesRoute
+  '/admin/sponsors': typeof AuthenticatedAdminSponsorsRoute
+  '/games/$id': typeof UnauthenticatedGamesIdRoute
+  '/team/$id': typeof UnauthenticatedTeamIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/admin/calendar': typeof AdminCalendarIndexRoute
-  '/admin/users': typeof AdminUsersIndexRoute
-  '/calendar/$id': typeof CalendarIdIndexRoute
-  '/admin/calendar/$id/edit': typeof AdminCalendarIdEditRoute
-  '/admin/users/$userId/edit': typeof AdminUsersUserIdEditRoute
-  '/admin/calendar/$id': typeof AdminCalendarIdIndexRoute
-  '/admin/users/$userId': typeof AdminUsersUserIdIndexRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
+  '/calendar': typeof UnauthenticatedCalendarIndexRoute
+  '/games': typeof UnauthenticatedGamesIndexRoute
+  '/sponsors': typeof UnauthenticatedSponsorsIndexRoute
+  '/team': typeof UnauthenticatedTeamIndexRoute
+  '/admin/calendar/new': typeof AuthenticatedAdminCalendarNewRoute
+  '/admin/calendar': typeof AuthenticatedAdminCalendarIndexRoute
+  '/admin/users': typeof AuthenticatedAdminUsersIndexRoute
+  '/calendar/$id': typeof UnauthenticatedCalendarIdIndexRoute
+  '/admin/calendar/$id/edit': typeof AuthenticatedAdminCalendarIdEditRoute
+  '/admin/users/$userId/edit': typeof AuthenticatedAdminUsersUserIdEditRoute
+  '/admin/calendar/$id': typeof AuthenticatedAdminCalendarIdIndexRoute
+  '/admin/users/$userId': typeof AuthenticatedAdminUsersUserIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
-  '/contact': typeof ContactRoute
   '/unauthenticated': typeof UnauthenticatedRoute
   '/unauthorized': typeof UnauthorizedRoute
-  '/admin/games': typeof AdminGamesRoute
-  '/admin/sponsors': typeof AdminSponsorsRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
+  '/_unauthenticated/contact': typeof UnauthenticatedContactRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/signin': typeof AuthSigninRoute
   '/auth/signup': typeof AuthSignupRoute
-  '/games/$id': typeof GamesIdRoute
-  '/team/$id': typeof TeamIdRoute
-  '/admin/': typeof AdminIndexRoute
-  '/calendar/': typeof CalendarIndexRoute
-  '/games/': typeof GamesIndexRoute
-  '/sponsors/': typeof SponsorsIndexRoute
-  '/team/': typeof TeamIndexRoute
-  '/admin/users/$userId': typeof AdminUsersUserIdRouteRouteWithChildren
-  '/admin/calendar/new': typeof AdminCalendarNewRoute
+  '/_authenticated/admin/games': typeof AuthenticatedAdminGamesRoute
+  '/_authenticated/admin/sponsors': typeof AuthenticatedAdminSponsorsRoute
+  '/_unauthenticated/games/$id': typeof UnauthenticatedGamesIdRoute
+  '/_unauthenticated/team/$id': typeof UnauthenticatedTeamIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/admin/calendar/': typeof AdminCalendarIndexRoute
-  '/admin/users/': typeof AdminUsersIndexRoute
-  '/calendar/$id/': typeof CalendarIdIndexRoute
-  '/admin/calendar/$id/edit': typeof AdminCalendarIdEditRoute
-  '/admin/users/$userId/edit': typeof AdminUsersUserIdEditRoute
-  '/admin/calendar/$id/': typeof AdminCalendarIdIndexRoute
-  '/admin/users/$userId/': typeof AdminUsersUserIdIndexRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_unauthenticated/calendar/': typeof UnauthenticatedCalendarIndexRoute
+  '/_unauthenticated/games/': typeof UnauthenticatedGamesIndexRoute
+  '/_unauthenticated/sponsors/': typeof UnauthenticatedSponsorsIndexRoute
+  '/_unauthenticated/team/': typeof UnauthenticatedTeamIndexRoute
+  '/_authenticated/admin/users/$userId': typeof AuthenticatedAdminUsersUserIdRouteRouteWithChildren
+  '/_authenticated/admin/calendar/new': typeof AuthenticatedAdminCalendarNewRoute
+  '/_authenticated/admin/calendar/': typeof AuthenticatedAdminCalendarIndexRoute
+  '/_authenticated/admin/users/': typeof AuthenticatedAdminUsersIndexRoute
+  '/_unauthenticated/calendar/$id/': typeof UnauthenticatedCalendarIdIndexRoute
+  '/_authenticated/admin/calendar/$id/edit': typeof AuthenticatedAdminCalendarIdEditRoute
+  '/_authenticated/admin/users/$userId/edit': typeof AuthenticatedAdminUsersUserIdEditRoute
+  '/_authenticated/admin/calendar/$id/': typeof AuthenticatedAdminCalendarIdIndexRoute
+  '/_authenticated/admin/users/$userId/': typeof AuthenticatedAdminUsersUserIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/admin'
     | '/auth'
-    | '/contact'
     | '/unauthenticated'
     | '/unauthorized'
-    | '/admin/games'
-    | '/admin/sponsors'
+    | '/admin'
+    | '/contact'
     | '/auth/forgot-password'
     | '/auth/signin'
     | '/auth/signup'
+    | '/admin/games'
+    | '/admin/sponsors'
     | '/games/$id'
     | '/team/$id'
+    | '/api/auth/$'
     | '/admin/'
     | '/calendar/'
     | '/games/'
@@ -291,7 +306,6 @@ export interface FileRouteTypes {
     | '/team/'
     | '/admin/users/$userId'
     | '/admin/calendar/new'
-    | '/api/auth/$'
     | '/admin/calendar/'
     | '/admin/users/'
     | '/calendar/$id/'
@@ -303,23 +317,23 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
-    | '/contact'
     | '/unauthenticated'
     | '/unauthorized'
-    | '/admin/games'
-    | '/admin/sponsors'
+    | '/contact'
     | '/auth/forgot-password'
     | '/auth/signin'
     | '/auth/signup'
+    | '/admin/games'
+    | '/admin/sponsors'
     | '/games/$id'
     | '/team/$id'
+    | '/api/auth/$'
     | '/admin'
     | '/calendar'
     | '/games'
     | '/sponsors'
     | '/team'
     | '/admin/calendar/new'
-    | '/api/auth/$'
     | '/admin/calendar'
     | '/admin/users'
     | '/calendar/$id'
@@ -330,50 +344,50 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/admin'
     | '/auth'
-    | '/contact'
     | '/unauthenticated'
     | '/unauthorized'
-    | '/admin/games'
-    | '/admin/sponsors'
+    | '/_authenticated/admin'
+    | '/_unauthenticated/contact'
     | '/auth/forgot-password'
     | '/auth/signin'
     | '/auth/signup'
-    | '/games/$id'
-    | '/team/$id'
-    | '/admin/'
-    | '/calendar/'
-    | '/games/'
-    | '/sponsors/'
-    | '/team/'
-    | '/admin/users/$userId'
-    | '/admin/calendar/new'
+    | '/_authenticated/admin/games'
+    | '/_authenticated/admin/sponsors'
+    | '/_unauthenticated/games/$id'
+    | '/_unauthenticated/team/$id'
     | '/api/auth/$'
-    | '/admin/calendar/'
-    | '/admin/users/'
-    | '/calendar/$id/'
-    | '/admin/calendar/$id/edit'
-    | '/admin/users/$userId/edit'
-    | '/admin/calendar/$id/'
-    | '/admin/users/$userId/'
+    | '/_authenticated/admin/'
+    | '/_unauthenticated/calendar/'
+    | '/_unauthenticated/games/'
+    | '/_unauthenticated/sponsors/'
+    | '/_unauthenticated/team/'
+    | '/_authenticated/admin/users/$userId'
+    | '/_authenticated/admin/calendar/new'
+    | '/_authenticated/admin/calendar/'
+    | '/_authenticated/admin/users/'
+    | '/_unauthenticated/calendar/$id/'
+    | '/_authenticated/admin/calendar/$id/edit'
+    | '/_authenticated/admin/users/$userId/edit'
+    | '/_authenticated/admin/calendar/$id/'
+    | '/_authenticated/admin/users/$userId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRouteRoute: typeof AdminRouteRouteWithChildren
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
-  ContactRoute: typeof ContactRoute
   UnauthenticatedRoute: typeof UnauthenticatedRoute
   UnauthorizedRoute: typeof UnauthorizedRoute
-  GamesIdRoute: typeof GamesIdRoute
-  TeamIdRoute: typeof TeamIdRoute
-  CalendarIndexRoute: typeof CalendarIndexRoute
-  GamesIndexRoute: typeof GamesIndexRoute
-  SponsorsIndexRoute: typeof SponsorsIndexRoute
-  TeamIndexRoute: typeof TeamIndexRoute
+  AuthenticatedAdminRouteRoute: typeof AuthenticatedAdminRouteRouteWithChildren
+  UnauthenticatedContactRoute: typeof UnauthenticatedContactRoute
+  UnauthenticatedGamesIdRoute: typeof UnauthenticatedGamesIdRoute
+  UnauthenticatedTeamIdRoute: typeof UnauthenticatedTeamIdRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
-  CalendarIdIndexRoute: typeof CalendarIdIndexRoute
+  UnauthenticatedCalendarIndexRoute: typeof UnauthenticatedCalendarIndexRoute
+  UnauthenticatedGamesIndexRoute: typeof UnauthenticatedGamesIndexRoute
+  UnauthenticatedSponsorsIndexRoute: typeof UnauthenticatedSponsorsIndexRoute
+  UnauthenticatedTeamIndexRoute: typeof UnauthenticatedTeamIndexRoute
+  UnauthenticatedCalendarIdIndexRoute: typeof UnauthenticatedCalendarIdIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -392,13 +406,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UnauthenticatedRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/contact': {
-      id: '/contact'
-      path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof ContactRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/auth': {
       id: '/auth'
       path: '/auth'
@@ -406,67 +413,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin': {
-      id: '/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/team/': {
-      id: '/team/'
-      path: '/team'
-      fullPath: '/team/'
-      preLoaderRoute: typeof TeamIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sponsors/': {
-      id: '/sponsors/'
-      path: '/sponsors'
-      fullPath: '/sponsors/'
-      preLoaderRoute: typeof SponsorsIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/games/': {
-      id: '/games/'
-      path: '/games'
-      fullPath: '/games/'
-      preLoaderRoute: typeof GamesIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/calendar/': {
-      id: '/calendar/'
-      path: '/calendar'
-      fullPath: '/calendar/'
-      preLoaderRoute: typeof CalendarIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin/': {
-      id: '/admin/'
-      path: '/'
-      fullPath: '/admin/'
-      preLoaderRoute: typeof AdminIndexRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/team/$id': {
-      id: '/team/$id'
-      path: '/team/$id'
-      fullPath: '/team/$id'
-      preLoaderRoute: typeof TeamIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/games/$id': {
-      id: '/games/$id'
-      path: '/games/$id'
-      fullPath: '/games/$id'
-      preLoaderRoute: typeof GamesIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth/signup': {
@@ -490,40 +441,54 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthForgotPasswordRouteImport
       parentRoute: typeof AuthRouteRoute
     }
-    '/admin/sponsors': {
-      id: '/admin/sponsors'
-      path: '/sponsors'
-      fullPath: '/admin/sponsors'
-      preLoaderRoute: typeof AdminSponsorsRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/games': {
-      id: '/admin/games'
-      path: '/games'
-      fullPath: '/admin/games'
-      preLoaderRoute: typeof AdminGamesRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/calendar/$id/': {
-      id: '/calendar/$id/'
-      path: '/calendar/$id'
-      fullPath: '/calendar/$id/'
-      preLoaderRoute: typeof CalendarIdIndexRouteImport
+    '/_unauthenticated/contact': {
+      id: '/_unauthenticated/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof UnauthenticatedContactRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/users/': {
-      id: '/admin/users/'
-      path: '/users'
-      fullPath: '/admin/users/'
-      preLoaderRoute: typeof AdminUsersIndexRouteImport
-      parentRoute: typeof AdminRouteRoute
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/admin/calendar/': {
-      id: '/admin/calendar/'
+    '/_unauthenticated/team/': {
+      id: '/_unauthenticated/team/'
+      path: '/team'
+      fullPath: '/team/'
+      preLoaderRoute: typeof UnauthenticatedTeamIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_unauthenticated/sponsors/': {
+      id: '/_unauthenticated/sponsors/'
+      path: '/sponsors'
+      fullPath: '/sponsors/'
+      preLoaderRoute: typeof UnauthenticatedSponsorsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_unauthenticated/games/': {
+      id: '/_unauthenticated/games/'
+      path: '/games'
+      fullPath: '/games/'
+      preLoaderRoute: typeof UnauthenticatedGamesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_unauthenticated/calendar/': {
+      id: '/_unauthenticated/calendar/'
       path: '/calendar'
-      fullPath: '/admin/calendar/'
-      preLoaderRoute: typeof AdminCalendarIndexRouteImport
-      parentRoute: typeof AdminRouteRoute
+      fullPath: '/calendar/'
+      preLoaderRoute: typeof UnauthenticatedCalendarIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/api/auth/$': {
       id: '/api/auth/$'
@@ -532,93 +497,99 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/calendar/new': {
-      id: '/admin/calendar/new'
+    '/_unauthenticated/team/$id': {
+      id: '/_unauthenticated/team/$id'
+      path: '/team/$id'
+      fullPath: '/team/$id'
+      preLoaderRoute: typeof UnauthenticatedTeamIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_unauthenticated/games/$id': {
+      id: '/_unauthenticated/games/$id'
+      path: '/games/$id'
+      fullPath: '/games/$id'
+      preLoaderRoute: typeof UnauthenticatedGamesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/admin/sponsors': {
+      id: '/_authenticated/admin/sponsors'
+      path: '/sponsors'
+      fullPath: '/admin/sponsors'
+      preLoaderRoute: typeof AuthenticatedAdminSponsorsRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/games': {
+      id: '/_authenticated/admin/games'
+      path: '/games'
+      fullPath: '/admin/games'
+      preLoaderRoute: typeof AuthenticatedAdminGamesRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_unauthenticated/calendar/$id/': {
+      id: '/_unauthenticated/calendar/$id/'
+      path: '/calendar/$id'
+      fullPath: '/calendar/$id/'
+      preLoaderRoute: typeof UnauthenticatedCalendarIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/admin/users/': {
+      id: '/_authenticated/admin/users/'
+      path: '/users'
+      fullPath: '/admin/users/'
+      preLoaderRoute: typeof AuthenticatedAdminUsersIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/calendar/': {
+      id: '/_authenticated/admin/calendar/'
+      path: '/calendar'
+      fullPath: '/admin/calendar/'
+      preLoaderRoute: typeof AuthenticatedAdminCalendarIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/calendar/new': {
+      id: '/_authenticated/admin/calendar/new'
       path: '/calendar/new'
       fullPath: '/admin/calendar/new'
-      preLoaderRoute: typeof AdminCalendarNewRouteImport
-      parentRoute: typeof AdminRouteRoute
+      preLoaderRoute: typeof AuthenticatedAdminCalendarNewRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
     }
-    '/admin/users/$userId': {
-      id: '/admin/users/$userId'
+    '/_authenticated/admin/users/$userId': {
+      id: '/_authenticated/admin/users/$userId'
       path: '/users/$userId'
       fullPath: '/admin/users/$userId'
-      preLoaderRoute: typeof AdminUsersUserIdRouteRouteImport
-      parentRoute: typeof AdminRouteRoute
+      preLoaderRoute: typeof AuthenticatedAdminUsersUserIdRouteRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
     }
-    '/admin/users/$userId/': {
-      id: '/admin/users/$userId/'
+    '/_authenticated/admin/users/$userId/': {
+      id: '/_authenticated/admin/users/$userId/'
       path: '/'
       fullPath: '/admin/users/$userId/'
-      preLoaderRoute: typeof AdminUsersUserIdIndexRouteImport
-      parentRoute: typeof AdminUsersUserIdRouteRoute
+      preLoaderRoute: typeof AuthenticatedAdminUsersUserIdIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminUsersUserIdRouteRoute
     }
-    '/admin/calendar/$id/': {
-      id: '/admin/calendar/$id/'
+    '/_authenticated/admin/calendar/$id/': {
+      id: '/_authenticated/admin/calendar/$id/'
       path: '/calendar/$id'
       fullPath: '/admin/calendar/$id/'
-      preLoaderRoute: typeof AdminCalendarIdIndexRouteImport
-      parentRoute: typeof AdminRouteRoute
+      preLoaderRoute: typeof AuthenticatedAdminCalendarIdIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
     }
-    '/admin/users/$userId/edit': {
-      id: '/admin/users/$userId/edit'
+    '/_authenticated/admin/users/$userId/edit': {
+      id: '/_authenticated/admin/users/$userId/edit'
       path: '/edit'
       fullPath: '/admin/users/$userId/edit'
-      preLoaderRoute: typeof AdminUsersUserIdEditRouteImport
-      parentRoute: typeof AdminUsersUserIdRouteRoute
+      preLoaderRoute: typeof AuthenticatedAdminUsersUserIdEditRouteImport
+      parentRoute: typeof AuthenticatedAdminUsersUserIdRouteRoute
     }
-    '/admin/calendar/$id/edit': {
-      id: '/admin/calendar/$id/edit'
+    '/_authenticated/admin/calendar/$id/edit': {
+      id: '/_authenticated/admin/calendar/$id/edit'
       path: '/calendar/$id/edit'
       fullPath: '/admin/calendar/$id/edit'
-      preLoaderRoute: typeof AdminCalendarIdEditRouteImport
-      parentRoute: typeof AdminRouteRoute
+      preLoaderRoute: typeof AuthenticatedAdminCalendarIdEditRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
     }
   }
 }
-
-interface AdminUsersUserIdRouteRouteChildren {
-  AdminUsersUserIdEditRoute: typeof AdminUsersUserIdEditRoute
-  AdminUsersUserIdIndexRoute: typeof AdminUsersUserIdIndexRoute
-}
-
-const AdminUsersUserIdRouteRouteChildren: AdminUsersUserIdRouteRouteChildren = {
-  AdminUsersUserIdEditRoute: AdminUsersUserIdEditRoute,
-  AdminUsersUserIdIndexRoute: AdminUsersUserIdIndexRoute,
-}
-
-const AdminUsersUserIdRouteRouteWithChildren =
-  AdminUsersUserIdRouteRoute._addFileChildren(
-    AdminUsersUserIdRouteRouteChildren,
-  )
-
-interface AdminRouteRouteChildren {
-  AdminGamesRoute: typeof AdminGamesRoute
-  AdminSponsorsRoute: typeof AdminSponsorsRoute
-  AdminIndexRoute: typeof AdminIndexRoute
-  AdminUsersUserIdRouteRoute: typeof AdminUsersUserIdRouteRouteWithChildren
-  AdminCalendarNewRoute: typeof AdminCalendarNewRoute
-  AdminCalendarIndexRoute: typeof AdminCalendarIndexRoute
-  AdminUsersIndexRoute: typeof AdminUsersIndexRoute
-  AdminCalendarIdEditRoute: typeof AdminCalendarIdEditRoute
-  AdminCalendarIdIndexRoute: typeof AdminCalendarIdIndexRoute
-}
-
-const AdminRouteRouteChildren: AdminRouteRouteChildren = {
-  AdminGamesRoute: AdminGamesRoute,
-  AdminSponsorsRoute: AdminSponsorsRoute,
-  AdminIndexRoute: AdminIndexRoute,
-  AdminUsersUserIdRouteRoute: AdminUsersUserIdRouteRouteWithChildren,
-  AdminCalendarNewRoute: AdminCalendarNewRoute,
-  AdminCalendarIndexRoute: AdminCalendarIndexRoute,
-  AdminUsersIndexRoute: AdminUsersIndexRoute,
-  AdminCalendarIdEditRoute: AdminCalendarIdEditRoute,
-  AdminCalendarIdIndexRoute: AdminCalendarIdIndexRoute,
-}
-
-const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
-  AdminRouteRouteChildren,
-)
 
 interface AuthRouteRouteChildren {
   AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
@@ -636,21 +607,72 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
   AuthRouteRouteChildren,
 )
 
+interface AuthenticatedAdminUsersUserIdRouteRouteChildren {
+  AuthenticatedAdminUsersUserIdEditRoute: typeof AuthenticatedAdminUsersUserIdEditRoute
+  AuthenticatedAdminUsersUserIdIndexRoute: typeof AuthenticatedAdminUsersUserIdIndexRoute
+}
+
+const AuthenticatedAdminUsersUserIdRouteRouteChildren: AuthenticatedAdminUsersUserIdRouteRouteChildren =
+  {
+    AuthenticatedAdminUsersUserIdEditRoute:
+      AuthenticatedAdminUsersUserIdEditRoute,
+    AuthenticatedAdminUsersUserIdIndexRoute:
+      AuthenticatedAdminUsersUserIdIndexRoute,
+  }
+
+const AuthenticatedAdminUsersUserIdRouteRouteWithChildren =
+  AuthenticatedAdminUsersUserIdRouteRoute._addFileChildren(
+    AuthenticatedAdminUsersUserIdRouteRouteChildren,
+  )
+
+interface AuthenticatedAdminRouteRouteChildren {
+  AuthenticatedAdminGamesRoute: typeof AuthenticatedAdminGamesRoute
+  AuthenticatedAdminSponsorsRoute: typeof AuthenticatedAdminSponsorsRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+  AuthenticatedAdminUsersUserIdRouteRoute: typeof AuthenticatedAdminUsersUserIdRouteRouteWithChildren
+  AuthenticatedAdminCalendarNewRoute: typeof AuthenticatedAdminCalendarNewRoute
+  AuthenticatedAdminCalendarIndexRoute: typeof AuthenticatedAdminCalendarIndexRoute
+  AuthenticatedAdminUsersIndexRoute: typeof AuthenticatedAdminUsersIndexRoute
+  AuthenticatedAdminCalendarIdEditRoute: typeof AuthenticatedAdminCalendarIdEditRoute
+  AuthenticatedAdminCalendarIdIndexRoute: typeof AuthenticatedAdminCalendarIdIndexRoute
+}
+
+const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren =
+  {
+    AuthenticatedAdminGamesRoute: AuthenticatedAdminGamesRoute,
+    AuthenticatedAdminSponsorsRoute: AuthenticatedAdminSponsorsRoute,
+    AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+    AuthenticatedAdminUsersUserIdRouteRoute:
+      AuthenticatedAdminUsersUserIdRouteRouteWithChildren,
+    AuthenticatedAdminCalendarNewRoute: AuthenticatedAdminCalendarNewRoute,
+    AuthenticatedAdminCalendarIndexRoute: AuthenticatedAdminCalendarIndexRoute,
+    AuthenticatedAdminUsersIndexRoute: AuthenticatedAdminUsersIndexRoute,
+    AuthenticatedAdminCalendarIdEditRoute:
+      AuthenticatedAdminCalendarIdEditRoute,
+    AuthenticatedAdminCalendarIdIndexRoute:
+      AuthenticatedAdminCalendarIdIndexRoute,
+  }
+
+const AuthenticatedAdminRouteRouteWithChildren =
+  AuthenticatedAdminRouteRoute._addFileChildren(
+    AuthenticatedAdminRouteRouteChildren,
+  )
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRouteRoute: AdminRouteRouteWithChildren,
   AuthRouteRoute: AuthRouteRouteWithChildren,
-  ContactRoute: ContactRoute,
   UnauthenticatedRoute: UnauthenticatedRoute,
   UnauthorizedRoute: UnauthorizedRoute,
-  GamesIdRoute: GamesIdRoute,
-  TeamIdRoute: TeamIdRoute,
-  CalendarIndexRoute: CalendarIndexRoute,
-  GamesIndexRoute: GamesIndexRoute,
-  SponsorsIndexRoute: SponsorsIndexRoute,
-  TeamIndexRoute: TeamIndexRoute,
+  AuthenticatedAdminRouteRoute: AuthenticatedAdminRouteRouteWithChildren,
+  UnauthenticatedContactRoute: UnauthenticatedContactRoute,
+  UnauthenticatedGamesIdRoute: UnauthenticatedGamesIdRoute,
+  UnauthenticatedTeamIdRoute: UnauthenticatedTeamIdRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
-  CalendarIdIndexRoute: CalendarIdIndexRoute,
+  UnauthenticatedCalendarIndexRoute: UnauthenticatedCalendarIndexRoute,
+  UnauthenticatedGamesIndexRoute: UnauthenticatedGamesIndexRoute,
+  UnauthenticatedSponsorsIndexRoute: UnauthenticatedSponsorsIndexRoute,
+  UnauthenticatedTeamIndexRoute: UnauthenticatedTeamIndexRoute,
+  UnauthenticatedCalendarIdIndexRoute: UnauthenticatedCalendarIdIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -1,8 +1,8 @@
 import { db } from "@/db";
 import { sponsorTable } from "@/db/schema";
 import { seedSponsors } from "@/db/seed/sponsors";
+import { authenticatedMiddleware } from "@/server/middleware/authenticated";
 import { createServerFn } from "@tanstack/react-start";
-import { authenticatedMiddleware } from "../middleware/authenticatedMiddleware";
 
 export const seedSponsorsFn = createServerFn({ method: "GET" })
   .middleware([authenticatedMiddleware])

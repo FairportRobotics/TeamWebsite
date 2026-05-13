@@ -2,24 +2,23 @@
 import Footer from "@/components/footer";
 import Header from "@/components/header";
 import { Toaster } from "@/components/ui/sonner";
-import { getSession, SessionContext, type AppSession } from "@/lib/auth/utils/session";
+import type { RouterContext } from "@/router";
+import { getSessionFn } from "@/server/functions/auth/getSession";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import { createRootRouteWithContext, HeadContent, Scripts } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import appCss from "../styles.css?url";
 
-interface RouterContext {
-  session: AppSession;
-}
-
 export const Route = createRootRouteWithContext<RouterContext>()({
-  beforeLoad: async () => {
-    const session = await getSession();
-    return { session: session };
+  beforeLoad: async ({ context }) => {
+    const sessionData = await getSessionFn();
+
+    context.auth.session = sessionData.session;
+    context.auth.user = sessionData.user;
+
+    return null;
   },
-  loader: async ({ context }) => {
-    return { session: context.session };
-  },
+
   head: () => ({
     meta: [
       {
@@ -48,35 +47,31 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 });
 
 function RootDocument({ children }: { children: React.ReactNode }) {
-  const { session } = Route.useLoaderData();
-
   return (
-    <SessionContext.Provider value={session}>
-      <html lang="en" suppressHydrationWarning>
-        <head>
-          <HeadContent />
-        </head>
-        <body className="font-sans antialiased wrap-anywhere">
-          <div className="flex flex-col min-h-screen">
-            <Header />
-            <main className="p-10">{children}</main>
-          </div>
-          <Footer />
-          <TanStackDevtools
-            config={{
-              position: "bottom-right",
-            }}
-            plugins={[
-              {
-                name: "Tanstack Router",
-                render: <TanStackRouterDevtoolsPanel />,
-              },
-            ]}
-          />
-          <Toaster position="top-center" />
-          <Scripts />
-        </body>
-      </html>
-    </SessionContext.Provider>
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <HeadContent />
+      </head>
+      <body className="font-sans antialiased wrap-anywhere">
+        <div className="flex flex-col min-h-screen">
+          <Header />
+          <main className="p-10">{children}</main>
+        </div>
+        <Footer />
+        <TanStackDevtools
+          config={{
+            position: "bottom-right",
+          }}
+          plugins={[
+            {
+              name: "Tanstack Router",
+              render: <TanStackRouterDevtoolsPanel />,
+            },
+          ]}
+        />
+        <Toaster position="top-center" />
+        <Scripts />
+      </body>
+    </html>
   );
 }

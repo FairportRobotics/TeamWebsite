@@ -1,7 +1,7 @@
 import { pgEnum } from "drizzle-orm/pg-core";
 
 import * as schema from "@/db/schema";
-import { Roles } from "@/lib/auth/permissions";
+import { Roles } from "@/lib/auth/roles";
 import {
   type BuildQueryResult,
   type DBQueryConfig,

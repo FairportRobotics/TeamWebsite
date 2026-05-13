@@ -4,7 +4,7 @@ import { createFileRoute } from "@tanstack/react-router";
 export const Route = createFileRoute("/")({
   component: App,
   loader: async ({ context }) => {
-    return context.session?.user ?? null;
+    return context.auth.user;
   },
 });
 
