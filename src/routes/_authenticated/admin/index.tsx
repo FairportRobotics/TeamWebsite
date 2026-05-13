@@ -5,7 +5,7 @@ import { getAdminSummaryFn } from "@/server/functions/admin/getAdminSummary";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/admin/")({
-  beforeLoad: async ({ context }) => {},
+  beforeLoad: async () => {},
   loader: async () => {
     const metrics = await getAdminSummaryFn();
     return metrics;
