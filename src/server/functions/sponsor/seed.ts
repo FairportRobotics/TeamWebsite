@@ -6,7 +6,7 @@ import { anyPermissionMiddleware } from "@/server/middleware/anyPermission";
 import { authenticatedMiddleware } from "@/server/middleware/authenticated";
 import { createServerFn } from "@tanstack/react-start";
 
-export const seedSponsorsFn = createServerFn({ method: "GET" })
+export const seedSponsorsFn = createServerFn({ method: "POST" })
   .middleware([
     authenticatedMiddleware,
     anyPermissionMiddleware([Permissions.SponsorAdminister, Permissions.SponsorCreate]),

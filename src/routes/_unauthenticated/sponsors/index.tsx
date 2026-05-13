@@ -4,13 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import { getSponsorsFn } from "@/server/functions/sponsor/getSponsorList";
+import { getSponsorListFn } from "@/server/functions/sponsor/getSponsorList";
 import { createFileRoute } from "@tanstack/react-router";
 import { Building2, Download, Heart, SquareCheck, SquareUser } from "lucide-react";
 
 export const Route = createFileRoute("/_unauthenticated/sponsors/")({
   loader: async () => {
-    const sponsors = await getSponsorsFn();
+    const sponsors = await getSponsorListFn();
     return sponsors;
   },
   component: RouteComponent,

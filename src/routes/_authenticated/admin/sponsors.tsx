@@ -2,14 +2,14 @@
 import { BackTo } from "@/components/back-to";
 import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
 import { TeamActionButton } from "@/components/team-action-buttom";
-import { getSponsorsFn } from "@/server/functions/sponsor/getSponsorList";
+import { getSponsorListFn } from "@/server/functions/sponsor/getSponsorList";
 import { seedSponsorsFn } from "@/server/functions/sponsor/seed";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/admin/sponsors")({
-  beforeLoad: async ({ context }) => {},
+  beforeLoad: async () => {},
   loader: async () => {
-    const sponsors = await getSponsorsFn();
+    const sponsors = await getSponsorListFn();
     return sponsors;
   },
   component: RouteComponent,
