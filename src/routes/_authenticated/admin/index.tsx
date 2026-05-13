@@ -1,7 +1,7 @@
 // prettier-ignore
 import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getAdminSummaryFn } from "@/lib/fn/admin";
+import { getAdminSummaryFn } from "@/server/functions/admin/getAdminSummary";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/admin/")({
