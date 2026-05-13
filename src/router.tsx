@@ -37,4 +37,5 @@ declare module "@tanstack/react-router" {
   }
 }
 
+// This type is used by custom Link components so the "to" property is strongly typed.
 export type AppRouter = typeof getRouter;
