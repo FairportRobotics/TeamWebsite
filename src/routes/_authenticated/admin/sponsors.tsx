@@ -2,7 +2,8 @@
 import { BackTo } from "@/components/back-to";
 import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
 import { TeamActionButton } from "@/components/team-action-buttom";
-import { getSponsorsFn, seedSponsorsFn } from "@/lib/fn/sponsor";
+import { getSponsorsFn } from "@/server/functions/sponsor/getSponsorList";
+import { seedSponsorsFn } from "@/server/functions/sponsor/seed";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/admin/sponsors")({
@@ -15,8 +16,6 @@ export const Route = createFileRoute("/_authenticated/admin/sponsors")({
 });
 
 function RouteComponent() {
-  const sponsors = Route.useLoaderData();
-
   async function handleSeedGames() {
     await seedSponsorsFn();
     return { error: null };

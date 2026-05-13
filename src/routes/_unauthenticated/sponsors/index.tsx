@@ -3,8 +3,8 @@ import { PageSection } from "@/components/page-section";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { getSponsorsFn } from "@/lib/fn/sponsor";
 import { cn } from "@/lib/utils";
+import { getSponsorsFn } from "@/server/functions/sponsor/getSponsorList";
 import { createFileRoute } from "@tanstack/react-router";
 import { Building2, Download, Heart, SquareCheck, SquareUser } from "lucide-react";
 

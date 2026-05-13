@@ -1,11 +1,16 @@
 import { db } from "@/db";
 import { sponsorTable } from "@/db/schema";
 import { seedSponsors } from "@/db/seed/sponsors";
+import { Permissions } from "@/lib/auth/permissions";
+import { anyPermissionMiddleware } from "@/server/middleware/anyPermission";
 import { authenticatedMiddleware } from "@/server/middleware/authenticated";
 import { createServerFn } from "@tanstack/react-start";
 
 export const seedSponsorsFn = createServerFn({ method: "GET" })
-  .middleware([authenticatedMiddleware])
+  .middleware([
+    authenticatedMiddleware,
+    anyPermissionMiddleware([Permissions.SponsorAdminister, Permissions.SponsorCreate]),
+  ])
   .handler(async () => {
     seedSponsors.forEach(async (s) => {
       console.log("🌱 Seeding Sponsors", s.name);
@@ -25,8 +30,3 @@ export const seedSponsorsFn = createServerFn({ method: "GET" })
       }
     });
   });
-
-export const getSponsorsFn = createServerFn({ method: "GET" }).handler(async () => {
-  const results = await db.select().from(sponsorTable);
-  return results;
-});
