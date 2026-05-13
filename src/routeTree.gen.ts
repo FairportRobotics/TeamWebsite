@@ -11,9 +11,12 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UnauthorizedRouteImport } from './routes/unauthorized'
 import { Route as UnauthenticatedRouteImport } from './routes/unauthenticated'
+import { Route as AuthRouteRouteImport } from './routes/auth/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthSignupRouteImport } from './routes/auth/signup'
+import { Route as AuthSigninRouteImport } from './routes/auth/signin'
+import { Route as AuthForgotPasswordRouteImport } from './routes/auth/forgot-password'
 import { Route as UnauthenticatedContactRouteImport } from './routes/_unauthenticated/contact'
-import { Route as UnauthenticatedAuthRouteRouteImport } from './routes/_unauthenticated/auth/route'
 import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authenticated/admin/route'
 import { Route as UnauthenticatedTeamIndexRouteImport } from './routes/_unauthenticated/team/index'
 import { Route as UnauthenticatedSponsorsIndexRouteImport } from './routes/_unauthenticated/sponsors/index'
@@ -23,9 +26,6 @@ import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authentic
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as UnauthenticatedTeamIdRouteImport } from './routes/_unauthenticated/team/$id'
 import { Route as UnauthenticatedGamesIdRouteImport } from './routes/_unauthenticated/games/$id'
-import { Route as UnauthenticatedAuthSignupRouteImport } from './routes/_unauthenticated/auth/signup'
-import { Route as UnauthenticatedAuthSigninRouteImport } from './routes/_unauthenticated/auth/signin'
-import { Route as UnauthenticatedAuthForgotPasswordRouteImport } from './routes/_unauthenticated/auth/forgot-password'
 import { Route as AuthenticatedAdminSponsorsRouteImport } from './routes/_authenticated/admin/sponsors'
 import { Route as AuthenticatedAdminGamesRouteImport } from './routes/_authenticated/admin/games'
 import { Route as UnauthenticatedCalendarIdIndexRouteImport } from './routes/_unauthenticated/calendar/$id/index'
@@ -48,22 +48,36 @@ const UnauthenticatedRoute = UnauthenticatedRouteImport.update({
   path: '/unauthenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRouteRoute = AuthRouteRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthSignupRoute = AuthSignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+const AuthSigninRoute = AuthSigninRouteImport.update({
+  id: '/signin',
+  path: '/signin',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => AuthRouteRoute,
 } as any)
 const UnauthenticatedContactRoute = UnauthenticatedContactRouteImport.update({
   id: '/_unauthenticated/contact',
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
-const UnauthenticatedAuthRouteRoute =
-  UnauthenticatedAuthRouteRouteImport.update({
-    id: '/_unauthenticated/auth',
-    path: '/auth',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 const AuthenticatedAdminRouteRoute = AuthenticatedAdminRouteRouteImport.update({
   id: '/_authenticated/admin',
   path: '/admin',
@@ -113,24 +127,6 @@ const UnauthenticatedGamesIdRoute = UnauthenticatedGamesIdRouteImport.update({
   path: '/games/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
-const UnauthenticatedAuthSignupRoute =
-  UnauthenticatedAuthSignupRouteImport.update({
-    id: '/signup',
-    path: '/signup',
-    getParentRoute: () => UnauthenticatedAuthRouteRoute,
-  } as any)
-const UnauthenticatedAuthSigninRoute =
-  UnauthenticatedAuthSigninRouteImport.update({
-    id: '/signin',
-    path: '/signin',
-    getParentRoute: () => UnauthenticatedAuthRouteRoute,
-  } as any)
-const UnauthenticatedAuthForgotPasswordRoute =
-  UnauthenticatedAuthForgotPasswordRouteImport.update({
-    id: '/forgot-password',
-    path: '/forgot-password',
-    getParentRoute: () => UnauthenticatedAuthRouteRoute,
-  } as any)
 const AuthenticatedAdminSponsorsRoute =
   AuthenticatedAdminSponsorsRouteImport.update({
     id: '/sponsors',
@@ -199,16 +195,16 @@ const AuthenticatedAdminCalendarIdEditRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRouteRouteWithChildren
   '/unauthenticated': typeof UnauthenticatedRoute
   '/unauthorized': typeof UnauthorizedRoute
   '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
-  '/auth': typeof UnauthenticatedAuthRouteRouteWithChildren
   '/contact': typeof UnauthenticatedContactRoute
+  '/auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/auth/signin': typeof AuthSigninRoute
+  '/auth/signup': typeof AuthSignupRoute
   '/admin/games': typeof AuthenticatedAdminGamesRoute
   '/admin/sponsors': typeof AuthenticatedAdminSponsorsRoute
-  '/auth/forgot-password': typeof UnauthenticatedAuthForgotPasswordRoute
-  '/auth/signin': typeof UnauthenticatedAuthSigninRoute
-  '/auth/signup': typeof UnauthenticatedAuthSignupRoute
   '/games/$id': typeof UnauthenticatedGamesIdRoute
   '/team/$id': typeof UnauthenticatedTeamIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -229,15 +225,15 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRouteRouteWithChildren
   '/unauthenticated': typeof UnauthenticatedRoute
   '/unauthorized': typeof UnauthorizedRoute
-  '/auth': typeof UnauthenticatedAuthRouteRouteWithChildren
   '/contact': typeof UnauthenticatedContactRoute
+  '/auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/auth/signin': typeof AuthSigninRoute
+  '/auth/signup': typeof AuthSignupRoute
   '/admin/games': typeof AuthenticatedAdminGamesRoute
   '/admin/sponsors': typeof AuthenticatedAdminSponsorsRoute
-  '/auth/forgot-password': typeof UnauthenticatedAuthForgotPasswordRoute
-  '/auth/signin': typeof UnauthenticatedAuthSigninRoute
-  '/auth/signup': typeof UnauthenticatedAuthSignupRoute
   '/games/$id': typeof UnauthenticatedGamesIdRoute
   '/team/$id': typeof UnauthenticatedTeamIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -258,16 +254,16 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRouteRouteWithChildren
   '/unauthenticated': typeof UnauthenticatedRoute
   '/unauthorized': typeof UnauthorizedRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
-  '/_unauthenticated/auth': typeof UnauthenticatedAuthRouteRouteWithChildren
   '/_unauthenticated/contact': typeof UnauthenticatedContactRoute
+  '/auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/auth/signin': typeof AuthSigninRoute
+  '/auth/signup': typeof AuthSignupRoute
   '/_authenticated/admin/games': typeof AuthenticatedAdminGamesRoute
   '/_authenticated/admin/sponsors': typeof AuthenticatedAdminSponsorsRoute
-  '/_unauthenticated/auth/forgot-password': typeof UnauthenticatedAuthForgotPasswordRoute
-  '/_unauthenticated/auth/signin': typeof UnauthenticatedAuthSigninRoute
-  '/_unauthenticated/auth/signup': typeof UnauthenticatedAuthSignupRoute
   '/_unauthenticated/games/$id': typeof UnauthenticatedGamesIdRoute
   '/_unauthenticated/team/$id': typeof UnauthenticatedTeamIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -290,16 +286,16 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
     | '/unauthenticated'
     | '/unauthorized'
     | '/admin'
-    | '/auth'
     | '/contact'
-    | '/admin/games'
-    | '/admin/sponsors'
     | '/auth/forgot-password'
     | '/auth/signin'
     | '/auth/signup'
+    | '/admin/games'
+    | '/admin/sponsors'
     | '/games/$id'
     | '/team/$id'
     | '/api/auth/$'
@@ -320,15 +316,15 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth'
     | '/unauthenticated'
     | '/unauthorized'
-    | '/auth'
     | '/contact'
-    | '/admin/games'
-    | '/admin/sponsors'
     | '/auth/forgot-password'
     | '/auth/signin'
     | '/auth/signup'
+    | '/admin/games'
+    | '/admin/sponsors'
     | '/games/$id'
     | '/team/$id'
     | '/api/auth/$'
@@ -348,16 +344,16 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/auth'
     | '/unauthenticated'
     | '/unauthorized'
     | '/_authenticated/admin'
-    | '/_unauthenticated/auth'
     | '/_unauthenticated/contact'
+    | '/auth/forgot-password'
+    | '/auth/signin'
+    | '/auth/signup'
     | '/_authenticated/admin/games'
     | '/_authenticated/admin/sponsors'
-    | '/_unauthenticated/auth/forgot-password'
-    | '/_unauthenticated/auth/signin'
-    | '/_unauthenticated/auth/signup'
     | '/_unauthenticated/games/$id'
     | '/_unauthenticated/team/$id'
     | '/api/auth/$'
@@ -379,10 +375,10 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRouteRoute: typeof AuthRouteRouteWithChildren
   UnauthenticatedRoute: typeof UnauthenticatedRoute
   UnauthorizedRoute: typeof UnauthorizedRoute
   AuthenticatedAdminRouteRoute: typeof AuthenticatedAdminRouteRouteWithChildren
-  UnauthenticatedAuthRouteRoute: typeof UnauthenticatedAuthRouteRouteWithChildren
   UnauthenticatedContactRoute: typeof UnauthenticatedContactRoute
   UnauthenticatedGamesIdRoute: typeof UnauthenticatedGamesIdRoute
   UnauthenticatedTeamIdRoute: typeof UnauthenticatedTeamIdRoute
@@ -410,6 +406,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UnauthenticatedRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -417,18 +420,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth/signup': {
+      id: '/auth/signup'
+      path: '/signup'
+      fullPath: '/auth/signup'
+      preLoaderRoute: typeof AuthSignupRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/auth/signin': {
+      id: '/auth/signin'
+      path: '/signin'
+      fullPath: '/auth/signin'
+      preLoaderRoute: typeof AuthSigninRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/auth/forgot-password': {
+      id: '/auth/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/auth/forgot-password'
+      preLoaderRoute: typeof AuthForgotPasswordRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
     '/_unauthenticated/contact': {
       id: '/_unauthenticated/contact'
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof UnauthenticatedContactRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_unauthenticated/auth': {
-      id: '/_unauthenticated/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof UnauthenticatedAuthRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/admin': {
@@ -493,27 +510,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/games/$id'
       preLoaderRoute: typeof UnauthenticatedGamesIdRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/_unauthenticated/auth/signup': {
-      id: '/_unauthenticated/auth/signup'
-      path: '/signup'
-      fullPath: '/auth/signup'
-      preLoaderRoute: typeof UnauthenticatedAuthSignupRouteImport
-      parentRoute: typeof UnauthenticatedAuthRouteRoute
-    }
-    '/_unauthenticated/auth/signin': {
-      id: '/_unauthenticated/auth/signin'
-      path: '/signin'
-      fullPath: '/auth/signin'
-      preLoaderRoute: typeof UnauthenticatedAuthSigninRouteImport
-      parentRoute: typeof UnauthenticatedAuthRouteRoute
-    }
-    '/_unauthenticated/auth/forgot-password': {
-      id: '/_unauthenticated/auth/forgot-password'
-      path: '/forgot-password'
-      fullPath: '/auth/forgot-password'
-      preLoaderRoute: typeof UnauthenticatedAuthForgotPasswordRouteImport
-      parentRoute: typeof UnauthenticatedAuthRouteRoute
     }
     '/_authenticated/admin/sponsors': {
       id: '/_authenticated/admin/sponsors'
@@ -595,6 +591,22 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthRouteRouteChildren {
+  AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
+  AuthSigninRoute: typeof AuthSigninRoute
+  AuthSignupRoute: typeof AuthSignupRoute
+}
+
+const AuthRouteRouteChildren: AuthRouteRouteChildren = {
+  AuthForgotPasswordRoute: AuthForgotPasswordRoute,
+  AuthSigninRoute: AuthSigninRoute,
+  AuthSignupRoute: AuthSignupRoute,
+}
+
+const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
+  AuthRouteRouteChildren,
+)
+
 interface AuthenticatedAdminUsersUserIdRouteRouteChildren {
   AuthenticatedAdminUsersUserIdEditRoute: typeof AuthenticatedAdminUsersUserIdEditRoute
   AuthenticatedAdminUsersUserIdIndexRoute: typeof AuthenticatedAdminUsersUserIdIndexRoute
@@ -646,31 +658,12 @@ const AuthenticatedAdminRouteRouteWithChildren =
     AuthenticatedAdminRouteRouteChildren,
   )
 
-interface UnauthenticatedAuthRouteRouteChildren {
-  UnauthenticatedAuthForgotPasswordRoute: typeof UnauthenticatedAuthForgotPasswordRoute
-  UnauthenticatedAuthSigninRoute: typeof UnauthenticatedAuthSigninRoute
-  UnauthenticatedAuthSignupRoute: typeof UnauthenticatedAuthSignupRoute
-}
-
-const UnauthenticatedAuthRouteRouteChildren: UnauthenticatedAuthRouteRouteChildren =
-  {
-    UnauthenticatedAuthForgotPasswordRoute:
-      UnauthenticatedAuthForgotPasswordRoute,
-    UnauthenticatedAuthSigninRoute: UnauthenticatedAuthSigninRoute,
-    UnauthenticatedAuthSignupRoute: UnauthenticatedAuthSignupRoute,
-  }
-
-const UnauthenticatedAuthRouteRouteWithChildren =
-  UnauthenticatedAuthRouteRoute._addFileChildren(
-    UnauthenticatedAuthRouteRouteChildren,
-  )
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRouteRoute: AuthRouteRouteWithChildren,
   UnauthenticatedRoute: UnauthenticatedRoute,
   UnauthorizedRoute: UnauthorizedRoute,
   AuthenticatedAdminRouteRoute: AuthenticatedAdminRouteRouteWithChildren,
-  UnauthenticatedAuthRouteRoute: UnauthenticatedAuthRouteRouteWithChildren,
   UnauthenticatedContactRoute: UnauthenticatedContactRoute,
   UnauthenticatedGamesIdRoute: UnauthenticatedGamesIdRoute,
   UnauthenticatedTeamIdRoute: UnauthenticatedTeamIdRoute,

@@ -19,25 +19,23 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
 
-export const Route = createFileRoute("/_unauthenticated/auth/signup")({
+export const Route = createFileRoute("/auth/signin")({
   component: RouteComponent,
 });
 
-const signUpSchema = z.object({
-  name: z.string().min(1),
+const signInSchema = z.object({
   email: z.email().min(1),
   password: z.string().min(1),
 });
 
-type SignUpForm = z.infer<typeof signUpSchema>;
+type SignInForm = z.infer<typeof signInSchema>;
 
 function RouteComponent() {
   const navigate = useNavigate();
 
-  const form = useForm<SignUpForm>({
-    resolver: zodResolver(signUpSchema),
+  const form = useForm<SignInForm>({
+    resolver: zodResolver(signInSchema),
     defaultValues: {
-      name: "",
       email: "",
       password: "",
     },
@@ -45,46 +43,30 @@ function RouteComponent() {
 
   const { isSubmitting } = form.formState;
 
-  async function handleSignUp(data: SignUpForm) {
-    const res = await authClient.signUp.email(
+  async function handleSignIn(data: SignInForm) {
+    await authClient.signIn.email(
       { ...data, callbackURL: "/" },
       {
         onError: (error) => {
-          console.error("Error signing up:", error);
-          toast.error("Error, something went wrong. Please try again.");
+          console.error("Error signing in:", error);
+          toast.error("Invalid email or password. Please try again.");
+        },
+        onSuccess: () => {
+          navigate({ to: "/" });
         },
       },
     );
-
-    if (res.error == null && !res.data.user.emailVerified) {
-    }
-
-    navigate({ to: "/" });
   }
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Sign Up</CardTitle>
+        <CardTitle>Sign In</CardTitle>
         <CardDescription>Sign in and enjoy our content</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form className="space-y-4" onSubmit={form.handleSubmit(handleSignUp)}>
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input type="name" autoComplete="" {...field} placeholder="First Last" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
+          <form className="space-y-4" onSubmit={form.handleSubmit(handleSignIn)}>
             <FormField
               control={form.control}
               name="email"
@@ -98,7 +80,6 @@ function RouteComponent() {
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="password"
@@ -106,6 +87,9 @@ function RouteComponent() {
                 <FormItem>
                   <div className="flex justify-between items-center">
                     <FormLabel>Password</FormLabel>
+                    <Link to="/auth/forgot-password" className="text-sm text-blue-700 underline">
+                      Forgot Password?
+                    </Link>
                   </div>
                   <FormControl>
                     <PasswordInput {...field} autoComplete="" />
@@ -115,15 +99,14 @@ function RouteComponent() {
               )}
             />
             <div>
-              Already have an account?{" "}
-              <Link to="/auth/signin" className="text-blue-700 underline">
-                Sign In
+              Don't have an account?{" "}
+              <Link to="/auth/signup" className="text-blue-700 underline">
+                Sign Up
               </Link>
             </div>
-
             <LoadingSwap isLoading={isSubmitting}>
               <Button type="submit" className="w-full " disabled={isSubmitting}>
-                Sign Up
+                Sign In
               </Button>
             </LoadingSwap>
             <div className="relative flex py-5 items-center">

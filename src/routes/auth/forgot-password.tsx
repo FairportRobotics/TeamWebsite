@@ -4,7 +4,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
-export const Route = createFileRoute("/_unauthenticated/auth/forgot-password")({
+export const Route = createFileRoute("/auth/forgot-password")({
   component: RouteComponent,
 });
 
