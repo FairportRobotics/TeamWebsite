@@ -1,6 +1,6 @@
 import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getGameYearsFn } from "@/lib/fn/games";
+import { getGameYearsFn } from "@/server/functions/game/getGameYears";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_unauthenticated/games/")({

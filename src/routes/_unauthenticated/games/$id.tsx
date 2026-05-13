@@ -1,7 +1,8 @@
 import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getGameYearFn, getGameYearsExtentsFn } from "@/lib/fn/games";
+import { getGameYearFn } from "@/server/functions/game/getGameYear";
+import { getGameYearsExtentsFn } from "@/server/functions/game/getGameYearsExtents";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 

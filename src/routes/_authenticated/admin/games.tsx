@@ -2,7 +2,7 @@
 import { BackTo } from "@/components/back-to";
 import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
 import { TeamActionButton } from "@/components/team-action-buttom";
-import { seedGameYearsFn } from "@/lib/fn/games";
+import { seedGameYearsFn } from "@/server/functions/game/seed";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/admin/games")({
