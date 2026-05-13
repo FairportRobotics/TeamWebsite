@@ -1,54 +1,16 @@
-import { createIsomorphicFn } from "@tanstack/react-start";
-import { getRequestHeaders } from "@tanstack/react-start/server";
-import { createContext, useContext } from "react";
+import { createServerFn } from "@tanstack/react-start";
+import { getRequest } from "@tanstack/react-start/server";
 import { auth } from "..";
-import { authClient } from "../auth-client";
 
-export type AppSession = {
-  user: { id: string; name: string; email: string; role: string; permissions: string[] };
-} | null;
+export const getSessionFn = createServerFn().handler(async () => {
+  const request = getRequest();
 
-export const getSession = createIsomorphicFn()
-  .server(async () => {
-    const headers = getRequestHeaders();
-    const session = await auth.api.getSession({ headers });
-
-    if (!session?.user) {
-      return null;
-    }
-
-    return {
-      user: {
-        id: session.user.id,
-        name: session.user.name,
-        email: session.user.email,
-        role: session.user.role ?? "",
-        permissions: [],
-      },
-    };
-  })
-
-  .client(async () => {
-    const data = await authClient.getSession();
-
-    if (!data.data?.user) {
-      return null;
-    }
-
-    return {
-      user: {
-        id: data.data.user.id,
-        name: data.data.user.name,
-        email: data.data.user.email,
-        role: data.data.user.role ?? "",
-        permissions: [],
-      },
-    };
+  const sessionData = await auth.api.getSession({
+    headers: request.headers,
   });
 
-export const SessionContext = createContext<AppSession>(null);
-
-export function useSession() {
-  const session = useContext(SessionContext);
-  return session;
-}
+  return {
+    session: sessionData?.session,
+    user: sessionData?.user,
+  };
+});
