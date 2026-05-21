@@ -1,4 +1,4 @@
-import { TeamActionButton } from "@/components/TeamActionButtom";
+import { TeamActionButton } from "@/components/site/TeamActionButtom";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -8,8 +8,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { CalendarListForAdminItem } from "@/lib/fn/calendar";
 import { getDateRangeParts } from "@/lib/utils";
+import type { CalendarListForAdminItem } from "@/server/functions/calendar/getCalendarListForAdmin";
 import { Link } from "@tanstack/react-router";
 import {
   flexRender,
