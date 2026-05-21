@@ -1,7 +1,7 @@
 // prettier-ignore
-import { BackTo } from "@/components/back-to";
-import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
-import { TeamActionButton } from "@/components/team-action-buttom";
+import { BackTo } from "@/components/site/BackTo";
+import { PageDescription, PageHeader, PageTitle } from "@/components/site/PageHeader";
+import { TeamActionButton } from "@/components/site/TeamActionButtom";
 import { getSponsorListFn } from "@/server/functions/sponsor/getSponsorList";
 import { seedSponsorsFn } from "@/server/functions/sponsor/seed";
 import { createFileRoute } from "@tanstack/react-router";

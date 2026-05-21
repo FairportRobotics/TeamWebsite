@@ -1,4 +1,4 @@
-import { SocialAuthButtons } from "@/components/social-login-buttons";
+import { SocialAuthButtons } from "@/components/site/SocialLoginButtons";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {

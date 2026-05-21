@@ -1,5 +1,5 @@
-import { EventCalendar } from "@/components/event-calendar";
-import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
+import { EventCalendar } from "@/components/site/EventCalendar";
+import { PageDescription, PageHeader, PageTitle } from "@/components/site/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { getPublishedCalendarListFn } from "@/server/functions/calendar/getPublishedCalendarList";

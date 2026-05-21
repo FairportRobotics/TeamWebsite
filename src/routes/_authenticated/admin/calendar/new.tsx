@@ -1,6 +1,6 @@
 import { CalendarEventForm } from "@/components/admin/calendar/calendar-event-form";
-import { BackTo } from "@/components/back-to";
-import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
+import { BackTo } from "@/components/site/BackTo";
+import { PageDescription, PageHeader, PageTitle } from "@/components/site/PageHeader";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/admin/calendar/new")({

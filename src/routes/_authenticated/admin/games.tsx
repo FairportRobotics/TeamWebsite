@@ -1,7 +1,7 @@
 // prettier-ignore
-import { BackTo } from "@/components/back-to";
-import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
-import { TeamActionButton } from "@/components/team-action-buttom";
+import { BackTo } from "@/components/site/BackTo";
+import { PageDescription, PageHeader, PageTitle } from "@/components/site/PageHeader";
+import { TeamActionButton } from "@/components/site/TeamActionButtom";
 import { seedGameYearsFn } from "@/server/functions/game/seed";
 import { createFileRoute } from "@tanstack/react-router";
 

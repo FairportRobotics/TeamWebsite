@@ -1,6 +1,6 @@
 // prettier-ignore
-import Footer from "@/components/footer";
-import Header from "@/components/header";
+import Footer from "@/components/site/Footer";
+import Header from "@/components/site/Header";
 import { Toaster } from "@/components/ui/sonner";
 import type { RouterContext } from "@/router";
 import { getSessionFn } from "@/server/functions/auth/getSession";

@@ -1,5 +1,5 @@
 // prettier-ignore
-import { DiscordIcon, GitHubIcon, GoogleIcon } from "@/components/oauth-icons";
+import { DiscordIcon, GitHubIcon, GoogleIcon } from "@/components/site/OAuthIcons";
 import type { ComponentProps, ElementType } from "react";
 
 export const SUPPORTED_AUTH_PROVIDERS = ["github", "google", "discord"] as const;

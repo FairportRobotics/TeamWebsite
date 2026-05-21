@@ -1,5 +1,5 @@
 // prettier-ignore
-import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
+import { PageDescription, PageHeader, PageTitle } from "@/components/site/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getAdminSummaryFn } from "@/server/functions/admin/getAdminSummary";
 import { createFileRoute, Link } from "@tanstack/react-router";

@@ -1,4 +1,4 @@
-import { TeamActionButton } from "@/components/team-action-buttom";
+import { TeamActionButton } from "@/components/TeamActionButtom";
 import { Button } from "@/components/ui/button";
 import {
   Table,

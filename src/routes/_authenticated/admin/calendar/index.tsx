@@ -1,9 +1,9 @@
 // prettier-ignore
 import { CalendarEventTable } from "@/components/admin/calendar/calendar-event-table";
-import { BackTo } from "@/components/back-to";
-import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
-import { PageSectionContainer } from "@/components/page-section-container";
-import { TeamActionButton } from "@/components/team-action-buttom";
+import { BackTo } from "@/components/site/BackTo";
+import { PageDescription, PageHeader, PageTitle } from "@/components/site/PageHeader";
+import { PageSectionContainer } from "@/components/site/PageSectionContainer";
+import { TeamActionButton } from "@/components/site/TeamActionButtom";
 import { Button } from "@/components/ui/button";
 import { approveRequest } from "@/server/functions/calendar/approveRequest";
 import { archiveFn } from "@/server/functions/calendar/archive";

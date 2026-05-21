@@ -1,7 +1,7 @@
 "use client";
 
+import { ActionButton } from "@/components/ui/action-button";
 import type { ComponentProps } from "react";
-import { ActionButton } from "./ui/action-button";
 
 export function TeamActionButton({
   action,

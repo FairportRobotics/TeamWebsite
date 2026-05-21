@@ -1,5 +1,5 @@
-import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
-import { SectionHeader } from "@/components/section-header";
+import { PageDescription, PageHeader, PageTitle } from "@/components/site/PageHeader";
+import { SectionHeader } from "@/components/site/SectionHeader";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getTeamMembersFn } from "@/server/functions/user/getTeamMembers";

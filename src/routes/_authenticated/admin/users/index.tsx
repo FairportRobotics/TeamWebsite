@@ -1,7 +1,7 @@
 import { UserListTable } from "@/components/admin/users/users-list-table";
-import { BackTo } from "@/components/back-to";
-import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
-import { SectionHeader } from "@/components/section-header";
+import { BackTo } from "@/components/site/BackTo";
+import { PageDescription, PageHeader, PageTitle } from "@/components/site/PageHeader";
+import { SectionHeader } from "@/components/site/SectionHeader";
 import { getListForAdminFn } from "@/server/functions/user/getListForAdmin";
 import { createFileRoute } from "@tanstack/react-router";
 

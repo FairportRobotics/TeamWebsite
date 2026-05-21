@@ -1,5 +1,5 @@
-import { BackTo } from "@/components/back-to";
-import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
+import { BackTo } from "@/components/site/BackTo";
+import { PageDescription, PageHeader, PageTitle } from "@/components/site/PageHeader";
 import { getCalendarListDetailsFn } from "@/server/functions/calendar/getCalendarDetails";
 import { createFileRoute, Link } from "@tanstack/react-router";
 

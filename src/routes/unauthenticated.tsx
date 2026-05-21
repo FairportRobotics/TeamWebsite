@@ -1,4 +1,4 @@
-import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
+import { PageDescription, PageHeader, PageTitle } from "@/components/site/PageHeader";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/unauthenticated")({

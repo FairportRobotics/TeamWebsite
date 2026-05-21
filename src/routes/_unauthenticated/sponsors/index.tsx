@@ -1,5 +1,5 @@
-import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
-import { PageSection } from "@/components/page-section";
+import { PageDescription, PageHeader, PageTitle } from "@/components/site/PageHeader";
+import { PageSection } from "@/components/site/PageSection";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";

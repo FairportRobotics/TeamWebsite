@@ -1,4 +1,4 @@
-import { PageDescription, PageHeader, PageTitle } from "@/components/page-header";
+import { PageDescription, PageHeader, PageTitle } from "@/components/site/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getGameYearFn } from "@/server/functions/game/getGameYear";

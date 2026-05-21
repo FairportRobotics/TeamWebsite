@@ -1,5 +1,5 @@
-import { BackTo } from "@/components/back-to";
-import { PageHeader, PageTitle } from "@/components/page-header";
+import { BackTo } from "@/components/site/BackTo";
+import { PageHeader, PageTitle } from "@/components/site/PageHeader";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { getDateRangeString } from "@/lib/utils";
 import { getCalendarListDetailsFn } from "@/server/functions/calendar/getCalendarDetails";

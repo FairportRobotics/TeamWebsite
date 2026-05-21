@@ -1,5 +1,7 @@
-import type { CalendarListItem } from "@/lib/fn/calendar";
+import { Card } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import { cn, getDateRangeString } from "@/lib/utils";
+import type { CalendarListItem } from "@/server/functions/calendar/getPublishedCalendarList";
 import { Link } from "@tanstack/react-router";
 import {
   addMonths,
@@ -16,8 +18,6 @@ import {
 import { enUS } from "date-fns/locale";
 import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp } from "lucide-react";
 import { useState, type ReactNode } from "react";
-import { Card } from "./ui/card";
-import { Separator } from "./ui/separator";
 
 export interface CalendarDay {
   date: Date;

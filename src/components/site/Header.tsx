@@ -1,12 +1,12 @@
 // prettier-ignore
+import { Button } from "@/components/ui/button";
 import { Permissions } from "@/lib/auth//permissions";
 import { authClient } from "@/lib/auth/auth-client";
 import { hasAnyPermission } from "@/lib/auth/guard";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { HeaderLink } from "./header-link";
-import { ImpersonateButton } from "./impersonate-button";
-import { Button } from "./ui/button";
+import { HeaderLink } from "./HeaderLink";
+import { ImpersonateButton } from "./ImpersonateButton";
 
 export default function Header() {
   const navigate = useNavigate();
