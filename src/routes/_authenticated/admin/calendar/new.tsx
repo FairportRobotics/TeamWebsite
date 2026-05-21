@@ -1,4 +1,4 @@
-import { CalendarEventForm } from "@/components/admin/calendar/calendar-event-form";
+import { CalendarEventForm } from "@/components/admin/calendar/CalendarEventForm";
 import { BackTo } from "@/components/site/BackTo";
 import { PageDescription, PageHeader, PageTitle } from "@/components/site/PageHeader";
 import { createFileRoute } from "@tanstack/react-router";

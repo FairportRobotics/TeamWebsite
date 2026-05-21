@@ -1,5 +1,5 @@
 // prettier-ignore
-import { CalendarEventTable } from "@/components/admin/calendar/calendar-event-table";
+import { CalendarEventTable } from "@/components/admin/calendar/CalendarEventTable";
 import { BackTo } from "@/components/site/BackTo";
 import { PageDescription, PageHeader, PageTitle } from "@/components/site/PageHeader";
 import { PageSectionContainer } from "@/components/site/PageSectionContainer";

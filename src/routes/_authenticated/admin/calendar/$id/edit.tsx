@@ -1,5 +1,5 @@
 // prettier-ignore
-import { CalendarEventForm } from "@/components/admin/calendar/calendar-event-form";
+import { CalendarEventForm } from "@/components/admin/calendar/CalendarEventForm";
 import { getCalendarForEditFn } from "@/server/functions/calendar/getCalendarForEdit";
 import { createFileRoute } from "@tanstack/react-router";
 

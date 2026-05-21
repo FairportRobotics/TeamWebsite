@@ -10,7 +10,7 @@ export const Route = createFileRoute("/_authenticated/admin/users/")({
   component: RouteComponent,
   loader: async ({ context }) => {
     // Pull needed data from the context.
-    const userId = context.session?.user.id;
+    const userId = context.auth.user?.id;
 
     // Get all the users.
     const users = await getListForAdminFn();
