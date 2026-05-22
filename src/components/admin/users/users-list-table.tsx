@@ -57,7 +57,7 @@ export function UserListTable({
               {name}
             </Link>
             {userId === currentUserId ? (
-              <div className="bg-(--color-destructive) px-3 py-1 rounded-full">You</div>
+              <div className="bg-destructive px-3 py-1 rounded-full">You</div>
             ) : (
               <></>
             )}

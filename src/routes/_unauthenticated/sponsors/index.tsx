@@ -6,7 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { getSponsorListFn } from "@/server/functions/sponsor/getSponsorList";
 import { createFileRoute } from "@tanstack/react-router";
-import { Building2, Download, Heart, SquareCheck, SquareUser } from "lucide-react";
+import { Building2, CircleCheck, Download, Heart, SquareUser } from "lucide-react";
 
 export const Route = createFileRoute("/_unauthenticated/sponsors/")({
   loader: async () => {
@@ -197,11 +197,11 @@ function SponsorTierCard({
         <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col flex-1 min-h-0">
-        <div className={cn("flex flex-col items-start grow gap-4", "text-muted")}>
+        <div className={cn("flex flex-col items-start grow gap-4")}>
           {benefits.map((b, i) => (
             <div className="flex items-start" key={i}>
               <div>
-                <SquareCheck className={cn(" w-8 h-8 mr-2 mt-0.5", benefitColor)} />
+                <CircleCheck className={cn(" w-8 h-8 mr-2 mt-0.5")} />
               </div>
               <span>{b}</span>
             </div>
@@ -210,7 +210,7 @@ function SponsorTierCard({
         <Separator className="my-6" />
         <Button
           className="w-full text-lg font-normal py-7"
-          variant={level === "gold" ? "destructive" : "secondary"}
+          variant={level === "gold" ? "destructive" : "default"}
           size="lg"
         >
           Inquire Now

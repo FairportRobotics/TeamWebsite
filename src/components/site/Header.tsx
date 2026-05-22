@@ -1,12 +1,13 @@
 // prettier-ignore
+import { HeaderLink } from "@/components/site/HeaderLink";
+import { ImpersonateButton } from "@/components/site/ImpersonateButton";
+import ThemeToggle from "@/components/site/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { Permissions } from "@/lib/auth//permissions";
 import { authClient } from "@/lib/auth/auth-client";
 import { hasAnyPermission } from "@/lib/auth/guard";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { HeaderLink } from "./HeaderLink";
-import { ImpersonateButton } from "./ImpersonateButton";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ export default function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-50 bg-(--color-accent) px-4 backdrop-blur-lg">
+    <header className="sticky top-0 z-50 bg-primary px-4 backdrop-blur-lg">
       <nav className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 py-3 sm:py-4">
         <section className="flex items-center justify-center gap-2">
           <HeaderLink label="Home" to="/" />
@@ -42,6 +43,7 @@ export default function Header() {
           {hasAdmin && <HeaderLink label="Admin" to="/admin" />}
         </section>
         <section className="flex items-center justify-center gap-3">
+          <ThemeToggle />
           {!isPending && (
             <>
               {session ? (

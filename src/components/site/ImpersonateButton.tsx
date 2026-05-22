@@ -1,8 +1,8 @@
 // prettier-ignore
+import { TeamActionButton } from "@/components/site/TeamActionButtom";
 import { authClient } from "@/lib/auth/auth-client";
 import { useNavigate } from "@tanstack/react-router";
 import { UserX } from "lucide-react";
-import { TeamActionButton } from "./TeamActionButtom";
 
 export function ImpersonateButton() {
   const { refetch } = authClient.useSession();

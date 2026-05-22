@@ -14,11 +14,11 @@ export function HeaderLink(props: Props) {
       {...linkProps}
       activeOptions={{ exact: false }}
       activeProps={{
-        className: "uppercase px-4 py-2 text-white font-extrabold rounded-md bg-destructive",
+        className: "uppercase px-4 py-2 font-extrabold rounded-md bg-background text-foreground",
       }}
       inactiveProps={{
         className:
-          "uppercase px-4 py-2 text-white font-extrabold rounded-md hover:bg-destructive/50 hover:text-white",
+          "uppercase px-4 py-2 font-extrabold rounded-md hover:bg-background/50 hover:text-foreground",
       }}
     >
       {label}

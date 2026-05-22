@@ -24,7 +24,7 @@ function PageDescription({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="page-description"
-      className={cn("text-muted-foreground text-xl mt-4 w-1/2 text-center", className)}
+      className={cn("text-muted-foreground-foreground text-xl mt-4 w-1/2 text-center", className)}
       {...props}
     />
   );

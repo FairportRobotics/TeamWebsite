@@ -1,5 +1,5 @@
+import { user } from "@/db/schema/better-auth";
 import { boolean, index, integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
-import { user } from "./better-auth";
 
 export const memberTable = pgTable(
   "member",

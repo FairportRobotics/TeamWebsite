@@ -6,7 +6,7 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="mt-20 p-4 py-10 flex gap-10 flex-col items-center bg-(--color-accent)">
+    <footer className="mt-20 p-4 py-10 flex gap-10 flex-col items-center bg-accent">
       <div className="flex flex-col items-center justify-center">
         <div className="text-3xl uppercase text-white mb-2">
           Thank you to our <span className="uppercase text-(--color-destructive)">generous</span>{" "}
@@ -88,7 +88,7 @@ function SocialLinkButton({
   return (
     <div
       className={cn(
-        "p-2 rounded-md bg-(--color-background) hover:bg-(--color-destructive) transition-colors duration-250",
+        "p-2 rounded-md bg-accent hover:bg-destructive transition-colors duration-250",
         className,
       )}
       {...props}

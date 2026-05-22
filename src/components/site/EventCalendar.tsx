@@ -235,7 +235,7 @@ function CalendarItem({
         >
           {item.location && (
             <div className="line-clamp-1 text-sm">
-              <span className="text-muted">at</span> {item.location}
+              <span className="text-muted-foreground">at</span> {item.location}
             </div>
           )}
 

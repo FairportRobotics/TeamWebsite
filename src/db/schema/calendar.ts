@@ -1,8 +1,8 @@
 // drizzle/schema/items.ts
+import { statusEnum, visibleEnum, type InferResultType } from "@/db/schema/_common";
 import { Roles } from "@/lib/auth/roles";
 import { index, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { user } from "../schema";
-import { statusEnum, visibleEnum, type InferResultType } from "./_common";
 
 // Stores all the events in which the team will host or participate.
 export const calendarTable = pgTable(

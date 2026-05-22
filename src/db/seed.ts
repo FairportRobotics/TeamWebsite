@@ -1,8 +1,8 @@
 import * as schema from "@/db/schema";
+import { gameTable, robotTable } from "@/db/schema";
 import "dotenv/config";
 import { drizzle } from "drizzle-orm/node-postgres";
 import pg from "pg";
-import { gameTable, robotTable } from "./schema";
 
 // Make sure we're loading the correct .env file and have the DATABASE_URL set.
 if (!process.env.DATABASE_URL) {
@@ -35,15 +35,13 @@ async function resetDatabase() {
     {
       year: 2026,
       name: "Rebuilt",
-      imageUrl:
-        "https://upload.wikimedia.org/wikipedia/en/0/0e/Rebuilt_FRC_Logo.png",
+      imageUrl: "https://upload.wikimedia.org/wikipedia/en/0/0e/Rebuilt_FRC_Logo.png",
       gameUrl: "https://en.wikipedia.org/wiki/Rebuilt_(FIRST)",
     },
     {
       year: 2025,
       name: "Reefscape",
-      imageUrl:
-        "https://upload.wikimedia.org/wikipedia/en/b/b9/Reefscape_FRC_Logo.png",
+      imageUrl: "https://upload.wikimedia.org/wikipedia/en/b/b9/Reefscape_FRC_Logo.png",
       gameUrl: "https://en.wikipedia.org/wiki/Reefscape",
     },
     {

@@ -2,12 +2,12 @@
 import { db } from "@/db";
 import { calendarTable } from "@/db/schema";
 import { Permissions } from "@/lib/auth/permissions";
+import { calendarIdSchema } from "@/server/functions/calendar/_common";
 import { anyPermissionMiddleware } from "@/server/middleware/anyPermission";
 import { authenticatedMiddleware } from "@/server/middleware/authenticated";
 import { createServerFn } from "@tanstack/react-start";
 import { zodValidator } from "@tanstack/zod-adapter";
 import { eq } from "drizzle-orm";
-import { calendarIdSchema } from "./_common";
 
 export const archiveFn = createServerFn()
   .middleware([authenticatedMiddleware, anyPermissionMiddleware([Permissions.EventAdminister])])

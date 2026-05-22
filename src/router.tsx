@@ -1,6 +1,6 @@
+import type { authClient } from "@/lib/auth/auth-client";
+import { routeTree } from "@/routeTree.gen";
 import { createRouter as createTanStackRouter } from "@tanstack/react-router";
-import type { authClient } from "./lib/auth/auth-client";
-import { routeTree } from "./routeTree.gen";
 
 export type SessionType = Awaited<ReturnType<typeof authClient.useSession>>;
 export type ContextUser = NonNullable<SessionType["data"]>["user"];
