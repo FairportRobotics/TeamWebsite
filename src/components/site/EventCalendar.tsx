@@ -178,13 +178,12 @@ function CalendarDay({ day, dayIndex }: { day: CalendarDay; dayIndex: number }) 
                       ? "bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 hover:bg-blue-50 dark:hover:bg-gray-800"
                       : "bg-gray-50 dark:bg-gray-800 text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700"
                   }
-                  ${day.events.length > 0 ? "ring-1 ring-inset ring-blue-200 dark:ring-blue-700" : ""}
-                  ${isSameDay(day.date, new Date()) ? "border-orange-400" : ""}
+                  ${day.events.length > 0 ? "ring-1 ring-inset ring-ring" : ""}
                 `}
       data-date={format(day.date, "yyyy-MM-dd")}
     >
       <span
-        className={`text-sm font-medium w-full ${isSameDay(day.date, new Date()) ? "bg-blue-900" : ""}`}
+        className={`text-sm font-medium w-full ${isSameDay(day.date, new Date()) ? "bg-primary" : ""}`}
       >
         {day.day}
       </span>
@@ -214,10 +213,10 @@ function CalendarItem({
   }
 
   return (
-    <div className="border border-amber-600 rounded-sm overflow-hidden">
-      <div className="flex flex-row items-center justify-between bg-amber-600 p-1">
-        <div className="line-clamp-1 font-semibold">{item.title}</div>
-        <div className="">
+    <div className="border border-primary rounded-sm overflow-hidden text-foreground bg-secondary">
+      <div className="flex flex-row items-center justify-between bg-primary p-1 ">
+        <div className="line-clamp-1 font-semibold text-primary-foreground">{item.title}</div>
+        <div className="text-primary-foreground">
           {state === "expanded" ? (
             <ChevronUp onClick={() => toggleState()} className="" />
           ) : (
@@ -261,7 +260,7 @@ function CalendarItem({
           </div>
 
           {/* Information and signup links */}
-          <Separator className="p-0.5 my-2" />
+          <Separator className="p-0.5 my-2 bg-muted-foreground" />
           <div className="grid grid-cols-3 text-sm">
             <div>
               {item.informationLink && (

@@ -1,3 +1,4 @@
+import { TeamActionButton } from "@/components/site/TeamActionButtom";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,10 +16,12 @@ import {
   VisibleToOptions,
 } from "@/server/functions/calendar/save";
 import { useForm } from "@tanstack/react-form";
+import { useRouter } from "@tanstack/react-router";
 import { format } from "date-fns";
 import { ChevronDownIcon, Plus, Trash2 } from "lucide-react";
 import * as React from "react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 interface CalendarDate {
   startAt: Date;
@@ -50,6 +53,7 @@ const defaultCalendar: Calendar = {
 export const CalendarEventForm = () => {
   const [showInformation, setShowInformation] = useState<boolean>(false);
   const [showSignup, setShowSignup] = useState<boolean>(false);
+  const router = useRouter();
 
   const form = useForm({
     defaultValues: defaultCalendar,
@@ -66,16 +70,20 @@ export const CalendarEventForm = () => {
           signupLinkVisibleTo: value.signupLinkVisibleTo as VisibleEnumType[],
         },
       });
+
+      toast.success("Calendar event was successfully created");
+      router.navigate({ to: "/admin/calendar" });
     },
     validators: {
       onSubmit: calendarInsertSchema,
     },
   });
 
-  function handleShow() {
+  async function handleShow() {
     //console.log(form.state.values);
     console.log("form.state.values:", JSON.stringify(form.state.values, null, 2));
     console.log("form.state.errorMap:", JSON.stringify(form.state.errorMap, null, 2));
+    return { error: null };
   }
 
   function handleToggleHasInformation(checked: boolean) {
@@ -430,8 +438,22 @@ export const CalendarEventForm = () => {
 
           {/* Form buttons */}
           <div className="mt-8 space-x-4">
-            <Button type="submit">Submit</Button>
-            <Button onClick={handleShow}>Show Current</Button>
+            <TeamActionButton
+              type="submit"
+              action={() => {
+                form.handleSubmit();
+                return Promise.resolve({ error: null });
+              }}
+            >
+              Submit
+            </TeamActionButton>
+            <TeamActionButton
+              action={() => {
+                return handleShow();
+              }}
+            >
+              Show Current
+            </TeamActionButton>
           </div>
         </form>
       </CardContent>
