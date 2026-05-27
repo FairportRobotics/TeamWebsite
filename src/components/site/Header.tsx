@@ -31,7 +31,7 @@ export default function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-50 bg-primary px-4 backdrop-blur-lg">
+    <header className="sticky top-0 z-50 bg-sidebar px-4 backdrop-blur-lg">
       <nav className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 py-3 sm:py-4">
         <section className="flex items-center justify-center gap-2">
           <HeaderLink label="Home" to="/" />

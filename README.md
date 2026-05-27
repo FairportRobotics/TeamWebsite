@@ -86,3 +86,8 @@ https://tweakcn.com/themes/cmlnfhvh2000004l7ggzsans1
 https://tweakcn.com/themes/cmmadj6zx000204l23giib1s2
 https://tweakcn.com/themes/cmmz25mmt000204l08j7sbxg6
 https://tweakcn.com/themes/cmmab9sq4000004l58w1r3vak
+https://tweakcn.com/themes/cmlk6zefr000004lbe9jygsqc
+
+[NLAN](https://tweakcn.com/themes/cmli80zt6000004l757xqgizs)
+
+[Sesi Theme 2](https://tweakcn.com/themes/cmmmevxer000004l25m5x7ee0)

@@ -20,11 +20,11 @@ export function PageSectionContainer({
   }
 
   return (
-    <div className="border-2 border-accent rounded-2xl overflow-hidden">
-      <div className="flex flex-row items-center justify-between bg-accent text-3xl font-bold py-2 px-4">
+    <div className="border-2 border-primary rounded-2xl overflow-hidden">
+      <div className="flex flex-row items-center justify-between bg-primary text-3xl font-bold py-2 px-4">
         <div className="flex flex-row gap-4 items-center">
-          <div>{title}</div>
-          {subTitle && <div className="text-xl">{subTitle}</div>}
+          <div className="text-primary-foreground">{title}</div>
+          {subTitle && <div className="text-xl text-background">{subTitle}</div>}
         </div>
 
         {state === "collapsed" ? (
