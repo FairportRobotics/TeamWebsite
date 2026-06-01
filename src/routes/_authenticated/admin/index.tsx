@@ -45,10 +45,6 @@ function RouteComponent() {
               <div>{calendarMetrics.find((m) => m.status === "published")?.count ?? 0}</div>
               <div>Published</div>
             </div>
-            <div className="flex flex-row items-center gap-3">
-              <div>{calendarMetrics.find((m) => m.status === "archived")?.count ?? 0}</div>
-              <div>Archived</div>
-            </div>
 
             <div className="mt-4">
               <Link to="/admin/calendar" className="underline">

@@ -7,7 +7,6 @@ import { PageSectionContainer } from "@/components/site/PageSectionContainer";
 import { TeamActionButton } from "@/components/site/TeamActionButtom";
 import { Button } from "@/components/ui/button";
 import { approveRequest } from "@/server/functions/calendar/approveRequest";
-import { archiveFn } from "@/server/functions/calendar/archive";
 import { getCalendarListForAdminFn } from "@/server/functions/calendar/getCalendarListForAdmin";
 import { requestApprovalCalendarFn } from "@/server/functions/calendar/requestApproval";
 import { seedEventsFn } from "@/server/functions/calendar/seed";
@@ -31,7 +30,7 @@ function RouteComponent() {
   const upcoming = calendar.filter(
     (c) => c.status === "published" && c.dates.some((d) => new Date(d.endAt) >= new Date()),
   );
-  const History = calendar.filter(
+  const archived = calendar.filter(
     (c) => c.status === "published" && !c.dates.every((d) => new Date(d.endAt) >= new Date()),
   );
 
@@ -54,13 +53,6 @@ function RouteComponent() {
     router.invalidate();
     return { error: null };
   }
-
-  const handleArchive = async (id: string) => {
-    console.log("handleArchive", id);
-    await archiveFn({ data: { id } });
-    router.invalidate();
-    return { error: null };
-  };
 
   const handleEdit = async (id: string) => {
     console.log("handleEdit", id);
@@ -109,15 +101,15 @@ function RouteComponent() {
           subTitle={`(${upcoming.length} records)`}
           initialState="collapsed"
         >
-          <CalendarEventTable data={upcoming} actionLabel="Archive" onAction={handleArchive} />
+          <CalendarEventTable data={upcoming} actionLabel="Archive" onAction={handleApprove} />
         </PageSectionContainer>
 
         <PageSectionContainer
-          title="History"
-          subTitle={`(${History.length} records)`}
+          title="Archived"
+          subTitle={`(${archived.length} records)`}
           initialState="collapsed"
         >
-          <CalendarEventTable data={History} actionLabel="Edit" onAction={handleEdit} />
+          <CalendarEventTable data={archived} actionLabel="Edit" onAction={handleEdit} />
         </PageSectionContainer>
       </div>
 
