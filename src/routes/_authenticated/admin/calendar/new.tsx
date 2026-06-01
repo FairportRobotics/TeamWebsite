@@ -4,7 +4,6 @@ import { PageDescription, PageHeader, PageTitle } from "@/components/site/PageHe
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/admin/calendar/new")({
-  beforeLoad: async ({ context }) => {},
   component: RouteComponent,
 });
 

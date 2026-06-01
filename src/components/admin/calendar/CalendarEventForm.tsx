@@ -58,7 +58,7 @@ export const CalendarEventForm = () => {
   const form = useForm({
     defaultValues: defaultCalendar,
     onSubmit: async ({ value }) => {
-      await saveCalendarFn({
+      const newEvent = await saveCalendarFn({
         data: {
           title: value.title,
           description: value.description,
@@ -72,19 +72,12 @@ export const CalendarEventForm = () => {
       });
 
       toast.success("Calendar event was successfully created");
-      router.navigate({ to: "/admin/calendar" });
+      router.navigate({ to: "/admin/calendar/$id", params: { id: newEvent! } });
     },
     validators: {
       onSubmit: calendarInsertSchema,
     },
   });
-
-  async function handleShow() {
-    //console.log(form.state.values);
-    console.log("form.state.values:", JSON.stringify(form.state.values, null, 2));
-    console.log("form.state.errorMap:", JSON.stringify(form.state.errorMap, null, 2));
-    return { error: null };
-  }
 
   function handleToggleHasInformation(checked: boolean) {
     setShowInformation(checked);
@@ -445,14 +438,7 @@ export const CalendarEventForm = () => {
                 return Promise.resolve({ error: null });
               }}
             >
-              Submit
-            </TeamActionButton>
-            <TeamActionButton
-              action={() => {
-                return handleShow();
-              }}
-            >
-              Show Current
+              Save
             </TeamActionButton>
           </div>
         </form>

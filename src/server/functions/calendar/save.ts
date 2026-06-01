@@ -73,20 +73,23 @@ export const saveCalendarFn = createServerFn()
 
       // Insert records in a transaction so we can rollback if anything goes sideways.
       await db.transaction(async (tx) => {
-        await tx.insert(calendarTable).values({
-          id: id,
-          title: data.title,
-          description: data.description ? data.description.split("\n") : undefined,
-          visibleTo: data.visibleTo,
-          location: data.location,
+        await tx
+          .insert(calendarTable)
+          .values({
+            id: id,
+            title: data.title,
+            description: data.description ? data.description.split("\n") : undefined,
+            visibleTo: data.visibleTo,
+            location: data.location,
 
-          informationLink: data.informationLink,
-          signupLink: data.signupLink,
-          signupLinkVisibleTo: data.signupLinkVisibleTo,
+            informationLink: data.informationLink,
+            signupLink: data.signupLink,
+            signupLinkVisibleTo: data.signupLinkVisibleTo,
 
-          createdBy: currentUserId,
-          updatedBy: currentUserId,
-        });
+            createdBy: currentUserId,
+            updatedBy: currentUserId,
+          })
+          .returning();
 
         data.dates.forEach(async (d) => {
           await tx.insert(calendarDates).values({
@@ -96,6 +99,8 @@ export const saveCalendarFn = createServerFn()
           });
         });
       });
+
+      return id;
     } catch (error) {
       console.error(error);
     }

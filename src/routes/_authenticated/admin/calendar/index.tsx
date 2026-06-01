@@ -1,5 +1,6 @@
 // prettier-ignore
 import { CalendarEventTable } from "@/components/admin/calendar/CalendarEventTable";
+import { DraftsTable } from "@/components/admin/calendar/DraftsTable";
 import { BackTo } from "@/components/site/BackTo";
 import { PageDescription, PageHeader, PageTitle } from "@/components/site/PageHeader";
 import { PageSectionContainer } from "@/components/site/PageSectionContainer";
@@ -13,7 +14,6 @@ import { seedEventsFn } from "@/server/functions/calendar/seed";
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/admin/calendar/")({
-  beforeLoad: async ({ context }) => {},
   loader: async () => {
     const calendar = await getCalendarListForAdminFn();
     return calendar;
@@ -28,8 +28,12 @@ function RouteComponent() {
   const calendar = Route.useLoaderData();
   const pendingApproval = calendar.filter((c) => c.status === "pending_review");
   const drafts = calendar.filter((c) => c.status === "draft");
-  const published = calendar.filter((c) => c.status === "published");
-  const archived = calendar.filter((c) => c.status === "archived");
+  const upcoming = calendar.filter(
+    (c) => c.status === "published" && c.dates.some((d) => new Date(d.endAt) >= new Date()),
+  );
+  const History = calendar.filter(
+    (c) => c.status === "published" && !c.dates.every((d) => new Date(d.endAt) >= new Date()),
+  );
 
   async function handleSeedCalendar() {
     await seedEventsFn();
@@ -81,7 +85,7 @@ function RouteComponent() {
           subTitle={`(${drafts.length} records)`}
           initialState="collapsed"
         >
-          <CalendarEventTable
+          <DraftsTable
             data={drafts}
             actionLabel="Request Approval"
             onAction={handleRequestApproval}
@@ -101,19 +105,19 @@ function RouteComponent() {
         </PageSectionContainer>
 
         <PageSectionContainer
-          title="Published"
-          subTitle={`(${published.length} records)`}
+          title="Upcoming"
+          subTitle={`(${upcoming.length} records)`}
           initialState="collapsed"
         >
-          <CalendarEventTable data={published} actionLabel="Archive" onAction={handleArchive} />
+          <CalendarEventTable data={upcoming} actionLabel="Archive" onAction={handleArchive} />
         </PageSectionContainer>
 
         <PageSectionContainer
-          title="Archived"
-          subTitle={`(${archived.length} records)`}
+          title="History"
+          subTitle={`(${History.length} records)`}
           initialState="collapsed"
         >
-          <CalendarEventTable data={archived} actionLabel="Edit" onAction={handleEdit} />
+          <CalendarEventTable data={History} actionLabel="Edit" onAction={handleEdit} />
         </PageSectionContainer>
       </div>
 

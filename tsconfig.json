@@ -1,11 +1,5 @@
 {
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    "eslint.config.js",
-    "prettier.config.js",
-    "vite.config.js"
-  ],
+  "include": ["**/*.ts", "**/*.tsx", "eslint.config.js", "prettier.config.js", "vite.config.js"],
 
   "compilerOptions": {
     "target": "ES2022",
@@ -27,8 +21,37 @@
     "skipLibCheck": true,
     "strict": true,
     "noUnusedLocals": true,
+
+    // Give a warning when local or parameter is defined but not used.
     "noUnusedParameters": true,
+
+    // Prevents a real edge-case error when you are trying to defined an object property but instead
+    // trigger a legacy type of goto.
+    "allowUnusedLabels": false,
+
+    // Prevents you from attempting to import a resource from a file but making a typo of the
+    // resource name or the filename.
+    "noUncheckedSideEffectImports": true,
+
+    // Must explicitely use "return" or "break" in switch...case statemsnts.
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+
+    // No-breainer. Prevents adding code after a return.
+    "allowUnreachableCode": false,
+
+    // Prevents you from attempting to access a value from an array but providing an invalid
+    // index. Adds a litlte bit of extra code since you need to account for a potential undefined:
+    // const numbers = [1, 2, 3]
+    // console.log(numbers[1].toString()) -> console.log(numbers[1]?.toString())
+    "noUncheckedIndexedAccess": true,
+
+    // Kind of like the array checking but for objects. If you are accessing the value of an object
+    // using the dot syntax, you will be forced to specify one of the values you've defined as a
+    // real value. Refer to example below.
+    "noPropertyAccessFromIndexSignature": true,
+
+    // Comes into play when defining classes. Essentially changes your TypeScript code into JavaScript
+    // code to satisfy type safety.
+    "erasableSyntaxOnly": true
   }
 }
