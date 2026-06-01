@@ -6,17 +6,14 @@ import { PageDescription, PageHeader, PageTitle } from "@/components/site/PageHe
 import { PageSectionContainer } from "@/components/site/PageSectionContainer";
 import { TeamActionButton } from "@/components/site/TeamActionButtom";
 import { Button } from "@/components/ui/button";
+import { calendarsQuery } from "@/queries/calendarsQuery";
 import { approveRequest } from "@/server/functions/calendar/approveRequest";
-import { getCalendarListForAdminFn } from "@/server/functions/calendar/getCalendarListForAdmin";
 import { requestApprovalCalendarFn } from "@/server/functions/calendar/requestApproval";
 import { seedEventsFn } from "@/server/functions/calendar/seed";
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/admin/calendar/")({
-  loader: async () => {
-    const calendar = await getCalendarListForAdminFn();
-    return calendar;
-  },
+  loader: async ({ context }) => context.queryClient?.ensureQueryData(calendarsQuery),
   component: RouteComponent,
 });
 
@@ -25,14 +22,17 @@ function RouteComponent() {
 
   // Get the entire list of calendar entries and filter according to type.
   const calendar = Route.useLoaderData();
-  const pendingApproval = calendar.filter((c) => c.status === "pending_review");
-  const drafts = calendar.filter((c) => c.status === "draft");
-  const upcoming = calendar.filter(
-    (c) => c.status === "published" && c.dates.some((d) => new Date(d.endAt) >= new Date()),
-  );
-  const archived = calendar.filter(
-    (c) => c.status === "published" && !c.dates.every((d) => new Date(d.endAt) >= new Date()),
-  );
+
+  const pendingApproval = calendar?.filter((c) => c.status === "pending_review") ?? [];
+  const drafts = calendar?.filter((c) => c.status === "draft") ?? [];
+  const upcoming =
+    calendar?.filter(
+      (c) => c.status === "published" && c.dates.some((d) => new Date(d.endAt) >= new Date()),
+    ) ?? [];
+  const archived =
+    calendar?.filter(
+      (c) => c.status === "published" && !c.dates.every((d) => new Date(d.endAt) >= new Date()),
+    ) ?? [];
 
   async function handleSeedCalendar() {
     await seedEventsFn();

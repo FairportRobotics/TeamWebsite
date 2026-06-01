@@ -13,8 +13,8 @@ const THEME_INIT_SCRIPT = `(function(){try{var stored=window.localStorage.getIte
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   beforeLoad: async ({ context }) => {
+    // Get the session data from the server and set it in the context
     const sessionData = await getSessionFn();
-
     context.auth.session = sessionData.session;
     context.auth.user = sessionData.user;
 
