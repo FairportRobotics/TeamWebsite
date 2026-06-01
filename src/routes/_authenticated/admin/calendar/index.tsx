@@ -6,22 +6,25 @@ import { PageDescription, PageHeader, PageTitle } from "@/components/site/PageHe
 import { PageSectionContainer } from "@/components/site/PageSectionContainer";
 import { TeamActionButton } from "@/components/site/TeamActionButtom";
 import { Button } from "@/components/ui/button";
-import { calendarsQuery } from "@/queries/calendarsQuery";
+import { calendarQueries } from "@/queries/calendarQueries";
 import { approveRequest } from "@/server/functions/calendar/approveRequest";
 import { requestApprovalCalendarFn } from "@/server/functions/calendar/requestApproval";
 import { seedEventsFn } from "@/server/functions/calendar/seed";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/admin/calendar/")({
-  loader: async ({ context }) => context.queryClient?.ensureQueryData(calendarsQuery),
   component: RouteComponent,
+  loader: ({ context }) => {
+    context.queryClient?.ensureQueryData(calendarQueries.list());
+  },
 });
 
 function RouteComponent() {
   const router = useRouter();
 
   // Get the entire list of calendar entries and filter according to type.
-  const calendar = Route.useLoaderData();
+  const { data: calendar } = useSuspenseQuery(calendarQueries.list());
 
   const pendingApproval = calendar?.filter((c) => c.status === "pending_review") ?? [];
   const drafts = calendar?.filter((c) => c.status === "draft") ?? [];

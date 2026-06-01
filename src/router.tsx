@@ -23,7 +23,7 @@ export function getRouter() {
     defaultPreloadDelay: 300,
     defaultPreloadStaleTime: 0,
     context: {
-      queryClient: new QueryClient(),
+      queryClient: undefined,
       auth: {
         session: undefined!,
         user: undefined!,

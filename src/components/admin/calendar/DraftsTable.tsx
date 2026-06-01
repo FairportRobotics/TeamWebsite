@@ -25,8 +25,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { getDateRangeParts } from "@/lib/utils";
+import { calendarQueries } from "@/queries/calendarQueries";
 import { deleteCalendarFn } from "@/server/functions/calendar/deleteCalendar";
 import type { CalendarListForAdminItem } from "@/server/functions/calendar/getCalendarListForAdmin";
+import { requestApprovalCalendarFn } from "@/server/functions/calendar/requestApproval";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, useRouter } from "@tanstack/react-router";
 import {
   flexRender,
@@ -54,6 +57,27 @@ export function DraftsTable({
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [openDeleteAlert, setOpenDeleteAlert] = React.useState(false);
+  const queryClient = useQueryClient();
+
+  const requestApprovalMutation = useMutation({
+    mutationFn: (id: string) => requestApprovalCalendarFn({ data: { id } }),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: calendarQueries.all,
+      });
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => deleteCalendarFn({ data: { id } }),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: calendarQueries.all,
+      });
+    },
+  });
 
   async function handleEdit(id: string) {
     router.navigate({ to: "/admin/calendar/$id/edit", params: { id } });
@@ -61,16 +85,6 @@ export function DraftsTable({
 
   async function handleViewDetails(id: string) {
     router.navigate({ to: "/admin/calendar/$id", params: { id } });
-  }
-
-  async function handleRequestApproval(id: string) {
-    console.log("Request Approval", id);
-    router.invalidate();
-  }
-
-  async function handleDelete(id: string) {
-    await deleteCalendarFn({ data: { id } });
-    router.invalidate();
   }
 
   const columns: ColumnDef<CalendarListForAdminItem>[] = [
@@ -152,16 +166,24 @@ export function DraftsTable({
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => handleViewDetails(id)}>Details</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleEdit(id)}>Edit</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleRequestApproval(id)}>
+                <DropdownMenuItem>
+                  <Link to="/admin/calendar/$id" params={{ id: id }}>
+                    Details
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link to="/admin/calendar/$id/edit" params={{ id: id }}>
+                    Edit
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => requestApprovalMutation.mutate(id)}>
                   Request Approval
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   className="text-destructive"
                   onSelect={(e) => {
-                    e.preventDefault(); // Prevent dropdown from stealing focus
+                    e.preventDefault();
                     setOpenDeleteAlert(true);
                   }}
                 >
@@ -181,7 +203,9 @@ export function DraftsTable({
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={() => handleDelete(id)}>Continue</AlertDialogAction>
+                  <AlertDialogAction onClick={() => deleteMutation.mutate(id)}>
+                    Continue
+                  </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>

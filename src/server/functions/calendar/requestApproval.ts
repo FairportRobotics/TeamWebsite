@@ -13,6 +13,7 @@ export const requestApprovalCalendarFn = createServerFn()
   .middleware([authenticatedMiddleware, anyPermissionMiddleware([Permissions.EventUpdate])])
   .inputValidator(zodValidator(calendarIdSchema))
   .handler(async ({ data, context }) => {
+    console.log("requestApprovalCalendarFn", data, context.user);
     if (!context.user) {
       return false;
     }
