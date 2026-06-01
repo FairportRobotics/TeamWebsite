@@ -8,27 +8,22 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
-import type { VisibleEnumType } from "@/db/schema";
-import { Roles } from "@/lib/auth/roles";
-import {
-  createCalendarFn,
-  createCalendarSchema,
-  VisibleToOptions,
-} from "@/server/functions/calendar/createCalendar";
+import { VisibleToOptions } from "@/server/functions/calendar/_common";
+import { createCalendarSchema } from "@/server/functions/calendar/createCalendar";
 import { useForm } from "@tanstack/react-form";
 import { useRouter } from "@tanstack/react-router";
 import { format } from "date-fns";
 import { ChevronDownIcon, Plus, Trash2 } from "lucide-react";
 import * as React from "react";
 import { useState } from "react";
-import { toast } from "sonner";
 
-interface CalendarDate {
+export type CalendarDate = {
   startAt: Date;
   endAt: Date;
-}
+};
 
-interface Calendar {
+export type CalendarFormValues = {
+  id?: string | undefined;
   title: string;
   description: string;
   location: string;
@@ -37,42 +32,23 @@ interface Calendar {
   informationLink?: string | undefined;
   signupLink?: string | undefined;
   signupLinkVisibleTo: Array<string>;
-}
-
-const defaultCalendar: Calendar = {
-  title: "",
-  description: "",
-  location: "",
-  visibleTo: [Roles.Everyone],
-  dates: [],
-  informationLink: undefined,
-  signupLink: undefined,
-  signupLinkVisibleTo: [],
 };
 
-export const CalendarEventForm = () => {
+export const CalendarEventForm = ({
+  defaultValues,
+  onSubmit,
+}: {
+  defaultValues: CalendarFormValues;
+  onSubmit: (values: CalendarFormValues) => void;
+}) => {
   const [showInformation, setShowInformation] = useState<boolean>(false);
   const [showSignup, setShowSignup] = useState<boolean>(false);
   const router = useRouter();
 
   const form = useForm({
-    defaultValues: defaultCalendar,
+    defaultValues: defaultValues,
     onSubmit: async ({ value }) => {
-      const newEvent = await createCalendarFn({
-        data: {
-          title: value.title,
-          description: value.description,
-          location: value.location,
-          visibleTo: value.visibleTo as VisibleEnumType[],
-          dates: value.dates,
-          informationLink: value.informationLink,
-          signupLink: value.signupLink,
-          signupLinkVisibleTo: value.signupLinkVisibleTo as VisibleEnumType[],
-        },
-      });
-
-      toast.success("Calendar event was successfully created");
-      router.navigate({ to: "/admin/calendar/$id/edit", params: { id: newEvent! } });
+      onSubmit(value);
     },
     validators: {
       onSubmit: createCalendarSchema,

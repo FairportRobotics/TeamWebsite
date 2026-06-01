@@ -1,4 +1,3 @@
-// prettier-ignore
 import { db } from "@/db";
 import { calendarDates, calendarTable } from "@/db/schema";
 import { Permissions } from "@/lib/auth/permissions";
@@ -7,12 +6,14 @@ import { anyPermissionMiddleware } from "@/server/middleware/anyPermission";
 import { authenticatedMiddleware } from "@/server/middleware/authenticated";
 import { createServerFn } from "@tanstack/react-start";
 import { zodValidator } from "@tanstack/zod-adapter";
+import { eq } from "drizzle-orm";
 import { z } from "zod";
 
 // Create a schema for validating calendar insert and update operations. We can reuse this for
 // both operations since they have the same requirements.
-export const createCalendarSchema = z
+export const updateCalendarSchema = z
   .object({
+    id: z.string(),
     title: z.string().trim().min(1, "Title is required"),
     description: z.string().trim().min(1, "Description is required"),
     location: z.string().trim().min(1, "Location is required"),
@@ -45,18 +46,19 @@ export const createCalendarSchema = z
 
 // TODO: Validate that the user has permission to perform this action based on the visibility options
 // of the calendar item and the user's roles.
-export const createCalendarFn = createServerFn()
+export const updateCalendarFn = createServerFn()
   .middleware([authenticatedMiddleware, anyPermissionMiddleware([Permissions.EventUpdate])])
-  .inputValidator(zodValidator(createCalendarSchema))
+  .inputValidator(zodValidator(updateCalendarSchema))
   .handler(async ({ data, context }) => {
     try {
       const currentUserId = context!.user!.id;
-      const id = crypto.randomUUID();
 
       // Insert records in a transaction so we can rollback if anything goes sideways.
       await db.transaction(async (tx) => {
-        await tx.insert(calendarTable).values({
-          id: id,
+        await tx.delete(calendarDates).where(eq(calendarDates.calendarId, data.id));
+
+        await tx.update(calendarTable).set({
+          id: data.id,
           title: data.title,
           status: "draft",
           description: data.description ? data.description.split("\n") : undefined,
@@ -67,20 +69,17 @@ export const createCalendarFn = createServerFn()
           signupLink: data.signupLink,
           signupLinkVisibleTo: data.signupLinkVisibleTo,
 
-          createdBy: currentUserId,
           updatedBy: currentUserId,
         });
 
         data.dates.forEach(async (d) => {
           await tx.insert(calendarDates).values({
-            calendarId: id,
+            calendarId: data.id,
             startAt: d.startAt,
             endAt: d.endAt,
           });
         });
       });
-
-      return id;
     } catch (error) {
       console.error(error);
     }
