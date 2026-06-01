@@ -21,22 +21,24 @@ export const VisibleToOptions = [
 
 // Create a schema for validating the date ranges for calendar events. We will use this as a
 // nested schema in the main calendar insert and update schema.
-export const calendarDateInsertSchema = z.object({
+export const createCalendarDateSchema = z.object({
+  id: z.string().optional(), // Optional for insert, required for update
   startAt: z.date(),
   endAt: z.date(),
 });
 
 // Create a schema for validating calendar insert and update operations. We can reuse this for
 // both operations since they have the same requirements.
-export const calendarInsertSchema = z
+export const createCalendarSchema = z
   .object({
+    id: z.string().optional(), // Optional for insert, required for update
     title: z.string().trim().min(1, "Title is required"),
     description: z.string().trim().min(1, "Description is required"),
     location: z.string().trim().min(1, "Location is required"),
     visibleTo: z
       .array(z.enum(VisibleToOptions))
       .min(1, "At least one visibility option must be selected"),
-    dates: z.array(calendarDateInsertSchema).min(1, "At least one date range is required"),
+    dates: z.array(createCalendarDateSchema).min(1, "At least one date range is required"),
     informationLink: z.url().optional().or(z.literal("")),
     signupLink: z.url().optional().or(z.literal("")),
     signupLinkVisibleTo: z.array(z.enum(VisibleToOptions)),
@@ -63,9 +65,9 @@ export const calendarInsertSchema = z
 // TODO: Validate that the user has permission to perform this action based on the visibility options
 // of the calendar item and the user's roles.
 // TODO: Refactor this so it will work for new and edited calendar events.
-export const saveCalendarFn = createServerFn()
+export const createCalendarFn = createServerFn()
   .middleware([authenticatedMiddleware, anyPermissionMiddleware([Permissions.EventUpdate])])
-  .inputValidator(zodValidator(calendarInsertSchema))
+  .inputValidator(zodValidator(createCalendarSchema))
   .handler(async ({ data, context }) => {
     try {
       const currentUserId = context!.user!.id;
@@ -73,23 +75,21 @@ export const saveCalendarFn = createServerFn()
 
       // Insert records in a transaction so we can rollback if anything goes sideways.
       await db.transaction(async (tx) => {
-        await tx
-          .insert(calendarTable)
-          .values({
-            id: id,
-            title: data.title,
-            description: data.description ? data.description.split("\n") : undefined,
-            visibleTo: data.visibleTo,
-            location: data.location,
+        await tx.insert(calendarTable).values({
+          id: id,
+          title: data.title,
+          status: "draft",
+          description: data.description ? data.description.split("\n") : undefined,
+          visibleTo: data.visibleTo,
+          location: data.location,
 
-            informationLink: data.informationLink,
-            signupLink: data.signupLink,
-            signupLinkVisibleTo: data.signupLinkVisibleTo,
+          informationLink: data.informationLink,
+          signupLink: data.signupLink,
+          signupLinkVisibleTo: data.signupLinkVisibleTo,
 
-            createdBy: currentUserId,
-            updatedBy: currentUserId,
-          })
-          .returning();
+          createdBy: currentUserId,
+          updatedBy: currentUserId,
+        });
 
         data.dates.forEach(async (d) => {
           await tx.insert(calendarDates).values({

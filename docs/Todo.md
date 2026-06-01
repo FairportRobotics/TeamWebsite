@@ -16,3 +16,15 @@
 - [-]
 - [-]
 -
+
+```
+  const requestApprovalMutation = useMutation({
+    mutationFn: (id: string) => requestApprovalCalendarFn({ data: { id } }),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: calendarQueries.all,
+      });
+    },
+  });
+```

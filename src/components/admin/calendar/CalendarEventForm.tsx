@@ -11,10 +11,10 @@ import { Textarea } from "@/components/ui/textarea";
 import type { VisibleEnumType } from "@/db/schema";
 import { Roles } from "@/lib/auth/roles";
 import {
-  calendarInsertSchema,
-  saveCalendarFn,
+  createCalendarFn,
+  createCalendarSchema,
   VisibleToOptions,
-} from "@/server/functions/calendar/save";
+} from "@/server/functions/calendar/createCalendar";
 import { useForm } from "@tanstack/react-form";
 import { useRouter } from "@tanstack/react-router";
 import { format } from "date-fns";
@@ -58,7 +58,7 @@ export const CalendarEventForm = () => {
   const form = useForm({
     defaultValues: defaultCalendar,
     onSubmit: async ({ value }) => {
-      const newEvent = await saveCalendarFn({
+      const newEvent = await createCalendarFn({
         data: {
           title: value.title,
           description: value.description,
@@ -72,10 +72,10 @@ export const CalendarEventForm = () => {
       });
 
       toast.success("Calendar event was successfully created");
-      router.navigate({ to: "/admin/calendar/$id", params: { id: newEvent! } });
+      router.navigate({ to: "/admin/calendar/$id/edit", params: { id: newEvent! } });
     },
     validators: {
-      onSubmit: calendarInsertSchema,
+      onSubmit: createCalendarSchema,
     },
   });
 
@@ -440,6 +440,15 @@ export const CalendarEventForm = () => {
             >
               Save
             </TeamActionButton>
+            <Button
+              type="button"
+              variant="destructive"
+              onClick={() => {
+                router.navigate({ to: "/admin/calendar" });
+              }}
+            >
+              Cancel
+            </Button>
           </div>
         </form>
       </CardContent>

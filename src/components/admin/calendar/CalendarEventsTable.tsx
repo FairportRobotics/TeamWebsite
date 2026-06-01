@@ -1,39 +1,16 @@
-import { TeamActionButton } from "@/components/site/TeamActionButtom";
 import { Button } from "@/components/ui/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+// prettier-ignore
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/components/ui/table";
 import { getDateRangeParts } from "@/lib/utils";
 import type { CalendarListForAdminItem } from "@/server/functions/calendar/getCalendarListForAdmin";
 import { Link } from "@tanstack/react-router";
-import {
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-  type ColumnDef,
-  type ColumnFiltersState,
-  type SortingState,
-} from "@tanstack/react-table";
+// prettier-ignore
+import { flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, type ColumnDef, type ColumnFiltersState, type SortingState, } from "@tanstack/react-table";
+import { format } from "date-fns";
 import { ArrowUpDown } from "lucide-react";
 import React from "react";
 
-export function CalendarEventTable({
-  data,
-  actionLabel,
-  onAction,
-}: {
-  data: CalendarListForAdminItem[];
-  actionLabel?: string;
-  onAction: (id: string) => Promise<{ error: null | { message?: string } }>;
-}) {
+export function CalendarEventsTable({ data }: { data: CalendarListForAdminItem[] }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
 
@@ -57,10 +34,24 @@ export function CalendarEventTable({
 
         return (
           <div>
-            <Link to="/admin/calendar/$id" params={{ id }}>
+            <Link to="/admin/calendar/$id/edit" params={{ id }}>
               {value}
             </Link>
           </div>
+        );
+      },
+    },
+    {
+      accessorKey: "location",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Location
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
         );
       },
     },
@@ -91,26 +82,29 @@ export function CalendarEventTable({
       },
     },
     {
-      accessorKey: "updatedAt",
-      header: "Updated",
+      accessorKey: "createdAt",
+      header: "Created By",
       cell: ({ row }) => {
-        const value = row.original.updatedAt;
-        return <div>{value.toISOString()}</div>;
+        const updatedAt = row.original.createdAt;
+        const updatedBy = row.original.createdBy?.name;
+        return (
+          <div>
+            <div>{updatedBy}</div>
+            <div>{format(updatedAt, "MM/dd/yyyy h:mmaaa")} </div>
+          </div>
+        );
       },
     },
     {
-      accessorKey: "id",
-      header: () => {
-        return <div className="text-right">Actions</div>;
-      },
+      accessorKey: "updatedAt",
+      header: "Updated By",
       cell: ({ row }) => {
-        const id = row.original.id;
-
+        const updatedAt = row.original.updatedAt;
+        const updatedBy = row.original.updatedBy?.name;
         return (
-          <div className="text-right py-2">
-            <TeamActionButton action={() => onAction(id)} variant="destructive">
-              {actionLabel}
-            </TeamActionButton>
+          <div>
+            <div>{updatedBy}</div>
+            <div>{format(updatedAt, "MM/dd/yyyy h:mmaaa")} </div>
           </div>
         );
       },

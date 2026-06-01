@@ -1,39 +1,34 @@
 // prettier-ignore
-import { CalendarEventTable } from "@/components/admin/calendar/CalendarEventTable";
-import { DraftsTable } from "@/components/admin/calendar/DraftsTable";
+import { CalendarEventsTable } from "@/components/admin/calendar/CalendarEventsTable";
 import { BackTo } from "@/components/site/BackTo";
 import { PageDescription, PageHeader, PageTitle } from "@/components/site/PageHeader";
 import { PageSectionContainer } from "@/components/site/PageSectionContainer";
 import { TeamActionButton } from "@/components/site/TeamActionButtom";
 import { Button } from "@/components/ui/button";
-import { calendarQueries } from "@/queries/calendarQueries";
-import { approveRequest } from "@/server/functions/calendar/approveRequest";
-import { requestApprovalCalendarFn } from "@/server/functions/calendar/requestApproval";
+import { getCalendarListForAdminFn } from "@/server/functions/calendar/getCalendarListForAdmin";
 import { seedEventsFn } from "@/server/functions/calendar/seed";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/admin/calendar/")({
   component: RouteComponent,
-  loader: ({ context }) => {
-    context.queryClient?.ensureQueryData(calendarQueries.list());
+  loader: () => {
+    const events = getCalendarListForAdminFn();
+    return events;
   },
 });
 
 function RouteComponent() {
   const router = useRouter();
+  const events = Route.useLoaderData();
 
-  // Get the entire list of calendar entries and filter according to type.
-  const { data: calendar } = useSuspenseQuery(calendarQueries.list());
-
-  const pendingApproval = calendar?.filter((c) => c.status === "pending_review") ?? [];
-  const drafts = calendar?.filter((c) => c.status === "draft") ?? [];
+  const pendingApproval = events?.filter((c) => c.status === "pending_review") ?? [];
+  const drafts = events?.filter((c) => c.status === "draft") ?? [];
   const upcoming =
-    calendar?.filter(
+    events?.filter(
       (c) => c.status === "published" && c.dates.some((d) => new Date(d.endAt) >= new Date()),
     ) ?? [];
   const archived =
-    calendar?.filter(
+    events?.filter(
       (c) => c.status === "published" && !c.dates.every((d) => new Date(d.endAt) >= new Date()),
     ) ?? [];
 
@@ -42,27 +37,6 @@ function RouteComponent() {
     router.invalidate();
     return { error: null };
   }
-
-  async function handleRequestApproval(id: string) {
-    console.log("handleRequestApproval", id);
-    await requestApprovalCalendarFn({ data: { id } });
-    router.invalidate();
-    return { error: null };
-  }
-
-  async function handleApprove(id: string) {
-    console.log("handleApprove", id);
-    await approveRequest({ data: { id } });
-    router.invalidate();
-    return { error: null };
-  }
-
-  const handleEdit = async (id: string) => {
-    console.log("handleEdit", id);
-    //await archiveCalendarFn({ data: { id } });
-    router.invalidate();
-    return { error: null };
-  };
 
   return (
     <div>
@@ -76,43 +50,35 @@ function RouteComponent() {
 
       <div className="flex flex-col gap-10">
         <PageSectionContainer
-          title="Drafts"
+          title="Event Drafts"
           subTitle={`(${drafts.length} records)`}
           initialState="collapsed"
         >
-          <DraftsTable
-            data={drafts}
-            actionLabel="Request Approval"
-            onAction={handleRequestApproval}
-          />
+          <CalendarEventsTable data={drafts} />
         </PageSectionContainer>
 
         <PageSectionContainer
-          title="Pending Approval"
+          title="Events Awaiting Approval"
           subTitle={`(${pendingApproval.length} records)`}
           initialState="collapsed"
         >
-          <CalendarEventTable
-            data={pendingApproval}
-            actionLabel="Approve"
-            onAction={handleApprove}
-          />
+          <CalendarEventsTable data={pendingApproval} />
         </PageSectionContainer>
 
         <PageSectionContainer
-          title="Upcoming"
+          title="Upcoming Events"
           subTitle={`(${upcoming.length} records)`}
           initialState="collapsed"
         >
-          <CalendarEventTable data={upcoming} actionLabel="Archive" onAction={handleApprove} />
+          <CalendarEventsTable data={upcoming} />
         </PageSectionContainer>
 
         <PageSectionContainer
-          title="Archived"
+          title="Past Events"
           subTitle={`(${archived.length} records)`}
           initialState="collapsed"
         >
-          <CalendarEventTable data={archived} actionLabel="Edit" onAction={handleEdit} />
+          <CalendarEventsTable data={archived} />
         </PageSectionContainer>
       </div>
 
