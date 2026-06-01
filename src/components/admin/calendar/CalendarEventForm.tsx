@@ -48,6 +48,7 @@ export const CalendarEventForm = ({
   const form = useForm({
     defaultValues: defaultValues,
     onSubmit: async ({ value }) => {
+      console.log("form.onSubmit:", value);
       onSubmit(value);
     },
     validators: {
@@ -93,6 +94,16 @@ export const CalendarEventForm = ({
           }}
         >
           <div className="flex flex-col gap-6">
+            {/* Id */}
+            {defaultValues.id && (
+              <form.Field
+                name="id"
+                children={(field) => (
+                  <input type="hidden" name={field.name} value={field.state.value} />
+                )}
+              />
+            )}
+
             {/* Title */}
             <form.Field
               name="title"
@@ -414,16 +425,16 @@ export const CalendarEventForm = ({
                 return Promise.resolve({ error: null });
               }}
             >
-              Save
+              Submit
             </TeamActionButton>
             <Button
               type="button"
               variant="destructive"
               onClick={() => {
-                router.navigate({ to: "/admin/calendar" });
+                form.reset();
               }}
             >
-              Cancel
+              Reset
             </Button>
           </div>
         </form>

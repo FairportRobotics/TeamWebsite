@@ -57,20 +57,24 @@ export const updateCalendarFn = createServerFn()
       await db.transaction(async (tx) => {
         await tx.delete(calendarDates).where(eq(calendarDates.calendarId, data.id));
 
-        await tx.update(calendarTable).set({
-          id: data.id,
-          title: data.title,
-          status: "draft",
-          description: data.description ? data.description.split("\n") : undefined,
-          visibleTo: data.visibleTo,
-          location: data.location,
+        await tx
+          .update(calendarTable)
+          .set({
+            id: data.id,
+            title: data.title,
+            status: "draft",
+            description: data.description ? data.description.split("\n") : undefined,
+            visibleTo: data.visibleTo,
+            location: data.location,
 
-          informationLink: data.informationLink,
-          signupLink: data.signupLink,
-          signupLinkVisibleTo: data.signupLinkVisibleTo,
+            informationLink: data.informationLink,
+            signupLink: data.signupLink,
+            signupLinkVisibleTo: data.signupLinkVisibleTo,
 
-          updatedBy: currentUserId,
-        });
+            updatedBy: currentUserId,
+            updatedAt: new Date(),
+          })
+          .where(eq(calendarTable.id, data.id));
 
         data.dates.forEach(async (d) => {
           await tx.insert(calendarDates).values({
