@@ -22,6 +22,7 @@ import { Route as UnauthenticatedTeamIndexRouteImport } from './routes/_unauthen
 import { Route as UnauthenticatedSponsorsIndexRouteImport } from './routes/_unauthenticated/sponsors/index'
 import { Route as UnauthenticatedGamesIndexRouteImport } from './routes/_unauthenticated/games/index'
 import { Route as UnauthenticatedCalendarIndexRouteImport } from './routes/_unauthenticated/calendar/index'
+import { Route as AuthenticatedProfileIndexRouteImport } from './routes/_authenticated/profile/index'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as UnauthenticatedTeamIdRouteImport } from './routes/_unauthenticated/team/$id'
@@ -105,6 +106,12 @@ const UnauthenticatedCalendarIndexRoute =
   UnauthenticatedCalendarIndexRouteImport.update({
     id: '/_unauthenticated/calendar/',
     path: '/calendar/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AuthenticatedProfileIndexRoute =
+  AuthenticatedProfileIndexRouteImport.update({
+    id: '/_authenticated/profile/',
+    path: '/profile/',
     getParentRoute: () => rootRouteImport,
   } as any)
 const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
@@ -209,6 +216,7 @@ export interface FileRoutesByFullPath {
   '/team/$id': typeof UnauthenticatedTeamIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/profile/': typeof AuthenticatedProfileIndexRoute
   '/calendar/': typeof UnauthenticatedCalendarIndexRoute
   '/games/': typeof UnauthenticatedGamesIndexRoute
   '/sponsors/': typeof UnauthenticatedSponsorsIndexRoute
@@ -238,6 +246,7 @@ export interface FileRoutesByTo {
   '/team/$id': typeof UnauthenticatedTeamIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
+  '/profile': typeof AuthenticatedProfileIndexRoute
   '/calendar': typeof UnauthenticatedCalendarIndexRoute
   '/games': typeof UnauthenticatedGamesIndexRoute
   '/sponsors': typeof UnauthenticatedSponsorsIndexRoute
@@ -268,6 +277,7 @@ export interface FileRoutesById {
   '/_unauthenticated/team/$id': typeof UnauthenticatedTeamIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/profile/': typeof AuthenticatedProfileIndexRoute
   '/_unauthenticated/calendar/': typeof UnauthenticatedCalendarIndexRoute
   '/_unauthenticated/games/': typeof UnauthenticatedGamesIndexRoute
   '/_unauthenticated/sponsors/': typeof UnauthenticatedSponsorsIndexRoute
@@ -300,6 +310,7 @@ export interface FileRouteTypes {
     | '/team/$id'
     | '/api/auth/$'
     | '/admin/'
+    | '/profile/'
     | '/calendar/'
     | '/games/'
     | '/sponsors/'
@@ -329,6 +340,7 @@ export interface FileRouteTypes {
     | '/team/$id'
     | '/api/auth/$'
     | '/admin'
+    | '/profile'
     | '/calendar'
     | '/games'
     | '/sponsors'
@@ -358,6 +370,7 @@ export interface FileRouteTypes {
     | '/_unauthenticated/team/$id'
     | '/api/auth/$'
     | '/_authenticated/admin/'
+    | '/_authenticated/profile/'
     | '/_unauthenticated/calendar/'
     | '/_unauthenticated/games/'
     | '/_unauthenticated/sponsors/'
@@ -383,6 +396,7 @@ export interface RootRouteChildren {
   UnauthenticatedGamesIdRoute: typeof UnauthenticatedGamesIdRoute
   UnauthenticatedTeamIdRoute: typeof UnauthenticatedTeamIdRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  AuthenticatedProfileIndexRoute: typeof AuthenticatedProfileIndexRoute
   UnauthenticatedCalendarIndexRoute: typeof UnauthenticatedCalendarIndexRoute
   UnauthenticatedGamesIndexRoute: typeof UnauthenticatedGamesIndexRoute
   UnauthenticatedSponsorsIndexRoute: typeof UnauthenticatedSponsorsIndexRoute
@@ -481,6 +495,13 @@ declare module '@tanstack/react-router' {
       path: '/calendar'
       fullPath: '/calendar/'
       preLoaderRoute: typeof UnauthenticatedCalendarIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/profile/': {
+      id: '/_authenticated/profile/'
+      path: '/profile'
+      fullPath: '/profile/'
+      preLoaderRoute: typeof AuthenticatedProfileIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/admin/': {
@@ -668,6 +689,7 @@ const rootRouteChildren: RootRouteChildren = {
   UnauthenticatedGamesIdRoute: UnauthenticatedGamesIdRoute,
   UnauthenticatedTeamIdRoute: UnauthenticatedTeamIdRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  AuthenticatedProfileIndexRoute: AuthenticatedProfileIndexRoute,
   UnauthenticatedCalendarIndexRoute: UnauthenticatedCalendarIndexRoute,
   UnauthenticatedGamesIndexRoute: UnauthenticatedGamesIndexRoute,
   UnauthenticatedSponsorsIndexRoute: UnauthenticatedSponsorsIndexRoute,
