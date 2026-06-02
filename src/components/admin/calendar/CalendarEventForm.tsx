@@ -47,7 +47,6 @@ export const CalendarEventForm = ({
   const form = useForm({
     defaultValues: defaultValues,
     onSubmit: async ({ value }) => {
-      console.log("form.onSubmit:", value);
       onSubmit(value);
     },
     validators: {

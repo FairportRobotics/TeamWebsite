@@ -19,19 +19,13 @@ export const calendarQueries = {
     }),
 };
 
-export const calendarMutations = {
-  requestApproval: (id: string) => requestApprovalCalendarFn({ data: { id } }),
-
-  approve: (id: string) => approveRequest({ data: { id } }),
-
-  delete: (id: string) => deleteCalendarFn({ data: { id } }),
-};
-
 export function useRequestApprovalMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: calendarMutations.requestApproval,
+    mutationFn: async (id: string) => {
+      requestApprovalCalendarFn({ data: { id } });
+    },
 
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -45,7 +39,9 @@ export function useApproveMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: calendarMutations.approve,
+    mutationFn: async (id: string) => {
+      approveRequest({ data: { id } });
+    },
 
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -59,7 +55,9 @@ export function useDeleteMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: calendarMutations.delete,
+    mutationFn: async (id: string) => {
+      deleteCalendarFn({ data: { id } });
+    },
 
     onSuccess: () => {
       queryClient.invalidateQueries({

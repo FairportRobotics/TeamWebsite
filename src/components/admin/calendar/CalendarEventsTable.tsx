@@ -1,20 +1,17 @@
 // prettier-ignore
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogMedia, AlertDialogTitle, } from "@/components/ui/alert-dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogMedia, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 // prettier-ignore
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 // prettier-ignore
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { getDateRangeParts } from "@/lib/utils";
-import {
-  useApproveMutation,
-  useDeleteMutation,
-  useRequestApprovalMutation,
-} from "@/queries/calendarQueries";
+// prettier-ignore
+import { useApproveMutation, useDeleteMutation, useRequestApprovalMutation } from "@/queries/calendarQueries";
 import type { CalendarListForAdminItem } from "@/server/functions/calendar/getCalendarListForAdmin";
 import { Link } from "@tanstack/react-router";
 // prettier-ignore
-import { flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, type ColumnDef, type ColumnFiltersState, type SortingState, } from "@tanstack/react-table";
+import { flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, type ColumnDef, type ColumnFiltersState, type SortingState } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { ArrowUpDown, Hand, MoreHorizontal, ThumbsUp, TrashIcon } from "lucide-react";
 import React from "react";
