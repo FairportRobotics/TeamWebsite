@@ -52,7 +52,7 @@ function RouteComponent() {
         <PageSectionContainer
           title="Event Drafts"
           subTitle={`(${drafts.length} records)`}
-          initialState="collapsed"
+          initialState="expanded"
         >
           <CalendarEventsTable data={drafts} />
         </PageSectionContainer>

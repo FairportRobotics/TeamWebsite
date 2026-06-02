@@ -436,41 +436,6 @@ export const CalendarEventForm = ({
             >
               Reset
             </TeamActionButton>
-
-            {defaultValues.status === "draft" && (
-              <TeamActionButton
-                type="button"
-                variant="default"
-                action={() => {
-                  console.log("Requesting approval...");
-                  return Promise.resolve({ error: null });
-                }}
-              >
-                Request Approval
-              </TeamActionButton>
-            )}
-            {defaultValues.status === "pending" && (
-              <TeamActionButton
-                type="button"
-                variant="default"
-                action={() => {
-                  console.log("Requesting approval...");
-                  return Promise.resolve({ error: null });
-                }}
-              >
-                Approve
-              </TeamActionButton>
-            )}
-            <TeamActionButton
-              type="button"
-              variant="destructive"
-              action={() => {
-                form.reset();
-                return Promise.resolve({ error: null });
-              }}
-            >
-              Delete
-            </TeamActionButton>
           </div>
         </form>
       </CardContent>
