@@ -6,7 +6,11 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 // prettier-ignore
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/components/ui/table";
 import { getDateRangeParts } from "@/lib/utils";
-import { calendarMutations } from "@/queries/calendarQueries";
+import {
+  useApproveMutation,
+  useDeleteMutation,
+  useRequestApprovalMutation,
+} from "@/queries/calendarQueries";
 import type { CalendarListForAdminItem } from "@/server/functions/calendar/getCalendarListForAdmin";
 import { Link } from "@tanstack/react-router";
 // prettier-ignore
@@ -21,13 +25,17 @@ export function CalendarEventsTable({ data }: { data: CalendarListForAdminItem[]
   const [showDeleteAlert, setShowDeleteAlert] = React.useState(false);
   const [selectedEventId, setSelectedEventId] = React.useState<string | null>(null);
 
+  const requestApprovalMutation = useRequestApprovalMutation();
+  const approveMutation = useApproveMutation();
+  const deleteMutation = useDeleteMutation();
+
   const handleVerifyDelete = (id: string) => {
     setSelectedEventId(id);
     setShowDeleteAlert(true);
   };
 
   const handleConfirmDelete = () => {
-    calendarMutations.delete(selectedEventId!);
+    deleteMutation.mutate(selectedEventId!);
     setSelectedEventId(null);
     setShowDeleteAlert(false);
   };
@@ -143,13 +151,13 @@ export function CalendarEventsTable({ data }: { data: CalendarListForAdminItem[]
               <DropdownMenuContent>
                 <DropdownMenuGroup>
                   {status === "draft" && (
-                    <DropdownMenuItem onClick={() => calendarMutations.requestApproval(id)}>
+                    <DropdownMenuItem onClick={() => requestApprovalMutation.mutate(id)}>
                       <Hand />
                       Request Approval
                     </DropdownMenuItem>
                   )}
                   {status === "pending" && (
-                    <DropdownMenuItem onClick={() => calendarMutations.approve(id)}>
+                    <DropdownMenuItem onClick={() => approveMutation.mutate(id)}>
                       <ThumbsUp />
                       Approve
                     </DropdownMenuItem>
