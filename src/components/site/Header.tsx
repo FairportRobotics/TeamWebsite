@@ -1,4 +1,5 @@
 // prettier-ignore
+import { AuthenticatedIcon } from "@/components/site/AuthenticatedIcon";
 import { HeaderLink } from "@/components/site/HeaderLink";
 import { ImpersonateButton } from "@/components/site/ImpersonateButton";
 import ThemeToggle from "@/components/site/ThemeToggle";
@@ -6,11 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Permissions } from "@/lib/auth//permissions";
 import { authClient } from "@/lib/auth/auth-client";
 import { hasAnyPermission } from "@/lib/auth/guard";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 
 export default function Header() {
-  const navigate = useNavigate();
   const { data: session, isPending } = authClient.useSession();
   const [hasAdmin, setHasAdmin] = useState<boolean>(false);
 
@@ -24,11 +24,6 @@ export default function Header() {
 
     setHasAdmin(result);
   }, [session, isPending]);
-
-  async function handleSignOut() {
-    await authClient.signOut();
-    navigate({ to: "/" });
-  }
 
   return (
     <header className="sticky top-0 z-50 bg-sidebar px-4 backdrop-blur-lg">
@@ -49,13 +44,11 @@ export default function Header() {
               {session ? (
                 <>
                   <ImpersonateButton />
-                  <Button variant="destructive" onClick={() => handleSignOut()}>
-                    Sign Out
-                  </Button>
+                  <AuthenticatedIcon />
                 </>
               ) : (
                 <>
-                  <Button variant="default">
+                  <Button variant="default" size="lg">
                     <Link to="/auth/signin">Sign In</Link>
                   </Button>
                 </>
