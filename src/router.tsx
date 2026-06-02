@@ -1,5 +1,6 @@
 import type { authClient } from "@/lib/auth/auth-client";
 import { routeTree } from "@/routeTree.gen";
+import { QueryClient } from "@tanstack/react-query";
 import { createRouter as createTanStackRouter } from "@tanstack/react-router";
 
 export type SessionType = Awaited<ReturnType<typeof authClient.useSession>>;
@@ -7,6 +8,7 @@ export type ContextUser = NonNullable<SessionType["data"]>["user"];
 export type ContextSession = NonNullable<SessionType["data"]>["session"];
 
 export interface RouterContext {
+  queryClient: QueryClient | undefined;
   auth: {
     session: ContextSession | undefined;
     user: ContextUser | undefined;
@@ -21,6 +23,7 @@ export function getRouter() {
     defaultPreloadDelay: 300,
     defaultPreloadStaleTime: 0,
     context: {
+      queryClient: undefined,
       auth: {
         session: undefined!,
         user: undefined!,

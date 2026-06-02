@@ -2,33 +2,16 @@
 import { db } from "@/db";
 import { calendarDates, calendarTable } from "@/db/schema";
 import { Permissions } from "@/lib/auth/permissions";
-import { Roles } from "@/lib/auth/roles";
+import { saveCalendarDateSchema, VisibleToOptions } from "@/server/functions/calendar/_common";
 import { anyPermissionMiddleware } from "@/server/middleware/anyPermission";
 import { authenticatedMiddleware } from "@/server/middleware/authenticated";
 import { createServerFn } from "@tanstack/react-start";
 import { zodValidator } from "@tanstack/zod-adapter";
 import { z } from "zod";
 
-// TODO: Refactor to use the InferResultType utility type from _common.ts for better type safety and
-// consistency across database query results. This will help ensure that the types of the results we
-// get from our database queries are accurate and consistent with our schema definitions.
-export const VisibleToOptions = [
-  Roles.Everyone,
-  Roles.Student,
-  Roles.Mentor,
-  Roles.Parent,
-] as const;
-
-// Create a schema for validating the date ranges for calendar events. We will use this as a
-// nested schema in the main calendar insert and update schema.
-export const calendarDateInsertSchema = z.object({
-  startAt: z.date(),
-  endAt: z.date(),
-});
-
 // Create a schema for validating calendar insert and update operations. We can reuse this for
 // both operations since they have the same requirements.
-export const calendarInsertSchema = z
+export const createCalendarSchema = z
   .object({
     title: z.string().trim().min(1, "Title is required"),
     description: z.string().trim().min(1, "Description is required"),
@@ -36,10 +19,11 @@ export const calendarInsertSchema = z
     visibleTo: z
       .array(z.enum(VisibleToOptions))
       .min(1, "At least one visibility option must be selected"),
-    dates: z.array(calendarDateInsertSchema).min(1, "At least one date range is required"),
+    dates: z.array(saveCalendarDateSchema).min(1, "At least one date range is required"),
     informationLink: z.url().optional().or(z.literal("")),
     signupLink: z.url().optional().or(z.literal("")),
     signupLinkVisibleTo: z.array(z.enum(VisibleToOptions)),
+    status: z.string(),
   })
   .refine(
     (data) => {
@@ -62,10 +46,9 @@ export const calendarInsertSchema = z
 
 // TODO: Validate that the user has permission to perform this action based on the visibility options
 // of the calendar item and the user's roles.
-// TODO: Refactor this so it will work for new and edited calendar events.
-export const saveCalendarFn = createServerFn()
+export const createCalendarFn = createServerFn()
   .middleware([authenticatedMiddleware, anyPermissionMiddleware([Permissions.EventUpdate])])
-  .inputValidator(zodValidator(calendarInsertSchema))
+  .inputValidator(zodValidator(createCalendarSchema))
   .handler(async ({ data, context }) => {
     try {
       const currentUserId = context!.user!.id;
@@ -76,6 +59,7 @@ export const saveCalendarFn = createServerFn()
         await tx.insert(calendarTable).values({
           id: id,
           title: data.title,
+          status: "draft",
           description: data.description ? data.description.split("\n") : undefined,
           visibleTo: data.visibleTo,
           location: data.location,
@@ -96,6 +80,8 @@ export const saveCalendarFn = createServerFn()
           });
         });
       });
+
+      return id;
     } catch (error) {
       console.error(error);
     }

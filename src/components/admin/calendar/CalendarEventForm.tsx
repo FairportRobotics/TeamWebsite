@@ -8,27 +8,21 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
-import type { VisibleEnumType } from "@/db/schema";
-import { Roles } from "@/lib/auth/roles";
-import {
-  calendarInsertSchema,
-  saveCalendarFn,
-  VisibleToOptions,
-} from "@/server/functions/calendar/save";
+import { VisibleToOptions } from "@/server/functions/calendar/_common";
+import { createCalendarSchema } from "@/server/functions/calendar/createCalendar";
 import { useForm } from "@tanstack/react-form";
-import { useRouter } from "@tanstack/react-router";
 import { format } from "date-fns";
 import { ChevronDownIcon, Plus, Trash2 } from "lucide-react";
 import * as React from "react";
 import { useState } from "react";
-import { toast } from "sonner";
 
-interface CalendarDate {
+export type CalendarDate = {
   startAt: Date;
   endAt: Date;
-}
+};
 
-interface Calendar {
+export type CalendarFormValues = {
+  id?: string | undefined;
   title: string;
   description: string;
   location: string;
@@ -37,54 +31,29 @@ interface Calendar {
   informationLink?: string | undefined;
   signupLink?: string | undefined;
   signupLinkVisibleTo: Array<string>;
-}
-
-const defaultCalendar: Calendar = {
-  title: "",
-  description: "",
-  location: "",
-  visibleTo: [Roles.Everyone],
-  dates: [],
-  informationLink: undefined,
-  signupLink: undefined,
-  signupLinkVisibleTo: [],
+  status: string | undefined;
 };
 
-export const CalendarEventForm = () => {
+export const CalendarEventForm = ({
+  defaultValues,
+  onSubmit,
+}: {
+  defaultValues: CalendarFormValues;
+  onSubmit: (values: CalendarFormValues) => void;
+}) => {
   const [showInformation, setShowInformation] = useState<boolean>(false);
   const [showSignup, setShowSignup] = useState<boolean>(false);
-  const router = useRouter();
 
   const form = useForm({
-    defaultValues: defaultCalendar,
+    defaultValues: defaultValues,
     onSubmit: async ({ value }) => {
-      await saveCalendarFn({
-        data: {
-          title: value.title,
-          description: value.description,
-          location: value.location,
-          visibleTo: value.visibleTo as VisibleEnumType[],
-          dates: value.dates,
-          informationLink: value.informationLink,
-          signupLink: value.signupLink,
-          signupLinkVisibleTo: value.signupLinkVisibleTo as VisibleEnumType[],
-        },
-      });
-
-      toast.success("Calendar event was successfully created");
-      router.navigate({ to: "/admin/calendar" });
+      console.log("form.onSubmit:", value);
+      onSubmit(value);
     },
     validators: {
-      onSubmit: calendarInsertSchema,
+      onSubmit: createCalendarSchema,
     },
   });
-
-  async function handleShow() {
-    //console.log(form.state.values);
-    console.log("form.state.values:", JSON.stringify(form.state.values, null, 2));
-    console.log("form.state.errorMap:", JSON.stringify(form.state.errorMap, null, 2));
-    return { error: null };
-  }
 
   function handleToggleHasInformation(checked: boolean) {
     setShowInformation(checked);
@@ -124,6 +93,16 @@ export const CalendarEventForm = () => {
           }}
         >
           <div className="flex flex-col gap-6">
+            {/* Id */}
+            {defaultValues.id && (
+              <form.Field
+                name="id"
+                children={(field) => (
+                  <input type="hidden" name={field.name} value={field.state.value} />
+                )}
+              />
+            )}
+
             {/* Title */}
             <form.Field
               name="title"
@@ -448,11 +427,14 @@ export const CalendarEventForm = () => {
               Submit
             </TeamActionButton>
             <TeamActionButton
+              type="button"
+              variant="default"
               action={() => {
-                return handleShow();
+                form.reset();
+                return Promise.resolve({ error: null });
               }}
             >
-              Show Current
+              Reset
             </TeamActionButton>
           </div>
         </form>
@@ -461,7 +443,7 @@ export const CalendarEventForm = () => {
   );
 };
 
-export function DateTimeRangePicker({
+function DateTimeRangePicker({
   dateSelected,
 }: {
   dateSelected: (startAt: Date, endAt: Date) => void;

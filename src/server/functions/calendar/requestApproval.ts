@@ -13,6 +13,7 @@ export const requestApprovalCalendarFn = createServerFn()
   .middleware([authenticatedMiddleware, anyPermissionMiddleware([Permissions.EventUpdate])])
   .inputValidator(zodValidator(calendarIdSchema))
   .handler(async ({ data, context }) => {
+    console.log("requestApprovalCalendarFn", data, context.user);
     if (!context.user) {
       return false;
     }
@@ -21,7 +22,7 @@ export const requestApprovalCalendarFn = createServerFn()
       .update(calendarTable)
       .set({
         updatedBy: context.user.id,
-        status: "pending_review",
+        status: "pending",
       })
       .where(eq(calendarTable.id, data.id));
 

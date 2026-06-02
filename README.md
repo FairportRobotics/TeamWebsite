@@ -91,3 +91,5 @@ https://tweakcn.com/themes/cmlk6zefr000004lbe9jygsqc
 [NLAN](https://tweakcn.com/themes/cmli80zt6000004l757xqgizs)
 
 [Sesi Theme 2](https://tweakcn.com/themes/cmmmevxer000004l25m5x7ee0)
+
+() => navigator.clipboard.writeText(id)

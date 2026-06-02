@@ -21,12 +21,7 @@ export type InferResultType<
 /**
  * Defines the status options for various entities.
  */
-export const statusEnum = pgEnum("item_status", [
-  "draft",
-  "pending_review",
-  "published",
-  "archived",
-]);
+export const statusEnum = pgEnum("item_status", ["draft", "pending", "published", "archived"]);
 
 export type StatusEnumType = (typeof statusEnum.enumValues)[number];
 

@@ -38,16 +38,12 @@ function RouteComponent() {
               <div>Draft(s)</div>
             </div>
             <div className="flex flex-row items-center gap-3">
-              <div>{calendarMetrics.find((m) => m.status === "pending_review")?.count ?? 0}</div>
+              <div>{calendarMetrics.find((m) => m.status === "pending")?.count ?? 0}</div>
               <div>Pending Approval</div>
             </div>
             <div className="flex flex-row items-center gap-3">
               <div>{calendarMetrics.find((m) => m.status === "published")?.count ?? 0}</div>
               <div>Published</div>
-            </div>
-            <div className="flex flex-row items-center gap-3">
-              <div>{calendarMetrics.find((m) => m.status === "archived")?.count ?? 0}</div>
-              <div>Archived</div>
             </div>
 
             <div className="mt-4">
