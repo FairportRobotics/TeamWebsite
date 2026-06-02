@@ -1,6 +1,7 @@
 // prettier-ignore
 import { PageDescription, PageHeader, PageTitle } from "@/components/site/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import { getAdminSummaryFn } from "@/server/functions/admin/getAdminSummary";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
@@ -14,7 +15,8 @@ export const Route = createFileRoute("/_authenticated/admin/")({
 });
 
 function RouteComponent() {
-  const { calendarMetrics } = Route.useLoaderData();
+  const { calendarStatusMetrics, calendarPeriodMetrics } = Route.useLoaderData();
+
   return (
     <div>
       <PageHeader>
@@ -34,15 +36,26 @@ function RouteComponent() {
           </CardHeader>
           <CardContent>
             <div className="flex flex-row items-center gap-3">
-              <div>{calendarMetrics.find((m) => m.status === "draft")?.count ?? 0}</div>
+              <div>{calendarPeriodMetrics?.upcoming ?? 0}</div>
+              <div>Upcoming</div>
+            </div>
+            <div className="flex flex-row items-center gap-3">
+              <div>{calendarPeriodMetrics?.elapsed ?? 0}</div>
+              <div>Past</div>
+            </div>
+
+            <Separator className="p-0.5 my-2" />
+
+            <div className="flex flex-row items-center gap-3">
+              <div>{calendarStatusMetrics.find((m) => m.status === "draft")?.count ?? 0}</div>
               <div>Draft(s)</div>
             </div>
             <div className="flex flex-row items-center gap-3">
-              <div>{calendarMetrics.find((m) => m.status === "pending")?.count ?? 0}</div>
+              <div>{calendarStatusMetrics.find((m) => m.status === "pending")?.count ?? 0}</div>
               <div>Pending Approval</div>
             </div>
             <div className="flex flex-row items-center gap-3">
-              <div>{calendarMetrics.find((m) => m.status === "published")?.count ?? 0}</div>
+              <div>{calendarStatusMetrics.find((m) => m.status === "published")?.count ?? 0}</div>
               <div>Published</div>
             </div>
 
