@@ -1,6 +1,6 @@
 // prettier-ignore
 import { db } from "@/db";
-import { calendarDates, calendarTable } from "@/db/schema";
+import { dbEvent, dbEventDate } from "@/db/schema";
 import { Permissions } from "@/lib/auth/permissions";
 import { saveCalendarDateSchema, VisibleToOptions } from "@/server/functions/calendar/_common";
 import { anyPermissionMiddleware } from "@/server/middleware/anyPermission";
@@ -56,7 +56,7 @@ export const createCalendarFn = createServerFn()
 
       // Insert records in a transaction so we can rollback if anything goes sideways.
       await db.transaction(async (tx) => {
-        await tx.insert(calendarTable).values({
+        await tx.insert(dbEvent).values({
           id: id,
           title: data.title,
           status: "draft",
@@ -73,7 +73,7 @@ export const createCalendarFn = createServerFn()
         });
 
         data.dates.forEach(async (d) => {
-          await tx.insert(calendarDates).values({
+          await tx.insert(dbEventDate).values({
             calendarId: id,
             startAt: d.startAt,
             endAt: d.endAt,

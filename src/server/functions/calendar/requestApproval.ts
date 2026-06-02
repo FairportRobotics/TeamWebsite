@@ -1,6 +1,6 @@
 // prettier-ignore
 import { db } from "@/db";
-import { calendarTable } from "@/db/schema";
+import { dbEvent } from "@/db/schema";
 import { Permissions } from "@/lib/auth/permissions";
 import { calendarIdSchema } from "@/server/functions/calendar/_common";
 import { anyPermissionMiddleware } from "@/server/middleware/anyPermission";
@@ -18,12 +18,12 @@ export const requestApprovalCalendarFn = createServerFn()
     }
 
     await db
-      .update(calendarTable)
+      .update(dbEvent)
       .set({
         updatedBy: context.user.id,
         status: "pending",
       })
-      .where(eq(calendarTable.id, data.id));
+      .where(eq(dbEvent.id, data.id));
 
     return true;
   });

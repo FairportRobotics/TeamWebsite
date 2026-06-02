@@ -1,6 +1,6 @@
 // prettier-ignore
 import { db } from "@/db";
-import { calendarTable } from "@/db/schema";
+import { dbEvent } from "@/db/schema";
 import { Permissions } from "@/lib/auth/permissions";
 import { calendarIdSchema } from "@/server/functions/calendar/_common";
 import { allPermissionsMiddleware } from "@/server/middleware/allPermissions";
@@ -15,8 +15,8 @@ export const getCalendarForEditFn = createServerFn()
   .inputValidator(zodValidator(calendarIdSchema))
   .handler(async ({ data }) => {
     // Retrieve the calendar, the dates and the users who have touched the record.
-    const results = await db.query.calendarTable.findFirst({
-      where: eq(calendarTable.id, data.id),
+    const results = await db.query.dbEvent.findFirst({
+      where: eq(dbEvent.id, data.id),
       with: {
         dates: true,
         createdBy: true,

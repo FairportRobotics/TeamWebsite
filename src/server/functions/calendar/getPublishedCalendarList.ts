@@ -1,6 +1,6 @@
 // prettier-ignore
 import { db } from "@/db";
-import { calendarDates, calendarTable, visibleEnum, type VisibleEnumType } from "@/db/schema";
+import { dbEvent, dbEventDate, visibleEnum, type VisibleEnumType } from "@/db/schema";
 import { Roles } from "@/lib/auth/roles";
 import { sessionMiddleware } from "@/server/middleware/session";
 import { createServerFn } from "@tanstack/react-start";
@@ -26,28 +26,23 @@ export const getPublishedCalendarListFn = createServerFn()
     // calendar record.
     const results = await db
       .select({
-        id: calendarTable.id,
-        status: calendarTable.status,
-        visibleTo: calendarTable.visibleTo,
-        title: calendarTable.title,
-        description: calendarTable.description,
-        location: calendarTable.location,
-        informationLink: calendarTable.informationLink,
-        signupLink: calendarTable.signupLink,
-        signupLinkVisibleTo: calendarTable.signupLinkVisibleTo,
+        id: dbEvent.id,
+        status: dbEvent.status,
+        visibleTo: dbEvent.visibleTo,
+        title: dbEvent.title,
+        description: dbEvent.description,
+        location: dbEvent.location,
+        informationLink: dbEvent.informationLink,
+        signupLink: dbEvent.signupLink,
+        signupLinkVisibleTo: dbEvent.signupLinkVisibleTo,
 
-        startAt: calendarDates.startAt,
-        endAt: calendarDates.endAt,
+        startAt: dbEventDate.startAt,
+        endAt: dbEventDate.endAt,
       })
-      .from(calendarTable)
-      .innerJoin(calendarDates, eq(calendarTable.id, calendarDates.calendarId))
-      .where(
-        and(
-          eq(calendarTable.status, "published"),
-          arrayOverlaps(calendarTable.visibleTo, visibleTo),
-        ),
-      )
-      .orderBy(calendarDates.startAt);
+      .from(dbEvent)
+      .innerJoin(dbEventDate, eq(dbEvent.id, dbEventDate.calendarId))
+      .where(and(eq(dbEvent.status, "published"), arrayOverlaps(dbEvent.visibleTo, visibleTo)))
+      .orderBy(dbEventDate.startAt);
 
     return results;
   });

@@ -9,7 +9,7 @@ export const getCalendarListForAdminFn = createServerFn()
   .middleware([authenticatedMiddleware, anyPermissionMiddleware([Permissions.EventAdminister])])
   .handler(async () => {
     // Query the calendar table and include the child dates.
-    const results = await db.query.calendarTable.findMany({
+    const results = await db.query.dbEvent.findMany({
       with: {
         dates: true,
         createdBy: true,

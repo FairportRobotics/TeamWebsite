@@ -1,12 +1,11 @@
-// drizzle/schema/items.ts
+import { user } from "@/db/schema";
 import { statusEnum, visibleEnum, type InferResultType } from "@/db/schema/_common";
 import { Roles } from "@/lib/auth/roles";
 import { index, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
-import { user } from "../schema";
 
 // Stores all the events in which the team will host or participate.
-export const calendarTable = pgTable(
-  "calendar",
+export const dbEvent = pgTable(
+  "event",
   {
     id: uuid("id").primaryKey().defaultRandom(),
 
@@ -32,29 +31,29 @@ export const calendarTable = pgTable(
       .notNull(),
   },
   (table) => [
-    index("idx_calendar_status").on(table.status),
-    index("idx_calendar_visibleTo").on(table.visibleTo),
+    index("idx_event_status").on(table.status),
+    index("idx_event_visibleTo").on(table.visibleTo),
   ],
 );
 
 // Stores the date ranges of events. In most cases, there will be a single date range.
-export const calendarDates = pgTable(
-  "calendar_dates",
+export const dbEventDate = pgTable(
+  "event_date",
   {
     id: uuid("id").primaryKey().defaultRandom(),
-    calendarId: uuid("calendar_id").references(() => calendarTable.id),
+    calendarId: uuid("event_id").references(() => dbEvent.id),
     startAt: timestamp("start_at").notNull(),
     endAt: timestamp("end_at").notNull(),
   },
   (table) => [
-    index("idx_calendar_dates_calendar_id").on(table.calendarId),
-    index("idx_event_dates_range").on(table.startAt, table.endAt),
+    index("idx_event_date_calendar_id").on(table.calendarId),
+    index("idx_event_date_range").on(table.startAt, table.endAt),
   ],
 );
 
 // Export inferred types so they can be used throughout the application.
-export type CalendarSelectItem = typeof calendarTable.$inferSelect;
-export type CalendarInsertItem = typeof calendarTable.$inferInsert;
-export type CalendarItemStatus = typeof calendarTable.$inferSelect.status;
-export type CalendarItemVisibleTo = typeof calendarTable.$inferSelect.visibleTo;
-export type CalendarWithDatesSelect = InferResultType<"calendarTable", { dates: true }>;
+export type CalendarSelectItem = typeof dbEvent.$inferSelect;
+export type CalendarInsertItem = typeof dbEvent.$inferInsert;
+export type CalendarItemStatus = typeof dbEvent.$inferSelect.status;
+export type CalendarItemVisibleTo = typeof dbEvent.$inferSelect.visibleTo;
+export type CalendarWithDatesSelect = InferResultType<"dbEvent", { dates: true }>;

@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { calendarDates, calendarTable } from "@/db/schema";
+import { dbEvent, dbEventDate } from "@/db/schema";
 import { Permissions } from "@/lib/auth/permissions";
 import { saveCalendarDateSchema, VisibleToOptions } from "@/server/functions/calendar/_common";
 import { anyPermissionMiddleware } from "@/server/middleware/anyPermission";
@@ -55,10 +55,10 @@ export const updateCalendarFn = createServerFn()
 
       // Insert records in a transaction so we can rollback if anything goes sideways.
       await db.transaction(async (tx) => {
-        await tx.delete(calendarDates).where(eq(calendarDates.calendarId, data.id));
+        await tx.delete(dbEventDate).where(eq(dbEventDate.calendarId, data.id));
 
         await tx
-          .update(calendarTable)
+          .update(dbEvent)
           .set({
             id: data.id,
             title: data.title,
@@ -74,10 +74,10 @@ export const updateCalendarFn = createServerFn()
             updatedBy: currentUserId,
             updatedAt: new Date(),
           })
-          .where(eq(calendarTable.id, data.id));
+          .where(eq(dbEvent.id, data.id));
 
         data.dates.forEach(async (d) => {
-          await tx.insert(calendarDates).values({
+          await tx.insert(dbEventDate).values({
             calendarId: data.id,
             startAt: d.startAt,
             endAt: d.endAt,
