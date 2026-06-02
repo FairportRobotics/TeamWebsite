@@ -21,8 +21,8 @@ function RouteComponent() {
   const router = useRouter();
   const events = Route.useLoaderData();
 
-  const pendingApproval = events?.filter((c) => c.status === "pending_review") ?? [];
   const drafts = events?.filter((c) => c.status === "draft") ?? [];
+  const pending = events?.filter((c) => c.status === "pending") ?? [];
   const upcoming =
     events?.filter(
       (c) => c.status === "published" && c.dates.some((d) => new Date(d.endAt) >= new Date()),
@@ -59,10 +59,10 @@ function RouteComponent() {
 
         <PageSectionContainer
           title="Events Awaiting Approval"
-          subTitle={`(${pendingApproval.length} records)`}
+          subTitle={`(${pending.length} records)`}
           initialState="collapsed"
         >
-          <CalendarEventsTable data={pendingApproval} />
+          <CalendarEventsTable data={pending} />
         </PageSectionContainer>
 
         <PageSectionContainer

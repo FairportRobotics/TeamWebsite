@@ -23,6 +23,7 @@ export const createCalendarSchema = z
     informationLink: z.url().optional().or(z.literal("")),
     signupLink: z.url().optional().or(z.literal("")),
     signupLinkVisibleTo: z.array(z.enum(VisibleToOptions)),
+    status: z.string(),
   })
   .refine(
     (data) => {

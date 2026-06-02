@@ -11,7 +11,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { VisibleToOptions } from "@/server/functions/calendar/_common";
 import { createCalendarSchema } from "@/server/functions/calendar/createCalendar";
 import { useForm } from "@tanstack/react-form";
-import { useRouter } from "@tanstack/react-router";
 import { format } from "date-fns";
 import { ChevronDownIcon, Plus, Trash2 } from "lucide-react";
 import * as React from "react";
@@ -32,6 +31,7 @@ export type CalendarFormValues = {
   informationLink?: string | undefined;
   signupLink?: string | undefined;
   signupLinkVisibleTo: Array<string>;
+  status: string | undefined;
 };
 
 export const CalendarEventForm = ({
@@ -43,7 +43,6 @@ export const CalendarEventForm = ({
 }) => {
   const [showInformation, setShowInformation] = useState<boolean>(false);
   const [showSignup, setShowSignup] = useState<boolean>(false);
-  const router = useRouter();
 
   const form = useForm({
     defaultValues: defaultValues,
@@ -427,15 +426,51 @@ export const CalendarEventForm = ({
             >
               Submit
             </TeamActionButton>
-            <Button
+            <TeamActionButton
               type="button"
-              variant="destructive"
-              onClick={() => {
+              variant="default"
+              action={() => {
                 form.reset();
+                return Promise.resolve({ error: null });
               }}
             >
               Reset
-            </Button>
+            </TeamActionButton>
+
+            {defaultValues.status === "draft" && (
+              <TeamActionButton
+                type="button"
+                variant="default"
+                action={() => {
+                  console.log("Requesting approval...");
+                  return Promise.resolve({ error: null });
+                }}
+              >
+                Request Approval
+              </TeamActionButton>
+            )}
+            {defaultValues.status === "pending" && (
+              <TeamActionButton
+                type="button"
+                variant="default"
+                action={() => {
+                  console.log("Requesting approval...");
+                  return Promise.resolve({ error: null });
+                }}
+              >
+                Approve
+              </TeamActionButton>
+            )}
+            <TeamActionButton
+              type="button"
+              variant="destructive"
+              action={() => {
+                form.reset();
+                return Promise.resolve({ error: null });
+              }}
+            >
+              Delete
+            </TeamActionButton>
           </div>
         </form>
       </CardContent>
@@ -443,7 +478,7 @@ export const CalendarEventForm = ({
   );
 };
 
-export function DateTimeRangePicker({
+function DateTimeRangePicker({
   dateSelected,
 }: {
   dateSelected: (startAt: Date, endAt: Date) => void;

@@ -27,6 +27,7 @@ function RouteComponent() {
         informationLink: value.informationLink,
         signupLink: value.signupLink,
         signupLinkVisibleTo: value.signupLinkVisibleTo as VisibleEnumType[],
+        status: "draft",
       },
     });
 
@@ -42,6 +43,7 @@ function RouteComponent() {
     dates: [],
     visibleTo: ["everyone"],
     signupLinkVisibleTo: ["everyone"],
+    status: "draft",
   };
 
   return (

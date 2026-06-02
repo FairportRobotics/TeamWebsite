@@ -22,7 +22,7 @@ export const requestApprovalCalendarFn = createServerFn()
       .update(calendarTable)
       .set({
         updatedBy: context.user.id,
-        status: "pending_review",
+        status: "pending",
       })
       .where(eq(calendarTable.id, data.id));
 

@@ -53,6 +53,7 @@ function RouteComponent() {
     })),
     visibleTo: event.visibleTo ?? [],
     signupLinkVisibleTo: event.signupLinkVisibleTo ?? [],
+    status: event.status,
   };
 
   return (
