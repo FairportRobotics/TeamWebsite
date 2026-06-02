@@ -44,7 +44,7 @@ function RouteComponent() {
   const defaultValues: CalendarFormValues = {
     id: event.id,
     title: event.title,
-    description: (event.description ?? []).join("\r\n"),
+    description: event.description,
     location: event.location,
     dates: event.dates.map((date) => ({
       id: date.id,

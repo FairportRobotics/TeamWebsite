@@ -60,7 +60,7 @@ export const createCalendarFn = createServerFn()
           id: id,
           title: data.title,
           status: "draft",
-          description: data.description ? data.description.split("\n") : undefined,
+          description: data.description,
           visibleTo: data.visibleTo,
           location: data.location,
 

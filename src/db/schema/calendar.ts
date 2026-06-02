@@ -9,16 +9,18 @@ export const calendarTable = pgTable(
   "calendar",
   {
     id: uuid("id").primaryKey().defaultRandom(),
+
     status: statusEnum("status").notNull().default("draft"),
     visibleTo: visibleEnum("visible_to").array().default([Roles.Everyone]),
     title: text("title").notNull(),
-    description: text("description").array(),
+    description: text("description").notNull(),
     location: text("location").notNull(),
     informationLink: text("information_link"),
     signupLink: text("signup_link"),
     signupLinkVisibleTo: visibleEnum("signup_link_visible_to")
       .array()
       .default([Roles.Student, Roles.Mentor]),
+
     createdAt: timestamp("created_at").defaultNow().notNull(),
     createdBy: text("created_by_user_id")
       .notNull()

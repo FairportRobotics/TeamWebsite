@@ -5,12 +5,12 @@ import { drizzle } from "drizzle-orm/node-postgres";
 import pg from "pg";
 
 // Make sure we're loading the correct .env file and have the DATABASE_URL set.
-if (!process.env.DATABASE_URL) {
+if (!process.env["DATABASE_URL"]) {
   throw new Error("❌ DATABASE_URL is not set");
 }
 
 // Protect against accidentally running this script in production.
-if (process.env.NODE_ENV === "production") {
+if (process.env["NODE_ENV"] === "production") {
   throw new Error("❌ Cannot seed production database");
 }
 
@@ -18,7 +18,7 @@ if (process.env.NODE_ENV === "production") {
 const { Pool } = pg;
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: process.env["DATABASE_URL"],
 });
 
 const db = drizzle(pool, { schema });

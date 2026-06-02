@@ -35,13 +35,7 @@ function RouteComponent() {
         <CardHeader></CardHeader>
         <CardContent>
           <DetailsSection title={data.title} icon={InfoIcon}>
-            <div>
-              {data.description?.map((d, i) => (
-                <div key={i} className="my-2 flex flex-row gap-2">
-                  <CircleSmall /> {d}
-                </div>
-              ))}
-            </div>
+            <div>{data.description}</div>
           </DetailsSection>
           <div className="grid grid-cols-2 gap-8 mt-8">
             {data.dates.length > 0 && (

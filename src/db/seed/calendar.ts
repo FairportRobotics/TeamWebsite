@@ -31,7 +31,7 @@ import type { CalendarWithDatesSelect } from "../schema";
 export const seedCalendar = [
   {
     title: "Ra Cha Cha Ruckus",
-    description: ["Let's get together and have some food."],
+    description: "Let's get together and have some food.",
     location: "Nazareth University Golisano Training Center",
     visibleTo: ["everyone"],
     informationLink: "https://ruckus.penfieldrobotics.com/",
@@ -46,7 +46,7 @@ export const seedCalendar = [
   },
   {
     title: "Team Picnic",
-    description: ["Let's get together and have some food."],
+    description: "Let's get together and have some food.",
     location: "VFW @ 300 Macedon Center Rd, Fairport, NY 14450",
     visibleTo: [Roles.Student, Roles.Mentor, Roles.Parent],
     informationLink: null,
@@ -61,7 +61,7 @@ export const seedCalendar = [
   },
   {
     title: "Chicken BBQ",
-    description: ["Our biggest fundraising event of the year!"],
+    description: "Our biggest fundraising event of the year!",
     location: "Fairport Hight School",
     visibleTo: [Roles.Student, Roles.Mentor, Roles.Parent],
     informationLink: null,
@@ -77,7 +77,7 @@ export const seedCalendar = [
   },
   {
     title: "Summer STEM - Session 1",
-    description: ["Shape some minds"],
+    description: "Shape some minds",
     location: "Perinton Rec Center",
     visibleTo: [Roles.Student, Roles.Mentor, Roles.Parent],
     informationLink: null,
@@ -107,7 +107,7 @@ export const seedCalendar = [
   },
   {
     title: "FLL Info",
-    description: ["Shape some minds"],
+    description: "Shape some minds",
     location: "Perinton Rec Center",
     visibleTo: [Roles.Student, Roles.Mentor, Roles.Parent],
     informationLink: null,
@@ -122,11 +122,8 @@ export const seedCalendar = [
   },
   {
     title: "Canal Days",
-    description: [
-      "Stop by and visit us at the Fairport Canal Days for STEM fun and games.",
-      "Let the kids play catch with one of our competition robots.",
-      "Our booth with also have lots of inreresting bits and bobs so kids can make their very own Junk Bots.",
-    ],
+    description:
+      "Stop by and visit us at the Fairport Canal Days for STEM fun and games.\n\nLet the kids play catch with one of our competition robots.\n\nOur booth with also have lots of interesting bits and bobs so kids can make their very own Junk Bots.",
     location: "Fairport Village",
     visibleTo: ["everyone"],
     informationLink: "https://www.fairportcanaldays.com/canal-days/",
@@ -146,9 +143,8 @@ export const seedCalendar = [
   },
   {
     title: "Mentor Meeting",
-    description: [
+    description:
       "Mentors - please join us for the end of the year review and discussion on plans for next year.",
-    ],
     location: "Minerva Deland",
     visibleTo: [Roles.Mentor],
     informationLink: null,
@@ -158,6 +154,21 @@ export const seedCalendar = [
       {
         startAt: new Date("2026-05-26T18:00:00"),
         endAt: new Date("2026-05-26T20:00:00"),
+      },
+    ],
+  },
+  {
+    title: "Mentor Meeting: Round 2",
+    description: "Continue discussions",
+    location: "Minerva Deland",
+    visibleTo: [Roles.Mentor],
+    informationLink: null,
+    signupLink: null,
+    signupLinkVisibleTo: null,
+    dates: [
+      {
+        startAt: new Date("2026-06-02T18:00:00"),
+        endAt: new Date("2026-06-02T20:00:00"),
       },
     ],
   },
