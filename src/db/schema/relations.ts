@@ -1,14 +1,14 @@
 // Moved relations into a file to prevent circular references.
-import { account, calendarDates, calendarTable, session, user } from "@/db/schema";
+import { account, dbEvent, dbEventDate, session, user } from "@/db/schema";
 import { relations } from "drizzle-orm";
 
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),
   accounts: many(account),
-  calendarsByCreated: many(calendarTable, {
+  calendarsByCreated: many(dbEvent, {
     relationName: "calendarCreatedBy",
   }),
-  calendarsByUpdated: many(calendarTable, {
+  calendarsByUpdated: many(dbEvent, {
     relationName: "calendarUpdatedBy",
   }),
 }));
@@ -27,23 +27,18 @@ export const accountRelations = relations(account, ({ one }) => ({
   }),
 }));
 
-export const calendarRelations = relations(calendarTable, ({ many, one }) => ({
-  dates: many(calendarDates),
+export const eventRelations = relations(dbEvent, ({ many, one }) => ({
+  dates: many(dbEventDate),
   createdBy: one(user, {
-    fields: [calendarTable.createdBy],
+    fields: [dbEvent.createdBy],
     references: [user.id],
-    relationName: "calendarCreatedBy",
-  }),
-  updatedBy: one(user, {
-    fields: [calendarTable.updatedBy],
-    references: [user.id],
-    relationName: "calendarUpdatedBy",
+    relationName: "eventCreatedBy",
   }),
 }));
 
-export const calendarDatesRelations = relations(calendarDates, ({ one }) => ({
-  event: one(calendarTable, {
-    fields: [calendarDates.calendarId],
-    references: [calendarTable.id],
+export const eventDateRelations = relations(dbEventDate, ({ one }) => ({
+  event: one(dbEvent, {
+    fields: [dbEventDate.eventId],
+    references: [dbEvent.id],
   }),
 }));

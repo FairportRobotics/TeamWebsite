@@ -1,8 +1,8 @@
 // prettier-ignore
-import { CalendarEventForm, type CalendarFormValues } from "@/components/admin/calendar/CalendarEventForm";
+import { EventForm, type CalendarFormValues } from "@/components/admin/calendar/EventForm";
 import { BackTo } from "@/components/site/BackTo";
 import type { VisibleEnumType } from "@/db/schema";
-import { getCalendarForEditFn } from "@/server/functions/calendar/getCalendarForEdit";
+import { getEventForEditFn } from "@/server/functions/calendar/getEventForEdit";
 import { updateCalendarFn } from "@/server/functions/calendar/updateCalendar";
 import { createFileRoute } from "@tanstack/react-router";
 import { toast } from "sonner";
@@ -10,7 +10,7 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/_authenticated/admin/calendar/$id/edit")({
   component: RouteComponent,
   loader: async ({ params }) => {
-    const event = await getCalendarForEditFn({ data: { id: params.id } });
+    const event = await getEventForEditFn({ data: { id: params.id } });
     return event;
   },
 });
@@ -44,7 +44,7 @@ function RouteComponent() {
   const defaultValues: CalendarFormValues = {
     id: event.id,
     title: event.title,
-    description: (event.description ?? []).join("\r\n"),
+    description: event.description,
     location: event.location,
     dates: event.dates.map((date) => ({
       id: date.id,
@@ -59,10 +59,7 @@ function RouteComponent() {
   return (
     <div>
       <BackTo to="/admin/calendar" label="Calendar Admin" />
-      <CalendarEventForm
-        defaultValues={defaultValues}
-        onSubmit={(values) => handleSubmit(values)}
-      />
+      <EventForm defaultValues={defaultValues} onSubmit={(values) => handleSubmit(values)} />
     </div>
   );
 }

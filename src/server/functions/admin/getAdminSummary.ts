@@ -1,6 +1,6 @@
 // prettier-ignore
 import { db } from "@/db";
-import { calendarDates, calendarTable } from "@/db/schema";
+import { dbEvent, dbEventDate } from "@/db/schema";
 import { authenticatedMiddleware } from "@/server/middleware/authenticated";
 import { createServerFn } from "@tanstack/react-start";
 import { count, sql } from "drizzle-orm";
@@ -12,24 +12,24 @@ export const getAdminSummaryFn = createServerFn()
     // Return metrics for the calendar.
     const calendarStatusPromise = db
       .select({
-        status: calendarTable.status,
-        count: count(calendarTable.id),
+        status: dbEvent.status,
+        count: count(dbEvent.id),
       })
-      .from(calendarTable)
-      .groupBy(calendarTable.status);
+      .from(dbEvent)
+      .groupBy(dbEvent.status);
 
     const calendarPeriodPromise = db
       .select({
         upcoming:
-          sql`COUNT(DISTINCT calendar_id) FILTER (WHERE ${calendarDates.startAt} >= NOW())`.mapWith(
+          sql`COUNT(DISTINCT event_id) FILTER (WHERE ${dbEventDate.startAt} >= NOW())`.mapWith(
             Number,
           ),
         elapsed:
-          sql`COUNT(DISTINCT calendar_id) FILTER (WHERE ${calendarDates.startAt} < NOW())`.mapWith(
+          sql`COUNT(DISTINCT event_id) FILTER (WHERE ${dbEventDate.startAt} < NOW())`.mapWith(
             Number,
           ),
       })
-      .from(calendarDates)
+      .from(dbEventDate)
       .limit(1)
       .then((res) => res[0] || null);
 

@@ -1,8 +1,7 @@
-// prettier-ignore
 import { db } from "@/db";
-import { calendarDates, calendarTable } from "@/db/schema";
+import { dbEvent, dbEventDate } from "@/db/schema";
 import { Permissions } from "@/lib/auth/permissions";
-import { saveCalendarDateSchema, VisibleToOptions } from "@/server/functions/calendar/_common";
+import { saveEventDateSchema, VisibleToOptions } from "@/server/functions/calendar/_common";
 import { anyPermissionMiddleware } from "@/server/middleware/anyPermission";
 import { authenticatedMiddleware } from "@/server/middleware/authenticated";
 import { createServerFn } from "@tanstack/react-start";
@@ -11,7 +10,7 @@ import { z } from "zod";
 
 // Create a schema for validating calendar insert and update operations. We can reuse this for
 // both operations since they have the same requirements.
-export const createCalendarSchema = z
+export const createEventSchema = z
   .object({
     title: z.string().trim().min(1, "Title is required"),
     description: z.string().trim().min(1, "Description is required"),
@@ -19,7 +18,7 @@ export const createCalendarSchema = z
     visibleTo: z
       .array(z.enum(VisibleToOptions))
       .min(1, "At least one visibility option must be selected"),
-    dates: z.array(saveCalendarDateSchema).min(1, "At least one date range is required"),
+    dates: z.array(saveEventDateSchema).min(1, "At least one date range is required"),
     informationLink: z.url().optional().or(z.literal("")),
     signupLink: z.url().optional().or(z.literal("")),
     signupLinkVisibleTo: z.array(z.enum(VisibleToOptions)),
@@ -46,35 +45,38 @@ export const createCalendarSchema = z
 
 // TODO: Validate that the user has permission to perform this action based on the visibility options
 // of the calendar item and the user's roles.
-export const createCalendarFn = createServerFn()
+export const createEventFn = createServerFn()
   .middleware([authenticatedMiddleware, anyPermissionMiddleware([Permissions.EventUpdate])])
-  .inputValidator(zodValidator(createCalendarSchema))
+  .inputValidator(zodValidator(createEventSchema))
   .handler(async ({ data, context }) => {
-    try {
-      const currentUserId = context!.user!.id;
-      const id = crypto.randomUUID();
+    const currentUserId = context!.user!.id;
+    const id = crypto.randomUUID();
+    const eventCode = crypto.randomUUID();
 
-      // Insert records in a transaction so we can rollback if anything goes sideways.
+    try {
       await db.transaction(async (tx) => {
-        await tx.insert(calendarTable).values({
+        // Insert the Event.
+        await tx.insert(dbEvent).values({
           id: id,
-          title: data.title,
+          code: eventCode,
+          createdBy: currentUserId,
           status: "draft",
-          description: data.description ? data.description.split("\n") : undefined,
+          active: true,
+
+          title: data.title,
+          description: data.description,
           visibleTo: data.visibleTo,
           location: data.location,
 
           informationLink: data.informationLink,
           signupLink: data.signupLink,
           signupLinkVisibleTo: data.signupLinkVisibleTo,
-
-          createdBy: currentUserId,
-          updatedBy: currentUserId,
         });
 
+        // Insert all the dates associated with the Event.
         data.dates.forEach(async (d) => {
-          await tx.insert(calendarDates).values({
-            calendarId: id,
+          await tx.insert(dbEventDate).values({
+            eventId: id,
             startAt: d.startAt,
             endAt: d.endAt,
           });

@@ -1,11 +1,8 @@
-import {
-  CalendarEventForm,
-  type CalendarFormValues,
-} from "@/components/admin/calendar/CalendarEventForm";
+import { EventForm, type CalendarFormValues } from "@/components/admin/calendar/EventForm";
 import { BackTo } from "@/components/site/BackTo";
 import { PageDescription, PageHeader, PageTitle } from "@/components/site/PageHeader";
 import type { VisibleEnumType } from "@/db/schema";
-import { createCalendarFn } from "@/server/functions/calendar/createCalendar";
+import { createEventFn } from "@/server/functions/calendar/createEvent";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { toast } from "sonner";
 
@@ -17,7 +14,7 @@ function RouteComponent() {
   const router = useRouter();
 
   async function handleSubmit(value: CalendarFormValues) {
-    const newEvent = await createCalendarFn({
+    const newEvent = await createEventFn({
       data: {
         title: value.title,
         description: value.description,
@@ -56,10 +53,7 @@ function RouteComponent() {
         <PageDescription>Create a new Event to appear on the Calendar.</PageDescription>
       </PageHeader>
 
-      <CalendarEventForm
-        defaultValues={emptyCalendar}
-        onSubmit={(values) => handleSubmit(values)}
-      />
+      <EventForm defaultValues={emptyCalendar} onSubmit={(values) => handleSubmit(values)} />
     </div>
   );
 }

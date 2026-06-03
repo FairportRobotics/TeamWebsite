@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { cn, getDateRangeString } from "@/lib/utils";
-import type { CalendarListItem } from "@/server/functions/calendar/getPublishedCalendarList";
+import type { EventListItem } from "@/server/functions/calendar/getPublishedEventList";
 import { Link } from "@tanstack/react-router";
 import {
   addMonths,
@@ -25,19 +25,16 @@ export interface CalendarDay {
   month: number;
   year: number;
   isCurrentMonth: boolean;
-  events: CalendarListItem[];
+  events: EventListItem[];
 }
 
 interface CalendarProps {
   initialMonth: Date;
-  events: CalendarListItem[];
+  events: EventListItem[];
   onDateSelect?: (date: Date) => void;
 }
 
-export function buildCalendarData(
-  referenceDate: Date,
-  events: CalendarListItem[],
-): CalendarDay[][] {
+export function buildCalendarData(referenceDate: Date, events: EventListItem[]): CalendarDay[][] {
   // 1. Define the visible range (includes padding days)
   const monthStart = startOfMonth(referenceDate);
   const monthEnd = endOfMonth(referenceDate);
@@ -45,7 +42,7 @@ export function buildCalendarData(
   const endDate = endOfWeek(monthEnd, { locale: enUS });
 
   // 2. Pre-index events by date string for O(1) lookup
-  const eventsByDate = new Map<string, CalendarListItem[]>();
+  const eventsByDate = new Map<string, EventListItem[]>();
   for (const event of events) {
     const dateKey = format(new Date(event.startAt), "yyyy-MM-dd");
     if (!eventsByDate.has(dateKey)) eventsByDate.set(dateKey, []);
@@ -198,13 +195,7 @@ function CalendarDay({ day, dayIndex }: { day: CalendarDay; dayIndex: number }) 
   );
 }
 
-function CalendarItem({
-  item,
-  canSignup,
-}: {
-  item: CalendarListItem;
-  canSignup: boolean;
-}): ReactNode {
+function CalendarItem({ item, canSignup }: { item: EventListItem; canSignup: boolean }): ReactNode {
   const [state, setState] = useState<"expanded" | "collapsed">("collapsed");
   const dateParts = getDateRangeString(item.startAt, item.endAt);
 

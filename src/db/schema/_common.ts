@@ -21,14 +21,14 @@ export type InferResultType<
 /**
  * Defines the status options for various entities.
  */
-export const statusEnum = pgEnum("item_status", ["draft", "pending", "published", "archived"]);
+export const statusEnum = pgEnum("item_status", ["draft", "pending", "approved", "archived"]);
 
 export type StatusEnumType = (typeof statusEnum.enumValues)[number];
 
 /**
  * Define enums specific to the Calendar-related tables.
  */
-export const visibleEnum = pgEnum("calendar_visible", [
+export const visibleEnum = pgEnum("event_visible", [
   Roles.Everyone,
   Roles.Student,
   Roles.Mentor,

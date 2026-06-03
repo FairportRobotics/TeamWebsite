@@ -2,13 +2,13 @@ import { EventCalendar } from "@/components/site/EventCalendar";
 import { PageDescription, PageHeader, PageTitle } from "@/components/site/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { getPublishedCalendarListFn } from "@/server/functions/calendar/getPublishedCalendarList";
+import { getPublishedEventListFn } from "@/server/functions/calendar/getPublishedEventList";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
 export const Route = createFileRoute("/_unauthenticated/calendar/")({
   loader: async () => {
-    const calendarEvents = await getPublishedCalendarListFn();
+    const calendarEvents = await getPublishedEventListFn();
     return calendarEvents;
   },
   component: RouteComponent,

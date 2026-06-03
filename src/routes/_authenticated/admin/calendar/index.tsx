@@ -1,35 +1,33 @@
 // prettier-ignore
-import { CalendarEventsTable } from "@/components/admin/calendar/CalendarEventsTable";
+import { EventsTable } from "@/components/admin/calendar/EventsTable";
 import { BackTo } from "@/components/site/BackTo";
 import { PageDescription, PageHeader, PageTitle } from "@/components/site/PageHeader";
 import { PageSectionContainer } from "@/components/site/PageSectionContainer";
 import { TeamActionButton } from "@/components/site/TeamActionButtom";
 import { Button } from "@/components/ui/button";
-import { getCalendarListForAdminFn } from "@/server/functions/calendar/getCalendarListForAdmin";
+import { calendarQueries } from "@/queries/calendarQueries";
 import { seedEventsFn } from "@/server/functions/calendar/seed";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/admin/calendar/")({
   component: RouteComponent,
-  loader: () => {
-    const events = getCalendarListForAdminFn();
-    return events;
-  },
+  loader: ({ context }) => context.queryClient?.ensureQueryData(calendarQueries.list()),
 });
 
 function RouteComponent() {
   const router = useRouter();
-  const events = Route.useLoaderData();
+  const { data: calendar } = useSuspenseQuery(calendarQueries.list());
 
-  const drafts = events?.filter((c) => c.status === "draft") ?? [];
-  const pending = events?.filter((c) => c.status === "pending") ?? [];
+  const drafts = calendar?.filter((c) => c.status === "draft") ?? [];
+  const pending = calendar?.filter((c) => c.status === "pending") ?? [];
   const upcoming =
-    events?.filter(
-      (c) => c.status === "published" && c.dates.some((d) => new Date(d.endAt) >= new Date()),
+    calendar?.filter(
+      (c) => c.status === "approved" && c.dates.some((d) => new Date(d.endAt) >= new Date()),
     ) ?? [];
   const archived =
-    events?.filter(
-      (c) => c.status === "published" && !c.dates.every((d) => new Date(d.endAt) >= new Date()),
+    calendar?.filter(
+      (c) => c.status === "approved" && !c.dates.every((d) => new Date(d.endAt) >= new Date()),
     ) ?? [];
 
   async function handleSeedCalendar() {
@@ -54,7 +52,7 @@ function RouteComponent() {
           subTitle={`(${drafts.length} records)`}
           initialState="expanded"
         >
-          <CalendarEventsTable data={drafts} />
+          <EventsTable data={drafts} />
         </PageSectionContainer>
 
         <PageSectionContainer
@@ -62,7 +60,7 @@ function RouteComponent() {
           subTitle={`(${pending.length} records)`}
           initialState="collapsed"
         >
-          <CalendarEventsTable data={pending} />
+          <EventsTable data={pending} />
         </PageSectionContainer>
 
         <PageSectionContainer
@@ -70,7 +68,7 @@ function RouteComponent() {
           subTitle={`(${upcoming.length} records)`}
           initialState="collapsed"
         >
-          <CalendarEventsTable data={upcoming} />
+          <EventsTable data={upcoming} />
         </PageSectionContainer>
 
         <PageSectionContainer
@@ -78,7 +76,7 @@ function RouteComponent() {
           subTitle={`(${archived.length} records)`}
           initialState="collapsed"
         >
-          <CalendarEventsTable data={archived} />
+          <EventsTable data={archived} />
         </PageSectionContainer>
       </div>
 

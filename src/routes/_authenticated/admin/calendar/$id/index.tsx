@@ -1,12 +1,12 @@
 import { BackTo } from "@/components/site/BackTo";
 import { PageDescription, PageHeader, PageTitle } from "@/components/site/PageHeader";
-import { getCalendarListDetailsFn } from "@/server/functions/calendar/getCalendarDetails";
+import { getEventListDetailsFn } from "@/server/functions/calendar/getEventDetails";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/admin/calendar/$id/")({
   component: RouteComponent,
   loader: async ({ params }) => {
-    const results = await getCalendarListDetailsFn({ data: { id: params.id } });
+    const results = await getEventListDetailsFn({ data: { id: params.id } });
     return results;
   },
 });
