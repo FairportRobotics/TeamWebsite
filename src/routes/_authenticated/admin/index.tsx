@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { getAdminSummaryFn } from "@/server/functions/admin/getAdminSummary";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { Book, BookAlert, BookDashed, BookMinus, BookPlus } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin/")({
   beforeLoad: async () => {},
@@ -29,34 +30,41 @@ function RouteComponent() {
         </PageDescription>
       </PageHeader>
 
-      <div className="flex items-center justify-center gap-10">
+      <div className="flex items-top justify-center gap-10">
         <Card className="w-60">
           <CardHeader>
             <CardTitle>Calendar Events</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-row items-center gap-3">
-              <div>{calendarPeriodMetrics?.upcoming ?? 0}</div>
-              <div>Upcoming</div>
-            </div>
-            <div className="flex flex-row items-center gap-3">
-              <div>{calendarPeriodMetrics?.elapsed ?? 0}</div>
-              <div>Past</div>
-            </div>
+            <div className="flex flex-col gap-3">
+              <div className="flex flex-row items-center gap-3">
+                <Book />
+                <div>{calendarStatusMetrics.find((m) => m.status === "approved")?.count ?? 0}</div>
+                <div>Published</div>
+              </div>
+              <div className="flex flex-row items-center gap-3">
+                <BookAlert />
+                <div>{calendarStatusMetrics.find((m) => m.status === "pending")?.count ?? 0}</div>
+                <div>Pending Approval</div>
+              </div>
+              <div className="flex flex-row items-center gap-3">
+                <BookDashed className="" />
+                <div>{calendarStatusMetrics.find((m) => m.status === "draft")?.count ?? 0}</div>
+                <div>Drafts</div>
+              </div>
 
-            <Separator className="p-0.5 my-2" />
+              <Separator className="p-0.5" />
 
-            <div className="flex flex-row items-center gap-3">
-              <div>{calendarStatusMetrics.find((m) => m.status === "draft")?.count ?? 0}</div>
-              <div>Draft(s)</div>
-            </div>
-            <div className="flex flex-row items-center gap-3">
-              <div>{calendarStatusMetrics.find((m) => m.status === "pending")?.count ?? 0}</div>
-              <div>Pending Approval</div>
-            </div>
-            <div className="flex flex-row items-center gap-3">
-              <div>{calendarStatusMetrics.find((m) => m.status === "approved")?.count ?? 0}</div>
-              <div>Published</div>
+              <div className="flex flex-row items-center gap-3">
+                <BookPlus />
+                <div>{calendarPeriodMetrics?.upcoming ?? 0}</div>
+                <div>Upcoming</div>
+              </div>
+              <div className="flex flex-row items-center gap-3">
+                <BookMinus />
+                <div>{calendarPeriodMetrics?.elapsed ?? 0}</div>
+                <div>Elapsed</div>
+              </div>
             </div>
 
             <div className="mt-4">
@@ -88,7 +96,6 @@ function RouteComponent() {
               <div>0</div>
               <div>Archived</div>
             </div>
-
             <div className="mt-4">
               <Link to="/admin/games" className="underline">
                 Manage Game Years
