@@ -26,7 +26,7 @@ SignUpGenius sign up form
 */
 
 import { Roles } from "@/lib/auth/roles";
-import type { CalendarWithDatesSelect } from "../schema";
+import type { EventWithDatesSelect } from "../schema";
 
 export const seedCalendar = [
   {
@@ -172,4 +172,4 @@ export const seedCalendar = [
       },
     ],
   },
-] as CalendarWithDatesSelect[];
+] as EventWithDatesSelect[];

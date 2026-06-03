@@ -27,23 +27,18 @@ export const accountRelations = relations(account, ({ one }) => ({
   }),
 }));
 
-export const calendarRelations = relations(dbEvent, ({ many, one }) => ({
+export const eventRelations = relations(dbEvent, ({ many, one }) => ({
   dates: many(dbEventDate),
   createdBy: one(user, {
     fields: [dbEvent.createdBy],
     references: [user.id],
-    relationName: "calendarCreatedBy",
-  }),
-  updatedBy: one(user, {
-    fields: [dbEvent.updatedBy],
-    references: [user.id],
-    relationName: "calendarUpdatedBy",
+    relationName: "eventCreatedBy",
   }),
 }));
 
-export const calendarDatesRelations = relations(dbEventDate, ({ one }) => ({
+export const eventDateRelations = relations(dbEventDate, ({ one }) => ({
   event: one(dbEvent, {
-    fields: [dbEventDate.calendarId],
+    fields: [dbEventDate.eventId],
     references: [dbEvent.id],
   }),
 }));

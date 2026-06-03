@@ -1,7 +1,7 @@
 import { db } from "@/db";
 import { dbEvent, dbEventDate } from "@/db/schema";
 import { Permissions } from "@/lib/auth/permissions";
-import { saveCalendarDateSchema, VisibleToOptions } from "@/server/functions/calendar/_common";
+import { saveEventDateSchema, VisibleToOptions } from "@/server/functions/calendar/_common";
 import { anyPermissionMiddleware } from "@/server/middleware/anyPermission";
 import { authenticatedMiddleware } from "@/server/middleware/authenticated";
 import { createServerFn } from "@tanstack/react-start";
@@ -20,7 +20,7 @@ export const updateCalendarSchema = z
     visibleTo: z
       .array(z.enum(VisibleToOptions))
       .min(1, "At least one visibility option must be selected"),
-    dates: z.array(saveCalendarDateSchema).min(1, "At least one date range is required"),
+    dates: z.array(saveEventDateSchema).min(1, "At least one date range is required"),
     informationLink: z.url().optional().or(z.literal("")),
     signupLink: z.url().optional().or(z.literal("")),
     signupLinkVisibleTo: z.array(z.enum(VisibleToOptions)),
@@ -50,35 +50,56 @@ export const updateCalendarFn = createServerFn()
   .middleware([authenticatedMiddleware, anyPermissionMiddleware([Permissions.EventUpdate])])
   .inputValidator(zodValidator(updateCalendarSchema))
   .handler(async ({ data, context }) => {
-    try {
-      const currentUserId = context!.user!.id;
+    const currentUserId = context!.user!.id;
+    const newEventid = crypto.randomUUID();
 
+    try {
       // Insert records in a transaction so we can rollback if anything goes sideways.
       await db.transaction(async (tx) => {
-        await tx.delete(dbEventDate).where(eq(dbEventDate.calendarId, data.id));
+        // Retrieve the existing version so we can get its values.
+        const originalEvent = await db.query.dbEvent.findFirst({
+          where: eq(dbEvent.id, data.id),
+          with: {
+            dates: true,
+            createdBy: true,
+          },
+        });
 
+        if (!originalEvent) {
+          tx.rollback();
+          throw new Error("Unable to locate the Event");
+        }
+
+        // Flip the original active to false.
         await tx
           .update(dbEvent)
           .set({
-            id: data.id,
-            title: data.title,
-            status: "draft",
-            description: data.description,
-            visibleTo: data.visibleTo,
-            location: data.location,
-
-            informationLink: data.informationLink,
-            signupLink: data.signupLink,
-            signupLinkVisibleTo: data.signupLinkVisibleTo,
-
-            updatedBy: currentUserId,
-            updatedAt: new Date(),
+            active: false,
           })
           .where(eq(dbEvent.id, data.id));
 
-        data.dates.forEach(async (d) => {
+        // Insert the new Event with the status changed.
+        await tx.insert(dbEvent).values({
+          id: newEventid,
+          code: originalEvent.code,
+          createdBy: currentUserId,
+          active: true,
+          status: "draft",
+
+          title: originalEvent.title,
+          description: originalEvent.description,
+          visibleTo: originalEvent.visibleTo,
+          location: originalEvent.location,
+
+          informationLink: originalEvent.informationLink,
+          signupLink: originalEvent.signupLink,
+          signupLinkVisibleTo: originalEvent.signupLinkVisibleTo,
+        });
+
+        // Insert the dates for the new Event.
+        originalEvent.dates.forEach(async (d) => {
           await tx.insert(dbEventDate).values({
-            calendarId: data.id,
+            eventId: newEventid,
             startAt: d.startAt,
             endAt: d.endAt,
           });

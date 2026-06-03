@@ -7,8 +7,8 @@ import { createServerFn } from "@tanstack/react-start";
 import { and, arrayOverlaps, eq } from "drizzle-orm";
 
 // TODO: Add support for optional date filtering.
-export type CalendarListItem = Awaited<ReturnType<typeof getPublishedCalendarListFn>>[0];
-export const getPublishedCalendarListFn = createServerFn()
+export type EventListItem = Awaited<ReturnType<typeof getPublishedEventListFn>>[0];
+export const getPublishedEventListFn = createServerFn()
   .middleware([sessionMiddleware])
   .handler(async ({ context }) => {
     // Default to everyone.
@@ -40,7 +40,7 @@ export const getPublishedCalendarListFn = createServerFn()
         endAt: dbEventDate.endAt,
       })
       .from(dbEvent)
-      .innerJoin(dbEventDate, eq(dbEvent.id, dbEventDate.calendarId))
+      .innerJoin(dbEventDate, eq(dbEvent.id, dbEventDate.eventId))
       .where(and(eq(dbEvent.status, "published"), arrayOverlaps(dbEvent.visibleTo, visibleTo)))
       .orderBy(dbEventDate.startAt);
 

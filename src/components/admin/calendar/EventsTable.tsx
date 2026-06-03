@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { getDateRangeParts } from "@/lib/utils";
 // prettier-ignore
 import { useApproveMutation, useDeleteMutation, useRequestApprovalMutation } from "@/queries/calendarQueries";
-import type { CalendarListForAdminItem } from "@/server/functions/calendar/getCalendarListForAdmin";
+import type { EventListForAdminItem } from "@/server/functions/calendar/getEventListForAdmin";
 import { Link } from "@tanstack/react-router";
 // prettier-ignore
 import { flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, type ColumnDef, type ColumnFiltersState, type SortingState } from "@tanstack/react-table";
@@ -16,28 +16,28 @@ import { format } from "date-fns";
 import { ArrowUpDown, Hand, MoreHorizontal, ThumbsUp, TrashIcon } from "lucide-react";
 import React from "react";
 
-export function CalendarEventsTable({ data }: { data: CalendarListForAdminItem[] }) {
+export function EventsTable({ data }: { data: EventListForAdminItem[] }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [showDeleteAlert, setShowDeleteAlert] = React.useState(false);
-  const [selectedEventId, setSelectedEventId] = React.useState<string | null>(null);
+  const [selectedEventCode, setSelectedEventCode] = React.useState<string | null>(null);
 
   const requestApprovalMutation = useRequestApprovalMutation();
   const approveMutation = useApproveMutation();
   const deleteMutation = useDeleteMutation();
 
-  const handleVerifyDelete = (id: string) => {
-    setSelectedEventId(id);
+  const handleVerifyDelete = (code: string) => {
+    setSelectedEventCode(code);
     setShowDeleteAlert(true);
   };
 
   const handleConfirmDelete = () => {
-    deleteMutation.mutate(selectedEventId!);
-    setSelectedEventId(null);
+    deleteMutation.mutate(selectedEventCode!);
+    setSelectedEventCode(null);
     setShowDeleteAlert(false);
   };
 
-  const columns: ColumnDef<CalendarListForAdminItem>[] = [
+  const columns: ColumnDef<EventListForAdminItem>[] = [
     {
       accessorKey: "title",
       header: ({ column }) => {
@@ -52,13 +52,13 @@ export function CalendarEventsTable({ data }: { data: CalendarListForAdminItem[]
         );
       },
       cell: ({ row }) => {
-        const value = row.original.title;
         const id = row.original.id;
+        const title = row.original.title;
 
         return (
           <div>
             <Link to="/admin/calendar/$id/edit" params={{ id }}>
-              {value}
+              {title}
             </Link>
           </div>
         );
@@ -100,8 +100,8 @@ export function CalendarEventsTable({ data }: { data: CalendarListForAdminItem[]
       accessorKey: "visibleTo",
       header: "Visible To",
       cell: ({ row }) => {
-        const value = row.original.visibleTo;
-        return <div>{value?.join(", ")}</div>;
+        const visibleTo = row.original.visibleTo;
+        return <div>{visibleTo?.join(", ")}</div>;
       },
     },
     {
@@ -119,24 +119,11 @@ export function CalendarEventsTable({ data }: { data: CalendarListForAdminItem[]
       },
     },
     {
-      accessorKey: "updatedAt",
-      header: "Updated By",
-      cell: ({ row }) => {
-        const updatedAt = row.original.updatedAt;
-        const updatedBy = row.original.updatedBy?.name;
-        return (
-          <div className="py-1">
-            <div>{updatedBy}</div>
-            <div>{format(updatedAt, "MM/dd/yyyy h:mmaaa")} </div>
-          </div>
-        );
-      },
-    },
-    {
       accessorKey: "id",
       header: "Actions",
       cell: ({ row }) => {
         const id = row.original.id;
+        const code = row.original.code;
         const status = row.original.status;
 
         return (
@@ -162,7 +149,7 @@ export function CalendarEventsTable({ data }: { data: CalendarListForAdminItem[]
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                  <DropdownMenuItem variant="destructive" onClick={() => handleVerifyDelete(id)}>
+                  <DropdownMenuItem variant="destructive" onClick={() => handleVerifyDelete(code)}>
                     <TrashIcon />
                     Delete
                   </DropdownMenuItem>

@@ -15,40 +15,40 @@ export const seedEventsFn = createServerFn()
   ])
   .handler(async ({ context }) => {
     const currentUserId = context!.user!.id;
-    seedCalendar.forEach(async (s) => {
-      console.log("🌱 Seeding Calendar", s.title);
+
+    seedCalendar.forEach(async (data) => {
+      console.log("🌱 Seeding Calendar", data.title);
+      const id = crypto.randomUUID();
+      const eventCode = crypto.randomUUID();
 
       try {
-        // Declare a UUID we can use for the calendar and the date children.
-        const id = crypto.randomUUID();
-
         // Insert records in a transaction so we can rollback if anything goes sideways.
         await db.transaction(async (tx) => {
           await tx.insert(dbEvent).values({
             id: id,
-            title: s.title,
-            description: s.description,
-            visibleTo: s.visibleTo,
-            location: s.location,
-
-            informationLink: s.informationLink,
-            signupLink: s.signupLink,
-            signupLinkVisibleTo: s.signupLinkVisibleTo,
-
+            code: eventCode,
             createdBy: currentUserId,
-            updatedBy: currentUserId,
+            status: "draft",
+
+            title: data.title,
+            description: data.description,
+            visibleTo: data.visibleTo,
+            location: data.location,
+
+            informationLink: data.informationLink,
+            signupLink: data.signupLink,
+            signupLinkVisibleTo: data.signupLinkVisibleTo,
           });
 
-          s.dates.forEach(async (d) => {
+          data.dates.forEach(async (d) => {
             await tx.insert(dbEventDate).values({
-              calendarId: id,
+              eventId: id,
               startAt: d.startAt,
               endAt: d.endAt,
             });
           });
         });
       } catch (error) {
-        console.log("⚠️ Failed to seed calendar item", s.title);
         console.error(error);
       }
     });

@@ -1,5 +1,5 @@
 // prettier-ignore
-import { CalendarEventsTable } from "@/components/admin/calendar/CalendarEventsTable";
+import { EventsTable } from "@/components/admin/calendar/EventsTable";
 import { BackTo } from "@/components/site/BackTo";
 import { PageDescription, PageHeader, PageTitle } from "@/components/site/PageHeader";
 import { PageSectionContainer } from "@/components/site/PageSectionContainer";
@@ -52,7 +52,7 @@ function RouteComponent() {
           subTitle={`(${drafts.length} records)`}
           initialState="expanded"
         >
-          <CalendarEventsTable data={drafts} />
+          <EventsTable data={drafts} />
         </PageSectionContainer>
 
         <PageSectionContainer
@@ -60,7 +60,7 @@ function RouteComponent() {
           subTitle={`(${pending.length} records)`}
           initialState="collapsed"
         >
-          <CalendarEventsTable data={pending} />
+          <EventsTable data={pending} />
         </PageSectionContainer>
 
         <PageSectionContainer
@@ -68,7 +68,7 @@ function RouteComponent() {
           subTitle={`(${upcoming.length} records)`}
           initialState="collapsed"
         >
-          <CalendarEventsTable data={upcoming} />
+          <EventsTable data={upcoming} />
         </PageSectionContainer>
 
         <PageSectionContainer
@@ -76,7 +76,7 @@ function RouteComponent() {
           subTitle={`(${archived.length} records)`}
           initialState="collapsed"
         >
-          <CalendarEventsTable data={archived} />
+          <EventsTable data={archived} />
         </PageSectionContainer>
       </div>
 

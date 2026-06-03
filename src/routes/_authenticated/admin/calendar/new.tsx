@@ -5,7 +5,7 @@ import {
 import { BackTo } from "@/components/site/BackTo";
 import { PageDescription, PageHeader, PageTitle } from "@/components/site/PageHeader";
 import type { VisibleEnumType } from "@/db/schema";
-import { createCalendarFn } from "@/server/functions/calendar/createCalendar";
+import { createEventFn } from "@/server/functions/calendar/createEvent";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { toast } from "sonner";
 
@@ -17,7 +17,7 @@ function RouteComponent() {
   const router = useRouter();
 
   async function handleSubmit(value: CalendarFormValues) {
-    const newEvent = await createCalendarFn({
+    const newEvent = await createEventFn({
       data: {
         title: value.title,
         description: value.description,

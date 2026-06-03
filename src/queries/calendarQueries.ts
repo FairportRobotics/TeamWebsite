@@ -1,7 +1,7 @@
 import { approveRequest } from "@/server/functions/calendar/approveRequest";
-import { deleteCalendarFn } from "@/server/functions/calendar/deleteCalendar";
-import { getCalendarListDetailsFn } from "@/server/functions/calendar/getCalendarDetails";
-import { getCalendarListForAdminFn } from "@/server/functions/calendar/getCalendarListForAdmin";
+import { deleteEventFn } from "@/server/functions/calendar/deleteEvent";
+import { getEventListDetailsFn } from "@/server/functions/calendar/getEventDetails";
+import { getEventListForAdminFn } from "@/server/functions/calendar/getEventListForAdmin";
 import { requestApprovalCalendarFn } from "@/server/functions/calendar/requestApproval";
 import { queryOptions, useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -10,12 +10,12 @@ export const calendarQueries = {
   list: (filters?: string) =>
     queryOptions({
       queryKey: [...calendarQueries.all, "list", filters],
-      queryFn: () => getCalendarListForAdminFn(),
+      queryFn: () => getEventListForAdminFn(),
     }),
   details: (id: string) =>
     queryOptions({
       queryKey: [...calendarQueries.all, "details", id],
-      queryFn: () => getCalendarListDetailsFn({ data: { id } }),
+      queryFn: () => getEventListDetailsFn({ data: { id } }),
     }),
 };
 
@@ -55,8 +55,8 @@ export function useDeleteMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (id: string) => {
-      deleteCalendarFn({ data: { id } });
+    mutationFn: async (code: string) => {
+      deleteEventFn({ data: { code } });
     },
 
     onSuccess: () => {

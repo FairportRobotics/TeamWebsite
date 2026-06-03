@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
 import { VisibleToOptions } from "@/server/functions/calendar/_common";
-import { createCalendarSchema } from "@/server/functions/calendar/createCalendar";
+import { createEventSchema } from "@/server/functions/calendar/createEvent";
 import { useForm } from "@tanstack/react-form";
 import { format } from "date-fns";
 import { ChevronDownIcon, Plus, Trash2 } from "lucide-react";
@@ -50,7 +50,7 @@ export const CalendarEventForm = ({
       onSubmit(value);
     },
     validators: {
-      onSubmit: createCalendarSchema,
+      onSubmit: createEventSchema,
     },
   });
 

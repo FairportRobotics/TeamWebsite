@@ -2,7 +2,7 @@ import { BackTo } from "@/components/site/BackTo";
 import { PageHeader, PageTitle } from "@/components/site/PageHeader";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { getDateRangeString } from "@/lib/utils";
-import { getCalendarListDetailsFn } from "@/server/functions/calendar/getCalendarDetails";
+import { getEventListDetailsFn } from "@/server/functions/calendar/getEventDetails";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { format } from "date-fns";
 import { CircleSmall, Clock, InfoIcon, MapPin, Signature, type LucideProps } from "lucide-react";
@@ -11,7 +11,7 @@ import type { ComponentType, ReactNode } from "react";
 export const Route = createFileRoute("/_unauthenticated/calendar/$id/")({
   component: RouteComponent,
   loader: async ({ params }) => {
-    const results = await getCalendarListDetailsFn({ data: { id: params.id } });
+    const results = await getEventListDetailsFn({ data: { id: params.id } });
 
     if (!results) throw redirect({ to: "/calendar" });
 
