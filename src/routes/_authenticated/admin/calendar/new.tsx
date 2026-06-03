@@ -1,7 +1,4 @@
-import {
-  CalendarEventForm,
-  type CalendarFormValues,
-} from "@/components/admin/calendar/CalendarEventForm";
+import { EventForm, type CalendarFormValues } from "@/components/admin/calendar/EventForm";
 import { BackTo } from "@/components/site/BackTo";
 import { PageDescription, PageHeader, PageTitle } from "@/components/site/PageHeader";
 import type { VisibleEnumType } from "@/db/schema";
@@ -56,10 +53,7 @@ function RouteComponent() {
         <PageDescription>Create a new Event to appear on the Calendar.</PageDescription>
       </PageHeader>
 
-      <CalendarEventForm
-        defaultValues={emptyCalendar}
-        onSubmit={(values) => handleSubmit(values)}
-      />
+      <EventForm defaultValues={emptyCalendar} onSubmit={(values) => handleSubmit(values)} />
     </div>
   );
 }

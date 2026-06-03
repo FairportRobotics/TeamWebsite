@@ -41,7 +41,7 @@ export const getPublishedEventListFn = createServerFn()
       })
       .from(dbEvent)
       .innerJoin(dbEventDate, eq(dbEvent.id, dbEventDate.eventId))
-      .where(and(eq(dbEvent.status, "published"), arrayOverlaps(dbEvent.visibleTo, visibleTo)))
+      .where(and(eq(dbEvent.status, "approved"), arrayOverlaps(dbEvent.visibleTo, visibleTo)))
       .orderBy(dbEventDate.startAt);
 
     return results;

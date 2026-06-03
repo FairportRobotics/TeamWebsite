@@ -34,7 +34,7 @@ export type CalendarFormValues = {
   status: string | undefined;
 };
 
-export const CalendarEventForm = ({
+export const EventForm = ({
   defaultValues,
   onSubmit,
 }: {

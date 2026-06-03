@@ -23,11 +23,11 @@ function RouteComponent() {
   const pending = calendar?.filter((c) => c.status === "pending") ?? [];
   const upcoming =
     calendar?.filter(
-      (c) => c.status === "published" && c.dates.some((d) => new Date(d.endAt) >= new Date()),
+      (c) => c.status === "approved" && c.dates.some((d) => new Date(d.endAt) >= new Date()),
     ) ?? [];
   const archived =
     calendar?.filter(
-      (c) => c.status === "published" && !c.dates.every((d) => new Date(d.endAt) >= new Date()),
+      (c) => c.status === "approved" && !c.dates.every((d) => new Date(d.endAt) >= new Date()),
     ) ?? [];
 
   async function handleSeedCalendar() {

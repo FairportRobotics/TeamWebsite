@@ -55,7 +55,7 @@ function RouteComponent() {
               <div>Pending Approval</div>
             </div>
             <div className="flex flex-row items-center gap-3">
-              <div>{calendarStatusMetrics.find((m) => m.status === "published")?.count ?? 0}</div>
+              <div>{calendarStatusMetrics.find((m) => m.status === "approved")?.count ?? 0}</div>
               <div>Published</div>
             </div>
 

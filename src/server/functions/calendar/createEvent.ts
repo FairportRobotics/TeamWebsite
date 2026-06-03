@@ -54,13 +54,14 @@ export const createEventFn = createServerFn()
     const eventCode = crypto.randomUUID();
 
     try {
-      // Insert records in a transaction so we can rollback if anything goes sideways.
       await db.transaction(async (tx) => {
+        // Insert the Event.
         await tx.insert(dbEvent).values({
           id: id,
           code: eventCode,
           createdBy: currentUserId,
           status: "draft",
+          active: true,
 
           title: data.title,
           description: data.description,
@@ -72,6 +73,7 @@ export const createEventFn = createServerFn()
           signupLinkVisibleTo: data.signupLinkVisibleTo,
         });
 
+        // Insert all the dates associated with the Event.
         data.dates.forEach(async (d) => {
           await tx.insert(dbEventDate).values({
             eventId: id,
@@ -80,6 +82,8 @@ export const createEventFn = createServerFn()
           });
         });
       });
+
+      return id;
     } catch (error) {
       console.error(error);
     }

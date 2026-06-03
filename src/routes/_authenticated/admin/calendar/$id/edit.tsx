@@ -1,5 +1,5 @@
 // prettier-ignore
-import { CalendarEventForm, type CalendarFormValues } from "@/components/admin/calendar/CalendarEventForm";
+import { EventForm, type CalendarFormValues } from "@/components/admin/calendar/EventForm";
 import { BackTo } from "@/components/site/BackTo";
 import type { VisibleEnumType } from "@/db/schema";
 import { getEventForEditFn } from "@/server/functions/calendar/getEventForEdit";
@@ -59,10 +59,7 @@ function RouteComponent() {
   return (
     <div>
       <BackTo to="/admin/calendar" label="Calendar Admin" />
-      <CalendarEventForm
-        defaultValues={defaultValues}
-        onSubmit={(values) => handleSubmit(values)}
-      />
+      <EventForm defaultValues={defaultValues} onSubmit={(values) => handleSubmit(values)} />
     </div>
   );
 }

@@ -46,7 +46,7 @@ export const approveRequest = createServerFn()
           code: originalEvent.code,
           createdBy: currentUserId,
           active: true,
-          status: "published",
+          status: "approved",
 
           title: originalEvent.title,
           description: originalEvent.description,
