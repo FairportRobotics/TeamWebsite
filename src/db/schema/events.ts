@@ -53,14 +53,14 @@ export const dbEventDate = pgTable(
     endAt: timestamp("end_at").notNull(),
   },
   (table) => [
-    index("idx_event_date_calendar_id").on(table.eventId),
+    index("idx_event_date_event_id").on(table.eventId),
     index("idx_event_date_range").on(table.startAt, table.endAt),
   ],
 );
 
 // Export inferred types so they can be used throughout the application.
-export type EventSelectItem = typeof dbEvent.$inferSelect;
-export type EventInsertItem = typeof dbEvent.$inferInsert;
-export type EventItemStatus = typeof dbEvent.$inferSelect.status;
-export type EventItemVisibleTo = typeof dbEvent.$inferSelect.visibleTo;
+// export type EventSelectItem = typeof dbEvent.$inferSelect;
+// export type EventInsertItem = typeof dbEvent.$inferInsert;
+// export type EventItemStatus = typeof dbEvent.$inferSelect.status;
+// export type EventItemVisibleTo = typeof dbEvent.$inferSelect.visibleTo;
 export type EventWithDatesSelect = InferResultType<"dbEvent", { dates: true }>;

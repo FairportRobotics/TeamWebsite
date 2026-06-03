@@ -28,7 +28,7 @@ export type StatusEnumType = (typeof statusEnum.enumValues)[number];
 /**
  * Define enums specific to the Calendar-related tables.
  */
-export const visibleEnum = pgEnum("calendar_visible", [
+export const visibleEnum = pgEnum("event_visible", [
   Roles.Everyone,
   Roles.Student,
   Roles.Mentor,
