@@ -6,9 +6,11 @@ import { PageSectionContainer } from "@/components/site/PageSectionContainer";
 import { TeamActionButton } from "@/components/site/TeamActionButtom";
 import { Button } from "@/components/ui/button";
 import { calendarQueries } from "@/queries/calendarQueries";
+import type { EventListForAdminItem } from "@/server/functions/calendar/getEventListForAdmin";
 import { seedEventsFn } from "@/server/functions/calendar/seed";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 
 export const Route = createFileRoute("/_authenticated/admin/calendar/")({
   component: RouteComponent,
@@ -17,18 +19,38 @@ export const Route = createFileRoute("/_authenticated/admin/calendar/")({
 
 function RouteComponent() {
   const router = useRouter();
-  const { data: calendar } = useSuspenseQuery(calendarQueries.list());
+  const { data: events } = useSuspenseQuery(calendarQueries.list());
 
-  const drafts = calendar?.filter((c) => c.status === "draft") ?? [];
-  const pending = calendar?.filter((c) => c.status === "pending") ?? [];
-  const upcoming =
-    calendar?.filter(
-      (c) => c.status === "approved" && c.dates.some((d) => new Date(d.endAt) >= new Date()),
-    ) ?? [];
-  const archived =
-    calendar?.filter(
-      (c) => c.status === "approved" && !c.dates.every((d) => new Date(d.endAt) >= new Date()),
-    ) ?? [];
+  const [drafts, setDrafts] = useState<EventListForAdminItem[]>([]);
+  const [pending, setPending] = useState<EventListForAdminItem[]>([]);
+  const [upcoming, setUpcoming] = useState<EventListForAdminItem[]>([]);
+  const [elapsed, setElapsed] = useState<EventListForAdminItem[]>([]);
+
+  useEffect(() => {
+    setDrafts(events?.filter((c) => c.status === "draft") ?? []);
+    setPending(events?.filter((c) => c.status === "pending") ?? []);
+    setUpcoming(
+      events?.filter(
+        (c) => c.status === "approved" && c.dates.some((d) => new Date(d.endAt) >= new Date()),
+      ) ?? [],
+    );
+    setElapsed(
+      events?.filter(
+        (c) => c.status === "approved" && !c.dates.every((d) => new Date(d.endAt) >= new Date()),
+      ) ?? [],
+    );
+  }, [events]);
+
+  //const drafts = events?.filter((c) => c.status === "draft") ?? [];
+  //const pending = events?.filter((c) => c.status === "pending") ?? [];
+  // const upcoming =
+  //   events?.filter(
+  //     (c) => c.status === "approved" && c.dates.some((d) => new Date(d.endAt) >= new Date()),
+  //   ) ?? [];
+  // const archived =
+  //   events?.filter(
+  //     (c) => c.status === "approved" && !c.dates.every((d) => new Date(d.endAt) >= new Date()),
+  //   ) ?? [];
 
   async function handleSeedCalendar() {
     await seedEventsFn();
@@ -73,10 +95,10 @@ function RouteComponent() {
 
         <PageSectionContainer
           title="Past Events"
-          subTitle={`(${archived.length} records)`}
+          subTitle={`(${elapsed.length} records)`}
           initialState="collapsed"
         >
-          <EventsTable data={archived} />
+          <EventsTable data={elapsed} />
         </PageSectionContainer>
       </div>
 
