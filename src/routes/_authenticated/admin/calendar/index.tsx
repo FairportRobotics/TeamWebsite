@@ -1,4 +1,3 @@
-// prettier-ignore
 import { EventDraftsTable } from "@/components/admin/calendar/EventDraftsTable";
 import { EventPublishedTable } from "@/components/admin/calendar/EventPublishedTable";
 import { BackTo } from "@/components/site/BackTo";
