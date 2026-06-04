@@ -20,15 +20,15 @@ export function PageSectionContainer({
   }
 
   return (
-    <div className="border-2 border-sidebar rounded-2xl overflow-hidden">
-      <div className="flex flex-row items-center justify-between bg-sidebar text-3xl font-bold py-2 px-4">
+    <div className="border-2 border-accent rounded-2xl overflow-hidden">
+      <div className="flex flex-row items-center justify-between bg-accent text-3xl font-bold py-2 px-4">
         <div className="flex flex-row gap-4 items-center">
           <div className="text-foreground">{title}</div>
           {subTitle && <div className="text-xl text-muted-foreground">{subTitle}</div>}
         </div>
 
         {state === "collapsed" ? (
-          <Button variant="outline" size="lg" onClick={() => toggleState("expanded")}>
+          <Button variant="default" size="lg" onClick={() => toggleState("expanded")}>
             <Plus className="w-14 h-14" />
           </Button>
         ) : (
