@@ -1,31 +1,38 @@
-import { AccountsTable } from "@/components/admin/users/accounts-table";
-import { SessionsTable } from "@/components/admin/users/sessions-table";
+import { AccountsSection } from "@/components/admin/users/AccountsSection";
+import { SessionsSection } from "@/components/admin/users/SessionsSection";
 import { BackTo } from "@/components/site/BackTo";
 import { PageDescription, PageHeader, PageTitle } from "@/components/site/PageHeader";
 import { SectionHeader } from "@/components/site/SectionHeader";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { authClient } from "@/lib/auth/auth-client";
-import { getUserDetailsFn } from "@/server/functions/user/getUserDetails";
+import { userQueries } from "@/queries/userQueries";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/admin/users/$userId/")({
   component: RouteComponent,
-  loader: async ({ params }) => {
-    const details = await getUserDetailsFn({ data: { userId: params.userId } });
-    return details;
+  loader: async ({ params, context }) => {
+    context.queryClient?.ensureQueryData(userQueries.details(params.userId));
   },
 });
 
 function RouteComponent() {
-  const { user, accounts, sessions } = Route.useLoaderData();
+  const params = Route.useParams();
+
+  const {
+    data: { user, accounts, sessions },
+  } = useSuspenseQuery(userQueries.details(params.userId));
+
   const router = useRouter();
   const navigate = useNavigate();
 
+  if (!user) return <div>Loading...</div>;
+
   function handleUnbanUser() {
     authClient.admin.unbanUser(
-      { userId: user.id },
+      { userId: user!.id },
       {
         onError: (error) => {
           toast.error(error.error.message || "Failed to unban user");
@@ -40,7 +47,7 @@ function RouteComponent() {
 
   function handleBanUser() {
     authClient.admin.banUser(
-      { userId: user.id, banReason: "testing 1..2..3.." },
+      { userId: user!.id, banReason: "testing 1..2..3.." },
       {
         onError: (error) => {
           toast.error(error.error.message || "Failed to ban user");
@@ -54,7 +61,7 @@ function RouteComponent() {
 
   function handleImpersonate() {
     authClient.admin.impersonateUser(
-      { userId: user.id },
+      { userId: user!.id },
       {
         onError: (error) => {
           toast.error(error.error.message || "Failed to impersonate user");
@@ -69,7 +76,7 @@ function RouteComponent() {
 
   return (
     <div>
-      <BackTo to="/admin/users" label="Users" />
+      <BackTo to="/admin/users" label="Back to Users" />
       <PageHeader>
         <PageTitle>{user.name}</PageTitle>
         <PageDescription>
@@ -108,32 +115,10 @@ function RouteComponent() {
         </CardContent>
       </Card>
 
-      <Card className="mb-10">
-        <CardHeader>
-          <CardTitle>
-            <SectionHeader>Accounts</SectionHeader>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <AccountsTable data={accounts} />
-        </CardContent>
-      </Card>
-
-      <Card className="mb-10">
-        <CardHeader>
-          <CardTitle>
-            <SectionHeader>Sessions</SectionHeader>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <SessionsTable data={sessions} />
-          {sessions.length > 0 && (
-            <div className="mt-4">
-              <Button variant="destructive">Revoke all Sessions</Button>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+      <div className="flex flex-col gap-6">
+        <AccountsSection data={accounts} />
+        <SessionsSection data={sessions} userId={user.id} />
+      </div>
     </div>
   );
 }

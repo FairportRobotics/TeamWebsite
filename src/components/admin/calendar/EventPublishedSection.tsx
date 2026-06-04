@@ -1,44 +1,40 @@
-// prettier-ignore
 import { DataTable } from "@/components/site/DataTable";
 import { PageSectionContainer } from "@/components/site/PageSectionContainer";
 // prettier-ignore
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogMedia, AlertDialogTitle, } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 // prettier-ignore
-import { getDateRangeParts } from "@/lib/utils";
 // prettier-ignore
-import { calendarQueries, useApproveMutation, useDeleteDraftMutation, useRequestApprovalMutation, } from "@/queries/calendarQueries";
-import type { DraftEvent } from "@/server/functions/calendar/getDraftEvent";
+import { getDateRangeParts } from "@/lib/utils";
+import { eventQueries, useDeletePublishedMutation } from "@/queries/eventQueries";
+import type { PublishedEvent } from "@/server/functions/calendar/getPublishedEvents";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 // prettier-ignore
 import { type ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
-import { ArrowUpDown, CalendarFold, Pencil, Stamp, Trash2, TrashIcon } from "lucide-react";
+import { ArrowUpDown, Pencil, Trash2, TrashIcon } from "lucide-react";
 import React from "react";
 
-export function EventDraftsTable() {
-  const { data } = useSuspenseQuery(calendarQueries.drafts());
+export function EventPublishedSection() {
+  const { data } = useSuspenseQuery(eventQueries.published());
   const [showDeleteAlert, setShowDeleteAlert] = React.useState(false);
-  const [selectedEventId, setSelectedEventId] = React.useState<string | null>(null);
+  const [selectedEventCode, setSelectedEventCode] = React.useState<string | null>(null);
 
-  // Entity mutations.
-  const requestApprovalMutation = useRequestApprovalMutation();
-  const approveMutation = useApproveMutation();
-  const deleteMutation = useDeleteDraftMutation();
+  const deleteMutation = useDeletePublishedMutation();
 
-  const handleVerifyDelete = (id: string) => {
-    setSelectedEventId(id);
+  const handleVerifyDelete = (code: string) => {
+    setSelectedEventCode(code);
     setShowDeleteAlert(true);
   };
 
   const handleConfirmDelete = () => {
-    deleteMutation.mutate(selectedEventId!);
-    setSelectedEventId(null);
+    deleteMutation.mutate(selectedEventCode!);
+    setSelectedEventCode(null);
     setShowDeleteAlert(false);
   };
 
-  const columns: ColumnDef<DraftEvent>[] = [
+  const columns: ColumnDef<PublishedEvent>[] = [
     {
       accessorKey: "title",
       header: ({ column }) => {
@@ -108,6 +104,14 @@ export function EventDraftsTable() {
       },
     },
     {
+      accessorKey: "visibleTo",
+      header: "Visible To",
+      cell: ({ row }) => {
+        const visibleTo = row.original.visibleTo;
+        return <div>{visibleTo?.join(", ")}</div>;
+      },
+    },
+    {
       accessorKey: "createdAt",
       header: ({ column }) => {
         return (
@@ -132,21 +136,12 @@ export function EventDraftsTable() {
       },
     },
     {
-      accessorKey: "visibleTo",
-      header: "Visible To",
-      cell: ({ row }) => {
-        const visibleTo = row.original.visibleTo;
-        return <div className="flex items-center gap-1">{visibleTo?.join(", ")}</div>;
-      },
-    },
-    {
       accessorKey: "id",
       header: () => {
         return <div className="flex justify-end">Actions</div>;
       },
       cell: ({ row }) => {
         const id = row.original.id;
-        const status = row.original.status;
 
         return (
           <div className="flex items-center justify-end gap-1">
@@ -158,28 +153,6 @@ export function EventDraftsTable() {
             >
               <Pencil />
             </Button>
-            {status === "draft" ? (
-              <Button
-                variant="default"
-                onClick={() => requestApprovalMutation.mutate(id)}
-                title="Request publication approval"
-                aria-description="Request publication approval"
-                className="bg-chart-2"
-              >
-                <CalendarFold />
-              </Button>
-            ) : (
-              <Button
-                variant="default"
-                onClick={() => approveMutation.mutate(id)}
-                title="Approve to publish"
-                aria-description="Approve to publish"
-                className="bg-chart-4"
-              >
-                <Stamp />
-              </Button>
-            )}
-
             <Button
               variant="destructive"
               onClick={() => handleVerifyDelete(id)}
@@ -196,9 +169,9 @@ export function EventDraftsTable() {
 
   return (
     <PageSectionContainer
-      title="Event Drafts"
+      title="Published Events"
       subTitle={`(${data.length} records)`}
-      initialState="expanded"
+      initialState="collapsed"
     >
       <AlertDialog open={showDeleteAlert} onOpenChange={setShowDeleteAlert}>
         <AlertDialogContent>
@@ -206,10 +179,10 @@ export function EventDraftsTable() {
             <AlertDialogMedia>
               <TrashIcon />
             </AlertDialogMedia>
-            <AlertDialogTitle>Delete Draft?</AlertDialogTitle>
+            <AlertDialogTitle>Delete Calendar Event</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete this Event draft and cannot be undone. Are you sure you
-              want to continue?
+              This will permanently delete this calendar Event and cannot be undone. Are you sure
+              you want to continue?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

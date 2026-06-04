@@ -1,29 +1,18 @@
-import { EventDraftsTable } from "@/components/admin/calendar/EventDraftsTable";
-import { EventPublishedTable } from "@/components/admin/calendar/EventPublishedTable";
+import { EventDraftsSection } from "@/components/admin/calendar/EventDraftsSection";
+import { EventPublishedSection } from "@/components/admin/calendar/EventPublishedSection";
 import { BackTo } from "@/components/site/BackTo";
 import { PageDescription, PageHeader, PageTitle } from "@/components/site/PageHeader";
-import { TeamActionButton } from "@/components/site/TeamActionButtom";
-import { Button } from "@/components/ui/button";
-import { calendarQueries } from "@/queries/calendarQueries";
-import { seedEventsFn } from "@/server/functions/calendar/seed";
-import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
+import { eventQueries } from "@/queries/eventQueries";
+import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/admin/calendar/")({
   component: RouteComponent,
   loader: ({ context }) => {
-    context.queryClient?.ensureQueryData(calendarQueries.published());
+    context.queryClient?.ensureQueryData(eventQueries.published());
   },
 });
 
 function RouteComponent() {
-  const router = useRouter();
-
-  async function handleSeedCalendar() {
-    await seedEventsFn();
-    router.invalidate();
-    return { error: null };
-  }
-
   return (
     <div>
       <BackTo to="/admin" label="Back to Admin" />
@@ -35,23 +24,9 @@ function RouteComponent() {
       </PageHeader>
 
       <div className="flex flex-col gap-10">
-        <EventDraftsTable />
-        <EventPublishedTable />
+        <EventDraftsSection />
+        <EventPublishedSection />
       </div>
-
-      <Button asChild variant="default">
-        <Link to="/admin/calendar/new">Create New Event</Link>
-      </Button>
-
-      <TeamActionButton
-        variant="destructive"
-        className="mt-10 ml-6"
-        action={() => {
-          return handleSeedCalendar();
-        }}
-      >
-        Seed Calendar
-      </TeamActionButton>
     </div>
   );
 }
