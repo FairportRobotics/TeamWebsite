@@ -109,6 +109,7 @@ export function SessionsSection({ data, userId }: { data: SessionSelect[]; userI
             return handleRevokeAllSessions();
           }}
         >
+          <EyeOff />
           Revoke All Sessions
         </TeamActionButton>
       </div>
