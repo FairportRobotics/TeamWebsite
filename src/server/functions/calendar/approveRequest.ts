@@ -18,7 +18,6 @@ export const approveRequest = createServerFn()
       // Insert records in a transaction so we can rollback if anything goes sideways.
       await db.transaction(async (tx) => {
         // Retrieve the existing Draft.
-        console.log("approveRequest Retrieve the existing Draft");
         const draft = await tx.query.dbEventDraft.findFirst({
           where: eq(dbEventDraft.id, data.id),
           with: {
@@ -33,7 +32,6 @@ export const approveRequest = createServerFn()
         // If this draft is to replace an edit to and Event, log the history.
         if (draft.eventId) {
           // Retrieve the Published Event.
-          console.log("approveRequest Retrieve the Published Event");
           const published = await tx.query.dbEvent.findFirst({
             where: eq(dbEvent.id, draft.eventId),
             with: {
@@ -43,7 +41,6 @@ export const approveRequest = createServerFn()
           });
 
           // Create a history record of the Published Event.
-          console.log("approveRequest Create a history record of the Published Event");
           await tx.insert(dbEventDraftHistory).values({
             draftId: draft.id,
             eventId: draft.eventId,
@@ -51,17 +48,12 @@ export const approveRequest = createServerFn()
           });
 
           // Delete the Published Event as we are going to be replacing it with the promoted Draft.
-          console.log(
-            "approveRequest Delete the Published Event as we are going to be replacing it with the promoted Draft",
-          );
           await tx.delete(dbEvent).where(eq(dbEvent.id, draft.eventId));
         }
 
-        console.log("approveRequest Delete the Draft");
         await tx.delete(dbEventDraft).where(eq(dbEventDraft.id, draft.id));
 
         // Publish the Event and the Event Dates.
-        console.log("approveRequest Publish the Event and the Event Dates");
         await tx.insert(dbEvent).values({
           id: draft.eventId ?? draft.id,
           createdBy: currentUserId,
@@ -85,7 +77,6 @@ export const approveRequest = createServerFn()
         });
 
         // Return the Published Event.
-        console.log("approveRequest Return the Published Event");
         return await tx.query.dbEvent.findFirst({
           where: eq(dbEvent.id, draft.eventId ?? draft.id),
           with: {
