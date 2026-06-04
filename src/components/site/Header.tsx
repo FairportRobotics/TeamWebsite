@@ -28,6 +28,9 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 bg-sidebar px-4 backdrop-blur-lg">
       <nav className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 py-3 sm:py-4">
+        <Link to="/">
+          <h2 className="text-4xl font-extrabold text-destructive uppercase">Team 578</h2>
+        </Link>
         <section className="flex items-center justify-center gap-2">
           <HeaderLink label="Home" to="/" />
           <HeaderLink label="Team Members" to="/team" />

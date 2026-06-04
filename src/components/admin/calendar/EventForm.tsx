@@ -8,8 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
-import { VisibleToOptions } from "@/server/functions/calendar/_common";
-import { createEventSchema } from "@/server/functions/calendar/createEvent";
+import { updateEventSchema, VisibleToOptions } from "@/server/functions/calendar/_common";
 import { useForm } from "@tanstack/react-form";
 import { format } from "date-fns";
 import { ChevronDownIcon, Plus, Trash2 } from "lucide-react";
@@ -23,6 +22,7 @@ export type CalendarDate = {
 
 export type CalendarFormValues = {
   id?: string | undefined;
+  eventId?: string | undefined;
   title: string;
   description: string;
   location: string;
@@ -50,7 +50,7 @@ export const EventForm = ({
       onSubmit(value);
     },
     validators: {
-      onSubmit: createEventSchema,
+      onSubmit: updateEventSchema,
     },
   });
 
@@ -92,10 +92,20 @@ export const EventForm = ({
           }}
         >
           <div className="flex flex-col gap-6">
-            {/* Id */}
+            {/* id */}
             {defaultValues.id && (
               <form.Field
                 name="id"
+                children={(field) => (
+                  <input type="hidden" name={field.name} value={field.state.value} />
+                )}
+              />
+            )}
+
+            {/* eventId */}
+            {defaultValues.id && (
+              <form.Field
+                name="eventId"
                 children={(field) => (
                   <input type="hidden" name={field.name} value={field.state.value} />
                 )}
@@ -210,19 +220,15 @@ export const EventForm = ({
                     {field.state.value
                       .sort((a, b) => a.startAt.toISOString().localeCompare(b.endAt.toISOString()))
                       .map((date, index) => (
-                        <div
-                          key={index}
-                          className="flex flex-row items-center hover:bg-slate-800 rounded-md p-1"
-                        >
+                        <div key={index} className="flex flex-row items-center rounded-md">
                           <Button
                             type="button"
                             onClick={() => handleRemoveDate(index)}
                             variant="destructive"
-                            className="hover:cursor-pointer mr-3 w-8 h-8"
                           >
                             <Trash2 className="" />
                           </Button>
-                          <div className="flex flex-row gap-3">
+                          <div className="flex flex-row gap-2 ml-7">
                             <span>{date.startAt.toLocaleDateString()}</span>
                             <span>from</span>
                             <span>{date.startAt.toLocaleTimeString()}</span>
@@ -241,9 +247,7 @@ export const EventForm = ({
               name="visibleTo"
               children={(field) => (
                 <div>
-                  <Label className="mb-3 font-bold text-lg">
-                    Calendar event will be visible to:
-                  </Label>
+                  <Label className="mb-3 font-bold text-lg">Event will be visible to:</Label>
                   <div className="space-y-2">
                     {VisibleToOptions.map((option) => (
                       <div key={option}>
@@ -280,7 +284,7 @@ export const EventForm = ({
             />
 
             {/* Information Options */}
-            <div className="flex flex-col mt-6">
+            <div className="flex flex-col mt-3">
               <div className="flex flex-row">
                 <Checkbox
                   id="has-signup"
@@ -325,7 +329,7 @@ export const EventForm = ({
             </div>
 
             {/* Signup Options */}
-            <div className="flex flex-col mt-6">
+            <div className="flex flex-col mt-3">
               <div className="flex flex-row">
                 <Checkbox
                   id="has-signup"
@@ -448,7 +452,7 @@ function DateTimeRangePicker({
   dateSelected: (startAt: Date, endAt: Date) => void;
 }) {
   const [open, setOpen] = React.useState(false);
-  const [date, setDate] = React.useState<Date | undefined>(undefined);
+  const [date, setDate] = React.useState<Date | undefined>(new Date());
   const [startAt, setStartAt] = React.useState<string>("08:00:00");
   const [endAt, setEndAt] = React.useState<string>("17:00:00");
 
@@ -465,6 +469,11 @@ function DateTimeRangePicker({
 
   return (
     <FieldGroup className="max-w-xs flex-row">
+      <Field className="items-end justify-end">
+        <Button onClick={() => handleAdd()} variant="default" type="button">
+          <Plus className="" />
+        </Button>
+      </Field>
       <Field>
         <FieldLabel htmlFor="date-picker">Date</FieldLabel>
         <Popover open={open} onOpenChange={setOpen}>
@@ -509,11 +518,6 @@ function DateTimeRangePicker({
           onChange={(value) => setEndAt(value.target.value)}
           className="appearance-none bg-background [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
         />
-      </Field>
-      <Field className="items-end justify-end">
-        <Button onClick={() => handleAdd()} className="" variant="secondary" type="button">
-          <Plus className="" />
-        </Button>
       </Field>
     </FieldGroup>
   );
