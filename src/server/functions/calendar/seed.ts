@@ -1,6 +1,6 @@
 // prettier-ignore
 import { db } from "@/db";
-import { dbEvent, dbEventDate } from "@/db/schema";
+import { dbEventDraft, dbEventDraftDate } from "@/db/schema";
 import { seedCalendar } from "@/db/seed/calendar";
 import { Permissions } from "@/lib/auth/permissions";
 import { anyPermissionMiddleware } from "@/server/middleware/anyPermission";
@@ -19,14 +19,12 @@ export const seedEventsFn = createServerFn()
     seedCalendar.forEach(async (data) => {
       console.log("🌱 Seeding Calendar", data.title);
       const id = crypto.randomUUID();
-      const eventCode = crypto.randomUUID();
 
       try {
         // Insert records in a transaction so we can rollback if anything goes sideways.
         await db.transaction(async (tx) => {
-          await tx.insert(dbEvent).values({
+          await tx.insert(dbEventDraft).values({
             id: id,
-            code: eventCode,
             createdBy: currentUserId,
             status: "draft",
 
@@ -41,8 +39,8 @@ export const seedEventsFn = createServerFn()
           });
 
           data.dates.forEach(async (d) => {
-            await tx.insert(dbEventDate).values({
-              eventId: id,
+            await tx.insert(dbEventDraftDate).values({
+              draftId: id,
               startAt: d.startAt,
               endAt: d.endAt,
             });

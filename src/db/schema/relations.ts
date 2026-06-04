@@ -1,5 +1,13 @@
 // Moved relations into a file to prevent circular references.
-import { account, dbEvent, dbEventDate, session, user } from "@/db/schema";
+import {
+  account,
+  dbEvent,
+  dbEventDate,
+  dbEventDraft,
+  dbEventDraftDate,
+  session,
+  user,
+} from "@/db/schema";
 import { relations } from "drizzle-orm";
 
 export const userRelations = relations(user, ({ many }) => ({
@@ -40,5 +48,21 @@ export const eventDateRelations = relations(dbEventDate, ({ one }) => ({
   event: one(dbEvent, {
     fields: [dbEventDate.eventId],
     references: [dbEvent.id],
+  }),
+}));
+
+export const eventDraftRelations = relations(dbEventDraft, ({ many, one }) => ({
+  dates: many(dbEventDraftDate),
+  createdBy: one(user, {
+    fields: [dbEventDraft.createdBy],
+    references: [user.id],
+    relationName: "eventDraftCreatedBy",
+  }),
+}));
+
+export const eventDraftDateRelations = relations(dbEventDraftDate, ({ one }) => ({
+  eventDraft: one(dbEventDraft, {
+    fields: [dbEventDraftDate.draftId],
+    references: [dbEventDraft.id],
   }),
 }));

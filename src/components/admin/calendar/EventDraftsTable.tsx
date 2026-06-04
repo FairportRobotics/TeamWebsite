@@ -1,22 +1,55 @@
-// prettier-ignore
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogMedia, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogMedia,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-// prettier-ignore
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-// prettier-ignore
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { getDateRangeParts } from "@/lib/utils";
-// prettier-ignore
-import { useApproveMutation, useDeleteMutation, useRequestApprovalMutation } from "@/queries/calendarQueries";
-import type { EventListForAdminItem } from "@/server/functions/calendar/getEventListForAdmin";
+import {
+  useApproveMutation,
+  useDeleteMutation,
+  useRequestApprovalMutation,
+} from "@/queries/calendarQueries";
+import type { DraftEventAdminItem } from "@/server/functions/calendar/getEventListForAdmin";
 import { Link } from "@tanstack/react-router";
-// prettier-ignore
-import { flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, type ColumnDef, type ColumnFiltersState, type SortingState } from "@tanstack/react-table";
+import {
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+  type ColumnDef,
+  type ColumnFiltersState,
+  type SortingState,
+} from "@tanstack/react-table";
 import { format } from "date-fns";
 import { ArrowUpDown, Hand, MoreHorizontal, ThumbsUp, TrashIcon } from "lucide-react";
 import React from "react";
 
-export function EventsTable({ data }: { data: EventListForAdminItem[] }) {
+export function EventDraftsTable({ data }: { data: DraftEventAdminItem[] }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [showDeleteAlert, setShowDeleteAlert] = React.useState(false);
@@ -37,7 +70,7 @@ export function EventsTable({ data }: { data: EventListForAdminItem[] }) {
     setShowDeleteAlert(false);
   };
 
-  const columns: ColumnDef<EventListForAdminItem>[] = [
+  const columns: ColumnDef<DraftEventAdminItem>[] = [
     {
       accessorKey: "title",
       header: ({ column }) => {
@@ -119,11 +152,14 @@ export function EventsTable({ data }: { data: EventListForAdminItem[] }) {
       },
     },
     {
+      accessorKey: "status",
+      header: "Status",
+    },
+    {
       accessorKey: "id",
       header: "Actions",
       cell: ({ row }) => {
         const id = row.original.id;
-        const code = row.original.code;
         const status = row.original.status;
 
         return (
@@ -149,7 +185,7 @@ export function EventsTable({ data }: { data: EventListForAdminItem[] }) {
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                  <DropdownMenuItem variant="destructive" onClick={() => handleVerifyDelete(code)}>
+                  <DropdownMenuItem variant="destructive" onClick={() => handleVerifyDelete(id)}>
                     <TrashIcon />
                     Delete
                   </DropdownMenuItem>
