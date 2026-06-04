@@ -8,8 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
-import { VisibleToOptions } from "@/server/functions/calendar/_common";
-import { createEventSchema } from "@/server/functions/calendar/createEvent";
+import { updateEventSchema, VisibleToOptions } from "@/server/functions/calendar/_common";
 import { useForm } from "@tanstack/react-form";
 import { format } from "date-fns";
 import { ChevronDownIcon, Plus, Trash2 } from "lucide-react";
@@ -23,6 +22,7 @@ export type CalendarDate = {
 
 export type CalendarFormValues = {
   id?: string | undefined;
+  eventId?: string | undefined;
   title: string;
   description: string;
   location: string;
@@ -50,7 +50,7 @@ export const EventForm = ({
       onSubmit(value);
     },
     validators: {
-      onSubmit: createEventSchema,
+      onSubmit: updateEventSchema,
     },
   });
 
@@ -92,10 +92,20 @@ export const EventForm = ({
           }}
         >
           <div className="flex flex-col gap-6">
-            {/* Id */}
+            {/* id */}
             {defaultValues.id && (
               <form.Field
                 name="id"
+                children={(field) => (
+                  <input type="hidden" name={field.name} value={field.state.value} />
+                )}
+              />
+            )}
+
+            {/* eventId */}
+            {defaultValues.id && (
+              <form.Field
+                name="eventId"
                 children={(field) => (
                   <input type="hidden" name={field.name} value={field.state.value} />
                 )}
@@ -448,7 +458,7 @@ function DateTimeRangePicker({
   dateSelected: (startAt: Date, endAt: Date) => void;
 }) {
   const [open, setOpen] = React.useState(false);
-  const [date, setDate] = React.useState<Date | undefined>(undefined);
+  const [date, setDate] = React.useState<Date | undefined>(new Date());
   const [startAt, setStartAt] = React.useState<string>("08:00:00");
   const [endAt, setEndAt] = React.useState<string>("17:00:00");
 
@@ -511,7 +521,7 @@ function DateTimeRangePicker({
         />
       </Field>
       <Field className="items-end justify-end">
-        <Button onClick={() => handleAdd()} className="" variant="secondary" type="button">
+        <Button onClick={() => handleAdd()} className="" variant="default" type="button">
           <Plus className="" />
         </Button>
       </Field>

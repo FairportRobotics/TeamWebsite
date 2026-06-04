@@ -1,7 +1,7 @@
 import { approveRequest } from "@/server/functions/calendar/approveRequest";
 import { deleteDraftEventFn } from "@/server/functions/calendar/deleteDraftEvent";
 import { deletePublishedEventFn } from "@/server/functions/calendar/deletePublishedEvent";
-import { getDraftEvents } from "@/server/functions/calendar/getDraftEvent";
+import { getDraftEvents } from "@/server/functions/calendar/getDraftEvents";
 import { getPublishedEventsFn } from "@/server/functions/calendar/getPublishedEvents";
 import { requestApprovalCalendarFn } from "@/server/functions/calendar/requestApproval";
 import { queryOptions, useMutation, useQueryClient } from "@tanstack/react-query";

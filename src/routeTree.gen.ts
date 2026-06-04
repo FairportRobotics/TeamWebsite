@@ -37,7 +37,8 @@ import { Route as AuthenticatedAdminUsersUserIdRouteRouteImport } from './routes
 import { Route as AuthenticatedAdminUsersUserIdIndexRouteImport } from './routes/_authenticated/admin/users/$userId/index'
 import { Route as AuthenticatedAdminCalendarIdIndexRouteImport } from './routes/_authenticated/admin/calendar/$id/index'
 import { Route as AuthenticatedAdminUsersUserIdEditRouteImport } from './routes/_authenticated/admin/users/$userId/edit'
-import { Route as AuthenticatedAdminCalendarIdEditRouteImport } from './routes/_authenticated/admin/calendar/$id/edit'
+import { Route as AuthenticatedAdminCalendarIdPublishedRouteImport } from './routes/_authenticated/admin/calendar/$id/published'
+import { Route as AuthenticatedAdminCalendarIdDraftRouteImport } from './routes/_authenticated/admin/calendar/$id/draft'
 
 const UnauthorizedRoute = UnauthorizedRouteImport.update({
   id: '/unauthorized',
@@ -193,10 +194,16 @@ const AuthenticatedAdminUsersUserIdEditRoute =
     path: '/edit',
     getParentRoute: () => AuthenticatedAdminUsersUserIdRouteRoute,
   } as any)
-const AuthenticatedAdminCalendarIdEditRoute =
-  AuthenticatedAdminCalendarIdEditRouteImport.update({
-    id: '/calendar/$id/edit',
-    path: '/calendar/$id/edit',
+const AuthenticatedAdminCalendarIdPublishedRoute =
+  AuthenticatedAdminCalendarIdPublishedRouteImport.update({
+    id: '/calendar/$id/published',
+    path: '/calendar/$id/published',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminCalendarIdDraftRoute =
+  AuthenticatedAdminCalendarIdDraftRouteImport.update({
+    id: '/calendar/$id/draft',
+    path: '/calendar/$id/draft',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 
@@ -226,7 +233,8 @@ export interface FileRoutesByFullPath {
   '/admin/calendar/': typeof AuthenticatedAdminCalendarIndexRoute
   '/admin/users/': typeof AuthenticatedAdminUsersIndexRoute
   '/calendar/$id/': typeof UnauthenticatedCalendarIdIndexRoute
-  '/admin/calendar/$id/edit': typeof AuthenticatedAdminCalendarIdEditRoute
+  '/admin/calendar/$id/draft': typeof AuthenticatedAdminCalendarIdDraftRoute
+  '/admin/calendar/$id/published': typeof AuthenticatedAdminCalendarIdPublishedRoute
   '/admin/users/$userId/edit': typeof AuthenticatedAdminUsersUserIdEditRoute
   '/admin/calendar/$id/': typeof AuthenticatedAdminCalendarIdIndexRoute
   '/admin/users/$userId/': typeof AuthenticatedAdminUsersUserIdIndexRoute
@@ -255,7 +263,8 @@ export interface FileRoutesByTo {
   '/admin/calendar': typeof AuthenticatedAdminCalendarIndexRoute
   '/admin/users': typeof AuthenticatedAdminUsersIndexRoute
   '/calendar/$id': typeof UnauthenticatedCalendarIdIndexRoute
-  '/admin/calendar/$id/edit': typeof AuthenticatedAdminCalendarIdEditRoute
+  '/admin/calendar/$id/draft': typeof AuthenticatedAdminCalendarIdDraftRoute
+  '/admin/calendar/$id/published': typeof AuthenticatedAdminCalendarIdPublishedRoute
   '/admin/users/$userId/edit': typeof AuthenticatedAdminUsersUserIdEditRoute
   '/admin/calendar/$id': typeof AuthenticatedAdminCalendarIdIndexRoute
   '/admin/users/$userId': typeof AuthenticatedAdminUsersUserIdIndexRoute
@@ -287,7 +296,8 @@ export interface FileRoutesById {
   '/_authenticated/admin/calendar/': typeof AuthenticatedAdminCalendarIndexRoute
   '/_authenticated/admin/users/': typeof AuthenticatedAdminUsersIndexRoute
   '/_unauthenticated/calendar/$id/': typeof UnauthenticatedCalendarIdIndexRoute
-  '/_authenticated/admin/calendar/$id/edit': typeof AuthenticatedAdminCalendarIdEditRoute
+  '/_authenticated/admin/calendar/$id/draft': typeof AuthenticatedAdminCalendarIdDraftRoute
+  '/_authenticated/admin/calendar/$id/published': typeof AuthenticatedAdminCalendarIdPublishedRoute
   '/_authenticated/admin/users/$userId/edit': typeof AuthenticatedAdminUsersUserIdEditRoute
   '/_authenticated/admin/calendar/$id/': typeof AuthenticatedAdminCalendarIdIndexRoute
   '/_authenticated/admin/users/$userId/': typeof AuthenticatedAdminUsersUserIdIndexRoute
@@ -320,7 +330,8 @@ export interface FileRouteTypes {
     | '/admin/calendar/'
     | '/admin/users/'
     | '/calendar/$id/'
-    | '/admin/calendar/$id/edit'
+    | '/admin/calendar/$id/draft'
+    | '/admin/calendar/$id/published'
     | '/admin/users/$userId/edit'
     | '/admin/calendar/$id/'
     | '/admin/users/$userId/'
@@ -349,7 +360,8 @@ export interface FileRouteTypes {
     | '/admin/calendar'
     | '/admin/users'
     | '/calendar/$id'
-    | '/admin/calendar/$id/edit'
+    | '/admin/calendar/$id/draft'
+    | '/admin/calendar/$id/published'
     | '/admin/users/$userId/edit'
     | '/admin/calendar/$id'
     | '/admin/users/$userId'
@@ -380,7 +392,8 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/calendar/'
     | '/_authenticated/admin/users/'
     | '/_unauthenticated/calendar/$id/'
-    | '/_authenticated/admin/calendar/$id/edit'
+    | '/_authenticated/admin/calendar/$id/draft'
+    | '/_authenticated/admin/calendar/$id/published'
     | '/_authenticated/admin/users/$userId/edit'
     | '/_authenticated/admin/calendar/$id/'
     | '/_authenticated/admin/users/$userId/'
@@ -602,11 +615,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminUsersUserIdEditRouteImport
       parentRoute: typeof AuthenticatedAdminUsersUserIdRouteRoute
     }
-    '/_authenticated/admin/calendar/$id/edit': {
-      id: '/_authenticated/admin/calendar/$id/edit'
-      path: '/calendar/$id/edit'
-      fullPath: '/admin/calendar/$id/edit'
-      preLoaderRoute: typeof AuthenticatedAdminCalendarIdEditRouteImport
+    '/_authenticated/admin/calendar/$id/published': {
+      id: '/_authenticated/admin/calendar/$id/published'
+      path: '/calendar/$id/published'
+      fullPath: '/admin/calendar/$id/published'
+      preLoaderRoute: typeof AuthenticatedAdminCalendarIdPublishedRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/calendar/$id/draft': {
+      id: '/_authenticated/admin/calendar/$id/draft'
+      path: '/calendar/$id/draft'
+      fullPath: '/admin/calendar/$id/draft'
+      preLoaderRoute: typeof AuthenticatedAdminCalendarIdDraftRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
   }
@@ -654,7 +674,8 @@ interface AuthenticatedAdminRouteRouteChildren {
   AuthenticatedAdminCalendarNewRoute: typeof AuthenticatedAdminCalendarNewRoute
   AuthenticatedAdminCalendarIndexRoute: typeof AuthenticatedAdminCalendarIndexRoute
   AuthenticatedAdminUsersIndexRoute: typeof AuthenticatedAdminUsersIndexRoute
-  AuthenticatedAdminCalendarIdEditRoute: typeof AuthenticatedAdminCalendarIdEditRoute
+  AuthenticatedAdminCalendarIdDraftRoute: typeof AuthenticatedAdminCalendarIdDraftRoute
+  AuthenticatedAdminCalendarIdPublishedRoute: typeof AuthenticatedAdminCalendarIdPublishedRoute
   AuthenticatedAdminCalendarIdIndexRoute: typeof AuthenticatedAdminCalendarIdIndexRoute
 }
 
@@ -668,8 +689,10 @@ const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren
     AuthenticatedAdminCalendarNewRoute: AuthenticatedAdminCalendarNewRoute,
     AuthenticatedAdminCalendarIndexRoute: AuthenticatedAdminCalendarIndexRoute,
     AuthenticatedAdminUsersIndexRoute: AuthenticatedAdminUsersIndexRoute,
-    AuthenticatedAdminCalendarIdEditRoute:
-      AuthenticatedAdminCalendarIdEditRoute,
+    AuthenticatedAdminCalendarIdDraftRoute:
+      AuthenticatedAdminCalendarIdDraftRoute,
+    AuthenticatedAdminCalendarIdPublishedRoute:
+      AuthenticatedAdminCalendarIdPublishedRoute,
     AuthenticatedAdminCalendarIdIndexRoute:
       AuthenticatedAdminCalendarIdIndexRoute,
   }

@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { dbEventDraft } from "@/db/schema";
+import { dbEvent } from "@/db/schema";
 import { Permissions } from "@/lib/auth/permissions";
 import { eventIdSchema } from "@/server/functions/calendar/_common";
 import { anyPermissionMiddleware } from "@/server/middleware/anyPermission";
@@ -8,14 +8,14 @@ import { createServerFn } from "@tanstack/react-start";
 import { zodValidator } from "@tanstack/zod-adapter";
 import { eq } from "drizzle-orm";
 
-export type DraftEvent = Awaited<ReturnType<typeof getDraftEvent>>;
+export type PublishedEvent = Awaited<ReturnType<typeof getPublishedEventFn>>;
 
-export const getDraftEvent = createServerFn()
+export const getPublishedEventFn = createServerFn()
   .middleware([authenticatedMiddleware, anyPermissionMiddleware([Permissions.EventAdminister])])
   .inputValidator(zodValidator(eventIdSchema))
   .handler(async ({ data }) => {
-    return await db.query.dbEventDraft.findFirst({
-      where: eq(dbEventDraft.id, data.id),
+    return await db.query.dbEvent.findFirst({
+      where: eq(dbEvent.id, data.id),
       with: {
         dates: true,
         createdBy: true,

@@ -33,13 +33,15 @@ function RouteComponent() {
 
   // Create a default empty calendar form values object.
   const emptyCalendar: CalendarFormValues = {
+    id: undefined,
+    eventId: undefined,
+    status: "draft",
     title: "",
     description: "",
     location: "",
     dates: [],
     visibleTo: ["everyone"],
     signupLinkVisibleTo: ["everyone"],
-    status: "draft",
   };
 
   return (

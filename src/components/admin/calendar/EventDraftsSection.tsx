@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { getDateRangeParts } from "@/lib/utils";
 // prettier-ignore
 import { eventQueries, useApproveMutation, useDeleteDraftMutation, useRequestApprovalMutation, } from "@/queries/eventQueries";
-import type { DraftEvent } from "@/server/functions/calendar/getDraftEvent";
+import type { DraftEvent } from "@/server/functions/calendar/getDraftEvents";
 import { seedEventsFn } from "@/server/functions/calendar/seed";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link, useRouter } from "@tanstack/react-router";
@@ -162,8 +162,10 @@ export function EventDraftsSection() {
           <div className="flex items-center justify-end gap-1">
             <Button
               variant="default"
-              onClick={() => console.log("Edit", id)}
-              title="Edit Draft"
+              onClick={() =>
+                router.navigate({ to: "/admin/calendar/$id/draft", params: { id: id } })
+              }
+              title="Edit"
               aria-description="Edit"
             >
               <Pencil />

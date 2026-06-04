@@ -9,7 +9,7 @@ import { getDateRangeParts } from "@/lib/utils";
 import { eventQueries, useDeletePublishedMutation } from "@/queries/eventQueries";
 import type { PublishedEvent } from "@/server/functions/calendar/getPublishedEvents";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { Link } from "@tanstack/react-router";
+import { Link, useRouter } from "@tanstack/react-router";
 // prettier-ignore
 import { type ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
@@ -17,6 +17,7 @@ import { ArrowUpDown, Pencil, Trash2, TrashIcon } from "lucide-react";
 import React from "react";
 
 export function EventPublishedSection() {
+  const router = useRouter();
   const { data } = useSuspenseQuery(eventQueries.published());
   const [showDeleteAlert, setShowDeleteAlert] = React.useState(false);
   const [selectedEventCode, setSelectedEventCode] = React.useState<string | null>(null);
@@ -147,8 +148,10 @@ export function EventPublishedSection() {
           <div className="flex items-center justify-end gap-1">
             <Button
               variant="default"
-              onClick={() => console.log("Edit", id)}
-              title="Edit Draft"
+              onClick={() =>
+                router.navigate({ to: "/admin/calendar/$id/published", params: { id: id } })
+              }
+              title="Edit"
               aria-description="Edit"
             >
               <Pencil />
