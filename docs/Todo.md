@@ -13,18 +13,15 @@
   - [-] Style standards (button and text sizes for example)
 - [-] Add a means of indicating that you are interested in joining the team. A signup for students and mentors.
 - [-] Make sure 1787 cart changes are shared with the Team.
-- [-]
-- [-]
--
 
-```
-  const requestApprovalMutation = useMutation({
-    mutationFn: (id: string) => requestApprovalCalendarFn({ data: { id } }),
+## Events:
 
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: calendarQueries.all,
-      });
-    },
-  });
-```
+### Admin
+
+- [-] Use the pattern from the CMS Reports tables and allow all columns to be sortable and searchable.
+
+### Create
+
+- [-] Default to today.
+- [-] Better support for selecting the time.
+- [-] Add date/time button style should be default.

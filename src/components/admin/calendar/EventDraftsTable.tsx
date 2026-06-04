@@ -1,10 +1,10 @@
 // prettier-ignore
+import { DataTable } from "@/components/site/DataTable";
 import { PageSectionContainer } from "@/components/site/PageSectionContainer";
 // prettier-ignore
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogMedia, AlertDialogTitle, } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 // prettier-ignore
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/components/ui/table";
 import { getDateRangeParts } from "@/lib/utils";
 // prettier-ignore
 import { calendarQueries, useApproveMutation, useDeleteDraftMutation, useRequestApprovalMutation, } from "@/queries/calendarQueries";
@@ -12,15 +12,13 @@ import type { DraftEvent } from "@/server/functions/calendar/getDraftEvent";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 // prettier-ignore
-import { flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, type ColumnDef, type ColumnFiltersState, type SortingState, } from "@tanstack/react-table";
+import { type ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { ArrowUpDown, CalendarFold, Pencil, Stamp, Trash2, TrashIcon } from "lucide-react";
 import React from "react";
 
 export function EventDraftsTable() {
   const { data } = useSuspenseQuery(calendarQueries.drafts());
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [showDeleteAlert, setShowDeleteAlert] = React.useState(false);
   const [selectedEventId, setSelectedEventId] = React.useState<string | null>(null);
 
@@ -83,7 +81,17 @@ export function EventDraftsTable() {
     },
     {
       accessorKey: "dates",
-      header: "Dates",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Dates
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
       cell: ({ row }) => {
         const dates = row.original.dates;
         return dates.map((d) => {
@@ -101,7 +109,17 @@ export function EventDraftsTable() {
     },
     {
       accessorKey: "createdAt",
-      header: "Created By",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Created
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
       cell: ({ row }) => {
         const updatedAt = row.original.createdAt;
         const updatedBy = row.original.createdBy?.name;
@@ -123,7 +141,9 @@ export function EventDraftsTable() {
     },
     {
       accessorKey: "id",
-      header: "Actions",
+      header: () => {
+        return <div className="flex justify-end">Actions</div>;
+      },
       cell: ({ row }) => {
         const id = row.original.id;
         const status = row.original.status;
@@ -174,21 +194,6 @@ export function EventDraftsTable() {
     },
   ];
 
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    onSortingChange: setSorting,
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnFiltersChange: setColumnFilters,
-    state: {
-      sorting,
-      columnFilters,
-    },
-  });
-
   return (
     <PageSectionContainer
       title="Event Drafts"
@@ -215,42 +220,7 @@ export function EventDraftsTable() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      <Table>
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(header.column.columnDef.header, header.getContext())}
-                  </TableHead>
-                );
-              })}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id} className="items-center py-1">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                No records.
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+      <DataTable data={data} columns={columns} />
     </PageSectionContainer>
   );
 }
