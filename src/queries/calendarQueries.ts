@@ -1,6 +1,6 @@
 import { approveRequest } from "@/server/functions/calendar/approveRequest";
-import { deleteEventFn } from "@/server/functions/calendar/deleteEvent";
-import { deleteEventDraftFn } from "@/server/functions/calendar/deleteEventDraft";
+import { deleteDraftEventFn } from "@/server/functions/calendar/deleteDraftEvent";
+import { deletePublishedEventFn } from "@/server/functions/calendar/deletePublishedEvent";
 import { getDraftEvents } from "@/server/functions/calendar/getDraftEvent";
 import { getPublishedEventsFn } from "@/server/functions/calendar/getPublishedEvents";
 import { requestApprovalCalendarFn } from "@/server/functions/calendar/requestApproval";
@@ -60,7 +60,7 @@ export function useDeleteDraftMutation() {
 
   return useMutation({
     mutationFn: async (id: string) => {
-      await deleteEventDraftFn({ data: { id } });
+      await deleteDraftEventFn({ data: { id } });
     },
 
     onSuccess: () => {
@@ -75,8 +75,8 @@ export function useDeletePublishedMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (code: string) => {
-      await deleteEventFn({ data: { code } });
+    mutationFn: async (id: string) => {
+      await deletePublishedEventFn({ data: { id } });
     },
 
     onSuccess: () => {

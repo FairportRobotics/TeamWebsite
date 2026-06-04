@@ -3,7 +3,6 @@ import { PageSectionContainer } from "@/components/site/PageSectionContainer";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogMedia, AlertDialogTitle, } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 // prettier-ignore
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu";
 // prettier-ignore
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/components/ui/table";
 import { getDateRangeParts } from "@/lib/utils";
@@ -14,7 +13,7 @@ import { Link } from "@tanstack/react-router";
 // prettier-ignore
 import { flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, type ColumnDef, type ColumnFiltersState, type SortingState, } from "@tanstack/react-table";
 import { format } from "date-fns";
-import { ArrowUpDown, MoreHorizontal, TrashIcon } from "lucide-react";
+import { ArrowUpDown, Pencil, Trash2, TrashIcon } from "lucide-react";
 import React from "react";
 
 export function EventPublishedTable() {
@@ -125,22 +124,23 @@ export function EventPublishedTable() {
         const id = row.original.id;
 
         return (
-          <div className="flex items-center">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <MoreHorizontal />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuGroup></DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                  <DropdownMenuItem variant="destructive" onClick={() => handleVerifyDelete(id)}>
-                    <TrashIcon />
-                    Delete
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
+          <div className="flex items-center justify-end gap-1">
+            <Button
+              variant="default"
+              onClick={() => console.log("Edit", id)}
+              title="Edit Draft"
+              aria-description="Edit"
+            >
+              <Pencil />
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={() => handleVerifyDelete(id)}
+              title="Delete"
+              aria-description="Delete"
+            >
+              <Trash2 />
+            </Button>
           </div>
         );
       },

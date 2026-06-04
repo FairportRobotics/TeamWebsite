@@ -6,7 +6,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { zodValidator } from "@tanstack/zod-adapter";
 import { eq } from "drizzle-orm";
 
-export const deleteEventDraftFn = createServerFn()
+export const deleteDraftEventFn = createServerFn()
   .inputValidator(zodValidator(eventIdSchema))
   .handler(async ({ data }) => {
     try {
