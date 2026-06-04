@@ -15,5 +15,6 @@ export const getDraftEvents = createServerFn()
         dates: true,
         createdBy: true,
       },
+      orderBy: (events, { asc }) => asc(events.title),
     });
   });

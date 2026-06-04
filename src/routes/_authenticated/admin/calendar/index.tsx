@@ -3,12 +3,10 @@ import { EventDraftsTable } from "@/components/admin/calendar/EventDraftsTable";
 import { EventPublishedTable } from "@/components/admin/calendar/EventPublishedTable";
 import { BackTo } from "@/components/site/BackTo";
 import { PageDescription, PageHeader, PageTitle } from "@/components/site/PageHeader";
-import { PageSectionContainer } from "@/components/site/PageSectionContainer";
 import { TeamActionButton } from "@/components/site/TeamActionButtom";
 import { Button } from "@/components/ui/button";
 import { calendarQueries } from "@/queries/calendarQueries";
 import { seedEventsFn } from "@/server/functions/calendar/seed";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/admin/calendar/")({
@@ -20,7 +18,6 @@ export const Route = createFileRoute("/_authenticated/admin/calendar/")({
 
 function RouteComponent() {
   const router = useRouter();
-  const { data: publishedEvents } = useSuspenseQuery(calendarQueries.published());
 
   async function handleSeedCalendar() {
     await seedEventsFn();
@@ -40,14 +37,7 @@ function RouteComponent() {
 
       <div className="flex flex-col gap-10">
         <EventDraftsTable />
-
-        <PageSectionContainer
-          title="Published Events"
-          subTitle={`(${publishedEvents.length} records)`}
-          initialState="collapsed"
-        >
-          <EventPublishedTable data={publishedEvents} />
-        </PageSectionContainer>
+        <EventPublishedTable />
       </div>
 
       <Button asChild variant="default">

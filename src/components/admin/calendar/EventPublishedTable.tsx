@@ -1,3 +1,4 @@
+import { PageSectionContainer } from "@/components/site/PageSectionContainer";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -27,8 +28,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { getDateRangeParts } from "@/lib/utils";
-import { useDeletePublishedMutation } from "@/queries/calendarQueries";
+import { calendarQueries, useDeletePublishedMutation } from "@/queries/calendarQueries";
 import type { PublishedEvent } from "@/server/functions/calendar/getPublishedEvents";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import {
   flexRender,
@@ -45,7 +47,8 @@ import { format } from "date-fns";
 import { ArrowUpDown, MoreHorizontal, TrashIcon } from "lucide-react";
 import React from "react";
 
-export function EventPublishedTable({ data }: { data: PublishedEvent[] }) {
+export function EventPublishedTable() {
+  const { data } = useSuspenseQuery(calendarQueries.published());
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [showDeleteAlert, setShowDeleteAlert] = React.useState(false);
@@ -190,7 +193,11 @@ export function EventPublishedTable({ data }: { data: PublishedEvent[] }) {
   });
 
   return (
-    <div>
+    <PageSectionContainer
+      title="Published Events"
+      subTitle={`(${data.length} records)`}
+      initialState="expanded"
+    >
       <AlertDialog open={showDeleteAlert} onOpenChange={setShowDeleteAlert}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -247,6 +254,6 @@ export function EventPublishedTable({ data }: { data: PublishedEvent[] }) {
           )}
         </TableBody>
       </Table>
-    </div>
+    </PageSectionContainer>
   );
 }
