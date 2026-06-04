@@ -1,6 +1,6 @@
 // prettier-ignore
 import { db } from "@/db";
-import { dbEvent, dbEventDate } from "@/db/schema";
+import { dbEventDate, dbEventDraft } from "@/db/schema";
 import { authenticatedMiddleware } from "@/server/middleware/authenticated";
 import { createServerFn } from "@tanstack/react-start";
 import { count, sql } from "drizzle-orm";
@@ -10,15 +10,15 @@ export const getAdminSummaryFn = createServerFn()
   .middleware([authenticatedMiddleware])
   .handler(async () => {
     // Return metrics for the calendar.
-    const calendarStatusPromise = db
+    const draftMetricsPromise = db
       .select({
-        status: dbEvent.status,
-        count: count(dbEvent.id),
+        status: dbEventDraft.status,
+        count: count(dbEventDraft.id),
       })
-      .from(dbEvent)
-      .groupBy(dbEvent.status);
+      .from(dbEventDraft)
+      .groupBy(dbEventDraft.status);
 
-    const calendarPeriodPromise = db
+    const publishedMetricsPromise = db
       .select({
         upcoming:
           sql`COUNT(DISTINCT event_id) FILTER (WHERE ${dbEventDate.startAt} >= NOW())`.mapWith(
@@ -33,10 +33,10 @@ export const getAdminSummaryFn = createServerFn()
       .limit(1)
       .then((res) => res[0] || null);
 
-    const [calendarStatusMetrics, calendarPeriodMetrics] = await Promise.all([
-      calendarStatusPromise,
-      calendarPeriodPromise,
+    const [draftMetrics, publishedMetrics] = await Promise.all([
+      draftMetricsPromise,
+      publishedMetricsPromise,
     ]);
 
-    return { calendarStatusMetrics, calendarPeriodMetrics };
+    return { draftMetrics, publishedMetrics };
   });

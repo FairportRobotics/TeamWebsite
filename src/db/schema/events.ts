@@ -1,62 +1,81 @@
 import { user } from "@/db/schema";
 import { statusEnum, visibleEnum, type InferResultType } from "@/db/schema/_common";
 import { Roles } from "@/lib/auth/roles";
-import { sql } from "drizzle-orm";
-import { boolean, index, pgTable, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
+import { index, jsonb, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
-// Stores all the events which the team will host or participate.
-export const dbEvent = pgTable(
-  "event",
-  {
-    // id is the identifier of the individual version of an Event as it moves through different
-    // mutations. Each mutation or edit of an Event will get a new id while code should
-    // remain unchanged.
-    id: uuid("id").primaryKey().defaultRandom(),
+// Stores all the Events which the team will host or participate.
+export const dbEvent = pgTable("event_publish", {
+  id: uuid("id").primaryKey().defaultRandom(),
 
-    // code represents the identifier for the Event as a whole. code is established when an
-    // Event is first created and remains with the Event throughout its lifecycle.
-    code: uuid("code").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  createdBy: text("created_by_user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "no action" }),
 
-    createdAt: timestamp("created_at").defaultNow().notNull(),
-    createdBy: text("created_by_user_id")
-      .notNull()
-      .references(() => user.id, { onDelete: "no action" }),
-    active: boolean().default(true),
-    status: statusEnum("status").notNull().default("draft"),
+  visibleTo: visibleEnum("visible_to").array().default([Roles.Everyone]),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  location: text("location").notNull(),
+  informationLink: text("information_link"),
+  signupLink: text("signup_link"),
+  signupLinkVisibleTo: visibleEnum("signup_link_visible_to")
+    .array()
+    .default([Roles.Student, Roles.Mentor]),
+});
 
-    visibleTo: visibleEnum("visible_to").array().default([Roles.Everyone]),
-    title: text("title").notNull(),
-    description: text("description").notNull(),
-    location: text("location").notNull(),
-    informationLink: text("information_link"),
-    signupLink: text("signup_link"),
-    signupLinkVisibleTo: visibleEnum("signup_link_visible_to")
-      .array()
-      .default([Roles.Student, Roles.Mentor]),
-  },
-  (table) => [
-    index("idx_event_status").on(table.status),
-    index("idx_event_visibleTo").on(table.visibleTo),
-    uniqueIndex("ux_event_active")
-      .on(table.code, table.active)
-      .where(sql`${table.active} = true`),
-  ],
-);
-
-// Stores the date ranges of events. In most cases, there will be a single date range.
+// Stores the date ranges of Events. In most cases, there will be a single date range.
 export const dbEventDate = pgTable(
-  "event_date",
+  "event_publish_date",
   {
     id: uuid("id").primaryKey().defaultRandom(),
     eventId: uuid("event_id").references(() => dbEvent.id, { onDelete: "cascade" }),
     startAt: timestamp("start_at").notNull(),
     endAt: timestamp("end_at").notNull(),
   },
-  (table) => [
-    index("idx_event_date_event_id").on(table.eventId),
-    index("idx_event_date_range").on(table.startAt, table.endAt),
-  ],
+  (table) => [index("idx_event_date_event_id").on(table.eventId)],
 );
+
+// Drafts for Events that are being edited or new and not yet approved.
+export const dbEventDraft = pgTable("event_draft", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  eventId: uuid("event_id").references(() => dbEvent.id, { onDelete: "cascade" }),
+
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  createdBy: text("created_by_user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "no action" }),
+  status: statusEnum("status").notNull().default("draft"),
+
+  visibleTo: visibleEnum("visible_to").array().default([Roles.Everyone]),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  location: text("location").notNull(),
+  informationLink: text("information_link"),
+  signupLink: text("signup_link"),
+  signupLinkVisibleTo: visibleEnum("signup_link_visible_to")
+    .array()
+    .default([Roles.Student, Roles.Mentor]),
+});
+
+export const dbEventDraftDate = pgTable(
+  "event_draft_date",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    draftId: uuid("draft_id").references(() => dbEventDraft.id, { onDelete: "cascade" }),
+    startAt: timestamp("start_at").notNull(),
+    endAt: timestamp("end_at").notNull(),
+  },
+  (table) => [index("idx_event_draft_date_draft_id").on(table.draftId)],
+);
+
+// History table that stores changes to Event Draft records.
+export const dbEventDraftHistory = pgTable("event_draft_history", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  draftId: uuid("draft_id"),
+  eventId: uuid("event_id"),
+  changedAt: timestamp("changed_at").defaultNow(),
+  snapshot: jsonb("snapshot").notNull(),
+});
 
 // Export inferred types so they can be used throughout the application.
 // export type EventSelectItem = typeof dbEvent.$inferSelect;

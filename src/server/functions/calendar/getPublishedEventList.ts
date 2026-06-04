@@ -4,7 +4,7 @@ import { dbEvent, dbEventDate, visibleEnum, type VisibleEnumType } from "@/db/sc
 import { Roles } from "@/lib/auth/roles";
 import { sessionMiddleware } from "@/server/middleware/session";
 import { createServerFn } from "@tanstack/react-start";
-import { and, arrayOverlaps, eq } from "drizzle-orm";
+import { arrayOverlaps, eq } from "drizzle-orm";
 
 // TODO: Add support for optional date filtering.
 export type EventListItem = Awaited<ReturnType<typeof getPublishedEventListFn>>[0];
@@ -27,7 +27,6 @@ export const getPublishedEventListFn = createServerFn()
     const results = await db
       .select({
         id: dbEvent.id,
-        status: dbEvent.status,
         visibleTo: dbEvent.visibleTo,
         title: dbEvent.title,
         description: dbEvent.description,
@@ -41,7 +40,7 @@ export const getPublishedEventListFn = createServerFn()
       })
       .from(dbEvent)
       .innerJoin(dbEventDate, eq(dbEvent.id, dbEventDate.eventId))
-      .where(and(eq(dbEvent.status, "approved"), arrayOverlaps(dbEvent.visibleTo, visibleTo)))
+      .where(arrayOverlaps(dbEvent.visibleTo, visibleTo))
       .orderBy(dbEventDate.startAt);
 
     return results;

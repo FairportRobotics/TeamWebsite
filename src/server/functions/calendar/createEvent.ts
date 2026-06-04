@@ -1,11 +1,12 @@
 import { db } from "@/db";
-import { dbEvent, dbEventDate } from "@/db/schema";
+import { dbEventDraft, dbEventDraftDate } from "@/db/schema";
 import { Permissions } from "@/lib/auth/permissions";
 import { saveEventDateSchema, VisibleToOptions } from "@/server/functions/calendar/_common";
 import { anyPermissionMiddleware } from "@/server/middleware/anyPermission";
 import { authenticatedMiddleware } from "@/server/middleware/authenticated";
 import { createServerFn } from "@tanstack/react-start";
 import { zodValidator } from "@tanstack/zod-adapter";
+import { eq } from "drizzle-orm";
 import { z } from "zod";
 
 // Create a schema for validating calendar insert and update operations. We can reuse this for
@@ -22,7 +23,6 @@ export const createEventSchema = z
     informationLink: z.url().optional().or(z.literal("")),
     signupLink: z.url().optional().or(z.literal("")),
     signupLinkVisibleTo: z.array(z.enum(VisibleToOptions)),
-    status: z.string(),
   })
   .refine(
     (data) => {
@@ -51,17 +51,15 @@ export const createEventFn = createServerFn()
   .handler(async ({ data, context }) => {
     const currentUserId = context!.user!.id;
     const id = crypto.randomUUID();
-    const eventCode = crypto.randomUUID();
 
     try {
+      // Insert records in a transaction so we can rollback if anything goes sideways.
       await db.transaction(async (tx) => {
-        // Insert the Event.
-        await tx.insert(dbEvent).values({
+        await tx.insert(dbEventDraft).values({
           id: id,
-          code: eventCode,
+          eventId: null,
           createdBy: currentUserId,
           status: "draft",
-          active: true,
 
           title: data.title,
           description: data.description,
@@ -73,17 +71,23 @@ export const createEventFn = createServerFn()
           signupLinkVisibleTo: data.signupLinkVisibleTo,
         });
 
-        // Insert all the dates associated with the Event.
         data.dates.forEach(async (d) => {
-          await tx.insert(dbEventDate).values({
-            eventId: id,
+          await tx.insert(dbEventDraftDate).values({
+            draftId: id,
             startAt: d.startAt,
             endAt: d.endAt,
           });
         });
       });
 
-      return id;
+      // Return the newly created draft.
+      return db.query.dbEventDraft.findFirst({
+        where: eq(dbEventDraft.id, id),
+        with: {
+          dates: true,
+          createdBy: true,
+        },
+      });
     } catch (error) {
       console.error(error);
     }

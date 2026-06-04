@@ -1,30 +1,29 @@
+import { PageSectionContainer } from "@/components/site/PageSectionContainer";
 // prettier-ignore
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogMedia, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogMedia, AlertDialogTitle, } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 // prettier-ignore
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 // prettier-ignore
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/components/ui/table";
 import { getDateRangeParts } from "@/lib/utils";
-// prettier-ignore
-import { useApproveMutation, useDeleteMutation, useRequestApprovalMutation } from "@/queries/calendarQueries";
-import type { EventListForAdminItem } from "@/server/functions/calendar/getEventListForAdmin";
+import { calendarQueries, useDeletePublishedMutation } from "@/queries/calendarQueries";
+import type { PublishedEvent } from "@/server/functions/calendar/getPublishedEvents";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 // prettier-ignore
-import { flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, type ColumnDef, type ColumnFiltersState, type SortingState } from "@tanstack/react-table";
+import { flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, type ColumnDef, type ColumnFiltersState, type SortingState, } from "@tanstack/react-table";
 import { format } from "date-fns";
-import { ArrowUpDown, Hand, MoreHorizontal, ThumbsUp, TrashIcon } from "lucide-react";
+import { ArrowUpDown, Pencil, Trash2, TrashIcon } from "lucide-react";
 import React from "react";
 
-export function EventsTable({ data }: { data: EventListForAdminItem[] }) {
+export function EventPublishedTable() {
+  const { data } = useSuspenseQuery(calendarQueries.published());
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [showDeleteAlert, setShowDeleteAlert] = React.useState(false);
   const [selectedEventCode, setSelectedEventCode] = React.useState<string | null>(null);
 
-  const requestApprovalMutation = useRequestApprovalMutation();
-  const approveMutation = useApproveMutation();
-  const deleteMutation = useDeleteMutation();
+  const deleteMutation = useDeletePublishedMutation();
 
   const handleVerifyDelete = (code: string) => {
     setSelectedEventCode(code);
@@ -37,7 +36,7 @@ export function EventsTable({ data }: { data: EventListForAdminItem[] }) {
     setShowDeleteAlert(false);
   };
 
-  const columns: ColumnDef<EventListForAdminItem>[] = [
+  const columns: ColumnDef<PublishedEvent>[] = [
     {
       accessorKey: "title",
       header: ({ column }) => {
@@ -123,39 +122,25 @@ export function EventsTable({ data }: { data: EventListForAdminItem[] }) {
       header: "Actions",
       cell: ({ row }) => {
         const id = row.original.id;
-        const code = row.original.code;
-        const status = row.original.status;
 
         return (
-          <div className="flex items-center">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <MoreHorizontal />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuGroup>
-                  {status === "draft" && (
-                    <DropdownMenuItem onClick={() => requestApprovalMutation.mutate(id)}>
-                      <Hand />
-                      Request Approval
-                    </DropdownMenuItem>
-                  )}
-                  {status === "pending" && (
-                    <DropdownMenuItem onClick={() => approveMutation.mutate(id)}>
-                      <ThumbsUp />
-                      Approve
-                    </DropdownMenuItem>
-                  )}
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                  <DropdownMenuItem variant="destructive" onClick={() => handleVerifyDelete(code)}>
-                    <TrashIcon />
-                    Delete
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
+          <div className="flex items-center justify-end gap-1">
+            <Button
+              variant="default"
+              onClick={() => console.log("Edit", id)}
+              title="Edit Draft"
+              aria-description="Edit"
+            >
+              <Pencil />
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={() => handleVerifyDelete(id)}
+              title="Delete"
+              aria-description="Delete"
+            >
+              <Trash2 />
+            </Button>
           </div>
         );
       },
@@ -178,7 +163,11 @@ export function EventsTable({ data }: { data: EventListForAdminItem[] }) {
   });
 
   return (
-    <div>
+    <PageSectionContainer
+      title="Published Events"
+      subTitle={`(${data.length} records)`}
+      initialState="collapsed"
+    >
       <AlertDialog open={showDeleteAlert} onOpenChange={setShowDeleteAlert}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -235,6 +224,6 @@ export function EventsTable({ data }: { data: EventListForAdminItem[] }) {
           )}
         </TableBody>
       </Table>
-    </div>
+    </PageSectionContainer>
   );
 }

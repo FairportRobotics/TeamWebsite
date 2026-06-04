@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { getAdminSummaryFn } from "@/server/functions/admin/getAdminSummary";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Book, BookAlert, BookDashed, BookMinus, BookPlus } from "lucide-react";
+import { BookAlert, BookDashed, BookMinus, BookPlus } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin/")({
   beforeLoad: async () => {},
@@ -16,7 +16,7 @@ export const Route = createFileRoute("/_authenticated/admin/")({
 });
 
 function RouteComponent() {
-  const { calendarStatusMetrics, calendarPeriodMetrics } = Route.useLoaderData();
+  const { draftMetrics, publishedMetrics } = Route.useLoaderData();
 
   return (
     <div>
@@ -37,38 +37,34 @@ function RouteComponent() {
           </CardHeader>
           <CardContent>
             <div className="flex flex-col gap-3">
+              <h2>Published</h2>
               <div className="flex flex-row items-center gap-3">
-                <Book />
-                <div>{calendarStatusMetrics.find((m) => m.status === "approved")?.count ?? 0}</div>
-                <div>Published</div>
+                <BookPlus className="text-chart-4" />
+                <div>{publishedMetrics?.upcoming ?? 0}</div>
+                <div>Upcoming</div>
               </div>
               <div className="flex flex-row items-center gap-3">
-                <BookAlert />
-                <div>{calendarStatusMetrics.find((m) => m.status === "pending")?.count ?? 0}</div>
-                <div>Pending Approval</div>
-              </div>
-              <div className="flex flex-row items-center gap-3">
-                <BookDashed className="" />
-                <div>{calendarStatusMetrics.find((m) => m.status === "draft")?.count ?? 0}</div>
-                <div>Drafts</div>
+                <BookMinus className="text-chart-2" />
+                <div>{publishedMetrics?.elapsed ?? 0}</div>
+                <div>Elapsed</div>
               </div>
 
               <Separator className="p-0.5" />
 
+              <h2>Drafts</h2>
               <div className="flex flex-row items-center gap-3">
-                <BookPlus />
-                <div>{calendarPeriodMetrics?.upcoming ?? 0}</div>
-                <div>Upcoming</div>
+                <BookAlert className="text-chart-5" />
+                <div>{draftMetrics.find((m) => m.status === "pending")?.count ?? 0}</div>
+                <div>Pending Approval</div>
               </div>
               <div className="flex flex-row items-center gap-3">
-                <BookMinus />
-                <div>{calendarPeriodMetrics?.elapsed ?? 0}</div>
-                <div>Elapsed</div>
+                <BookDashed className="text-chart-3" />
+                <div>{draftMetrics.find((m) => m.status === "draft")?.count ?? 0}</div>
+                <div>Drafts</div>
               </div>
             </div>
-
             <div className="mt-4">
-              <Link to="/admin/calendar" className="underline">
+              <Link to="/admin/calendar" className="underline text-primary">
                 Manage Calendar Events
               </Link>
             </div>
@@ -97,7 +93,7 @@ function RouteComponent() {
               <div>Archived</div>
             </div>
             <div className="mt-4">
-              <Link to="/admin/games" className="underline">
+              <Link to="/admin/games" className="underline text-primary">
                 Manage Game Years
               </Link>
             </div>
@@ -127,7 +123,7 @@ function RouteComponent() {
             </div>
 
             <div className="mt-4">
-              <Link to="/admin/sponsors" className="underline">
+              <Link to="/admin/sponsors" className="underline text-primary">
                 Manage Sponsors
               </Link>
             </div>
@@ -157,7 +153,7 @@ function RouteComponent() {
             </div>
 
             <div className="mt-4">
-              <Link to="/admin/users" className="underline">
+              <Link to="/admin/users" className="underline text-primary">
                 Manage Users
               </Link>
             </div>

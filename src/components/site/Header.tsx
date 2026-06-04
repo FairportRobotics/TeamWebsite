@@ -33,7 +33,7 @@ export default function Header() {
           <HeaderLink label="Team Members" to="/team" />
           <HeaderLink label="Games" to="/games" />
           <HeaderLink label="Calendar" to="/calendar" />
-          <HeaderLink label="Sponsors" to="/sponsors" />
+          <HeaderLink label="Support Us" to="/sponsors" />
 
           {hasAdmin && <HeaderLink label="Admin" to="/admin" />}
         </section>

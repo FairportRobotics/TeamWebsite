@@ -7,7 +7,7 @@ const config = {
   singleQuote: false,
   jsxSingleQuote: false,
   trailingComma: "all",
-  printWidth: 100,
+  printWidth: 120,
 };
 
 export default config;

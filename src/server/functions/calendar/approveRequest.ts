@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { dbEvent, dbEventDate } from "@/db/schema";
+import { dbEvent, dbEventDate, dbEventDraft, dbEventDraftHistory } from "@/db/schema";
 import { Permissions } from "@/lib/auth/permissions";
 import { eventIdSchema } from "@/server/functions/calendar/_common";
 import { anyPermissionMiddleware } from "@/server/middleware/anyPermission";
@@ -13,63 +13,81 @@ export const approveRequest = createServerFn()
   .inputValidator(zodValidator(eventIdSchema))
   .handler(async ({ data, context }) => {
     const currentUserId = context!.user!.id;
-    const newEventid = crypto.randomUUID();
 
     try {
       // Insert records in a transaction so we can rollback if anything goes sideways.
       await db.transaction(async (tx) => {
-        // Retrieve the existing version so we can get its values.
-        const originalEvent = await db.query.dbEvent.findFirst({
-          where: eq(dbEvent.id, data.id),
+        // Retrieve the existing Draft.
+        const draft = await tx.query.dbEventDraft.findFirst({
+          where: eq(dbEventDraft.id, data.id),
           with: {
             dates: true,
             createdBy: true,
           },
         });
 
-        if (!originalEvent) {
-          tx.rollback();
-          throw new Error("Unable to locate the Event");
+        // Verify the Draft was loaded.
+        if (!draft) throw new Error("Event draft not found");
+
+        // If this draft is to replace an edit to and Event, log the history.
+        if (draft.eventId) {
+          // Retrieve the Published Event.
+          const published = await tx.query.dbEvent.findFirst({
+            where: eq(dbEvent.id, draft.eventId),
+            with: {
+              dates: true,
+              createdBy: true,
+            },
+          });
+
+          // Create a history record of the Published Event.
+          await tx.insert(dbEventDraftHistory).values({
+            draftId: draft.id,
+            eventId: draft.eventId,
+            snapshot: published,
+          });
+
+          // Delete the Published Event as we are going to be replacing it with the promoted Draft.
+          await tx.delete(dbEvent).where(eq(dbEvent.id, draft.eventId));
         }
 
-        // Flip the original active to false.
-        await tx
-          .update(dbEvent)
-          .set({
-            active: false,
-          })
-          .where(eq(dbEvent.id, data.id));
+        await tx.delete(dbEventDraft).where(eq(dbEventDraft.id, draft.id));
 
-        // Insert the new Event with the status changed.
+        // Publish the Event and the Event Dates.
         await tx.insert(dbEvent).values({
-          id: newEventid,
-          code: originalEvent.code,
+          id: draft.eventId ?? draft.id,
           createdBy: currentUserId,
-          active: true,
-          status: "approved",
 
-          title: originalEvent.title,
-          description: originalEvent.description,
-          visibleTo: originalEvent.visibleTo,
-          location: originalEvent.location,
+          title: draft.title,
+          description: draft.description,
+          visibleTo: draft.visibleTo,
+          location: draft.location,
 
-          informationLink: originalEvent.informationLink,
-          signupLink: originalEvent.signupLink,
-          signupLinkVisibleTo: originalEvent.signupLinkVisibleTo,
+          informationLink: draft.informationLink,
+          signupLink: draft.signupLink,
+          signupLinkVisibleTo: draft.signupLinkVisibleTo,
         });
 
-        // Insert the dates for the new Event.
-        originalEvent.dates.forEach(async (d) => {
+        draft.dates.forEach(async (d) => {
           await tx.insert(dbEventDate).values({
-            eventId: newEventid,
+            eventId: draft.eventId ?? draft.id,
             startAt: d.startAt,
             endAt: d.endAt,
           });
+        });
+
+        // Return the Published Event.
+        return await tx.query.dbEvent.findFirst({
+          where: eq(dbEvent.id, draft.eventId ?? draft.id),
+          with: {
+            dates: true,
+            createdBy: true,
+          },
         });
       });
     } catch (error) {
       console.error(error);
     }
 
-    return true;
+    return null;
   });
