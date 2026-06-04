@@ -27,12 +27,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { getDateRangeParts } from "@/lib/utils";
-import {
-  useApproveMutation,
-  useDeleteMutation,
-  useRequestApprovalMutation,
-} from "@/queries/calendarQueries";
-import type { PublishEventAdminItem } from "@/server/functions/calendar/getEventListForAdmin";
+import { useDeletePublishedMutation } from "@/queries/calendarQueries";
+import type { PublishedEvent } from "@/server/functions/calendar/getPublishedEvents";
 import { Link } from "@tanstack/react-router";
 import {
   flexRender,
@@ -46,18 +42,16 @@ import {
   type SortingState,
 } from "@tanstack/react-table";
 import { format } from "date-fns";
-import { ArrowUpDown, Hand, MoreHorizontal, ThumbsUp, TrashIcon } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal, TrashIcon } from "lucide-react";
 import React from "react";
 
-export function EventPublishedTable({ data }: { data: PublishEventAdminItem[] }) {
+export function EventPublishedTable({ data }: { data: PublishedEvent[] }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [showDeleteAlert, setShowDeleteAlert] = React.useState(false);
   const [selectedEventCode, setSelectedEventCode] = React.useState<string | null>(null);
 
-  const requestApprovalMutation = useRequestApprovalMutation();
-  const approveMutation = useApproveMutation();
-  const deleteMutation = useDeleteMutation();
+  const deleteMutation = useDeletePublishedMutation();
 
   const handleVerifyDelete = (code: string) => {
     setSelectedEventCode(code);
@@ -70,7 +64,7 @@ export function EventPublishedTable({ data }: { data: PublishEventAdminItem[] })
     setShowDeleteAlert(false);
   };
 
-  const columns: ColumnDef<PublishEventAdminItem>[] = [
+  const columns: ColumnDef<PublishedEvent>[] = [
     {
       accessorKey: "title",
       header: ({ column }) => {
@@ -164,20 +158,7 @@ export function EventPublishedTable({ data }: { data: PublishEventAdminItem[] })
                 <MoreHorizontal />
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuGroup>
-                  {status === "draft" && (
-                    <DropdownMenuItem onClick={() => requestApprovalMutation.mutate(id)}>
-                      <Hand />
-                      Request Approval
-                    </DropdownMenuItem>
-                  )}
-                  {status === "pending" && (
-                    <DropdownMenuItem onClick={() => approveMutation.mutate(id)}>
-                      <ThumbsUp />
-                      Approve
-                    </DropdownMenuItem>
-                  )}
-                </DropdownMenuGroup>
+                <DropdownMenuGroup></DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                   <DropdownMenuItem variant="destructive" onClick={() => handleVerifyDelete(id)}>

@@ -13,14 +13,14 @@ import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/admin/calendar/")({
   component: RouteComponent,
-  loader: ({ context }) => context.queryClient?.ensureQueryData(calendarQueries.list()),
+  loader: ({ context }) => {
+    context.queryClient?.ensureQueryData(calendarQueries.published());
+  },
 });
 
 function RouteComponent() {
   const router = useRouter();
-  const {
-    data: { drafts, published },
-  } = useSuspenseQuery(calendarQueries.list());
+  const { data: publishedEvents } = useSuspenseQuery(calendarQueries.published());
 
   async function handleSeedCalendar() {
     await seedEventsFn();
@@ -39,20 +39,14 @@ function RouteComponent() {
       </PageHeader>
 
       <div className="flex flex-col gap-10">
-        <PageSectionContainer
-          title="Event Drafts"
-          subTitle={`(${drafts.length} records)`}
-          initialState="expanded"
-        >
-          <EventDraftsTable data={drafts} />
-        </PageSectionContainer>
+        <EventDraftsTable />
 
         <PageSectionContainer
           title="Published Events"
-          subTitle={`(${published.length} records)`}
+          subTitle={`(${publishedEvents.length} records)`}
           initialState="collapsed"
         >
-          <EventPublishedTable data={published} />
+          <EventPublishedTable data={publishedEvents} />
         </PageSectionContainer>
       </div>
 

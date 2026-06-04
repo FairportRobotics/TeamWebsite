@@ -1,25 +1,25 @@
 import { approveRequest } from "@/server/functions/calendar/approveRequest";
 import { deleteEventFn } from "@/server/functions/calendar/deleteEvent";
 import { deleteEventDraftFn } from "@/server/functions/calendar/deleteEventDraft";
-import { getEventListDetailsFn } from "@/server/functions/calendar/getEventDetails";
-import {
-  getEventListForAdminFn,
-  type DraftEventAdminItem,
-} from "@/server/functions/calendar/getEventListForAdmin";
+import { getDraftEvents } from "@/server/functions/calendar/getDraftEvent";
+import { getPublishedEventsFn } from "@/server/functions/calendar/getPublishedEvents";
 import { requestApprovalCalendarFn } from "@/server/functions/calendar/requestApproval";
 import { queryOptions, useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const calendarQueries = {
-  all: ["calendars"],
-  list: (filters?: string) =>
+  draftsKey: ["draft-events"],
+  publishedKey: ["published-events"],
+
+  drafts: () =>
     queryOptions({
-      queryKey: [...calendarQueries.all, "list", filters],
-      queryFn: () => getEventListForAdminFn(),
+      queryKey: [calendarQueries.draftsKey],
+      queryFn: async () => await getDraftEvents(),
     }),
-  details: (id: string) =>
+
+  published: () =>
     queryOptions({
-      queryKey: [...calendarQueries.all, "details", id],
-      queryFn: () => getEventListDetailsFn({ data: { id } }),
+      queryKey: [calendarQueries.publishedKey],
+      queryFn: async () => await getPublishedEventsFn(),
     }),
 };
 
@@ -28,12 +28,12 @@ export function useRequestApprovalMutation() {
 
   return useMutation({
     mutationFn: async (id: string) => {
-      requestApprovalCalendarFn({ data: { id } });
+      await requestApprovalCalendarFn({ data: { id } });
     },
 
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: calendarQueries.all,
+        queryKey: [calendarQueries.draftsKey],
       });
     },
   });
@@ -44,28 +44,12 @@ export function useApproveMutation() {
 
   return useMutation({
     mutationFn: async (id: string) => {
-      approveRequest({ data: { id } });
+      await approveRequest({ data: { id } });
     },
 
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: calendarQueries.all,
-      });
-    },
-  });
-}
-
-export function useDeleteMutation() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async (code: string) => {
-      deleteEventFn({ data: { code } });
-    },
-
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: calendarQueries.all,
+        queryKey: [calendarQueries.draftsKey],
       });
     },
   });
@@ -76,13 +60,28 @@ export function useDeleteDraftMutation() {
 
   return useMutation({
     mutationFn: async (id: string) => {
-      deleteEventDraftFn({ data: { id } });
+      await deleteEventDraftFn({ data: { id } });
     },
 
     onSuccess: () => {
-      queryClient.setQueryData([calendarQueries.all], (oldData: DraftEventAdminItem[]) => {
-        console.log("useDeleteDraftMutation onSuccess");
-        return oldData.filter((d) => !d.id);
+      queryClient.invalidateQueries({
+        queryKey: [calendarQueries.draftsKey],
+      });
+    },
+  });
+}
+
+export function useDeletePublishedMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (code: string) => {
+      await deleteEventFn({ data: { code } });
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [calendarQueries.publishedKey],
       });
     },
   });

@@ -1,3 +1,4 @@
+import { PageSectionContainer } from "@/components/site/PageSectionContainer";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,11 +21,13 @@ import {
 } from "@/components/ui/table";
 import { getDateRangeParts } from "@/lib/utils";
 import {
+  calendarQueries,
   useApproveMutation,
   useDeleteDraftMutation,
   useRequestApprovalMutation,
 } from "@/queries/calendarQueries";
-import type { DraftEventAdminItem } from "@/server/functions/calendar/getEventListForAdmin";
+import type { DraftEvent } from "@/server/functions/calendar/getDraftEvent";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import {
   flexRender,
@@ -41,7 +44,8 @@ import { format } from "date-fns";
 import { ArrowUpDown, CalendarFold, Pencil, Stamp, Trash2, TrashIcon } from "lucide-react";
 import React from "react";
 
-export function EventDraftsTable({ data }: { data: DraftEventAdminItem[] }) {
+export function EventDraftsTable() {
+  const { data } = useSuspenseQuery(calendarQueries.drafts());
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [showDeleteAlert, setShowDeleteAlert] = React.useState(false);
@@ -63,7 +67,7 @@ export function EventDraftsTable({ data }: { data: DraftEventAdminItem[] }) {
     setShowDeleteAlert(false);
   };
 
-  const columns: ColumnDef<DraftEventAdminItem>[] = [
+  const columns: ColumnDef<DraftEvent>[] = [
     {
       accessorKey: "title",
       header: ({ column }) => {
@@ -164,7 +168,7 @@ export function EventDraftsTable({ data }: { data: DraftEventAdminItem[] }) {
             {status === "draft" ? (
               <Button
                 variant="default"
-                onClick={() => console.log("Request Approval", id)}
+                onClick={() => requestApprovalMutation.mutate(id)}
                 title="Request publication approval"
                 aria-description="Request publication approval"
                 className="bg-chart-2"
@@ -174,7 +178,7 @@ export function EventDraftsTable({ data }: { data: DraftEventAdminItem[] }) {
             ) : (
               <Button
                 variant="default"
-                onClick={() => console.log("Approve", id)}
+                onClick={() => approveMutation.mutate(id)}
                 title="Approve to publish"
                 aria-description="Approve to publish"
                 className="bg-chart-4"
@@ -213,7 +217,11 @@ export function EventDraftsTable({ data }: { data: DraftEventAdminItem[] }) {
   });
 
   return (
-    <div>
+    <PageSectionContainer
+      title="Event Drafts"
+      subTitle={`(${data.length} records)`}
+      initialState="expanded"
+    >
       <AlertDialog open={showDeleteAlert} onOpenChange={setShowDeleteAlert}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -270,6 +278,6 @@ export function EventDraftsTable({ data }: { data: DraftEventAdminItem[] }) {
           )}
         </TableBody>
       </Table>
-    </div>
+    </PageSectionContainer>
   );
 }
