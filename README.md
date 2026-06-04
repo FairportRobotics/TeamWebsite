@@ -81,15 +81,8 @@ pnpm run db:studio
 pnpm dlx shadcn@latest apply --preset b6WK0xowQq
 ```
 
-Themes
-https://tweakcn.com/themes/cmlnfhvh2000004l7ggzsans1
-https://tweakcn.com/themes/cmmadj6zx000204l23giib1s2
-https://tweakcn.com/themes/cmmz25mmt000204l08j7sbxg6
-https://tweakcn.com/themes/cmmab9sq4000004l58w1r3vak
-https://tweakcn.com/themes/cmlk6zefr000004lbe9jygsqc
+### Themes
 
-[NLAN](https://tweakcn.com/themes/cmli80zt6000004l757xqgizs)
-
-[Sesi Theme 2](https://tweakcn.com/themes/cmmmevxer000004l25m5x7ee0)
+[Meridian](https://tweakcn.com/themes/cmojzn0oy000505ldam699poc?p=colors)
 
 () => navigator.clipboard.writeText(id)
