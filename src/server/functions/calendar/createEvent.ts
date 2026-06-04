@@ -6,6 +6,7 @@ import { anyPermissionMiddleware } from "@/server/middleware/anyPermission";
 import { authenticatedMiddleware } from "@/server/middleware/authenticated";
 import { createServerFn } from "@tanstack/react-start";
 import { zodValidator } from "@tanstack/zod-adapter";
+import { eq } from "drizzle-orm";
 import { z } from "zod";
 
 // Create a schema for validating calendar insert and update operations. We can reuse this for
@@ -54,7 +55,6 @@ export const createEventFn = createServerFn()
     try {
       // Insert records in a transaction so we can rollback if anything goes sideways.
       await db.transaction(async (tx) => {
-        console.log("createEventFn Create dbEventDraft record from", data);
         await tx.insert(dbEventDraft).values({
           id: id,
           eventId: null,
@@ -71,7 +71,6 @@ export const createEventFn = createServerFn()
           signupLinkVisibleTo: data.signupLinkVisibleTo,
         });
 
-        console.log("createEventFn Create dbEventDraftDate records from", data);
         data.dates.forEach(async (d) => {
           await tx.insert(dbEventDraftDate).values({
             draftId: id,
@@ -79,8 +78,15 @@ export const createEventFn = createServerFn()
             endAt: d.endAt,
           });
         });
+      });
 
-        console.log("createEventFn Success");
+      // Return the newly created draft.
+      return db.query.dbEventDraft.findFirst({
+        where: eq(dbEventDraft.id, id),
+        with: {
+          dates: true,
+          createdBy: true,
+        },
       });
     } catch (error) {
       console.error(error);

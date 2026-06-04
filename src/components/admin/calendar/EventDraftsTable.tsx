@@ -21,7 +21,7 @@ import {
 import { getDateRangeParts } from "@/lib/utils";
 import {
   useApproveMutation,
-  useDeleteMutation,
+  useDeleteDraftMutation,
   useRequestApprovalMutation,
 } from "@/queries/calendarQueries";
 import type { DraftEventAdminItem } from "@/server/functions/calendar/getEventListForAdmin";
@@ -45,20 +45,21 @@ export function EventDraftsTable({ data }: { data: DraftEventAdminItem[] }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [showDeleteAlert, setShowDeleteAlert] = React.useState(false);
-  const [selectedEventCode, setSelectedEventCode] = React.useState<string | null>(null);
+  const [selectedEventId, setSelectedEventId] = React.useState<string | null>(null);
 
+  // Entity mutations.
   const requestApprovalMutation = useRequestApprovalMutation();
   const approveMutation = useApproveMutation();
-  const deleteMutation = useDeleteMutation();
+  const deleteMutation = useDeleteDraftMutation();
 
-  const handleVerifyDelete = (code: string) => {
-    setSelectedEventCode(code);
+  const handleVerifyDelete = (id: string) => {
+    setSelectedEventId(id);
     setShowDeleteAlert(true);
   };
 
   const handleConfirmDelete = () => {
-    deleteMutation.mutate(selectedEventCode!);
-    setSelectedEventCode(null);
+    deleteMutation.mutate(selectedEventId!);
+    setSelectedEventId(null);
     setShowDeleteAlert(false);
   };
 
@@ -122,14 +123,6 @@ export function EventDraftsTable({ data }: { data: DraftEventAdminItem[] }) {
       },
     },
     {
-      accessorKey: "visibleTo",
-      header: "Visible To",
-      cell: ({ row }) => {
-        const visibleTo = row.original.visibleTo;
-        return <div>{visibleTo?.join(", ")}</div>;
-      },
-    },
-    {
       accessorKey: "createdAt",
       header: "Created By",
       cell: ({ row }) => {
@@ -141,6 +134,14 @@ export function EventDraftsTable({ data }: { data: DraftEventAdminItem[] }) {
             <div>{format(updatedAt, "MM/dd/yyyy h:mmaaa")} </div>
           </div>
         );
+      },
+    },
+    {
+      accessorKey: "visibleTo",
+      header: "Visible To",
+      cell: ({ row }) => {
+        const visibleTo = row.original.visibleTo;
+        return <div className="flex items-center gap-1">{visibleTo?.join(", ")}</div>;
       },
     },
     {
@@ -164,8 +165,8 @@ export function EventDraftsTable({ data }: { data: DraftEventAdminItem[] }) {
               <Button
                 variant="default"
                 onClick={() => console.log("Request Approval", id)}
-                title="Request Publish Approval"
-                aria-description="Request Publish Approval"
+                title="Request publication approval"
+                aria-description="Request publication approval"
                 className="bg-chart-2"
               >
                 <CalendarFold />
@@ -174,8 +175,8 @@ export function EventDraftsTable({ data }: { data: DraftEventAdminItem[] }) {
               <Button
                 variant="default"
                 onClick={() => console.log("Approve", id)}
-                title="Approve to Publish"
-                aria-description="Approve to Publish"
+                title="Approve to publish"
+                aria-description="Approve to publish"
                 className="bg-chart-4"
               >
                 <Stamp />
@@ -184,7 +185,7 @@ export function EventDraftsTable({ data }: { data: DraftEventAdminItem[] }) {
 
             <Button
               variant="destructive"
-              onClick={() => console.log("Delete", id)}
+              onClick={() => handleVerifyDelete(id)}
               title="Delete"
               aria-description="Delete"
             >
@@ -219,10 +220,10 @@ export function EventDraftsTable({ data }: { data: DraftEventAdminItem[] }) {
             <AlertDialogMedia>
               <TrashIcon />
             </AlertDialogMedia>
-            <AlertDialogTitle>Delete Calendar Event</AlertDialogTitle>
+            <AlertDialogTitle>Delete Draft?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete this calendar Event and cannot be undone. Are you sure
-              you want to continue?
+              This will permanently delete this Event draft and cannot be undone. Are you sure you
+              want to continue?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
