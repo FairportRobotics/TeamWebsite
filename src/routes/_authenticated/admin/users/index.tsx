@@ -1,45 +1,37 @@
-import { UserListTable } from "@/components/admin/users/users-list-table";
+import { UsersSection } from "@/components/admin/users/UsersSection";
 import { BackTo } from "@/components/site/BackTo";
 import { PageDescription, PageHeader, PageTitle } from "@/components/site/PageHeader";
-import { SectionHeader } from "@/components/site/SectionHeader";
-import { getListForAdminFn } from "@/server/functions/user/getListForAdmin";
+import { userQueries } from "@/queries/userQueries";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/admin/users/")({
-  beforeLoad: async ({ context }) => {},
   component: RouteComponent,
   loader: async ({ context }) => {
-    // Pull needed data from the context.
+    context.queryClient?.ensureQueryData(userQueries.list());
     const userId = context.auth.user?.id;
 
-    // Get all the users.
-    const users = await getListForAdminFn();
-
     return {
-      users,
       selfId: userId,
     };
   },
 });
 
 function RouteComponent() {
-  const { users, selfId } = Route.useLoaderData();
+  const { selfId } = Route.useLoaderData();
 
   return (
     <div className="">
       <BackTo to="/admin" label="Back to Admin" />
       <PageHeader>
         <PageTitle>
-          User <span className="text-(--color-destructive)">Administration</span>
+          User <span className="text-destructive">Administration</span>
         </PageTitle>
         <PageDescription>
           Manage users, roles, permissions, and other administrative tasks for the website.
         </PageDescription>
       </PageHeader>
 
-      <SectionHeader>Users ({users.length})</SectionHeader>
-
-      <UserListTable data={users} currentUserId={selfId!} />
+      <UsersSection currentUserId={selfId!} />
     </div>
   );
 }
