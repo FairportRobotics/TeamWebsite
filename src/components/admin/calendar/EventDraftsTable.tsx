@@ -11,14 +11,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
   Table,
   TableBody,
   TableCell,
@@ -46,7 +38,7 @@ import {
   type SortingState,
 } from "@tanstack/react-table";
 import { format } from "date-fns";
-import { ArrowUpDown, Hand, MoreHorizontal, ThumbsUp, TrashIcon } from "lucide-react";
+import { ArrowUpDown, CalendarFold, Pencil, Stamp, Trash2, TrashIcon } from "lucide-react";
 import React from "react";
 
 export function EventDraftsTable({ data }: { data: DraftEventAdminItem[] }) {
@@ -152,10 +144,6 @@ export function EventDraftsTable({ data }: { data: DraftEventAdminItem[] }) {
       },
     },
     {
-      accessorKey: "status",
-      header: "Status",
-    },
-    {
       accessorKey: "id",
       header: "Actions",
       cell: ({ row }) => {
@@ -163,35 +151,45 @@ export function EventDraftsTable({ data }: { data: DraftEventAdminItem[] }) {
         const status = row.original.status;
 
         return (
-          <div className="flex items-center">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <MoreHorizontal />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuGroup>
-                  {status === "draft" && (
-                    <DropdownMenuItem onClick={() => requestApprovalMutation.mutate(id)}>
-                      <Hand />
-                      Request Approval
-                    </DropdownMenuItem>
-                  )}
-                  {status === "pending" && (
-                    <DropdownMenuItem onClick={() => approveMutation.mutate(id)}>
-                      <ThumbsUp />
-                      Approve
-                    </DropdownMenuItem>
-                  )}
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                  <DropdownMenuItem variant="destructive" onClick={() => handleVerifyDelete(id)}>
-                    <TrashIcon />
-                    Delete
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
+          <div className="flex items-center gap-1">
+            <Button
+              variant="default"
+              onClick={() => console.log("Edit", id)}
+              title="Edit Draft"
+              aria-description="Edit"
+            >
+              <Pencil />
+            </Button>
+            {status === "draft" ? (
+              <Button
+                variant="default"
+                onClick={() => console.log("Request Approval", id)}
+                title="Request Publish Approval"
+                aria-description="Request Publish Approval"
+                className="bg-chart-2"
+              >
+                <CalendarFold />
+              </Button>
+            ) : (
+              <Button
+                variant="default"
+                onClick={() => console.log("Approve", id)}
+                title="Approve to Publish"
+                aria-description="Approve to Publish"
+                className="bg-chart-4"
+              >
+                <Stamp />
+              </Button>
+            )}
+
+            <Button
+              variant="destructive"
+              onClick={() => console.log("Delete", id)}
+              title="Delete"
+              aria-description="Delete"
+            >
+              <Trash2 />
+            </Button>
           </div>
         );
       },
@@ -256,7 +254,7 @@ export function EventDraftsTable({ data }: { data: DraftEventAdminItem[] }) {
             table.getRowModel().rows.map((row) => (
               <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id} className="items-center">
+                  <TableCell key={cell.id} className="items-center py-1">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}

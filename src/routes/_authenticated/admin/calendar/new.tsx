@@ -14,7 +14,7 @@ function RouteComponent() {
   const router = useRouter();
 
   async function handleSubmit(value: CalendarFormValues) {
-    const newEvent = await createEventFn({
+    await createEventFn({
       data: {
         title: value.title,
         description: value.description,
@@ -24,12 +24,11 @@ function RouteComponent() {
         informationLink: value.informationLink,
         signupLink: value.signupLink,
         signupLinkVisibleTo: value.signupLinkVisibleTo as VisibleEnumType[],
-        status: "draft",
       },
     });
 
     toast.success("Calendar event was successfully created");
-    router.navigate({ to: "/admin/calendar/$id/edit", params: { id: newEvent! } });
+    router.navigate({ to: "/admin/calendar" });
   }
 
   // Create a default empty calendar form values object.

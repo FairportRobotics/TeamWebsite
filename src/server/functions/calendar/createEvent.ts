@@ -22,7 +22,6 @@ export const createEventSchema = z
     informationLink: z.url().optional().or(z.literal("")),
     signupLink: z.url().optional().or(z.literal("")),
     signupLinkVisibleTo: z.array(z.enum(VisibleToOptions)),
-    status: z.string(),
   })
   .refine(
     (data) => {
@@ -55,8 +54,10 @@ export const createEventFn = createServerFn()
     try {
       // Insert records in a transaction so we can rollback if anything goes sideways.
       await db.transaction(async (tx) => {
+        console.log("createEventFn Create dbEventDraft record from", data);
         await tx.insert(dbEventDraft).values({
           id: id,
+          eventId: null,
           createdBy: currentUserId,
           status: "draft",
 
@@ -70,6 +71,7 @@ export const createEventFn = createServerFn()
           signupLinkVisibleTo: data.signupLinkVisibleTo,
         });
 
+        console.log("createEventFn Create dbEventDraftDate records from", data);
         data.dates.forEach(async (d) => {
           await tx.insert(dbEventDraftDate).values({
             draftId: id,
@@ -77,6 +79,8 @@ export const createEventFn = createServerFn()
             endAt: d.endAt,
           });
         });
+
+        console.log("createEventFn Success");
       });
     } catch (error) {
       console.error(error);
