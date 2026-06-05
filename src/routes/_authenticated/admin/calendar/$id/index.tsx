@@ -20,7 +20,7 @@ function RouteComponent() {
       <BackTo to="/admin/calendar" label="Calendar Admin" />
       <PageHeader>
         <PageTitle>
-          Calendar <span className="text-(--color-destructive)">Details</span>
+          Calendar <span className="text-destructive">Details</span>
         </PageTitle>
         <PageDescription>View the details for a single calendar entry.</PageDescription>
       </PageHeader>

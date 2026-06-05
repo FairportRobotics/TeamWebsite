@@ -1,7 +1,7 @@
 // prettier-ignore
 import { db } from "@/db";
 import { dbEventDraft, dbEventDraftDate } from "@/db/schema";
-import { seedCalendar } from "@/db/seed/calendar";
+import { seedEvents } from "@/db/seed/events";
 import { Permissions } from "@/lib/auth/permissions";
 import { anyPermissionMiddleware } from "@/server/middleware/anyPermission";
 import { sessionMiddleware } from "@/server/middleware/session";
@@ -16,7 +16,7 @@ export const seedEventsFn = createServerFn()
   .handler(async ({ context }) => {
     const currentUserId = context!.user!.id;
 
-    seedCalendar.forEach(async (data) => {
+    seedEvents.forEach(async (data) => {
       console.log("🌱 Seeding Calendar", data.title);
       const id = crypto.randomUUID();
 

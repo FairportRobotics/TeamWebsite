@@ -33,8 +33,8 @@ function RouteComponent() {
 
   // Create a default empty calendar form values object.
   const emptyCalendar: CalendarFormValues = {
-    id: undefined,
-    eventId: undefined,
+    id: crypto.randomUUID(),
+    eventId: null,
     status: "draft",
     title: "",
     description: "",
@@ -49,7 +49,7 @@ function RouteComponent() {
       <BackTo to="/admin/calendar" label="Calendar Admin" />
       <PageHeader>
         <PageTitle>
-          Create <span className="text-(--color-destructive)">New Event</span>
+          Create <span className="text-destructive">New Event</span>
         </PageTitle>
         <PageDescription>Create a new Event to appear on the Calendar.</PageDescription>
       </PageHeader>

@@ -14,7 +14,7 @@ function App() {
     <main className="">
       <PageHeader>
         <PageTitle>
-          Fairport Robotics <span className="text-(--color-destructive)">Team 578</span>
+          Fairport Robotics <span className="text-destructive">Team 578</span>
         </PageTitle>
         <PageDescription>
           <div>Welcome {user ? user.name : "Guest"}!</div>
@@ -24,7 +24,7 @@ function App() {
       <section>
         <p>
           Some of the look and feel of this site has been shamelessly stolen from the amazing{" "}
-          <a href="https://1418.team/team" target="_blank" className="text-(--color-destructive)">
+          <a href="https://1418.team/team" target="_blank" className="text-destructive">
             Team 1418
           </a>
           .
@@ -34,7 +34,7 @@ function App() {
           <a
             href="https://fairportrobotics.org/prod/wp/"
             target="_blank"
-            className="text-(--color-destructive)"
+            className="text-destructive"
           >
             the legacy team website.
           </a>
@@ -44,7 +44,7 @@ function App() {
           <a
             href="https://team-website-pi.vercel.app/"
             target="_blank"
-            className="text-(--color-destructive)"
+            className="text-destructive"
           >
             Vercel live version
           </a>{" "}

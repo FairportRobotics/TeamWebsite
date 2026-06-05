@@ -9,7 +9,7 @@ function RouteComponent() {
   return (
     <PageHeader>
       <PageTitle>
-        Get in <span className="text-(--color-destructive)">touch</span>
+        Get in <span className="text-destructive">touch</span>
       </PageTitle>
       <PageDescription>
         Do you have quetions about our team, sponsorship opportunities, or how you might be able to

@@ -10,7 +10,7 @@ function RouteComponent() {
     <div>
       <PageHeader>
         <PageTitle>
-          Naughty, <span className="text-(--color-destructive)">naughty</span>
+          Naughty, <span className="text-destructive">naughty</span>
         </PageTitle>
         <PageDescription className="flex flex-col gap-4">
           <p>It looks like you tried to access an area for which you don't have permission.</p>

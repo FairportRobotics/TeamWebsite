@@ -10,7 +10,7 @@ function RouteComponent() {
     <div>
       <PageHeader>
         <PageTitle>
-          On <span className="text-(--color-destructive)">no</span>
+          On <span className="text-destructive">no</span>
         </PageTitle>
         <PageDescription className="flex flex-col gap-4">
           <p>
@@ -19,7 +19,7 @@ function RouteComponent() {
           </p>
           <p>
             Just navigate to the{" "}
-            <Link to="/auth/signin" className="text-(--color-destructive)">
+            <Link to="/auth/signin" className="text-destructive">
               Sign In
             </Link>{" "}
             page and continue from there.

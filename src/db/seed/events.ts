@@ -28,7 +28,7 @@ SignUpGenius sign up form
 import { Roles } from "@/lib/auth/roles";
 import type { EventWithDatesSelect } from "../schema";
 
-export const seedCalendar = [
+export const seedEvents = [
   {
     title: "Ra Cha Cha Ruckus",
     description: "Let's get together and have some food.",

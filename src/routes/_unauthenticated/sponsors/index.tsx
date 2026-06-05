@@ -23,7 +23,7 @@ function RouteComponent() {
     <div className="flex flex-col items-center justify-center w-full">
       <PageHeader className="w-3/4">
         <PageTitle>
-          Our <span className="text-(--color-destructive)">sponsors</span>
+          Our <span className="text-destructive">sponsors</span>
         </PageTitle>
         <PageDescription>
           We are fortunate to have many generous and wonderful sponsors. We cannot thank them enough

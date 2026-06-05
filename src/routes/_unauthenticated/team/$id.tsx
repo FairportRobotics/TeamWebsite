@@ -22,7 +22,7 @@ function RouteComponent() {
       <BackTo to="/team" label="Back to Team" />
       <PageHeader>
         <PageTitle>
-          Team <span className="text-(--color-destructive)">Member</span>
+          Team <span className="text-destructive">Member</span>
         </PageTitle>
         <PageDescription className="flex flex-col gap-4">
           <p>How about this one...</p>

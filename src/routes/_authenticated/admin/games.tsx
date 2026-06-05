@@ -21,7 +21,7 @@ function RouteComponent() {
       <BackTo to="/admin" label="Back to Admin" />
       <PageHeader>
         <PageTitle>
-          Game Year <span className="text-(--color-destructive)">Administration</span>
+          Game Year <span className="text-destructive">Administration</span>
         </PageTitle>
         <PageDescription>Manage game years, robots and sparketing efforts.</PageDescription>
       </PageHeader>

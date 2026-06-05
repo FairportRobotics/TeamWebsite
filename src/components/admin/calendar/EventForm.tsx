@@ -21,8 +21,8 @@ export type CalendarDate = {
 };
 
 export type CalendarFormValues = {
-  id?: string | undefined;
-  eventId?: string | undefined;
+  id?: string | null;
+  eventId?: string | null;
   title: string;
   description: string;
   location: string;
@@ -93,24 +93,20 @@ export const EventForm = ({
         >
           <div className="flex flex-col gap-6">
             {/* id */}
-            {defaultValues.id && (
-              <form.Field
-                name="id"
-                children={(field) => (
-                  <input type="hidden" name={field.name} value={field.state.value} />
-                )}
-              />
-            )}
+            <form.Field
+              name="id"
+              children={(field) => (
+                <input type="hidden" name={field.name} value={field.state.value ?? ""} />
+              )}
+            />
 
             {/* eventId */}
-            {defaultValues.id && (
-              <form.Field
-                name="eventId"
-                children={(field) => (
-                  <input type="hidden" name={field.name} value={field.state.value} />
-                )}
-              />
-            )}
+            <form.Field
+              name="eventId"
+              children={(field) => (
+                <input type="hidden" name={field.name} value={field.state.value ?? ""} />
+              )}
+            />
 
             {/* Title */}
             <form.Field
@@ -127,7 +123,7 @@ export const EventForm = ({
                     type="text"
                     onChange={(e) => field.handleChange(e.target.value)}
                   />
-                  <ul className="text-red-600 list-disc list-inside">
+                  <ul className="text-destructive list-disc list-inside">
                     {field.state.meta.errors.map((e) => {
                       return (
                         <li className="" key={e?.message}>
@@ -155,7 +151,7 @@ export const EventForm = ({
                     rows={5}
                     onChange={(e) => field.handleChange(e.target.value)}
                   />
-                  <ul className="text-red-600 list-disc list-inside">
+                  <ul className="text-destructive list-disc list-inside">
                     {field.state.meta.errors.map((e) => {
                       return (
                         <li className="" key={e?.message}>
@@ -183,7 +179,7 @@ export const EventForm = ({
                     type="text"
                     onChange={(e) => field.handleChange(e.target.value)}
                   />
-                  <ul className="text-red-600 list-disc list-inside">
+                  <ul className="text-destructive list-disc list-inside">
                     {field.state.meta.errors.map((e) => {
                       return (
                         <li className="" key={e?.message}>
@@ -206,7 +202,7 @@ export const EventForm = ({
                     dateSelected={(startDate, endDate) => handleAddDate(startDate, endDate)}
                   />
                   <div>
-                    <ul className="text-red-600 list-disc list-inside">
+                    <ul className="text-destructive list-disc list-inside">
                       {field.state.meta.errors.map((e) => {
                         return (
                           <li className="" key={e?.message}>
@@ -270,7 +266,7 @@ export const EventForm = ({
                       </div>
                     ))}
                   </div>
-                  <ul className="text-red-600 list-disc list-inside">
+                  <ul className="text-destructive list-disc list-inside">
                     {field.state.meta.errors.map((e) => {
                       return (
                         <li className="" key={e?.message}>
@@ -312,7 +308,7 @@ export const EventForm = ({
                           type="text"
                           onChange={(e) => field.handleChange(e.target.value)}
                         />
-                        <ul className="text-red-600 list-disc list-inside">
+                        <ul className="text-destructive list-disc list-inside">
                           {field.state.meta.errors.map((e) => {
                             return (
                               <li className="" key={e?.message}>
@@ -359,7 +355,7 @@ export const EventForm = ({
                           type="text"
                           onChange={(e) => field.handleChange(e.target.value)}
                         />
-                        <ul className="text-red-600 list-disc list-inside">
+                        <ul className="text-destructive list-disc list-inside">
                           {field.state.meta.errors.map((e) => {
                             return (
                               <li className="" key={e?.message}>
@@ -401,7 +397,7 @@ export const EventForm = ({
                             </div>
                           ))}
                         </div>
-                        <ul className="text-red-600 list-disc list-inside">
+                        <ul className="text-destructive list-disc list-inside">
                           {field.state.meta.errors.map((e) => {
                             return (
                               <li className="" key={e?.message}>
@@ -422,7 +418,7 @@ export const EventForm = ({
           <div className="mt-8 space-x-4">
             <TeamActionButton
               type="submit"
-              action={() => {
+              action={async () => {
                 form.handleSubmit();
                 return Promise.resolve({ error: null });
               }}

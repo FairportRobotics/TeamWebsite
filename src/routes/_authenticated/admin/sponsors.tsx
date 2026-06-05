@@ -26,7 +26,7 @@ function RouteComponent() {
       <BackTo to="/admin" label="Back to Admin" />
       <PageHeader>
         <PageTitle>
-          Sponsor <span className="text-(--color-destructive)">Administration</span>
+          Sponsor <span className="text-destructive">Administration</span>
         </PageTitle>
         <PageDescription>Manage sponsors.</PageDescription>
       </PageHeader>

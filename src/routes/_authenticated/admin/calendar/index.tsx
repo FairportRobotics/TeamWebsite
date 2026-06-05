@@ -18,7 +18,7 @@ function RouteComponent() {
       <BackTo to="/admin" label="Back to Admin" />
       <PageHeader>
         <PageTitle>
-          Calendar <span className="text-(--color-destructive)">Administration</span>
+          Calendar <span className="text-destructive">Administration</span>
         </PageTitle>
         <PageDescription>Manage events that appear on the Calendar.</PageDescription>
       </PageHeader>
