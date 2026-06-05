@@ -24,7 +24,7 @@ export function UsersSection({ currentUserId }: { currentUserId: string }) {
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Name
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            <ArrowUpDown />
           </Button>
         );
       },
@@ -54,7 +54,7 @@ export function UsersSection({ currentUserId }: { currentUserId: string }) {
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Email
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            <ArrowUpDown />
           </Button>
         );
       },
@@ -68,7 +68,7 @@ export function UsersSection({ currentUserId }: { currentUserId: string }) {
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Roles
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            <ArrowUpDown />
           </Button>
         );
       },
@@ -87,7 +87,7 @@ export function UsersSection({ currentUserId }: { currentUserId: string }) {
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Banned
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            <ArrowUpDown />
           </Button>
         );
       },
@@ -105,7 +105,7 @@ export function UsersSection({ currentUserId }: { currentUserId: string }) {
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Created At
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            <ArrowUpDown />
           </Button>
         );
       },
@@ -123,7 +123,7 @@ export function UsersSection({ currentUserId }: { currentUserId: string }) {
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Accounts
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            <ArrowUpDown />
           </Button>
         );
       },
@@ -137,7 +137,7 @@ export function UsersSection({ currentUserId }: { currentUserId: string }) {
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Sessions
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            <ArrowUpDown />
           </Button>
         );
       },
@@ -151,7 +151,7 @@ export function UsersSection({ currentUserId }: { currentUserId: string }) {
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Last Login
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            <ArrowUpDown />
           </Button>
         );
       },

@@ -266,6 +266,7 @@ export const EventForm = ({
                       </div>
                     ))}
                   </div>
+
                   <ul className="text-destructive list-disc list-inside">
                     {field.state.meta.errors.map((e) => {
                       return (
@@ -423,7 +424,7 @@ export const EventForm = ({
                 return Promise.resolve({ error: null });
               }}
             >
-              Submit
+              Save
             </TeamActionButton>
             <TeamActionButton
               type="button"
