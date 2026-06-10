@@ -62,10 +62,9 @@ export function DataTable<TData, TValue>({
       <div className="flex items-center justify-between gap-2">
         <div>
           <InputWithClear
-            placeholder="Filter..."
+            placeholder="Search..."
             value={globalFilter}
             onChange={(event) => setGlobalFilter(event.target.value)}
-            className="max-w-sm"
           />
         </div>
         <div className="flex items-center justify-end gap-2 my-4 mx-2">

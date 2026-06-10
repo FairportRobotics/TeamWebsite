@@ -27,7 +27,7 @@ function RouteComponent() {
       <BackTo to="/calendar" label="Calendar" />
       <PageHeader>
         <PageTitle>
-          Event <span className="text-(--color-destructive)">Details</span>
+          Event <span className="text-destructive">Details</span>
         </PageTitle>
       </PageHeader>
 

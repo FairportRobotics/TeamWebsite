@@ -3,14 +3,11 @@ import { PageSectionContainer } from "@/components/site/PageSectionContainer";
 // prettier-ignore
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogMedia, AlertDialogTitle, } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-// prettier-ignore
-// prettier-ignore
 import { getDateRangeParts } from "@/lib/utils";
 import { eventQueries, useDeletePublishedMutation } from "@/queries/eventQueries";
 import type { PublishedEvent } from "@/server/functions/calendar/getPublishedEvents";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link, useRouter } from "@tanstack/react-router";
-// prettier-ignore
 import { type ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { ArrowUpDown, Pencil, Trash2, TrashIcon } from "lucide-react";
@@ -45,7 +42,7 @@ export function EventPublishedSection() {
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Title
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            <ArrowUpDown />
           </Button>
         );
       },
@@ -55,7 +52,7 @@ export function EventPublishedSection() {
 
         return (
           <div>
-            <Link to="/admin/calendar/$id/edit" params={{ id }}>
+            <Link to="/admin/calendar/$id" params={{ id }}>
               {title}
             </Link>
           </div>
@@ -71,7 +68,7 @@ export function EventPublishedSection() {
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Location
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            <ArrowUpDown />
           </Button>
         );
       },
@@ -85,7 +82,7 @@ export function EventPublishedSection() {
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Dates
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            <ArrowUpDown />
           </Button>
         );
       },
@@ -121,7 +118,7 @@ export function EventPublishedSection() {
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Created
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            <ArrowUpDown />
           </Button>
         );
       },

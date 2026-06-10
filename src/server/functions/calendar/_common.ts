@@ -35,8 +35,8 @@ export const saveEventDateSchema = z.object({
 // both operations since they have the same requirements.
 export const updateEventSchema = z
   .object({
-    id: z.string(),
-    eventId: z.string().optional(),
+    id: z.string().optional().nullable(),
+    eventId: z.string().optional().nullable(),
     status: z.string(),
     title: z.string().trim().min(1, "Title is required"),
     description: z.string().trim().min(1, "Description is required"),

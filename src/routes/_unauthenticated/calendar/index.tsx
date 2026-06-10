@@ -22,7 +22,7 @@ function RouteComponent() {
     <div>
       <PageHeader>
         <PageTitle>
-          Team <span className="text-(--color-destructive)">calendar</span>
+          Team <span className="text-destructive">calendar</span>
         </PageTitle>
         <PageDescription>
           Here's where you can find out what the team is up to. We'll display upcoming events and

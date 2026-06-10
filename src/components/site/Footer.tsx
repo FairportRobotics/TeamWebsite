@@ -49,7 +49,7 @@ export default function Footer() {
         <div>
           <h2 className="text-2xl uppercase text-white font-semibold">Get in touch</h2>
           <div>Address here</div>
-          <div className="hover:text-(--color-destructive)">
+          <div className="hover:text-destructive">
             <Link to="/contact">Contact us</Link>
           </div>
           <div className="flex flex-row gap-2 mt-8 overflow-hidden">

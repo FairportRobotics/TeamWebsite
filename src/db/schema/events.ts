@@ -1,10 +1,12 @@
 import { user } from "@/db/schema";
 import { statusEnum, visibleEnum, type InferResultType } from "@/db/schema/_common";
 import { Roles } from "@/lib/auth/roles";
-import { index, jsonb, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { index, jsonb, pgSchema, text, timestamp, uuid } from "drizzle-orm/pg-core";
+
+export const eventSchema = pgSchema("event");
 
 // Stores all the Events which the team will host or participate.
-export const dbEvent = pgTable("event_publish", {
+export const dbEvent = eventSchema.table("published", {
   id: uuid("id").primaryKey().defaultRandom(),
 
   createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -24,8 +26,8 @@ export const dbEvent = pgTable("event_publish", {
 });
 
 // Stores the date ranges of Events. In most cases, there will be a single date range.
-export const dbEventDate = pgTable(
-  "event_publish_date",
+export const dbEventDate = eventSchema.table(
+  "published_date",
   {
     id: uuid("id").primaryKey().defaultRandom(),
     eventId: uuid("event_id").references(() => dbEvent.id, { onDelete: "cascade" }),
@@ -36,7 +38,7 @@ export const dbEventDate = pgTable(
 );
 
 // Drafts for Events that are being edited or new and not yet approved.
-export const dbEventDraft = pgTable("event_draft", {
+export const dbEventDraft = eventSchema.table("draft", {
   id: uuid("id").primaryKey().defaultRandom(),
   eventId: uuid("event_id").references(() => dbEvent.id, { onDelete: "cascade" }),
 
@@ -45,6 +47,7 @@ export const dbEventDraft = pgTable("event_draft", {
     .notNull()
     .references(() => user.id, { onDelete: "no action" }),
   status: statusEnum("status").notNull().default("draft"),
+  statusComments: text("status_comments"),
 
   visibleTo: visibleEnum("visible_to").array().default([Roles.Everyone]),
   title: text("title").notNull(),
@@ -57,8 +60,8 @@ export const dbEventDraft = pgTable("event_draft", {
     .default([Roles.Student, Roles.Mentor]),
 });
 
-export const dbEventDraftDate = pgTable(
-  "event_draft_date",
+export const dbEventDraftDate = eventSchema.table(
+  "draft_date",
   {
     id: uuid("id").primaryKey().defaultRandom(),
     draftId: uuid("draft_id").references(() => dbEventDraft.id, { onDelete: "cascade" }),
@@ -69,7 +72,7 @@ export const dbEventDraftDate = pgTable(
 );
 
 // History table that stores changes to Event Draft records.
-export const dbEventDraftHistory = pgTable("event_draft_history", {
+export const dbEventDraftHistory = eventSchema.table("draft_history", {
   id: uuid("id").primaryKey().defaultRandom(),
   draftId: uuid("draft_id"),
   eventId: uuid("event_id"),

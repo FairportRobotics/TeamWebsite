@@ -1,14 +1,17 @@
 import { DataTable } from "@/components/site/DataTable";
 import { PageSectionContainer } from "@/components/site/PageSectionContainer";
+import { TeamActionButton } from "@/components/site/TeamActionButtom";
 import { Button } from "@/components/ui/button";
 import { userQueries } from "@/queries/userQueries";
 import type { UserListItem } from "@/server/functions/user/getListForAdmin";
+import { seedUsersFn } from "@/server/functions/user/seed";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { Link } from "@tanstack/react-router";
+import { Link, useRouter } from "@tanstack/react-router";
 import { type ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 
 export function UsersSection({ currentUserId }: { currentUserId: string }) {
+  const router = useRouter();
   const { data } = useSuspenseQuery(userQueries.list());
 
   const columns: ColumnDef<UserListItem>[] = [
@@ -21,7 +24,7 @@ export function UsersSection({ currentUserId }: { currentUserId: string }) {
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Name
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            <ArrowUpDown />
           </Button>
         );
       },
@@ -51,7 +54,7 @@ export function UsersSection({ currentUserId }: { currentUserId: string }) {
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Email
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            <ArrowUpDown />
           </Button>
         );
       },
@@ -65,7 +68,7 @@ export function UsersSection({ currentUserId }: { currentUserId: string }) {
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Roles
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            <ArrowUpDown />
           </Button>
         );
       },
@@ -84,7 +87,7 @@ export function UsersSection({ currentUserId }: { currentUserId: string }) {
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Banned
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            <ArrowUpDown />
           </Button>
         );
       },
@@ -102,7 +105,7 @@ export function UsersSection({ currentUserId }: { currentUserId: string }) {
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Created At
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            <ArrowUpDown />
           </Button>
         );
       },
@@ -120,7 +123,7 @@ export function UsersSection({ currentUserId }: { currentUserId: string }) {
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Accounts
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            <ArrowUpDown />
           </Button>
         );
       },
@@ -134,7 +137,7 @@ export function UsersSection({ currentUserId }: { currentUserId: string }) {
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Sessions
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            <ArrowUpDown />
           </Button>
         );
       },
@@ -148,7 +151,7 @@ export function UsersSection({ currentUserId }: { currentUserId: string }) {
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Last Login
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            <ArrowUpDown />
           </Button>
         );
       },
@@ -159,6 +162,12 @@ export function UsersSection({ currentUserId }: { currentUserId: string }) {
     },
   ];
 
+  async function handleSeedUsers() {
+    await seedUsersFn();
+    router.invalidate();
+    return { error: null };
+  }
+
   return (
     <div>
       <PageSectionContainer
@@ -167,6 +176,15 @@ export function UsersSection({ currentUserId }: { currentUserId: string }) {
         initialState="expanded"
       >
         <DataTable data={data} columns={columns} />
+        <TeamActionButton
+          variant="destructive"
+          className="mt-10 ml-6"
+          action={() => {
+            return handleSeedUsers();
+          }}
+        >
+          Seed Users
+        </TeamActionButton>
       </PageSectionContainer>
     </div>
   );

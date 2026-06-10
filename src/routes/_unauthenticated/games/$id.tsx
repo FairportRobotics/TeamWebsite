@@ -46,7 +46,7 @@ function RouteComponent() {
     <div>
       <PageHeader>
         <PageTitle>
-          Game <span className="text-(--color-destructive)">details</span>
+          Game <span className="text-destructive">details</span>
         </PageTitle>
         <PageDescription>
           This is where we can list each game year and include the robot name and any other awards
@@ -60,14 +60,14 @@ function RouteComponent() {
         <CardHeader>
           <CardTitle className="flex flex-row items-start justify-between ">
             <div className="text-2xl font-bold">
-              {game.year}: <span className="text-(--color-destructive)">{game.name}</span>
+              {game.year}: <span className="text-destructive">{game.name}</span>
             </div>
           </CardTitle>
           <CardDescription>
             <p>This game lorem ipsum</p>
             <p>
               Learn more about the game{" "}
-              <span className="text-(--color-destructive)">
+              <span className="text-destructive">
                 <a href={game.gameUrl ?? ""} target="_blank">
                   here
                 </a>
