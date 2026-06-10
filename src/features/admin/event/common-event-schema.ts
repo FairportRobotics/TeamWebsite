@@ -9,10 +9,10 @@ export const eventDateSchema = z.object({
   endAt: z.date(),
 });
 
-export const newEventSchema = z
+export const editEventSchema = z
   .object({
-    id: z.string().optional().nullable(),
-    eventId: z.string().optional().nullable(),
+    id: z.string().nullable(),
+    eventId: z.string().nullable(),
     status: z.string(),
     title: z.string().trim().min(1, "Title is required"),
     description: z.string().trim().min(1, "Description is required"),

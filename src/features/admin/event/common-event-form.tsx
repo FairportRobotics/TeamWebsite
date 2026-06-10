@@ -1,20 +1,16 @@
 import { useAppForm } from "@/components/form";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import type { VisibleEnumType } from "@/db/schema";
-import { newEventSchema } from "@/features/admin/event/new/new-event-schema";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { editEventSchema } from "@/features/admin/event/common-event-schema";
 import { VisibleToOptions } from "@/server/functions/calendar/_common";
-import { createEventFn } from "@/server/functions/calendar/createEvent";
-import { useRouter } from "@tanstack/react-router";
-import { toast } from "sonner";
 
-type CalendarDate = {
+export type CalendarDate = {
   startAt: Date;
   endAt: Date;
 };
 
-type CalendarFormValues = {
-  id?: string | null;
-  eventId?: string | null;
+export type CalendarFormValues = {
+  id?: string | null | undefined;
+  eventId?: string | null | undefined;
   title: string;
   description: string;
   location: string;
@@ -26,45 +22,20 @@ type CalendarFormValues = {
   status: string | undefined;
 };
 
-// Create a default empty calendar form values object.
-const defaultNewEvent: CalendarFormValues = {
-  id: crypto.randomUUID(),
-  eventId: null,
-  status: "draft",
-  title: "",
-  description: "",
-  location: "",
-  dates: [],
-  visibleTo: ["everyone"],
-  informationLink: "",
-  signupLink: "",
-  signupLinkVisibleTo: ["everyone"],
-};
-
-export function NewEventForm({ className, ...props }: React.ComponentProps<"div">) {
-  const router = useRouter();
-
+export function CommonEventForm({
+  defaultValues,
+  onSubmit,
+}: {
+  defaultValues: CalendarFormValues;
+  onSubmit: (values: CalendarFormValues) => void;
+}) {
   const form = useAppForm({
-    defaultValues: defaultNewEvent,
+    defaultValues: defaultValues,
     validators: {
-      onChange: newEventSchema,
+      onChange: editEventSchema,
     },
     onSubmit: async ({ value }) => {
-      await createEventFn({
-        data: {
-          title: value.title,
-          description: value.description,
-          location: value.location,
-          visibleTo: value.visibleTo as VisibleEnumType[],
-          dates: value.dates,
-          informationLink: value.informationLink,
-          signupLink: value.signupLink,
-          signupLinkVisibleTo: value.signupLinkVisibleTo as VisibleEnumType[],
-        },
-      });
-
-      toast.success("Draft Event was successfully created");
-      router.navigate({ to: "/admin/calendar" });
+      onSubmit(value);
     },
   });
 
@@ -74,7 +45,7 @@ export function NewEventForm({ className, ...props }: React.ComponentProps<"div"
   }));
 
   return (
-    <Card>
+    <Card className="w-full max-w-2xl mx-auto">
       <CardHeader>
         <CardTitle>Title</CardTitle>
         <CardDescription>Description</CardDescription>
@@ -85,11 +56,12 @@ export function NewEventForm({ className, ...props }: React.ComponentProps<"div"
             e.preventDefault();
             form.handleSubmit();
           }}
-          className="flex flex-col gap-5"
+          className="flex flex-col gap-8"
         >
           {/* Hidden fields for new/edit support */}
           <form.AppField name="id">{(field) => <field.HiddenField />}</form.AppField>
           <form.AppField name="eventId">{(field) => <field.HiddenField />}</form.AppField>
+          <form.AppField name="status">{(field) => <field.HiddenField />}</form.AppField>
 
           {/* Title */}
           <form.AppField name="title">{(field) => <field.TextField label="Title" required={true} />}</form.AppField>
@@ -136,7 +108,6 @@ export function NewEventForm({ className, ...props }: React.ComponentProps<"div"
           </form.AppForm>
         </form>
       </CardContent>
-      <CardFooter>Footer</CardFooter>
     </Card>
   );
 }
