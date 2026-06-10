@@ -2,27 +2,35 @@ import { BackTo } from "@/components/site/BackTo";
 import { PageHeader, PageTitle } from "@/components/site/PageHeader";
 import type { VisibleEnumType } from "@/db/schema";
 import { CommonEventForm, type CalendarFormValues } from "@/features/admin/event/common-event-form";
-import { createEventFn } from "@/server/functions/calendar/createEvent";
+import { updatePublishedEventFn } from "@/server/functions/calendar/updatePublishedEvent";
+import { useLoaderData } from "@tanstack/react-router";
 import { toast } from "sonner";
 
-export function NewEventPage() {
+export function EditPublisedPage() {
+  const event = useLoaderData({ from: "/_authenticated/admin/calendar/$id/published" });
+
+  if (!event) return null;
+
   const defaultValues: CalendarFormValues = {
-    id: null,
-    eventId: null,
-    status: "draft",
-    title: "",
-    description: "",
-    location: "",
-    dates: [],
-    visibleTo: ["everyone"],
-    informationLink: "",
-    signupLink: "",
-    signupLinkVisibleTo: [],
+    id: event.id,
+    eventId: event.id,
+    status: "published",
+    title: event.title,
+    description: event.description,
+    location: event.location,
+    dates: event.dates,
+    visibleTo: event.visibleTo ?? [],
+    informationLink: event.informationLink ?? "",
+    signupLink: event.signupLink ?? "",
+    signupLinkVisibleTo: event.signupLinkVisibleTo ?? [],
   };
 
   async function handleSubmit(value: CalendarFormValues) {
-    await createEventFn({
+    await updatePublishedEventFn({
       data: {
+        id: value.id!,
+        eventId: value.eventId,
+        status: "draft",
         title: value.title,
         description: value.description,
         location: value.location,
@@ -34,7 +42,7 @@ export function NewEventPage() {
       },
     });
 
-    toast.success("Event was successfully created");
+    toast.success("Event was successfully update");
   }
 
   return (
@@ -42,7 +50,7 @@ export function NewEventPage() {
       <BackTo to="/admin/calendar" label="Calendar Admin" />
       <PageHeader>
         <PageTitle>
-          Create <span className="text-destructive">New Event</span>
+          Edit <span className="text-destructive">Published Event</span>
         </PageTitle>
       </PageHeader>
 

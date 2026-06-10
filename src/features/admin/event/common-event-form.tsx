@@ -1,5 +1,5 @@
 import { useAppForm } from "@/components/form";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { editEventSchema } from "@/features/admin/event/common-event-schema";
 import { VisibleToOptions } from "@/server/functions/calendar/_common";
 
@@ -46,10 +46,6 @@ export function CommonEventForm({
 
   return (
     <Card className="w-full max-w-2xl mx-auto">
-      <CardHeader>
-        <CardTitle>Title</CardTitle>
-        <CardDescription>Description</CardDescription>
-      </CardHeader>
       <CardContent>
         <form
           onSubmit={async (e) => {

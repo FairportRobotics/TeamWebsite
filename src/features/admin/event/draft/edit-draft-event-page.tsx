@@ -1,5 +1,5 @@
 import { BackTo } from "@/components/site/BackTo";
-import { PageDescription, PageHeader, PageTitle } from "@/components/site/PageHeader";
+import { PageHeader, PageTitle } from "@/components/site/PageHeader";
 import type { VisibleEnumType } from "@/db/schema";
 import { CommonEventForm, type CalendarFormValues } from "@/features/admin/event/common-event-form";
 import { updateDraftEventFn } from "@/server/functions/calendar/updateDraftEvent";
@@ -8,7 +8,6 @@ import { toast } from "sonner";
 
 export function EditDraftPage() {
   const event = useLoaderData({ from: "/_authenticated/admin/calendar/$id/draft" });
-  console.log("EditDraftPage event", event);
 
   if (!event) return null;
 
@@ -27,7 +26,6 @@ export function EditDraftPage() {
   };
 
   async function handleSubmit(value: CalendarFormValues) {
-    console.log("EditDraftPage handleSubmit value", value);
     await updateDraftEventFn({
       data: {
         id: value.id!,
@@ -52,9 +50,8 @@ export function EditDraftPage() {
       <BackTo to="/admin/calendar" label="Calendar Admin" />
       <PageHeader>
         <PageTitle>
-          Edit <span className="text-destructive">Event</span>
+          Edit <span className="text-destructive">Draft Event</span>
         </PageTitle>
-        <PageDescription>Edit an exising Event.</PageDescription>
       </PageHeader>
 
       <CommonEventForm defaultValues={defaultValues} onSubmit={(values) => handleSubmit(values)} />
