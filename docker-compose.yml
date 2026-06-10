@@ -1,14 +1,17 @@
+name: team-578 # This renames the group folder in Docker Desktop
 services:
   db:
-    image: postgres:17.0
+    image: postgres:18
+    container_name: team-578
     hostname: ${DB_HOST}
     ports:
-      - "5432:${DB_PORT}"
+      - "${DB_PORT}:5432"
     environment:
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_DB=${DB_NAME}
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql # Fix: Pointing to root parent directory for Postgres 18+
+
 volumes:
   pgdata:
