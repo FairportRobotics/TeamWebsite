@@ -1,6 +1,6 @@
 import { useFieldContext } from "@/components/form";
-import AppFieldLabel from "@/components/form/app-field-label";
-import { FieldErrors } from "@/components/form/field-errors";
+import AppFieldLabel from "@/components/form/AppFieldLabel";
+import { FieldErrors } from "@/components/form/FieldErrors";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 

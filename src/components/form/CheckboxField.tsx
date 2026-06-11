@@ -1,5 +1,5 @@
 import { useFieldContext } from "@/components/form";
-import { FieldErrors } from "@/components/form/field-errors";
+import { FieldErrors } from "@/components/form/FieldErrors";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 
@@ -8,10 +8,7 @@ interface CheckboxFieldProps {
   description?: string;
 }
 
-export default function CheckboxField({
-  label,
-  description,
-}: CheckboxFieldProps) {
+export default function CheckboxField({ label, description }: CheckboxFieldProps) {
   const field = useFieldContext<boolean>();
 
   return (
@@ -26,9 +23,7 @@ export default function CheckboxField({
       <Label htmlFor={field.name} className="ml-2 cursor-pointer">
         {label}
       </Label>
-      {description ?? (
-        <p className="text-sm text-muted-foreground">{description}</p>
-      )}
+      {description ?? <p className="text-sm text-muted-foreground">{description}</p>}
       <FieldErrors meta={field.state.meta} />
     </div>
   );

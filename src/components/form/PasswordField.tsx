@@ -1,6 +1,6 @@
 import { useFieldContext } from "@/components/form";
-import AppFieldLabel from "@/components/form/app-field-label";
-import { FieldErrors } from "@/components/form/field-errors";
+import AppFieldLabel from "@/components/form/AppFieldLabel";
+import { FieldErrors } from "@/components/form/FieldErrors";
 import { PasswordInput } from "@/components/ui/password-input";
 
 interface PasswordFieldProps {
