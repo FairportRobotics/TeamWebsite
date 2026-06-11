@@ -2,7 +2,7 @@ import { EventCalendar } from "@/components/site/EventCalendar";
 import { PageDescription, PageHeader, PageTitle } from "@/components/site/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getDateTimeString, getTimeString } from "@/lib/utils";
+import { getDateTimeString, getTimeString } from "@/lib/dates";
 import { getPublishedEventListFn } from "@/server/functions/calendar/getPublishedEventList";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";

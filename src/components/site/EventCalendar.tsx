@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { getFriendlyMonthYearString, getShortTimeString, getSortableDateString } from "@/lib/utils";
+import { getFriendlyMonthYearString, getShortTimeString, getSortableDateString } from "@/lib/dates";
 import type { EventListItem } from "@/server/functions/calendar/getPublishedEventList";
 import {
   addMonths,

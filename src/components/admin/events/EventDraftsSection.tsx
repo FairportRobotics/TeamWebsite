@@ -13,7 +13,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { getDateRangeParts, getDateTimeString } from "@/lib/utils";
+import { getDateRangeParts, getDateTimeString } from "@/lib/dates";
 import {
   eventQueries,
   useApproveMutation,
@@ -226,7 +226,7 @@ export function EventDraftsSection() {
       <DataTable data={data} columns={columns} />
 
       <div>
-        <Button asChild variant="default">
+        <Button variant="default">
           <Link to="/admin/calendar/new">Create New Event</Link>
         </Button>
 
