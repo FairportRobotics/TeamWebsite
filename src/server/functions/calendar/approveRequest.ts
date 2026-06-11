@@ -8,7 +8,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { zodValidator } from "@tanstack/zod-adapter";
 import { eq } from "drizzle-orm";
 
-export const approveRequest = createServerFn()
+export const approveRequestFn = createServerFn()
   .middleware([authenticatedMiddleware, anyPermissionMiddleware([Permissions.EventApprove])])
   .validator(zodValidator(eventIdSchema))
   .handler(async ({ data, context }) => {

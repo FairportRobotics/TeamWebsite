@@ -2,9 +2,9 @@ import { EventCalendar } from "@/components/site/EventCalendar";
 import { PageDescription, PageHeader, PageTitle } from "@/components/site/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { getDateTimeString, getTimeString } from "@/lib/utils";
 import { getPublishedEventListFn } from "@/server/functions/calendar/getPublishedEventList";
 import { createFileRoute } from "@tanstack/react-router";
-import { format } from "date-fns";
 import { useState } from "react";
 
 export const Route = createFileRoute("/_unauthenticated/calendar/")({
@@ -49,7 +49,7 @@ function RouteComponent() {
               <CardHeader>
                 <CardTitle>{e.title}</CardTitle>
                 <CardDescription>
-                  @ {e.location} from {format(e.startAt, "M/dd/yyyy h:mmaaa")} to {format(e.endAt, "h:mmaaa")}
+                  @ {e.location} from {getDateTimeString(e.startAt)} to {getTimeString(e.endAt)}
                 </CardDescription>
                 <CardContent>{e.description}</CardContent>
               </CardHeader>

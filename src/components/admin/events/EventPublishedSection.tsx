@@ -12,13 +12,12 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { getDateRangeParts } from "@/lib/utils";
+import { getDateRangeParts, getDateTimeString } from "@/lib/utils";
 import { eventQueries, useDeletePublishedMutation } from "@/queries/eventQueries";
 import type { PublishedEvent } from "@/server/functions/calendar/getPublishedEvents";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link, useRouter } from "@tanstack/react-router";
 import { type ColumnDef } from "@tanstack/react-table";
-import { format } from "date-fns";
 import { ArrowUpDown, Pencil, Trash2, TrashIcon } from "lucide-react";
 import React from "react";
 
@@ -125,7 +124,7 @@ export function EventPublishedSection() {
         return (
           <div>
             <div>{updatedBy}</div>
-            <div>{format(updatedAt, "MM/dd/yyyy h:mmaaa")} </div>
+            <div>{getDateTimeString(updatedAt)} </div>
           </div>
         );
       },

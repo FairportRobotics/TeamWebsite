@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { cn, getDateRangeString } from "@/lib/utils";
+import { cn, getDateRangeString, getFriendlyMonthYearString, getSortableDateString } from "@/lib/utils";
 import type { EventListItem } from "@/server/functions/calendar/getPublishedEventList";
 import { Link } from "@tanstack/react-router";
 import {
@@ -8,7 +8,6 @@ import {
   eachDayOfInterval,
   endOfMonth,
   endOfWeek,
-  format,
   isSameDay,
   isSameMonth,
   startOfMonth,
@@ -44,7 +43,7 @@ export function buildCalendarData(referenceDate: Date, events: EventListItem[]):
   // 2. Pre-index events by date string for O(1) lookup
   const eventsByDate = new Map<string, EventListItem[]>();
   for (const event of events) {
-    const dateKey = format(new Date(event.startAt), "yyyy-MM-dd");
+    const dateKey = getSortableDateString(new Date(event.startAt));
     if (!eventsByDate.has(dateKey)) eventsByDate.set(dateKey, []);
     eventsByDate.get(dateKey)!.push(event);
   }
@@ -57,7 +56,7 @@ export function buildCalendarData(referenceDate: Date, events: EventListItem[]):
     const weekIndex = Math.floor(index / 7);
     if (!weeks[weekIndex]) weeks[weekIndex] = [];
 
-    const dateKey = format(date, "yyyy-MM-dd");
+    const dateKey = getSortableDateString(date);
     const dayEvents = eventsByDate.get(dateKey) ?? [];
 
     weeks[weekIndex].push({
@@ -109,7 +108,7 @@ function MonthHeader({
         <ChevronLeft />
       </button>
       <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
-        {format(currentDate, "MMMM yyyy")}
+        {getFriendlyMonthYearString(currentDate)}
       </h2>
       <button
         onClick={nextMonth}
@@ -122,13 +121,7 @@ function MonthHeader({
   );
 }
 
-function CalendarGrid({
-  weekDays,
-  calendarData,
-}: {
-  weekDays: string[];
-  calendarData: CalendarDay[][];
-}) {
+function CalendarGrid({ weekDays, calendarData }: { weekDays: string[]; calendarData: CalendarDay[][] }) {
   return (
     <div className="grid grid-cols-7 gap-px">
       {/* Weekday Headers */}
@@ -177,11 +170,9 @@ function CalendarDay({ day, dayIndex }: { day: CalendarDay; dayIndex: number }) 
                   }
                   ${day.events.length > 0 ? "ring-1 ring-inset ring-ring" : ""}
                 `}
-      data-date={format(day.date, "yyyy-MM-dd")}
+      data-date={getSortableDateString(day.date)}
     >
-      <span
-        className={`text-sm font-medium w-full ${isSameDay(day.date, new Date()) ? "bg-primary" : ""}`}
-      >
+      <span className={`text-sm font-medium w-full ${isSameDay(day.date, new Date()) ? "bg-primary" : ""}`}>
         {day.day}
       </span>
 
@@ -217,12 +208,7 @@ function CalendarItem({ item, canSignup }: { item: EventListItem; canSignup: boo
       </div>
 
       {state === "expanded" && (
-        <div
-          className={cn(
-            "p-1 transition duration-500 ease-in-out",
-            state === "expanded" ? "" : "hidden",
-          )}
-        >
+        <div className={cn("p-1 transition duration-500 ease-in-out", state === "expanded" ? "" : "hidden")}>
           {item.location && (
             <div className="line-clamp-1 text-sm">
               <span className="text-muted-foreground">at</span> {item.location}

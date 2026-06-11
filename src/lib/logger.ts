@@ -1,5 +1,5 @@
-const isDev = process.env.NODE_ENV === "development";
-const logLevel = process.env.LOG_LEVEL ?? (isDev ? "debug" : "info");
+const isDev = process.env["NODE_ENV"] === "development";
+const logLevel = process.env["LOG_LEVEL"] ?? (isDev ? "debug" : "info");
 
 export const logger = {
   debug: (msg: string, meta?: Record<string, unknown>) => {

@@ -13,7 +13,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { getDateRangeParts } from "@/lib/utils";
+import { getDateRangeParts, getDateTimeString } from "@/lib/utils";
 import {
   eventQueries,
   useApproveMutation,
@@ -25,7 +25,6 @@ import { seedEventsFn } from "@/server/functions/calendar/seed";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link, useRouter } from "@tanstack/react-router";
 import { type ColumnDef } from "@tanstack/react-table";
-import { format } from "date-fns";
 import { ArrowUpDown, CalendarFold, Pencil, Stamp, Trash2, TrashIcon } from "lucide-react";
 import React from "react";
 
@@ -134,7 +133,7 @@ export function EventDraftsSection() {
         return (
           <div>
             <div>{updatedBy}</div>
-            <div>{format(updatedAt, "MM/dd/yyyy h:mmaaa")} </div>
+            <div>{getDateTimeString(updatedAt)} </div>
           </div>
         );
       },
