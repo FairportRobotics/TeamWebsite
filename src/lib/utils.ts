@@ -10,10 +10,16 @@ export function cn(...inputs: ClassValue[]) {
 const friendlyMonthYearFormat = "MMMM yyyy";
 const dateFormat = "M/dd/yyyy";
 const timeFormat = "h:mmaaa";
+const shorTimeFormat = "haaa";
 const sortableDateFormat = "yyyy-MM-dd";
 
 export function getDateString(date: Date) {
   return format(date, dateFormat);
+}
+
+export function getShortTimeString(date: Date) {
+  if (date.getMinutes() === 0) return format(date, shorTimeFormat);
+  else return format(date, timeFormat);
 }
 
 export function getTimeString(date: Date) {
