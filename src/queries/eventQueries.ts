@@ -6,19 +6,24 @@ import { getPublishedEventsFn } from "@/server/functions/calendar/getPublishedEv
 import { requestApprovalCalendarFn } from "@/server/functions/calendar/requestApproval";
 import { queryOptions, useMutation, useQueryClient } from "@tanstack/react-query";
 
-export const eventQueries = {
-  draftsKey: ["draft-events"],
-  publishedKey: ["published-events"],
+const eventKeys = {
+  all: ["events"] as const,
+  drafts: () => [...eventKeys.all, "drafts"] as const,
+  published: () => [...eventKeys.all, "published"] as const,
+  details: () => [...eventKeys.all, "detail"] as const,
+  detail: (id: string) => [...eventKeys.details(), id] as const,
+};
 
+export const eventQueries = {
   drafts: () =>
     queryOptions({
-      queryKey: [eventQueries.draftsKey],
+      queryKey: eventKeys.drafts(),
       queryFn: async () => await getDraftEventsFn(),
     }),
 
   published: () =>
     queryOptions({
-      queryKey: [eventQueries.publishedKey],
+      queryKey: eventKeys.published(),
       queryFn: async () => await getPublishedEventsFn(),
     }),
 };
@@ -29,12 +34,18 @@ export function useRequestApprovalMutation() {
   return useMutation({
     mutationFn: async (id: string) => {
       await requestApprovalCalendarFn({ data: { id } });
+      return id;
     },
 
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [eventQueries.draftsKey],
-      });
+    onSuccess: async (id: string) => {
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: eventKeys.drafts(),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: eventKeys.detail(id),
+        }),
+      ]);
     },
   });
 }
@@ -49,7 +60,7 @@ export function useApproveMutation() {
 
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [eventQueries.draftsKey, eventQueries.publishedKey],
+        queryKey: eventKeys.all,
       });
     },
   });
@@ -65,7 +76,7 @@ export function useDeleteDraftMutation() {
 
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [eventQueries.draftsKey],
+        queryKey: eventKeys.drafts(),
       });
     },
   });
@@ -81,7 +92,7 @@ export function useDeletePublishedMutation() {
 
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [eventQueries.publishedKey],
+        queryKey: eventKeys.published(),
       });
     },
   });
