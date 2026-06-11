@@ -180,11 +180,11 @@ function CalendarDay({ currentDate, day, dayIndex }: { currentDate: Date; day: C
                   select-none transition-colors duration-150 border
                   ${startOfDay(day.date) >= startOfDay(currentDate) ? "" : "bg-muted/50 text-muted-foreground/50"}
                   ${day.isCurrentMonth ? "" : "bg-muted/75 text-muted-foreground/25"}
-                  ${isSameDay(day.date, new Date()) ? "border-primary border-2" : "border"}
+                  ${isSameDay(day.date, currentDate) ? "border-primary border-2" : "border"}
                 `}
       data-date={getSortableDateString(day.date)}
     >
-      <span className={`text-sm w-full p-1 ${isSameDay(day.date, new Date()) ? "border-secondary" : ""}`}>
+      <span className={`text-sm w-full p-1 ${isSameDay(day.date, currentDate) ? "border-secondary" : ""}`}>
         {day.day}
       </span>
 
