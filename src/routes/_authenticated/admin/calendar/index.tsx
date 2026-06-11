@@ -1,5 +1,5 @@
-import { EventDraftsSection } from "@/components/admin/calendar/EventDraftsSection";
-import { EventPublishedSection } from "@/components/admin/calendar/EventPublishedSection";
+import { EventDraftsSection } from "@/components/admin/events/EventDraftsSection";
+import { EventPublishedSection } from "@/components/admin/events/EventPublishedSection";
 import { BackTo } from "@/components/site/BackTo";
 import { PageDescription, PageHeader, PageTitle } from "@/components/site/PageHeader";
 import { eventQueries } from "@/queries/eventQueries";
