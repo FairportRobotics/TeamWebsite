@@ -1,6 +1,6 @@
 import { useFieldContext } from "@/components/form";
-import AppFieldLabel from "@/components/form/app-field-label";
-import { FieldErrors } from "@/components/form/field-errors";
+import AppFieldLabel from "@/components/form/AppFieldLabel";
+import { FieldErrors } from "@/components/form/FieldErrors";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";

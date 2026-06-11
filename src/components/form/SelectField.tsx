@@ -1,5 +1,5 @@
 import { useFieldContext } from "@/components/form";
-import AppFieldLabel from "@/components/form/app-field-label";
+import AppFieldLabel from "@/components/form/AppFieldLabel";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 type SelectOption = {
