@@ -78,8 +78,8 @@ export function EventDraftsSection() {
     setShowRejectDialog(true);
   };
 
-  const handleConfirmReject = () => {
-    rejectMutation.mutate({ id: selectedEventId!, rejectReason: rejectReason });
+  const handleConfirmReject = (reason: string) => {
+    rejectMutation.mutate({ id: selectedEventId!, rejectReason: reason });
     setSelectedEventId(null);
     setShowRejectDialog(false);
     setRejectReason("");
@@ -246,39 +246,11 @@ export function EventDraftsSection() {
         </AlertDialogContent>
       </AlertDialog>
 
-      <Dialog open={showRejectDialog} onOpenChange={setShowRejectDialog}>
-        <form
-          onSubmit={async (e) => {
-            e.preventDefault();
-          }}
-        >
-          <DialogContent className="sm:max-w-sm">
-            <DialogHeader>
-              <DialogTitle>Reject Request?</DialogTitle>
-              <DialogDescription>Enter the reason for rejecting the request</DialogDescription>
-            </DialogHeader>
-            <FieldGroup>
-              <Field>
-                <Label htmlFor="reason">Reason</Label>
-                <Input
-                  id="reason"
-                  name="reason"
-                  value={rejectReason}
-                  onChange={(value) => setRejectReason(value.target.value)}
-                />
-              </Field>
-            </FieldGroup>
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button variant="outline">Cancel</Button>
-              </DialogClose>
-              <Button type="submit" onClick={handleConfirmReject}>
-                Continue
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </form>
-      </Dialog>
+      <RejectReasonDialog
+        show={showRejectDialog}
+        setShow={setShowRejectDialog}
+        onSubmit={(reason) => handleConfirmReject(reason)}
+      />
 
       <DataTable data={data} columns={columns} />
 
@@ -298,5 +270,53 @@ export function EventDraftsSection() {
         </TeamActionButton>
       </div>
     </PageSectionContainer>
+  );
+}
+
+function RejectReasonDialog({
+  show,
+  setShow,
+  onSubmit,
+}: {
+  show: boolean;
+  setShow: (show: boolean) => void;
+  onSubmit: (reason: string) => void;
+}) {
+  const [rejectReason, setRejectReason] = React.useState("");
+
+  return (
+    <Dialog open={show} onOpenChange={setShow}>
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault();
+        }}
+      >
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Reject Request?</DialogTitle>
+            <DialogDescription>Enter the reason for rejecting the request</DialogDescription>
+          </DialogHeader>
+          <FieldGroup>
+            <Field>
+              <Label htmlFor="reason">Reason</Label>
+              <Input
+                id="reason"
+                name="reason"
+                value={rejectReason}
+                onChange={(value) => setRejectReason(value.target.value)}
+              />
+            </Field>
+          </FieldGroup>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline">Cancel</Button>
+            </DialogClose>
+            <Button type="submit" onClick={() => onSubmit(rejectReason)}>
+              Continue
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </form>
+    </Dialog>
   );
 }
