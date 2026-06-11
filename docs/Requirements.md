@@ -2,9 +2,10 @@
 
 # Revision History <!-- omit in toc -->
 
-| Date       | Version | Description | Author(s)     |
-| ---------- | ------- | ----------- | ------------- |
-| 2026-03-31 | 0.1     | Initial     | Hurrell, John |
+| Date       | Version | Description                                                 | Author(s)     |
+| ---------- | ------- | ----------------------------------------------------------- | ------------- |
+| 2026-06-11 | 0.2     | More tweaks based on refactors. Need to consult with Scott. | Hurrell, John |
+| 2026-03-31 | 0.1     | Initial                                                     | Hurrell, John |
 
 # Table of Contents <!-- omit in toc -->
 

@@ -1,3 +1,9 @@
+# Team 578 Website
+
+[Ideas](docs/Ideas.md)
+[Inspiration](docs/Inspiration.md)
+[Requirements](docs/Requirements.md)
+
 # Technologies
 
 [Tanstack Start](https://tanstack.com/start/latest)
