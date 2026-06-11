@@ -1,7 +1,8 @@
 import { BackTo } from "@/components/site/BackTo";
 import { PageHeader, PageTitle } from "@/components/site/PageHeader";
 import type { VisibleEnumType } from "@/db/schema";
-import { CommonEventForm, type CalendarFormValues } from "@/features/admin/event/common-event-form";
+import { CommonEventForm, type CalendarFormValues } from "@/features/admin/event/_common/common-event-form";
+import { createEventSchema } from "@/features/admin/event/schemas/create-event.schema";
 import { createEventFn } from "@/server/functions/calendar/createEvent";
 import { toast } from "sonner";
 
@@ -9,7 +10,6 @@ export function NewEventPage() {
   const defaultValues: CalendarFormValues = {
     id: null,
     eventId: null,
-    status: "draft",
     title: "",
     description: "",
     location: "",
@@ -46,7 +46,11 @@ export function NewEventPage() {
         </PageTitle>
       </PageHeader>
 
-      <CommonEventForm defaultValues={defaultValues} onSubmit={(values) => handleSubmit(values)} />
+      <CommonEventForm
+        defaultValues={defaultValues}
+        zodSchema={createEventSchema}
+        onSubmit={(values) => handleSubmit(values)}
+      />
     </div>
   );
 }

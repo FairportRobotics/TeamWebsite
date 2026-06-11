@@ -1,19 +1,9 @@
+import { eventDateSchema } from "@/features/admin/event/schemas/event-date.schema";
 import { VisibleToOptions } from "@/server/functions/calendar/_common";
 import { z } from "zod";
 
-// Create a schema for validating the date ranges for calendar events. We will use this as a
-// nested schema in the main calendar insert and update schema.
-export const eventDateSchema = z.object({
-  id: z.string().optional(), // Optional for insert, required for update
-  startAt: z.date(),
-  endAt: z.date(),
-});
-
-export const editEventSchema = z
+export const commonEventSchema = z
   .object({
-    id: z.string().nullable(),
-    eventId: z.string().nullable(),
-    status: z.string(),
     title: z.string().trim().min(1, "Title is required"),
     description: z.string().trim().min(1, "Description is required"),
     location: z.string().trim().min(1, "Location is required"),
@@ -25,7 +15,7 @@ export const editEventSchema = z
   })
   .refine(
     (data) => {
-      // TODO: This is messy but easy to follow.
+      // Make sure Signup Link Visiblity is set when a link is provided.
       if (data.signupLink === undefined) {
         return true;
       } else if (data.signupLink.trim() === "") {
@@ -37,7 +27,7 @@ export const editEventSchema = z
       return false;
     },
     {
-      message: "Must select visibility options if signup link is provided",
+      message: "At least on visibility option must be selected if signup link is provided",
       path: ["signupLinkVisibleTo"],
     },
   );

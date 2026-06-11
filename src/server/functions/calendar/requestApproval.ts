@@ -31,7 +31,7 @@ export const requestApprovalCalendarFn = createServerFn()
         // Create a history record of the draft.
         await tx.insert(dbEventDraftHistory).values({
           draftId: existingDraft.id,
-          snapshot: existingDraft,
+          snapshot: JSON.stringify(existingDraft),
         });
 
         // Update the Draft.

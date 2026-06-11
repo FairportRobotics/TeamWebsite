@@ -1,7 +1,7 @@
 import { useAppForm } from "@/components/form";
 import { Card, CardContent } from "@/components/ui/card";
-import { editEventSchema } from "@/features/admin/event/common-event-schema";
 import { VisibleToOptions } from "@/server/functions/calendar/_common";
+import type { StandardSchemaV1 } from "@tanstack/react-form";
 
 export type CalendarDate = {
   startAt: Date;
@@ -19,20 +19,21 @@ export type CalendarFormValues = {
   informationLink?: string | undefined;
   signupLink?: string | undefined;
   signupLinkVisibleTo: Array<string>;
-  status: string | undefined;
 };
 
 export function CommonEventForm({
   defaultValues,
+  zodSchema,
   onSubmit,
 }: {
   defaultValues: CalendarFormValues;
+  zodSchema: StandardSchemaV1<CalendarFormValues>;
   onSubmit: (values: CalendarFormValues) => void;
 }) {
   const form = useAppForm({
     defaultValues: defaultValues,
     validators: {
-      onChange: editEventSchema,
+      onChange: zodSchema,
     },
     onSubmit: async ({ value }) => {
       onSubmit(value);
@@ -57,7 +58,6 @@ export function CommonEventForm({
           {/* Hidden fields for new/edit support */}
           <form.AppField name="id">{(field) => <field.HiddenField />}</form.AppField>
           <form.AppField name="eventId">{(field) => <field.HiddenField />}</form.AppField>
-          <form.AppField name="status">{(field) => <field.HiddenField />}</form.AppField>
 
           {/* Title */}
           <form.AppField name="title">{(field) => <field.TextField label="Title" required={true} />}</form.AppField>

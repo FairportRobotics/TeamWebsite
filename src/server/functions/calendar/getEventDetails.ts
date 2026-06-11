@@ -1,4 +1,3 @@
-// prettier-ignore
 import { db } from "@/db";
 import { dbEvent, dbEventDraft, dbEventDraftHistory } from "@/db/schema";
 import { eventIdSchema } from "@/server/functions/calendar/_common";
