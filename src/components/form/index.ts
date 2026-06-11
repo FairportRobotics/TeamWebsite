@@ -1,7 +1,6 @@
 import CheckboxField from "@/components/form/CheckboxField";
 import DatesSelectionField from "@/components/form/DatesSelectionField";
 import HiddenField from "@/components/form/HiddenField";
-import { MultiCheckboxField } from "@/components/form/MultiCheckboxField";
 import NumberField from "@/components/form/NumberField";
 import PasswordField from "@/components/form/PasswordField";
 import { SelectField } from "@/components/form/SelectField";
@@ -9,6 +8,7 @@ import { SubmitButton } from "@/components/form/SubmitButton";
 import TextField from "@/components/form/TextField";
 import TextareaField from "@/components/form/TextareaField";
 import UrlField from "@/components/form/UrlField";
+import { VisibleToField } from "@/components/form/VisibleToField";
 import { createFormHook, createFormHookContexts } from "@tanstack/react-form";
 
 export const { fieldContext, useFieldContext, formContext, useFormContext } = createFormHookContexts();
@@ -19,7 +19,7 @@ export const { useAppForm } = createFormHook({
     CheckboxField,
     DatesSelectionField,
     HiddenField,
-    MultiCheckboxField,
+    VisibleToField,
     NumberField,
     PasswordField,
     SelectField,
