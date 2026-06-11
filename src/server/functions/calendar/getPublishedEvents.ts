@@ -10,7 +10,6 @@ export type PublishedEvent = NonNullable<PublishedEvents>[0];
 export const getPublishedEventsFn = createServerFn()
   .middleware([authenticatedMiddleware, anyPermissionMiddleware([Permissions.EventAdminister])])
   .handler(async () => {
-    console.log("getPublishedEventsFn");
     return await db.query.dbEvent.findMany({
       with: {
         dates: true,
