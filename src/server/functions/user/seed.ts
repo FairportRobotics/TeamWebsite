@@ -1,6 +1,7 @@
 import { db } from "@/db";
 import { user } from "@/db/schema";
 import { seedUsers } from "@/db/seed/users";
+import { auth } from "@/lib/auth";
 import { Permissions } from "@/lib/auth/permissions";
 import { anyPermissionMiddleware } from "@/server/middleware/anyPermission";
 import { sessionMiddleware } from "@/server/middleware/session";
@@ -14,21 +15,17 @@ export const seedUsersFn = createServerFn()
     seedUsers.forEach(async (data) => {
       console.log("🌱 Seeding User", data.name);
 
-      // const response = await auth.api.createUser({
-      //   body: {
-      //     name: data.name,
-      //     email: data.email,
-      //     password: "Password123!",
-      //     role: "user",
-      //   },
-      // });
+      const response = await auth.api.createUser({
+        body: {
+          name: data.name,
+          email: data.email,
+          password: "Password123!",
+          role: "user",
+        },
+      });
 
-      // console.log(response);
-
-      // const userId = response.user.id;
-      // console.log("🌱 Seeding User userId", userId);
-
-      // if (!userId) return;
+      const userId = response.user.id;
+      console.log("🌱 Setting Roles for userId", userId);
 
       await db
         .update(user)

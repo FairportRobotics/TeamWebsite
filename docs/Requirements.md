@@ -16,7 +16,9 @@
     - [1.1.4. References](#114-references)
     - [1.1.5. Overview](#115-overview)
   - [1.2. Overall Description](#12-overall-description)
-- [2. Website Overview](#2-website-overview)
+  - [1.3. Current Website Overview](#13-current-website-overview)
+  - [1.4. Current Website Issues](#14-current-website-issues)
+- [2. Proposed Website Overview](#2-proposed-website-overview)
   - [2.0.1. Home](#201-home)
   - [2.0.2. Events](#202-events)
   - [2.0.3. Team](#203-team)
@@ -25,13 +27,12 @@
   - [2.0.6. Authentication and Authorization](#206-authentication-and-authorization)
 - [3. System Requirements](#3-system-requirements)
   - [3.1. Roles](#31-roles)
-    - [3.1.1. Visitor](#311-visitor)
+    - [3.1.1. Guest](#311-guest)
     - [3.1.2. User](#312-user)
     - [3.1.3. Student](#313-student)
     - [3.1.4. Parent](#314-parent)
     - [3.1.5. Mentor](#315-mentor)
-    - [3.1.6. Coach](#316-coach)
-    - [3.1.7. User Admin](#317-user-admin)
+    - [3.1.6. Admin](#316-admin)
   - [3.2. Navigation Header](#32-navigation-header)
     - [3.2.1. Logo](#321-logo)
     - [3.2.2. Home](#322-home)
@@ -106,13 +107,18 @@ TBD
 | Authorization     | The process an application uses to understand WHAT you can do. Roles and permissions.                                                                                                  |
 | Database          | A software system which supports Creating, Retrieving, Updating and Deleting information. Also known as CRUD.                                                                          |
 | FIRST             | For Inspiration and Recognition of Science and Technology [FIRST](https://www.firstinspires.org/) is an international youth organization that operates the FIRST Robotics Competition. |
-| Register          | The act of providing credentials to gain access to the website.                                                                                                                        |
+| Register          | The act of providing name and credentials in order gain access to the website.                                                                                                         |
 | The Blue Alliance | A website which aggregates FRC data from [FIRST](https://www.firstinspires.org/) and provides information and metrics about competitions and teams.                                    |
 | User              | An individual who is registered and recognized by the website.                                                                                                                         |
+| Guest             | An individual who is not recognized by the website.                                                                                                                                    |
 
 ### 1.1.4. References
 
-[Team XXX]
+[Team 1418](https://1418.team/team)
+Team Vae Victis is the inspiration for the initial versions of the website.
+
+[Better-Auth](https://better-auth.com/)
+This is a library used to authenticate. It allows us to self-host authentication in our own database. Additionally, it supports the ability to login via social providers like Apple, Facebook, Google and others.
 
 ### 1.1.5. Overview
 
@@ -137,6 +143,40 @@ Section 5 is for supporting information.
 This document contains the problem statements that the current Team 578 website is facing and how we plan to correct
 those inadequecies.
 
+## 1.3. Current Website Overview
+
+The current website's navigation reveals the following tree:
+
+- Home
+- Blog
+- About Us
+  - Team History
+  - Team Goals
+  - Our Robots
+  - Subteams
+- Resources
+  - Chalk Raiders
+  - Safety
+  - STEM Kit Resources
+- Awards and Achievements
+- Parents
+  - STIMS Instructions
+- Calendar
+- Contact Us
+- Sponsors
+
+In addition, the site exposes widgets that expose the following:
+
+- Twitter Feed (broken)
+- Search
+- Recent Posts
+- Recent Comments
+- Archives
+- Categories
+- Meta
+
+## 1.4. Current Website Issues
+
 **Website is years out of date**
 
 The current website has not been updated in multiple years. Many of the images appearing on the site are over 5 years
@@ -155,30 +195,33 @@ Due to the limited ability to update the current site and the stale nature of it
 sponsors may be given a negative impression of our team. Visiting a site only to be presented with information that is
 many years out-of-date does not inspire a feeling of confidence that the organization is worthy of respect.
 
-# 2. Website Overview
+# 2. Proposed Website Overview
 
 There are five primary sections to the site which will allow us to provide a pleasant yet informative experience for
 intersted visitors.
 
-- Home
-- About
-  - History
-  - Awards
-  - Robots
-- Members
-- Sponsors
-- Sign In
-  - Sign In
-  - Sign Up
-  - Forgot Password
+- Team Members
+  - Current Students
+  - Alumni
+  - Mentors
+- Events/Calendar
+  - Calendar/list of Events
+- How to Help/Sponsors
+  - Sponsors
+  - How do become a sponsor
+  - Tier Levels
+  - People needed
+  - Other ways to help
+- Robots/Game Years
+  - Robots and thier charactieristics
 - Resources
-  - Team Handbook
   - Branding
+  - Contacts
 
 ### 2.0.1. Home
 
-This page should be used to provide a very quick and easily parsed impression of our Team. It can include an image of
-the current Team members, the Team number and name.
+This page should be used to provide a very quick and easily parsed impression of our Team. It can include the team number, an image of
+the current team members and brief history about the team
 
 Additionally, it can emit a limited number of upcoming events and posts with links to visit pages dedicated to showing
 more of those features.
@@ -238,13 +281,6 @@ Display a list of Sponsors with optional links to their websites.
 
 Display a table showing Sponsorship Tiers and the benefits each Tier brings to the Sponsor.
 
-| Tier     | Threshold     | Benefits                                               |
-| -------- | ------------- | ------------------------------------------------------ |
-| Platinum | $1000 or more | Gold plus: Company Logo will be displayed on the Robot |
-| Gold     | $500 or more  | Silver plus: TBD                                       |
-| Silver   | $250 or more  | Bronze plus: TBD                                       |
-| Bronze   | Up to $250    | TBD                                                    |
-
 Reinforce that no donation is too small. Event a $5 gift card is welcome and will be used as prizes for Team Members or
 at Outreach Events.
 
@@ -279,12 +315,12 @@ Roles provide the ability for the System to implement access restrictions.
 
 An authenticated individual will have one or more Roles.
 
-### 3.1.1. Visitor
+### 3.1.1. Guest
 
-A Visitor is any unauthenticated visitor to the website. This Role is not assigned to a visitor but represents an
+A Guest is any unauthenticated visitor to the website. This Role is not assigned to a guest but represents an
 absence of any other defined Role.
 
-A Visitor has limited, read-only access to the website.
+A Guest has limited, read-only access to the website.
 
 ### 3.1.2. User
 
@@ -304,16 +340,16 @@ The Parent Role represents an individual who can be associated as the Parent or 
 
 ### 3.1.5. Mentor
 
-TBD
+The Mentor Role represents an adult individual who is not a Student.
 
-### 3.1.6. Coach
+### 3.1.6. Admin
 
-TBD
+The Admin Role is a specialized Role defined by Better-Auth and provides the following abilities:
 
-### 3.1.7. User Admin
-
-The User Admin Role is an individual who can Impersonate other Users in order to test how the website appears to other
-Users.
+- Can ban other users
+- Can unban users
+- Can impersonate users
+- Can revoke user sessions
 
 ## 3.2. Navigation Header
 

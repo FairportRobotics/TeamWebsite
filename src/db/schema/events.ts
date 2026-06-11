@@ -20,9 +20,7 @@ export const dbEvent = eventSchema.table("published", {
   location: text("location").notNull(),
   informationLink: text("information_link"),
   signupLink: text("signup_link"),
-  signupLinkVisibleTo: visibleEnum("signup_link_visible_to")
-    .array()
-    .default([Roles.Student, Roles.Mentor]),
+  signupLinkVisibleTo: visibleEnum("signup_link_visible_to").array().default([Roles.Student, Roles.Mentor]),
 });
 
 // Stores the date ranges of Events. In most cases, there will be a single date range.
@@ -55,9 +53,7 @@ export const dbEventDraft = eventSchema.table("draft", {
   location: text("location").notNull(),
   informationLink: text("information_link"),
   signupLink: text("signup_link"),
-  signupLinkVisibleTo: visibleEnum("signup_link_visible_to")
-    .array()
-    .default([Roles.Student, Roles.Mentor]),
+  signupLinkVisibleTo: visibleEnum("signup_link_visible_to").array().default([Roles.Student, Roles.Mentor]),
 });
 
 export const dbEventDraftDate = eventSchema.table(
@@ -77,7 +73,7 @@ export const dbEventDraftHistory = eventSchema.table("draft_history", {
   draftId: uuid("draft_id"),
   eventId: uuid("event_id"),
   changedAt: timestamp("changed_at").defaultNow(),
-  snapshot: jsonb("snapshot").notNull(),
+  snapshot: jsonb("snapshot").notNull().$type<Json>(),
 });
 
 // Export inferred types so they can be used throughout the application.
@@ -86,3 +82,5 @@ export const dbEventDraftHistory = eventSchema.table("draft_history", {
 // export type EventItemStatus = typeof dbEvent.$inferSelect.status;
 // export type EventItemVisibleTo = typeof dbEvent.$inferSelect.visibleTo;
 export type EventWithDatesSelect = InferResultType<"dbEvent", { dates: true }>;
+
+type Json = string | string[] | number | boolean | null | Json[] | { [key: string]: Json };

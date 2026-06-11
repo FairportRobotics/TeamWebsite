@@ -49,7 +49,7 @@ export function EventPublishedSection() {
 
         return (
           <div>
-            <Link to="/admin/calendar/$id/published" params={{ id }}>
+            <Link to="/admin/calendar/$id" params={{ id }}>
               {title}
             </Link>
           </div>
