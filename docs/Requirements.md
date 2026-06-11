@@ -20,12 +20,14 @@
   - [1.3. Current Website Overview](#13-current-website-overview)
   - [1.4. Current Website Issues](#14-current-website-issues)
 - [2. Proposed Website Overview](#2-proposed-website-overview)
-  - [2.0.1. Home](#201-home)
-  - [2.0.2. Events](#202-events)
-  - [2.0.3. Team](#203-team)
-  - [2.0.4. Robots](#204-robots)
-  - [2.0.5. Sponsors](#205-sponsors)
-  - [2.0.6. Authentication and Authorization](#206-authentication-and-authorization)
+  - [2.1. States](#21-states)
+  - [2.2. State Transitions](#22-state-transitions)
+    - [2.2.1. Home](#221-home)
+    - [2.2.2. Events](#222-events)
+    - [2.2.3. Team](#223-team)
+    - [2.2.4. Robots](#224-robots)
+    - [2.2.5. Sponsors](#225-sponsors)
+    - [2.2.6. Authentication and Authorization](#226-authentication-and-authorization)
 - [3. System Requirements](#3-system-requirements)
   - [3.1. Roles](#31-roles)
     - [3.1.1. Guest](#311-guest)
@@ -202,16 +204,17 @@ There are five primary sections to the site which will allow us to provide a ple
 intersted visitors.
 
 - Team Members
-  - Current Students
+  - Students
   - Alumni
-  - Mentors
+  - Mentors and Coaches
 - Events/Calendar
-  - Calendar/list of Events
+  - Calendar/List of Events
 - How to Help/Sponsors
   - Sponsors
-  - How do become a sponsor
-  - Tier Levels
-  - People needed
+  - Sponsorship Tier Levels
+  - How to become a sponsor
+  - Skills we need
+  - Equipment and supplies we need
   - Other ways to help
 - Robots/Game Years
   - Robots and thier charactieristics
@@ -219,7 +222,34 @@ intersted visitors.
   - Branding
   - Contacts
 
-### 2.0.1. Home
+## 2.1. States
+
+The website will allow individuals to create new content. Each object which can be mutated by the site can proceed through multiple states.
+
+- Draft: Starting state
+- Pending: Awaiting Approval
+- Rejected: Denied Approval
+- Approved: Approved and published
+- Archived: Removed from published
+
+For example, we might allow students to create a new Event. That Event would start as a Draft and the student would perform edits until they believe the Event is ready to be made visible on the calendar.
+
+1. Student creates a new Event. The Event is in the Draft state.
+2. Student mutates the Event until they believe it is complete and request that the Event be Approved.
+3. An individual with the proper permission can either Reject or Accept the Draft.
+   1. If Rejected, the Event will not be published and the student can make appropriate changes and Request Approval again.
+   2. If Accepted, the Event will be published.
+
+## 2.2. State Transitions
+
+- Draft -> Draft
+- Draft -> Pending
+- Pending -> Rejected
+- Pending -> Approved
+- Approved -> Archived
+- Approved -> Draft (new Draft is created an existing Approved remains visible)
+
+### 2.2.1. Home
 
 This page should be used to provide a very quick and easily parsed impression of our Team. It can include the team number, an image of
 the current team members and brief history about the team
@@ -227,7 +257,7 @@ the current team members and brief history about the team
 Additionally, it can emit a limited number of upcoming events and posts with links to visit pages dedicated to showing
 more of those features.
 
-### 2.0.2. Events
+### 2.2.2. Events
 
 Events are functions that the Team will host or attend. Examples include, but are not limited to:
 
@@ -240,7 +270,7 @@ Events are functions that the Team will host or attend. Examples include, but ar
 
 Some events are simple notices while others have sign-up requirements for Students, Mentors and Parents.
 
-### 2.0.3. Team
+### 2.2.3. Team
 
 Provide the ability to display information about members of the Team. Team Members include:
 
@@ -264,7 +294,7 @@ not limited to:
 By including active dates, we can filter Team Members (primarily students) to Active but provide a means for visitors to
 see formerly active students so they can share their successes with schools or employers later.
 
-### 2.0.4. Robots
+### 2.2.4. Robots
 
 Displays current and past Robots built by the Team. Properties include, but are not limited to:
 
@@ -276,7 +306,7 @@ Displays current and past Robots built by the Team. Properties include, but are 
 - Link to GitHub
 - Link to CAD
 
-### 2.0.5. Sponsors
+### 2.2.5. Sponsors
 
 Display a list of Sponsors with optional links to their websites.
 
@@ -302,7 +332,7 @@ Sposnor properties include, but are not limited to:
 Keep this list updated and track each and every donation to the team. Include parents and the food provided to the Team.
 Maybe this can be like the credits in a movie where it's a huge list that we build during the season.
 
-### 2.0.6. Authentication and Authorization
+### 2.2.6. Authentication and Authorization
 
 TBD
 
