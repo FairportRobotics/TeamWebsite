@@ -1,18 +1,24 @@
 import { db } from "@/db";
 import { dbEventDraft, dbEventDraftDate, dbEventDraftHistory } from "@/db/schema";
-import { updateDraftEventSchema } from "@/features/admin/events/draft/update-draft-event.schema";
 import { Permissions } from "@/lib/auth/permissions";
 import { anyPermissionMiddleware } from "@/server/middleware/anyPermission";
 import { authenticatedMiddleware } from "@/server/middleware/authenticated";
 import { createServerFn } from "@tanstack/react-start";
 import { zodValidator } from "@tanstack/zod-adapter";
 import { eq } from "drizzle-orm";
+import { z } from "zod";
+
+// Create a schema for operations where we need to pass an Event identifier.
+export const rejectSchema = z.object({
+  id: z.string(),
+  rejectReason: z.string(),
+});
 
 // TODO: Validate that the user has permission to perform this action based on the visibility options
 // of the calendar item and the user's roles.
-export const updateDraftEventFn = createServerFn()
+export const rejectRequestFn = createServerFn()
   .middleware([authenticatedMiddleware, anyPermissionMiddleware([Permissions.EventUpdate])])
-  .validator(zodValidator(updateDraftEventSchema))
+  .validator(zodValidator(rejectSchema))
   .handler(async ({ data, context }) => {
     const currentUserId = context!.user!.id;
 
@@ -43,22 +49,23 @@ export const updateDraftEventFn = createServerFn()
         // Insert new Draft.
         await tx.insert(dbEventDraft).values({
           id: data.id!,
-          eventId: data.eventId,
+          eventId: existingDraft.eventId,
           createdBy: currentUserId,
-          status: "draft",
+          status: "rejected",
+          statusComments: data.rejectReason,
 
-          title: data.title,
-          description: data.description,
-          visibleTo: data.visibleTo,
-          location: data.location,
+          title: existingDraft.title,
+          description: existingDraft.description,
+          visibleTo: existingDraft.visibleTo,
+          location: existingDraft.location,
 
-          informationLink: data.informationLink,
-          signupLink: data.signupLink,
-          signupLinkVisibleTo: data.signupLinkVisibleTo,
+          informationLink: existingDraft.informationLink,
+          signupLink: existingDraft.signupLink,
+          signupLinkVisibleTo: existingDraft.signupLinkVisibleTo,
         });
 
         // Insert Draft Dates.
-        data.dates.forEach(async (d) => {
+        existingDraft.dates.forEach(async (d) => {
           await tx.insert(dbEventDraftDate).values({
             draftId: data.id,
             startAt: d.startAt,
