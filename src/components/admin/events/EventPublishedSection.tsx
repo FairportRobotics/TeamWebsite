@@ -1,4 +1,5 @@
 import { DataTable } from "@/components/site/DataTable";
+import { HeaderSortLabel } from "@/components/site/HeaderSortLabel";
 import { PageSectionContainer } from "@/components/site/PageSectionContainer";
 import {
   AlertDialog,
@@ -18,7 +19,7 @@ import type { PublishedEvent } from "@/server/functions/calendar/getPublishedEve
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link, useRouter } from "@tanstack/react-router";
 import { type ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, Pencil, Trash2, TrashIcon } from "lucide-react";
+import { Pencil, Trash2, TrashIcon } from "lucide-react";
 import React from "react";
 
 export function EventPublishedSection() {
@@ -45,14 +46,7 @@ export function EventPublishedSection() {
   const columns: ColumnDef<PublishedEvent>[] = [
     {
       accessorKey: "title",
-      header: ({ column }) => {
-        return (
-          <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-            Title
-            <ArrowUpDown />
-          </Button>
-        );
-      },
+      header: ({ column }) => <HeaderSortLabel label="Title" column={column} />,
       cell: ({ row }) => {
         const id = row.original.id;
         const title = row.original.title;
@@ -68,25 +62,11 @@ export function EventPublishedSection() {
     },
     {
       accessorKey: "location",
-      header: ({ column }) => {
-        return (
-          <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-            Location
-            <ArrowUpDown />
-          </Button>
-        );
-      },
+      header: ({ column }) => <HeaderSortLabel label="Location" column={column} />,
     },
     {
       accessorKey: "dates",
-      header: ({ column }) => {
-        return (
-          <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-            Dates
-            <ArrowUpDown />
-          </Button>
-        );
-      },
+      header: ({ column }) => <HeaderSortLabel label="Dates" column={column} />,
       cell: ({ row }) => {
         const dates = row.original.dates;
         return dates.map((d) => {
@@ -104,22 +84,15 @@ export function EventPublishedSection() {
     },
     {
       accessorKey: "visibleTo",
-      header: "Visible To",
+      header: ({ column }) => <HeaderSortLabel label="Visible To" column={column} />,
       cell: ({ row }) => {
         const visibleTo = row.original.visibleTo;
-        return <div>{visibleTo?.join(", ")}</div>;
+        return <div>{visibleTo?.sort((a, b) => a.localeCompare(b)).join(", ")}</div>;
       },
     },
     {
       accessorKey: "createdAt",
-      header: ({ column }) => {
-        return (
-          <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-            Created
-            <ArrowUpDown />
-          </Button>
-        );
-      },
+      header: ({ column }) => <HeaderSortLabel label="Created" column={column} />,
       cell: ({ row }) => {
         const updatedAt = row.original.createdAt;
         const updatedBy = row.original.createdBy?.name;
@@ -164,7 +137,7 @@ export function EventPublishedSection() {
   ];
 
   return (
-    <PageSectionContainer title="Published Events" subTitle={`(${data.length} records)`} initialState="collapsed">
+    <PageSectionContainer title="Published Events" subTitle={`(${data.length} records)`} initialState="expanded">
       <AlertDialog open={showDeleteAlert} onOpenChange={setShowDeleteAlert}>
         <AlertDialogContent>
           <AlertDialogHeader>
