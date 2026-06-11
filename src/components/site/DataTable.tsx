@@ -1,18 +1,15 @@
 "use client";
-// prettier-ignore
-import type { ColumnDef, ColumnFiltersState, SortingState, Table as TanstackTable, } from "@tanstack/react-table";
-// prettier-ignore
-import { flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, } from "@tanstack/react-table";
-// prettier-ignore
 import { InputWithClear } from "@/components/site/InputWithClear";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import type { ColumnDef, ColumnFiltersState, SortingState, Table as TanstackTable } from "@tanstack/react-table";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
 import React, { useState } from "react";
 import { Button } from "../ui/button";
 
@@ -22,11 +19,7 @@ interface DataTableProps<TData, TValue> {
   renderToolbar?: (table: TanstackTable<TData>) => React.ReactNode;
 }
 
-export function DataTable<TData, TValue>({
-  columns,
-  data,
-  renderToolbar,
-}: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({ columns, data, renderToolbar }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = React.useState("");
@@ -60,7 +53,7 @@ export function DataTable<TData, TValue>({
     <div className="overflow-hidden">
       <div>{renderToolbar?.(table)}</div>
       <div className="flex items-center justify-between gap-2">
-        <div>
+        <div className="ml-1">
           <InputWithClear
             placeholder="Search..."
             value={globalFilter}
@@ -90,12 +83,7 @@ export function DataTable<TData, TValue>({
           >
             Previous
           </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
+          <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
             Next
           </Button>
         </div>
@@ -108,9 +96,7 @@ export function DataTable<TData, TValue>({
               {headerGroup.headers.map((header) => {
                 return (
                   <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(header.column.columnDef.header, header.getContext())}
+                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                   </TableHead>
                 );
               })}
@@ -139,20 +125,10 @@ export function DataTable<TData, TValue>({
       </Table>
 
       <div className="flex items-center justify-end gap-2 my-4 mx-2">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
+        <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
           Previous
         </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
+        <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
           Next
         </Button>
       </div>

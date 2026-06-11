@@ -1,14 +1,13 @@
 import { DataTable } from "@/components/site/DataTable";
+import { HeaderSortLabel } from "@/components/site/HeaderSortLabel";
 import { PageSectionContainer } from "@/components/site/PageSectionContainer";
 import { TeamActionButton } from "@/components/site/TeamActionButtom";
-import { Button } from "@/components/ui/button";
 import { userQueries } from "@/queries/userQueries";
 import type { UserListItem } from "@/server/functions/user/getListForAdmin";
 import { seedUsersFn } from "@/server/functions/user/seed";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link, useRouter } from "@tanstack/react-router";
 import { type ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react";
 
 export function UsersSection({ currentUserId }: { currentUserId: string }) {
   const router = useRouter();
@@ -17,17 +16,7 @@ export function UsersSection({ currentUserId }: { currentUserId: string }) {
   const columns: ColumnDef<UserListItem>[] = [
     {
       accessorKey: "name",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Name
-            <ArrowUpDown />
-          </Button>
-        );
-      },
+      header: ({ column }) => <HeaderSortLabel label="Name" column={column} />,
       cell: ({ row }) => {
         const name = row.original.name;
         const userId = row.original.id;
@@ -36,61 +25,27 @@ export function UsersSection({ currentUserId }: { currentUserId: string }) {
             <Link to="/admin/users/$userId" params={{ userId }}>
               {name}
             </Link>
-            {userId === currentUserId ? (
-              <div className="bg-destructive px-3 py-1 rounded-full">You</div>
-            ) : (
-              <></>
-            )}
+            {userId === currentUserId ? <div className="bg-destructive px-3 py-1 rounded-full">You</div> : <></>}
           </div>
         );
       },
     },
     {
       accessorKey: "email",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Email
-            <ArrowUpDown />
-          </Button>
-        );
-      },
+      header: ({ column }) => <HeaderSortLabel label="Email" column={column} />,
     },
     {
       accessorKey: "role",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Roles
-            <ArrowUpDown />
-          </Button>
-        );
-      },
+      header: ({ column }) => <HeaderSortLabel label="Roles" column={column} />,
       cell: ({ row }) => {
         const value = row.original.role;
         const roles = value?.split(",").map((item) => item.trim());
-        return <div className="capitalize">{roles?.join(", ")}</div>;
+        return <div className="capitalize">{roles?.sort((a, b) => a.localeCompare(b)).join(", ")}</div>;
       },
     },
     {
       accessorKey: "banned",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Banned
-            <ArrowUpDown />
-          </Button>
-        );
-      },
+      header: ({ column }) => <HeaderSortLabel label="Banned" column={column} />,
       cell: ({ row }) => {
         const value = row.original.banned;
         return <div>{value ? "Yes" : "-"}</div>;
@@ -98,17 +53,7 @@ export function UsersSection({ currentUserId }: { currentUserId: string }) {
     },
     {
       accessorKey: "createdAt",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Created At
-            <ArrowUpDown />
-          </Button>
-        );
-      },
+      header: ({ column }) => <HeaderSortLabel label="Created" column={column} />,
       cell: ({ row }) => {
         const value = row.original.createdAt;
         return <>{value.toLocaleDateString()}</>;
@@ -116,45 +61,15 @@ export function UsersSection({ currentUserId }: { currentUserId: string }) {
     },
     {
       accessorKey: "accountsCount",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Accounts
-            <ArrowUpDown />
-          </Button>
-        );
-      },
+      header: ({ column }) => <HeaderSortLabel label="Accounts" column={column} />,
     },
     {
       accessorKey: "sessionsCount",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Sessions
-            <ArrowUpDown />
-          </Button>
-        );
-      },
+      header: ({ column }) => <HeaderSortLabel label="Sessions" column={column} />,
     },
     {
       accessorKey: "sessionsLatest",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Last Login
-            <ArrowUpDown />
-          </Button>
-        );
-      },
+      header: ({ column }) => <HeaderSortLabel label="Last Login" column={column} />,
       cell: ({ row }) => {
         const value = row.original.sessionsLatest;
         return <>{value ? value.toLocaleDateString() : "-"}</>;
@@ -170,11 +85,7 @@ export function UsersSection({ currentUserId }: { currentUserId: string }) {
 
   return (
     <div>
-      <PageSectionContainer
-        title="Users"
-        subTitle={`(${data.length} records)`}
-        initialState="expanded"
-      >
+      <PageSectionContainer title="Users" subTitle={`(${data.length} records)`} initialState="expanded">
         <DataTable data={data} columns={columns} />
         <TeamActionButton
           variant="destructive"

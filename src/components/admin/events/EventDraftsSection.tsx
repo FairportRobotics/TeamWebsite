@@ -1,4 +1,5 @@
 import { DataTable } from "@/components/site/DataTable";
+import { HeaderSortLabel } from "@/components/site/HeaderSortLabel";
 import { PageSectionContainer } from "@/components/site/PageSectionContainer";
 import { TeamActionButton } from "@/components/site/TeamActionButtom";
 import {
@@ -25,7 +26,7 @@ import { seedEventsFn } from "@/server/functions/calendar/seed";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link, useRouter } from "@tanstack/react-router";
 import { type ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, CalendarFold, Pencil, Stamp, Trash2, TrashIcon } from "lucide-react";
+import { CalendarFold, Pencil, Stamp, Trash2, TrashIcon } from "lucide-react";
 import React from "react";
 
 export function EventDraftsSection() {
@@ -61,14 +62,7 @@ export function EventDraftsSection() {
   const columns: ColumnDef<DraftEvent>[] = [
     {
       accessorKey: "title",
-      header: ({ column }) => {
-        return (
-          <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-            Title
-            <ArrowUpDown />
-          </Button>
-        );
-      },
+      header: ({ column }) => <HeaderSortLabel label="Title" column={column} />,
       cell: ({ row }) => {
         const id = row.original.id;
         const title = row.original.title;
@@ -84,25 +78,11 @@ export function EventDraftsSection() {
     },
     {
       accessorKey: "location",
-      header: ({ column }) => {
-        return (
-          <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-            Location
-            <ArrowUpDown />
-          </Button>
-        );
-      },
+      header: ({ column }) => <HeaderSortLabel label="Location" column={column} />,
     },
     {
       accessorKey: "dates",
-      header: ({ column }) => {
-        return (
-          <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-            Dates
-            <ArrowUpDown />
-          </Button>
-        );
-      },
+      header: ({ column }) => <HeaderSortLabel label="Dates" column={column} />,
       cell: ({ row }) => {
         const dates = row.original.dates;
         return dates.map((d) => {
@@ -120,14 +100,7 @@ export function EventDraftsSection() {
     },
     {
       accessorKey: "createdAt",
-      header: ({ column }) => {
-        return (
-          <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-            Created
-            <ArrowUpDown />
-          </Button>
-        );
-      },
+      header: ({ column }) => <HeaderSortLabel label="Created" column={column} />,
       cell: ({ row }) => {
         const updatedAt = row.original.createdAt;
         const updatedBy = row.original.createdBy?.name;
@@ -141,10 +114,10 @@ export function EventDraftsSection() {
     },
     {
       accessorKey: "visibleTo",
-      header: "Visible To",
+      header: ({ column }) => <HeaderSortLabel label="Visible To" column={column} />,
       cell: ({ row }) => {
         const visibleTo = row.original.visibleTo;
-        return <div className="flex items-center gap-1">{visibleTo?.join(", ")}</div>;
+        return <div>{visibleTo?.sort((a, b) => a.localeCompare(b)).join(", ")}</div>;
       },
     },
     {
@@ -159,29 +132,29 @@ export function EventDraftsSection() {
         return (
           <div className="flex items-center justify-end gap-1">
             <Button
-              variant="default"
-              onClick={() => router.navigate({ to: "/admin/calendar/$id/draft", params: { id: id } })}
               title="Edit"
               aria-description="Edit"
+              variant="default"
+              onClick={() => router.navigate({ to: "/admin/calendar/$id/draft", params: { id: id } })}
             >
               <Pencil />
             </Button>
             {status === "draft" ? (
               <Button
-                variant="default"
-                onClick={() => requestApprovalMutation.mutate(id)}
                 title="Request publication approval"
                 aria-description="Request publication approval"
-                className="bg-chart-2"
+                variant="default"
+                onClick={() => requestApprovalMutation.mutate(id)}
+                className="bg-chart-5"
               >
                 <CalendarFold />
               </Button>
             ) : (
               <Button
-                variant="default"
-                onClick={() => approveMutation.mutate(id)}
                 title="Approve to publish"
                 aria-description="Approve to publish"
+                variant="default"
+                onClick={() => approveMutation.mutate(id)}
                 className="bg-chart-4"
               >
                 <Stamp />
@@ -189,10 +162,10 @@ export function EventDraftsSection() {
             )}
 
             <Button
-              variant="destructive"
-              onClick={() => handleVerifyDelete(id)}
               title="Delete"
               aria-description="Delete"
+              variant="destructive"
+              onClick={() => handleVerifyDelete(id)}
             >
               <Trash2 />
             </Button>
