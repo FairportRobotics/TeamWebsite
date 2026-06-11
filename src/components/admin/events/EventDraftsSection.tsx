@@ -16,12 +16,24 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Field, FieldGroup } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { getDateRangeParts, getDateTimeString } from "@/lib/dates";
 import {
   eventQueries,
@@ -46,6 +58,9 @@ export function EventDraftsSection() {
   const [showDeleteAlert, setShowDeleteAlert] = React.useState(false);
   const [selectedEventId, setSelectedEventId] = React.useState<string | null>(null);
 
+  const [showRejectDialog, setShowRejectDialog] = React.useState(false);
+  const [rejectReason, setRejectReason] = React.useState("");
+
   // Entity mutations.
   const requestApprovalMutation = useRequestApprovalMutation();
   const rejectMutation = useRejectMutation();
@@ -58,7 +73,19 @@ export function EventDraftsSection() {
     return { error: null };
   }
 
-  const handleVerifyDelete = (id: string) => {
+  const handleTriggerReject = (id: string) => {
+    setSelectedEventId(id);
+    setShowRejectDialog(true);
+  };
+
+  const handleConfirmReject = () => {
+    rejectMutation.mutate({ id: selectedEventId!, rejectReason: rejectReason });
+    setSelectedEventId(null);
+    setShowRejectDialog(false);
+    setRejectReason("");
+  };
+
+  const handleTriggerDelete = (id: string) => {
     setSelectedEventId(id);
     setShowDeleteAlert(true);
   };
@@ -174,7 +201,7 @@ export function EventDraftsSection() {
                 )}
                 {status === "pending" && (
                   <>
-                    <DropdownMenuItem onClick={() => rejectMutation.mutate({ id, rejectReason: "Testing 1..2..3.." })}>
+                    <DropdownMenuItem onClick={() => handleTriggerReject(id)}>
                       <StarOff />
                       Reject
                     </DropdownMenuItem>
@@ -185,7 +212,7 @@ export function EventDraftsSection() {
                     <DropdownMenuSeparator />
                   </>
                 )}
-                <DropdownMenuItem variant="destructive" onClick={() => handleVerifyDelete(id)}>
+                <DropdownMenuItem variant="destructive" onClick={() => handleTriggerDelete(id)}>
                   <Trash2 />
                   Delete
                 </DropdownMenuItem>
@@ -218,6 +245,41 @@ export function EventDraftsSection() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <Dialog open={showRejectDialog} onOpenChange={setShowRejectDialog}>
+        <form
+          onSubmit={async (e) => {
+            e.preventDefault();
+          }}
+        >
+          <DialogContent className="sm:max-w-sm">
+            <DialogHeader>
+              <DialogTitle>Reject Request?</DialogTitle>
+              <DialogDescription>Enter the reason for rejecting the request</DialogDescription>
+            </DialogHeader>
+            <FieldGroup>
+              <Field>
+                <Label htmlFor="reason">Reason</Label>
+                <Input
+                  id="reason"
+                  name="reason"
+                  value={rejectReason}
+                  onChange={(value) => setRejectReason(value.target.value)}
+                />
+              </Field>
+            </FieldGroup>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button variant="outline">Cancel</Button>
+              </DialogClose>
+              <Button type="submit" onClick={handleConfirmReject}>
+                Continue
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </form>
+      </Dialog>
+
       <DataTable data={data} columns={columns} />
 
       <div>
