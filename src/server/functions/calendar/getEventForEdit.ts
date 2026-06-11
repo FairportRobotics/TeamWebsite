@@ -12,7 +12,7 @@ import { eq } from "drizzle-orm";
 export type EventForEdit = Awaited<ReturnType<typeof getEventForEditFn>>;
 export const getEventForEditFn = createServerFn()
   .middleware([authenticatedMiddleware, allPermissionsMiddleware([Permissions.EventUpdate])])
-  .inputValidator(zodValidator(eventIdSchema))
+  .validator(zodValidator(eventIdSchema))
   .handler(async ({ data }) => {
     // Retrieve the calendar, the dates and the users who have touched the record.
     const results = await db.query.dbEvent.findFirst({

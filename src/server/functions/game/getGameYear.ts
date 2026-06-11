@@ -11,7 +11,7 @@ const getGameYearSchema = z.object({
 });
 
 export const getGameYearFn = createServerFn()
-  .inputValidator(zodValidator(getGameYearSchema))
+  .validator(zodValidator(getGameYearSchema))
   .handler(async ({ data }) => {
     const results = await db.select().from(dbGame).where(eq(dbGame.year, data.year));
 

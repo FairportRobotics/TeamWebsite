@@ -12,7 +12,7 @@ export type DetailDraft = Awaited<ReturnType<typeof getEventListDetailsFn>>["dra
 export type DetailHistory = Awaited<ReturnType<typeof getEventListDetailsFn>>["history"][0];
 
 export const getEventListDetailsFn = createServerFn()
-  .inputValidator(zodValidator(eventIdSchema))
+  .validator(zodValidator(eventIdSchema))
   .handler(async ({ data }) => {
     // Get any Published versions of the Event.
     const published = await db.query.dbEvent.findFirst({

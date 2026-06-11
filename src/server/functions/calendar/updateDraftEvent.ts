@@ -12,7 +12,7 @@ import { eq } from "drizzle-orm";
 // of the calendar item and the user's roles.
 export const updateDraftEventFn = createServerFn()
   .middleware([authenticatedMiddleware, anyPermissionMiddleware([Permissions.EventUpdate])])
-  .inputValidator(zodValidator(updateEventSchema))
+  .validator(zodValidator(updateEventSchema))
   .handler(async ({ data, context }) => {
     const currentUserId = context!.user!.id;
 

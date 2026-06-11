@@ -9,7 +9,7 @@ import { eq } from "drizzle-orm";
 // Get a single User of the system.
 export type UserDetailItem = Awaited<ReturnType<typeof getUserDetailsFn>>;
 export const getUserDetailsFn = createServerFn()
-  .inputValidator(zodValidator(userIdSchema))
+  .validator(zodValidator(userIdSchema))
   .handler(async ({ data }) => {
     const [user, accounts, sessions] = await Promise.all([
       db

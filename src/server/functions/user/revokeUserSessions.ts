@@ -10,7 +10,7 @@ import { zodValidator } from "@tanstack/zod-adapter";
 
 export const revokeAllUserSessionsFn = createServerFn()
   .middleware([authenticatedMiddleware, anyPermissionMiddleware([Permissions.UserRevokeSessions])])
-  .inputValidator(zodValidator(userIdSchema))
+  .validator(zodValidator(userIdSchema))
   .handler(async ({ data }) => {
     const request = getRequest();
     const userId = data.userId;

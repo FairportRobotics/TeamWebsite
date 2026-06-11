@@ -10,7 +10,7 @@ import { eq } from "drizzle-orm";
 
 export const approveRequest = createServerFn()
   .middleware([authenticatedMiddleware, anyPermissionMiddleware([Permissions.EventApprove])])
-  .inputValidator(zodValidator(eventIdSchema))
+  .validator(zodValidator(eventIdSchema))
   .handler(async ({ data, context }) => {
     const currentUserId = context!.user!.id;
 
@@ -44,7 +44,7 @@ export const approveRequest = createServerFn()
           await tx.insert(dbEventDraftHistory).values({
             draftId: draft.id,
             eventId: draft.eventId,
-            snapshot: published,
+            snapshot: JSON.stringify(published),
           });
 
           // Delete the Published Event as we are going to be replacing it with the promoted Draft.

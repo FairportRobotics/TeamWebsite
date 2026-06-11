@@ -10,7 +10,7 @@ import { eq } from "drizzle-orm";
 
 export const requestApprovalCalendarFn = createServerFn()
   .middleware([authenticatedMiddleware, anyPermissionMiddleware([Permissions.EventUpdate])])
-  .inputValidator(zodValidator(eventIdSchema))
+  .validator(zodValidator(eventIdSchema))
   .handler(async ({ data, context }) => {
     const currentUserId = context!.user!.id;
 

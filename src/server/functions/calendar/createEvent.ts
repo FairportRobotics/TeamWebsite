@@ -16,9 +16,7 @@ export const createEventSchema = z
     title: z.string().trim().min(1, "Title is required"),
     description: z.string().trim().min(1, "Description is required"),
     location: z.string().trim().min(1, "Location is required"),
-    visibleTo: z
-      .array(z.enum(VisibleToOptions))
-      .min(1, "At least one visibility option must be selected"),
+    visibleTo: z.array(z.enum(VisibleToOptions)).min(1, "At least one visibility option must be selected"),
     dates: z.array(saveEventDateSchema).min(1, "At least one date range is required"),
     informationLink: z.url().optional().or(z.literal("")),
     signupLink: z.url().optional().or(z.literal("")),
@@ -47,7 +45,7 @@ export const createEventSchema = z
 // of the calendar item and the user's roles.
 export const createEventFn = createServerFn()
   .middleware([authenticatedMiddleware, anyPermissionMiddleware([Permissions.EventUpdate])])
-  .inputValidator(zodValidator(createEventSchema))
+  .validator(zodValidator(createEventSchema))
   .handler(async ({ data, context }) => {
     const currentUserId = context!.user!.id;
     const id = crypto.randomUUID();

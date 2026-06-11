@@ -7,7 +7,7 @@ import { zodValidator } from "@tanstack/zod-adapter";
 import { eq } from "drizzle-orm";
 
 export const deletePublishedEventFn = createServerFn()
-  .inputValidator(zodValidator(eventIdSchema))
+  .validator(zodValidator(eventIdSchema))
   .handler(async ({ data }) => {
     try {
       await db.transaction(async (tx) => {
