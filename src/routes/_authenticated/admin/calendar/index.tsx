@@ -1,5 +1,5 @@
-import { EventDraftsSection } from "@/components/admin/calendar/EventDraftsSection";
-import { EventPublishedSection } from "@/components/admin/calendar/EventPublishedSection";
+import { EventDraftsSection } from "@/components/admin/events/EventDraftsSection";
+import { EventPublishedSection } from "@/components/admin/events/EventPublishedSection";
 import { BackTo } from "@/components/site/BackTo";
 import { PageDescription, PageHeader, PageTitle } from "@/components/site/PageHeader";
 import { eventQueries } from "@/queries/eventQueries";
@@ -8,6 +8,7 @@ import { createFileRoute } from "@tanstack/react-router";
 export const Route = createFileRoute("/_authenticated/admin/calendar/")({
   component: RouteComponent,
   loader: ({ context }) => {
+    context.queryClient?.ensureQueryData(eventQueries.drafts());
     context.queryClient?.ensureQueryData(eventQueries.published());
   },
 });

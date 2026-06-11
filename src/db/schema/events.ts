@@ -3,6 +3,7 @@ import { statusEnum, visibleEnum, type InferResultType } from "@/db/schema/_comm
 import { Roles } from "@/lib/auth/roles";
 import { index, jsonb, pgSchema, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
+// Create a database schema so we can segregate all the different tables we'll be using.
 export const eventSchema = pgSchema("event");
 
 // Stores all the Events which the team will host or participate.
@@ -14,10 +15,10 @@ export const dbEvent = eventSchema.table("published", {
     .notNull()
     .references(() => user.id, { onDelete: "no action" }),
 
-  visibleTo: visibleEnum("visible_to").array().default([Roles.Everyone]),
   title: text("title").notNull(),
   description: text("description").notNull(),
   location: text("location").notNull(),
+  visibleTo: visibleEnum("visible_to").array().default([Roles.Everyone]),
   informationLink: text("information_link"),
   signupLink: text("signup_link"),
   signupLinkVisibleTo: visibleEnum("signup_link_visible_to").array().default([Roles.Student, Roles.Mentor]),

@@ -10,7 +10,7 @@ import { eq } from "drizzle-orm";
 
 export const requestApprovalCalendarFn = createServerFn()
   .middleware([authenticatedMiddleware, anyPermissionMiddleware([Permissions.EventUpdate])])
-  .inputValidator(zodValidator(eventIdSchema))
+  .validator(zodValidator(eventIdSchema))
   .handler(async ({ data, context }) => {
     const currentUserId = context!.user!.id;
 
@@ -31,7 +31,7 @@ export const requestApprovalCalendarFn = createServerFn()
         // Create a history record of the draft.
         await tx.insert(dbEventDraftHistory).values({
           draftId: existingDraft.id,
-          snapshot: existingDraft,
+          snapshot: JSON.stringify(existingDraft),
         });
 
         // Update the Draft.

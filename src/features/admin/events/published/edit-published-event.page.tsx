@@ -1,7 +1,8 @@
 import { BackTo } from "@/components/site/BackTo";
 import { PageHeader, PageTitle } from "@/components/site/PageHeader";
 import type { VisibleEnumType } from "@/db/schema";
-import { CommonEventForm, type CalendarFormValues } from "@/features/admin/event/common-event-form";
+import { CommonEventForm, type CalendarFormValues } from "@/features/admin/events/_common/common-event.form";
+import { updatePublishedEventSchema } from "@/features/admin/events/published/update-published-event.schema";
 import { updatePublishedEventFn } from "@/server/functions/calendar/updatePublishedEvent";
 import { useLoaderData } from "@tanstack/react-router";
 import { toast } from "sonner";
@@ -14,7 +15,6 @@ export function EditPublisedPage() {
   const defaultValues: CalendarFormValues = {
     id: event.id,
     eventId: event.id,
-    status: "published",
     title: event.title,
     description: event.description,
     location: event.location,
@@ -29,8 +29,7 @@ export function EditPublisedPage() {
     await updatePublishedEventFn({
       data: {
         id: value.id!,
-        eventId: value.eventId,
-        status: "draft",
+        eventId: value.eventId!,
         title: value.title,
         description: value.description,
         location: value.location,
@@ -54,7 +53,11 @@ export function EditPublisedPage() {
         </PageTitle>
       </PageHeader>
 
-      <CommonEventForm defaultValues={defaultValues} onSubmit={(values) => handleSubmit(values)} />
+      <CommonEventForm
+        defaultValues={defaultValues}
+        zodSchema={updatePublishedEventSchema}
+        onSubmit={(values) => handleSubmit(values)}
+      />
     </div>
   );
 }

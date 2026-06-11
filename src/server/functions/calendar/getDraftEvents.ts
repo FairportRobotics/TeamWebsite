@@ -4,12 +4,13 @@ import { anyPermissionMiddleware } from "@/server/middleware/anyPermission";
 import { authenticatedMiddleware } from "@/server/middleware/authenticated";
 import { createServerFn } from "@tanstack/react-start";
 
-type DraftEvents = Awaited<ReturnType<typeof getDraftEvents>>;
+type DraftEvents = Awaited<ReturnType<typeof getDraftEventsFn>>;
 export type DraftEvent = NonNullable<DraftEvents>[0];
 
-export const getDraftEvents = createServerFn()
+export const getDraftEventsFn = createServerFn()
   .middleware([authenticatedMiddleware, anyPermissionMiddleware([Permissions.EventAdminister])])
   .handler(async () => {
+    console.log("getDraftEventsFn");
     return await db.query.dbEventDraft.findMany({
       with: {
         dates: true,

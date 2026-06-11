@@ -1,7 +1,7 @@
 import { db } from "@/db";
 import { dbEventDraft, dbEventDraftDate, dbEventDraftHistory } from "@/db/schema";
+import { updateDraftEventSchema } from "@/features/admin/events/draft/update-draft-event.schema";
 import { Permissions } from "@/lib/auth/permissions";
-import { updateEventSchema } from "@/server/functions/calendar/_common";
 import { anyPermissionMiddleware } from "@/server/middleware/anyPermission";
 import { authenticatedMiddleware } from "@/server/middleware/authenticated";
 import { createServerFn } from "@tanstack/react-start";
@@ -12,7 +12,7 @@ import { eq } from "drizzle-orm";
 // of the calendar item and the user's roles.
 export const updateDraftEventFn = createServerFn()
   .middleware([authenticatedMiddleware, anyPermissionMiddleware([Permissions.EventUpdate])])
-  .inputValidator(zodValidator(updateEventSchema))
+  .validator(zodValidator(updateDraftEventSchema))
   .handler(async ({ data, context }) => {
     const currentUserId = context!.user!.id;
 

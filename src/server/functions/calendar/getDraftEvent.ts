@@ -12,7 +12,7 @@ export type DraftEvent = Awaited<ReturnType<typeof getDraftEvent>>;
 
 export const getDraftEvent = createServerFn()
   .middleware([authenticatedMiddleware, anyPermissionMiddleware([Permissions.EventAdminister])])
-  .inputValidator(zodValidator(eventIdSchema))
+  .validator(zodValidator(eventIdSchema))
   .handler(async ({ data }) => {
     return await db.query.dbEventDraft.findFirst({
       where: eq(dbEventDraft.id, data.id),

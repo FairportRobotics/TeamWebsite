@@ -1,4 +1,4 @@
-import { EventDetailsPage } from "@/features/admin/event/details/event-details-page";
+import { EventDetailsPage } from "@/features/admin/events/details/event-details.page";
 import { getEventListDetailsFn } from "@/server/functions/calendar/getEventDetails";
 import { createFileRoute } from "@tanstack/react-router";
 

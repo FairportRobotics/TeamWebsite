@@ -1,7 +1,7 @@
 import { db } from "@/db";
 import { dbEvent, dbEventDraft, dbEventDraftDate, dbEventDraftHistory } from "@/db/schema";
+import { updatePublishedEventSchema } from "@/features/admin/events/published/update-published-event.schema";
 import { Permissions } from "@/lib/auth/permissions";
-import { updateEventSchema } from "@/server/functions/calendar/_common";
 import { anyPermissionMiddleware } from "@/server/middleware/anyPermission";
 import { authenticatedMiddleware } from "@/server/middleware/authenticated";
 import { createServerFn } from "@tanstack/react-start";
@@ -12,7 +12,7 @@ import { eq } from "drizzle-orm";
 // of the calendar item and the user's roles.
 export const updatePublishedEventFn = createServerFn()
   .middleware([authenticatedMiddleware, anyPermissionMiddleware([Permissions.EventUpdate])])
-  .inputValidator(zodValidator(updateEventSchema))
+  .validator(zodValidator(updatePublishedEventSchema))
   .handler(async ({ data, context }) => {
     const currentUserId = context!.user!.id;
 
@@ -33,7 +33,7 @@ export const updatePublishedEventFn = createServerFn()
         // Create a history record of the Published Event.
         await tx.insert(dbEventDraftHistory).values({
           eventId: existingEvent.id,
-          snapshot: existingEvent,
+          snapshot: JSON.stringify(existingEvent),
         });
 
         // Insert new Draft.

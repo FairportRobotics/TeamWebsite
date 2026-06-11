@@ -1,7 +1,7 @@
-import { approveRequest } from "@/server/functions/calendar/approveRequest";
+import { approveRequestFn } from "@/server/functions/calendar/approveRequest";
 import { deleteDraftEventFn } from "@/server/functions/calendar/deleteDraftEvent";
 import { deletePublishedEventFn } from "@/server/functions/calendar/deletePublishedEvent";
-import { getDraftEvents } from "@/server/functions/calendar/getDraftEvents";
+import { getDraftEventsFn } from "@/server/functions/calendar/getDraftEvents";
 import { getPublishedEventsFn } from "@/server/functions/calendar/getPublishedEvents";
 import { requestApprovalCalendarFn } from "@/server/functions/calendar/requestApproval";
 import { queryOptions, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -13,7 +13,7 @@ export const eventQueries = {
   drafts: () =>
     queryOptions({
       queryKey: [eventQueries.draftsKey],
-      queryFn: async () => await getDraftEvents(),
+      queryFn: async () => await getDraftEventsFn(),
     }),
 
   published: () =>
@@ -44,12 +44,12 @@ export function useApproveMutation() {
 
   return useMutation({
     mutationFn: async (id: string) => {
-      await approveRequest({ data: { id } });
+      await approveRequestFn({ data: { id } });
     },
 
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [eventQueries.draftsKey],
+        queryKey: [eventQueries.draftsKey, eventQueries.publishedKey],
       });
     },
   });

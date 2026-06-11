@@ -76,9 +76,9 @@ export const sponsorTable = pgTable(
 );
 
 // Export types for select queries.
-export type GameSelect = typeof gameTable.$inferSelect;
-export type GameInsert = typeof gameTable.$inferInsert;
-export type RobotSelect = typeof robotTable.$inferSelect;
-export type RobotInsert = typeof robotTable.$inferInsert;
-export type SponsorSelect = typeof sponsorTable.$inferSelect;
-export type SponsorInsert = typeof sponsorTable.$inferInsert;
+//export type GameSelect = typeof gameTable.$inferSelect;
+//export type GameInsert = typeof gameTable.$inferInsert;
+//export type RobotSelect = typeof robotTable.$inferSelect;
+//export type RobotInsert = typeof robotTable.$inferInsert;
+//export type SponsorSelect = typeof sponsorTable.$inferSelect;
+//export type SponsorInsert = typeof sponsorTable.$inferInsert;

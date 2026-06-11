@@ -1,7 +1,8 @@
 import { BackTo } from "@/components/site/BackTo";
 import { PageHeader, PageTitle } from "@/components/site/PageHeader";
 import type { VisibleEnumType } from "@/db/schema";
-import { CommonEventForm, type CalendarFormValues } from "@/features/admin/event/common-event-form";
+import { CommonEventForm, type CalendarFormValues } from "@/features/admin/events/_common/common-event.form";
+import { updateDraftEventSchema } from "@/features/admin/events/draft/update-draft-event.schema";
 import { updateDraftEventFn } from "@/server/functions/calendar/updateDraftEvent";
 import { useLoaderData } from "@tanstack/react-router";
 import { toast } from "sonner";
@@ -14,7 +15,6 @@ export function EditDraftPage() {
   const defaultValues: CalendarFormValues = {
     id: event.id,
     eventId: event.eventId,
-    status: event.status,
     title: event.title,
     description: event.description,
     location: event.location,
@@ -30,7 +30,6 @@ export function EditDraftPage() {
       data: {
         id: value.id!,
         eventId: value.eventId,
-        status: "draft",
         title: value.title,
         description: value.description,
         location: value.location,
@@ -54,7 +53,11 @@ export function EditDraftPage() {
         </PageTitle>
       </PageHeader>
 
-      <CommonEventForm defaultValues={defaultValues} onSubmit={(values) => handleSubmit(values)} />
+      <CommonEventForm
+        defaultValues={defaultValues}
+        zodSchema={updateDraftEventSchema}
+        onSubmit={(values) => handleSubmit(values)}
+      />
     </div>
   );
 }
