@@ -1,4 +1,4 @@
-import { eventDateSchema } from "@/features/admin/event/schemas/event-date.schema";
+import { eventDateSchema } from "@/features/admin/event/_common/event-date.schema";
 import { VisibleToOptions } from "@/server/functions/calendar/_common";
 import { z } from "zod";
 

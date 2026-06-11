@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { dbEventDraft, dbEventDraftDate } from "@/db/schema";
-import { createEventSchema } from "@/features/admin/event/schemas/create-event.schema";
+import { createEventSchema } from "@/features/admin/event/new/create-event.schema";
 import { Permissions } from "@/lib/auth/permissions";
 import { anyPermissionMiddleware } from "@/server/middleware/anyPermission";
 import { authenticatedMiddleware } from "@/server/middleware/authenticated";

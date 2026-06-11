@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { dbEvent, dbEventDraft, dbEventDraftDate, dbEventDraftHistory } from "@/db/schema";
-import { updatePublishedEventSchema } from "@/features/admin/event/schemas/update-published-event.schema";
+import { updatePublishedEventSchema } from "@/features/admin/event/published/update-published-event.schema";
 import { Permissions } from "@/lib/auth/permissions";
 import { anyPermissionMiddleware } from "@/server/middleware/anyPermission";
 import { authenticatedMiddleware } from "@/server/middleware/authenticated";

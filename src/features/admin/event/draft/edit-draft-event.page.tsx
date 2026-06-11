@@ -2,7 +2,7 @@ import { BackTo } from "@/components/site/BackTo";
 import { PageHeader, PageTitle } from "@/components/site/PageHeader";
 import type { VisibleEnumType } from "@/db/schema";
 import { CommonEventForm, type CalendarFormValues } from "@/features/admin/event/_common/common-event.form";
-import { updateDraftEventSchema } from "@/features/admin/event/schemas/update-draft-event.schema";
+import { updateDraftEventSchema } from "@/features/admin/event/draft/update-draft-event.schema";
 import { updateDraftEventFn } from "@/server/functions/calendar/updateDraftEvent";
 import { useLoaderData } from "@tanstack/react-router";
 import { toast } from "sonner";
