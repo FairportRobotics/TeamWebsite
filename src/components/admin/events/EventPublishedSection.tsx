@@ -23,7 +23,9 @@ import React from "react";
 
 export function EventPublishedSection() {
   const router = useRouter();
+
   const { data } = useSuspenseQuery(eventQueries.published());
+
   const [showDeleteAlert, setShowDeleteAlert] = React.useState(false);
   const [selectedEventCode, setSelectedEventCode] = React.useState<string | null>(null);
 

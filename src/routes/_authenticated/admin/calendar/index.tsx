@@ -8,6 +8,7 @@ import { createFileRoute } from "@tanstack/react-router";
 export const Route = createFileRoute("/_authenticated/admin/calendar/")({
   component: RouteComponent,
   loader: ({ context }) => {
+    context.queryClient?.ensureQueryData(eventQueries.drafts());
     context.queryClient?.ensureQueryData(eventQueries.published());
   },
 });

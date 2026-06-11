@@ -29,8 +29,9 @@ import { ArrowUpDown, CalendarFold, Pencil, Stamp, Trash2, TrashIcon } from "luc
 import React from "react";
 
 export function EventDraftsSection() {
-  const { data } = useSuspenseQuery(eventQueries.drafts());
   const router = useRouter();
+
+  const { data } = useSuspenseQuery(eventQueries.drafts());
 
   const [showDeleteAlert, setShowDeleteAlert] = React.useState(false);
   const [selectedEventId, setSelectedEventId] = React.useState<string | null>(null);
