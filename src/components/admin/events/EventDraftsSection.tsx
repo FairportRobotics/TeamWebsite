@@ -55,11 +55,9 @@ export function EventDraftsSection() {
 
   const { data } = useSuspenseQuery(eventQueries.drafts());
 
-  const [showDeleteAlert, setShowDeleteAlert] = React.useState(false);
   const [selectedEventId, setSelectedEventId] = React.useState<string | null>(null);
-
+  const [showDeleteAlert, setShowDeleteAlert] = React.useState(false);
   const [showRejectDialog, setShowRejectDialog] = React.useState(false);
-  const [rejectReason, setRejectReason] = React.useState("");
 
   // Entity mutations.
   const requestApprovalMutation = useRequestApprovalMutation();
@@ -82,7 +80,6 @@ export function EventDraftsSection() {
     rejectMutation.mutate({ id: selectedEventId!, rejectReason: reason });
     setSelectedEventId(null);
     setShowRejectDialog(false);
-    setRejectReason("");
   };
 
   const handleTriggerDelete = (id: string) => {

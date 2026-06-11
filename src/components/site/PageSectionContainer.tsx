@@ -20,12 +20,12 @@ export function PageSectionContainer({
       <CardContent className="m-0 p-0">
         <Collapsible className="m-0 p-0" defaultOpen={initialState === "expanded"}>
           <CollapsibleTrigger asChild className="m-0 p-0">
-            <div className="flex flex-row items-center justify-between bg-primary text-primary-foreground text-2xl font-extrabold p-4">
+            <div className="flex flex-row items-center justify-between bg-accent text-foreground text-2xl font-extrabold p-4">
               <div className="flex flex-row gap-4 items-baseline">
-                <div className="text-primary-foreground">{title}</div>
-                {subTitle && <div className="text-sm text-muted">{subTitle}</div>}
+                <div className="text-foreground">{title}</div>
+                {subTitle && <div className="text-sm text-foreground/50">{subTitle}</div>}
               </div>
-              <Button variant="ghost" className="group" size="lg">
+              <Button variant="outline" className="group" size="lg">
                 <ChevronDownIcon className="ml-auto group-data-[state=open]:rotate-180" />
               </Button>
             </div>
