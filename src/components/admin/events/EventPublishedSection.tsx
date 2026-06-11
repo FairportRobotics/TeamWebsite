@@ -12,7 +12,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { getDateRangeParts, getDateTimeString } from "@/lib/utils";
+import { getDateRangeParts, getDateTimeString } from "@/lib/dates";
 import { eventQueries, useDeletePublishedMutation } from "@/queries/eventQueries";
 import type { PublishedEvent } from "@/server/functions/calendar/getPublishedEvents";
 import { useSuspenseQuery } from "@tanstack/react-query";

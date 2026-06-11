@@ -10,7 +10,6 @@ export type DraftEvent = NonNullable<DraftEvents>[0];
 export const getDraftEventsFn = createServerFn()
   .middleware([authenticatedMiddleware, anyPermissionMiddleware([Permissions.EventAdminister])])
   .handler(async () => {
-    console.log("getDraftEventsFn");
     return await db.query.dbEventDraft.findMany({
       with: {
         dates: true,

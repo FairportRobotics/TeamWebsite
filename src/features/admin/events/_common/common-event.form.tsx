@@ -1,5 +1,6 @@
 import { useAppForm } from "@/components/form";
 import { Card, CardContent } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { VisibleToOptions } from "@/server/functions/calendar/_common";
 import type { StandardSchemaV1 } from "@tanstack/react-form";
 
@@ -37,6 +38,7 @@ export function CommonEventForm({
     },
     onSubmit: async ({ value }) => {
       onSubmit(value);
+      form.reset(value);
     },
   });
 
@@ -59,45 +61,56 @@ export function CommonEventForm({
           <form.AppField name="id">{(field) => <field.HiddenField />}</form.AppField>
           <form.AppField name="eventId">{(field) => <field.HiddenField />}</form.AppField>
 
-          {/* Title */}
-          <form.AppField name="title">{(field) => <field.TextField label="Title" required={true} />}</form.AppField>
+          <Tabs defaultValue="general" className="w-full">
+            <TabsList className="w-full">
+              <TabsTrigger value="general">General</TabsTrigger>
+              <TabsTrigger value="information">Information</TabsTrigger>
+              <TabsTrigger value="signup">Signup</TabsTrigger>
+            </TabsList>
+            <TabsContent value="general" className="flex flex-col gap-8 mt-4">
+              {/* Title */}
+              <form.AppField name="title">{(field) => <field.TextField label="Title" required={true} />}</form.AppField>
 
-          {/* Description */}
-          <form.AppField name="description">
-            {(field) => <field.TextareaField label="Description" required={true} rows={5} />}
-          </form.AppField>
+              {/* Description */}
+              <form.AppField name="description">
+                {(field) => <field.TextareaField label="Description" required={true} rows={5} />}
+              </form.AppField>
 
-          {/* Location */}
-          <form.AppField name="location">
-            {(field) => <field.TextareaField label="Location" required={true} rows={2} />}
-          </form.AppField>
+              {/* Location */}
+              <form.AppField name="location">
+                {(field) => <field.TextareaField label="Location" required={true} rows={2} />}
+              </form.AppField>
 
-          {/* Dates */}
-          <form.AppField name="dates">
-            {(field) => <field.DatesSelectionField label="Event Dates and Times" required={true} />}
-          </form.AppField>
+              {/* Dates */}
+              <form.AppField name="dates">
+                {(field) => <field.DatesSelectionField label="Event Dates and Times" required={true} />}
+              </form.AppField>
 
-          {/* Event Visibility */}
-          <form.AppField name="visibleTo">
-            {(field) => (
-              <field.MultiCheckboxField label="Event should be visible to" required={true} options={visibleToOptions} />
-            )}
-          </form.AppField>
-
-          {/* Information Link */}
-          <form.AppField name="informationLink">
-            {(field) => <field.UrlField label="Information Link" required={false} />}
-          </form.AppField>
-
-          {/* Signup Link */}
-          <form.AppField name="signupLink">
-            {(field) => <field.UrlField label="Signup Form Link" required={false} />}
-          </form.AppField>
-          <form.AppField name="signupLinkVisibleTo">
-            {(field) => (
-              <field.MultiCheckboxField label="Signup form should be visible to" options={visibleToOptions} />
-            )}
-          </form.AppField>
+              {/* Event Visibility */}
+              <form.AppField name="visibleTo">
+                {(field) => (
+                  <field.VisibleToField label="Event should be visible to" required={true} options={visibleToOptions} />
+                )}
+              </form.AppField>
+            </TabsContent>
+            <TabsContent value="information" className="flex flex-col gap-8 mt-4">
+              {/* Information Link */}
+              <form.AppField name="informationLink">
+                {(field) => <field.UrlField label="Information Link" required={false} />}
+              </form.AppField>
+            </TabsContent>
+            <TabsContent value="signup" className="flex flex-col gap-8 mt-4">
+              {/* Signup Link */}
+              <form.AppField name="signupLink">
+                {(field) => <field.UrlField label="Signup Form Link" required={false} />}
+              </form.AppField>
+              <form.AppField name="signupLinkVisibleTo">
+                {(field) => (
+                  <field.VisibleToField label="Signup form should be visible to" options={visibleToOptions} />
+                )}
+              </form.AppField>
+            </TabsContent>
+          </Tabs>
 
           <form.AppForm>
             <form.SubmitButton>Submit</form.SubmitButton>
