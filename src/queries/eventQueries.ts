@@ -3,6 +3,7 @@ import { deleteDraftEventFn } from "@/server/functions/calendar/deleteDraftEvent
 import { deletePublishedEventFn } from "@/server/functions/calendar/deletePublishedEvent";
 import { getDraftEventsFn } from "@/server/functions/calendar/getDraftEvents";
 import { getPublishedEventsFn } from "@/server/functions/calendar/getPublishedEvents";
+import { rejectRequestFn } from "@/server/functions/calendar/rejectRequest";
 import { requestApprovalCalendarFn } from "@/server/functions/calendar/requestApproval";
 import { queryOptions, useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -46,6 +47,22 @@ export function useRequestApprovalMutation() {
           queryKey: eventKeys.detail(id),
         }),
       ]);
+    },
+  });
+}
+
+export function useRejectMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ id, rejectReason }: { id: string; rejectReason: string }) => {
+      await rejectRequestFn({ data: { id, rejectReason } });
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: eventKeys.all,
+      });
     },
   });
 }

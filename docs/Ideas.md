@@ -32,3 +32,22 @@
   - Branding
   - Contact us
 - Social links
+
+# States
+
+Each object which can be mutated by the site can proceed through multiple states.
+
+- Draft
+- Pending
+- Rejected
+- Approved
+- Archived
+
+# State Transitions
+
+- Draft -> Draft
+- Draft -> Pending
+- Pending -> Rejected
+- Pending -> Approved
+- Approved -> Archived
+- Approved -> Draft (new Draft is created an existing Approved remains visible)

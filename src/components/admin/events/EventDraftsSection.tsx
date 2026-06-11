@@ -13,12 +13,33 @@ import {
   AlertDialogMedia,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Field, FieldGroup } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { getDateRangeParts, getDateTimeString } from "@/lib/dates";
 import {
   eventQueries,
   useApproveMutation,
   useDeleteDraftMutation,
+  useRejectMutation,
   useRequestApprovalMutation,
 } from "@/queries/eventQueries";
 import type { DraftEvent } from "@/server/functions/calendar/getDraftEvents";
@@ -26,7 +47,7 @@ import { seedEventsFn } from "@/server/functions/calendar/seed";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link, useRouter } from "@tanstack/react-router";
 import { type ColumnDef } from "@tanstack/react-table";
-import { CalendarFold, Pencil, Stamp, Trash2, TrashIcon } from "lucide-react";
+import { MoreHorizontalIcon, Pencil, Stamp, Star, StarOff, Trash2, TrashIcon } from "lucide-react";
 import React from "react";
 
 export function EventDraftsSection() {
@@ -34,11 +55,13 @@ export function EventDraftsSection() {
 
   const { data } = useSuspenseQuery(eventQueries.drafts());
 
-  const [showDeleteAlert, setShowDeleteAlert] = React.useState(false);
   const [selectedEventId, setSelectedEventId] = React.useState<string | null>(null);
+  const [showDeleteAlert, setShowDeleteAlert] = React.useState(false);
+  const [showRejectDialog, setShowRejectDialog] = React.useState(false);
 
   // Entity mutations.
   const requestApprovalMutation = useRequestApprovalMutation();
+  const rejectMutation = useRejectMutation();
   const approveMutation = useApproveMutation();
   const deleteMutation = useDeleteDraftMutation();
 
@@ -48,7 +71,18 @@ export function EventDraftsSection() {
     return { error: null };
   }
 
-  const handleVerifyDelete = (id: string) => {
+  const handleTriggerReject = (id: string) => {
+    setSelectedEventId(id);
+    setShowRejectDialog(true);
+  };
+
+  const handleConfirmReject = (reason: string) => {
+    rejectMutation.mutate({ id: selectedEventId!, rejectReason: reason });
+    setSelectedEventId(null);
+    setShowRejectDialog(false);
+  };
+
+  const handleTriggerDelete = (id: string) => {
     setSelectedEventId(id);
     setShowDeleteAlert(true);
   };
@@ -121,54 +155,66 @@ export function EventDraftsSection() {
       },
     },
     {
+      accessorKey: "status",
+      header: ({ column }) => <HeaderSortLabel label="State" column={column} />,
+      cell: ({ row }) => {
+        const status = row.original.status;
+        return <Badge variant={status as any}>{status}</Badge>;
+      },
+    },
+    {
       accessorKey: "id",
       header: () => {
-        return <div className="flex justify-end">Actions</div>;
+        return <div className="text-center">Actions</div>;
       },
       cell: ({ row }) => {
         const id = row.original.id;
         const status = row.original.status;
 
         return (
-          <div className="flex items-center justify-end gap-1">
-            <Button
-              title="Edit"
-              aria-description="Edit"
-              variant="default"
-              onClick={() => router.navigate({ to: "/admin/calendar/$id/draft", params: { id: id } })}
-            >
-              <Pencil />
-            </Button>
-            {status === "draft" ? (
-              <Button
-                title="Request publication approval"
-                aria-description="Request publication approval"
-                variant="default"
-                onClick={() => requestApprovalMutation.mutate(id)}
-                className="bg-chart-5"
-              >
-                <CalendarFold />
-              </Button>
-            ) : (
-              <Button
-                title="Approve to publish"
-                aria-description="Approve to publish"
-                variant="default"
-                onClick={() => approveMutation.mutate(id)}
-                className="bg-chart-4"
-              >
-                <Stamp />
-              </Button>
-            )}
-
-            <Button
-              title="Delete"
-              aria-description="Delete"
-              variant="destructive"
-              onClick={() => handleVerifyDelete(id)}
-            >
-              <Trash2 />
-            </Button>
+          <div className="text-center">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="size-8">
+                  <MoreHorizontalIcon />
+                  <span className="sr-only">Open menu</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-full">
+                <DropdownMenuItem
+                  onClick={() => router.navigate({ to: "/admin/calendar/$id/draft", params: { id: id } })}
+                >
+                  <Pencil />
+                  Edit
+                </DropdownMenuItem>
+                {status === "draft" && (
+                  <>
+                    <DropdownMenuItem onClick={() => requestApprovalMutation.mutate(id)}>
+                      <Star />
+                      Request Approval
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                  </>
+                )}
+                {status === "pending" && (
+                  <>
+                    <DropdownMenuItem onClick={() => handleTriggerReject(id)}>
+                      <StarOff />
+                      Reject
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => approveMutation.mutate(id)}>
+                      <Stamp />
+                      Approve
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                  </>
+                )}
+                <DropdownMenuItem variant="destructive" onClick={() => handleTriggerDelete(id)}>
+                  <Trash2 />
+                  Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         );
       },
@@ -196,6 +242,13 @@ export function EventDraftsSection() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <RejectReasonDialog
+        show={showRejectDialog}
+        setShow={setShowRejectDialog}
+        onSubmit={(reason) => handleConfirmReject(reason)}
+      />
+
       <DataTable data={data} columns={columns} />
 
       <div>
@@ -214,5 +267,53 @@ export function EventDraftsSection() {
         </TeamActionButton>
       </div>
     </PageSectionContainer>
+  );
+}
+
+function RejectReasonDialog({
+  show,
+  setShow,
+  onSubmit,
+}: {
+  show: boolean;
+  setShow: (show: boolean) => void;
+  onSubmit: (reason: string) => void;
+}) {
+  const [rejectReason, setRejectReason] = React.useState("");
+
+  return (
+    <Dialog open={show} onOpenChange={setShow}>
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault();
+        }}
+      >
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Reject Request?</DialogTitle>
+            <DialogDescription>Enter the reason for rejecting the request</DialogDescription>
+          </DialogHeader>
+          <FieldGroup>
+            <Field>
+              <Label htmlFor="reason">Reason</Label>
+              <Input
+                id="reason"
+                name="reason"
+                value={rejectReason}
+                onChange={(value) => setRejectReason(value.target.value)}
+              />
+            </Field>
+          </FieldGroup>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline">Cancel</Button>
+            </DialogClose>
+            <Button type="submit" onClick={() => onSubmit(rejectReason)}>
+              Continue
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </form>
+    </Dialog>
   );
 }
