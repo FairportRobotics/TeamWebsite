@@ -18,10 +18,10 @@
 
 ### Admin
 
-- [-] Use the pattern from the CMS Reports tables and allow all columns to be sortable and searchable.
+- [x] Use the pattern from the CMS Reports tables and allow all columns to be sortable and searchable.
 
 ### Create
 
-- [-] Default to today.
-- [-] Better support for selecting the time.
-- [-] Add date/time button style should be default.
+- [x] Default Date to today.
+- [x] Better support for selecting the time.
+- [x] Add date/time button style should be default.

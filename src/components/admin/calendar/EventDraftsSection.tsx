@@ -53,10 +53,7 @@ export function EventDraftsSection() {
       accessorKey: "title",
       header: ({ column }) => {
         return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
+          <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
             Title
             <ArrowUpDown />
           </Button>
@@ -68,7 +65,7 @@ export function EventDraftsSection() {
 
         return (
           <div>
-            <Link to="/admin/calendar/$id/draft" params={{ id }}>
+            <Link to="/admin/calendar/$id" params={{ id }}>
               {title}
             </Link>
           </div>
@@ -79,10 +76,7 @@ export function EventDraftsSection() {
       accessorKey: "location",
       header: ({ column }) => {
         return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
+          <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
             Location
             <ArrowUpDown />
           </Button>
@@ -93,10 +87,7 @@ export function EventDraftsSection() {
       accessorKey: "dates",
       header: ({ column }) => {
         return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
+          <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
             Dates
             <ArrowUpDown />
           </Button>
@@ -121,10 +112,7 @@ export function EventDraftsSection() {
       accessorKey: "createdAt",
       header: ({ column }) => {
         return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
+          <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
             Created
             <ArrowUpDown />
           </Button>
@@ -162,9 +150,7 @@ export function EventDraftsSection() {
           <div className="flex items-center justify-end gap-1">
             <Button
               variant="default"
-              onClick={() =>
-                router.navigate({ to: "/admin/calendar/$id/draft", params: { id: id } })
-              }
+              onClick={() => router.navigate({ to: "/admin/calendar/$id/draft", params: { id: id } })}
               title="Edit"
               aria-description="Edit"
             >
@@ -207,11 +193,7 @@ export function EventDraftsSection() {
   ];
 
   return (
-    <PageSectionContainer
-      title="Event Drafts"
-      subTitle={`(${data.length} records)`}
-      initialState="expanded"
-    >
+    <PageSectionContainer title="Event Drafts" subTitle={`(${data.length} records)`} initialState="expanded">
       <AlertDialog open={showDeleteAlert} onOpenChange={setShowDeleteAlert}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -220,8 +202,7 @@ export function EventDraftsSection() {
             </AlertDialogMedia>
             <AlertDialogTitle>Delete Draft?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete this Event draft and cannot be undone. Are you sure you
-              want to continue?
+              This will permanently delete this Event draft and cannot be undone. Are you sure you want to continue?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

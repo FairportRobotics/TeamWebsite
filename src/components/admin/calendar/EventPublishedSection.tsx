@@ -37,10 +37,7 @@ export function EventPublishedSection() {
       accessorKey: "title",
       header: ({ column }) => {
         return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
+          <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
             Title
             <ArrowUpDown />
           </Button>
@@ -63,10 +60,7 @@ export function EventPublishedSection() {
       accessorKey: "location",
       header: ({ column }) => {
         return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
+          <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
             Location
             <ArrowUpDown />
           </Button>
@@ -77,10 +71,7 @@ export function EventPublishedSection() {
       accessorKey: "dates",
       header: ({ column }) => {
         return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
+          <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
             Dates
             <ArrowUpDown />
           </Button>
@@ -113,10 +104,7 @@ export function EventPublishedSection() {
       accessorKey: "createdAt",
       header: ({ column }) => {
         return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
+          <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
             Created
             <ArrowUpDown />
           </Button>
@@ -145,9 +133,7 @@ export function EventPublishedSection() {
           <div className="flex items-center justify-end gap-1">
             <Button
               variant="default"
-              onClick={() =>
-                router.navigate({ to: "/admin/calendar/$id/published", params: { id: id } })
-              }
+              onClick={() => router.navigate({ to: "/admin/calendar/$id/published", params: { id: id } })}
               title="Edit"
               aria-description="Edit"
             >
@@ -168,11 +154,7 @@ export function EventPublishedSection() {
   ];
 
   return (
-    <PageSectionContainer
-      title="Published Events"
-      subTitle={`(${data.length} records)`}
-      initialState="collapsed"
-    >
+    <PageSectionContainer title="Published Events" subTitle={`(${data.length} records)`} initialState="collapsed">
       <AlertDialog open={showDeleteAlert} onOpenChange={setShowDeleteAlert}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -181,8 +163,7 @@ export function EventPublishedSection() {
             </AlertDialogMedia>
             <AlertDialogTitle>Delete Calendar Event</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete this calendar Event and cannot be undone. Are you sure
-              you want to continue?
+              This will permanently delete this calendar Event and cannot be undone. Are you sure you want to continue?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

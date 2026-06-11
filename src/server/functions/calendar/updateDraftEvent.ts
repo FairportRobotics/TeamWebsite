@@ -20,7 +20,7 @@ export const updateDraftEventFn = createServerFn()
       await db.transaction(async (tx) => {
         // Retrieve Draft Event.
         const existingDraft = await tx.query.dbEventDraft.findFirst({
-          where: eq(dbEventDraft.id, data.id),
+          where: eq(dbEventDraft.id, data.id!),
           with: {
             dates: true,
             createdBy: true,
@@ -30,19 +30,19 @@ export const updateDraftEventFn = createServerFn()
         // Save History
         if (!existingDraft) throw new Error("Event draft not found");
 
-        // Create a history record of the draft.
+        // Create a history record of the Draft.
         await tx.insert(dbEventDraftHistory).values({
           draftId: existingDraft.id,
           eventId: existingDraft.eventId,
-          snapshot: existingDraft,
+          snapshot: JSON.stringify(existingDraft),
         });
 
         // Delete existing Draft.
-        await tx.delete(dbEventDraft).where(eq(dbEventDraft.id, data.id));
+        await tx.delete(dbEventDraft).where(eq(dbEventDraft.id, data.id!));
 
         // Insert new Draft.
         await tx.insert(dbEventDraft).values({
-          id: data.id,
+          id: data.id!,
           eventId: data.eventId,
           createdBy: currentUserId,
           status: "draft",
@@ -57,6 +57,7 @@ export const updateDraftEventFn = createServerFn()
           signupLinkVisibleTo: data.signupLinkVisibleTo,
         });
 
+        // Insert Draft Dates.
         data.dates.forEach(async (d) => {
           await tx.insert(dbEventDraftDate).values({
             draftId: data.id,
