@@ -6,10 +6,12 @@ import { getPublishedEventsFn } from "@/server/functions/calendar/getPublishedEv
 import { requestApprovalCalendarFn } from "@/server/functions/calendar/requestApproval";
 import { queryOptions, useMutation, useQueryClient } from "@tanstack/react-query";
 
-export const eventKeys = {
+const eventKeys = {
   all: ["events"] as const,
   drafts: () => [...eventKeys.all, "drafts"] as const,
   published: () => [...eventKeys.all, "published"] as const,
+  details: () => [...eventKeys.all, "detail"] as const,
+  detail: (id: string) => [...eventKeys.details(), id] as const,
 };
 
 export const eventQueries = {
@@ -32,12 +34,18 @@ export function useRequestApprovalMutation() {
   return useMutation({
     mutationFn: async (id: string) => {
       await requestApprovalCalendarFn({ data: { id } });
+      return id;
     },
 
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: eventKeys.drafts(),
-      });
+    onSuccess: async (id: string) => {
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: eventKeys.drafts(),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: eventKeys.detail(id),
+        }),
+      ]);
     },
   });
 }
