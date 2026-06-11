@@ -1,8 +1,8 @@
 import { BackTo } from "@/components/site/BackTo";
 import { PageHeader, PageTitle } from "@/components/site/PageHeader";
 import type { VisibleEnumType } from "@/db/schema";
-import { CommonEventForm, type CalendarFormValues } from "@/features/admin/event/_common/common-event.form";
-import { createEventSchema } from "@/features/admin/event/new/create-event.schema";
+import { CommonEventForm, type CalendarFormValues } from "@/features/admin/events/_common/common-event.form";
+import { createEventSchema } from "@/features/admin/events/new/create-event.schema";
 import { createEventFn } from "@/server/functions/calendar/createEvent";
 import { toast } from "sonner";
 

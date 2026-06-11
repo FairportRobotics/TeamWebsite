@@ -1,4 +1,4 @@
-import { EditPublisedPage } from "@/features/admin/event/published/edit-published-event.page";
+import { EditPublisedPage } from "@/features/admin/events/published/edit-published-event.page";
 import { getPublishedEventFn } from "@/server/functions/calendar/getPublishedEvent";
 import { createFileRoute } from "@tanstack/react-router";
 

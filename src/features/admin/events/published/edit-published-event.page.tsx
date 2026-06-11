@@ -1,20 +1,20 @@
 import { BackTo } from "@/components/site/BackTo";
 import { PageHeader, PageTitle } from "@/components/site/PageHeader";
 import type { VisibleEnumType } from "@/db/schema";
-import { CommonEventForm, type CalendarFormValues } from "@/features/admin/event/_common/common-event.form";
-import { updateDraftEventSchema } from "@/features/admin/event/draft/update-draft-event.schema";
-import { updateDraftEventFn } from "@/server/functions/calendar/updateDraftEvent";
+import { CommonEventForm, type CalendarFormValues } from "@/features/admin/events/_common/common-event.form";
+import { updatePublishedEventSchema } from "@/features/admin/events/published/update-published-event.schema";
+import { updatePublishedEventFn } from "@/server/functions/calendar/updatePublishedEvent";
 import { useLoaderData } from "@tanstack/react-router";
 import { toast } from "sonner";
 
-export function EditDraftPage() {
-  const event = useLoaderData({ from: "/_authenticated/admin/calendar/$id/draft" });
+export function EditPublisedPage() {
+  const event = useLoaderData({ from: "/_authenticated/admin/calendar/$id/published" });
 
   if (!event) return null;
 
   const defaultValues: CalendarFormValues = {
     id: event.id,
-    eventId: event.eventId,
+    eventId: event.id,
     title: event.title,
     description: event.description,
     location: event.location,
@@ -26,10 +26,10 @@ export function EditDraftPage() {
   };
 
   async function handleSubmit(value: CalendarFormValues) {
-    await updateDraftEventFn({
+    await updatePublishedEventFn({
       data: {
         id: value.id!,
-        eventId: value.eventId,
+        eventId: value.eventId!,
         title: value.title,
         description: value.description,
         location: value.location,
@@ -41,7 +41,7 @@ export function EditDraftPage() {
       },
     });
 
-    toast.success("Event was successfully updated");
+    toast.success("Event was successfully update");
   }
 
   return (
@@ -49,13 +49,13 @@ export function EditDraftPage() {
       <BackTo to="/admin/calendar" label="Calendar Admin" />
       <PageHeader>
         <PageTitle>
-          Edit <span className="text-destructive">Draft Event</span>
+          Edit <span className="text-destructive">Published Event</span>
         </PageTitle>
       </PageHeader>
 
       <CommonEventForm
         defaultValues={defaultValues}
-        zodSchema={updateDraftEventSchema}
+        zodSchema={updatePublishedEventSchema}
         onSubmit={(values) => handleSubmit(values)}
       />
     </div>

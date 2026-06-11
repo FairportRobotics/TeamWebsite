@@ -1,4 +1,4 @@
-import { EditDraftPage } from "@/features/admin/event/draft/edit-draft-event.page";
+import { EditDraftPage } from "@/features/admin/events/draft/edit-draft-event.page";
 import { getDraftEvent } from "@/server/functions/calendar/getDraftEvent";
 import { createFileRoute } from "@tanstack/react-router";
 
