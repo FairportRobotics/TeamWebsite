@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
-import { Minus, Plus } from "lucide-react";
-import { useState, type ReactNode } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { ChevronDownIcon } from "lucide-react";
+import { type ReactNode } from "react";
 
 export function PageSectionContainer({
   title,
@@ -13,31 +15,24 @@ export function PageSectionContainer({
   initialState: "expanded" | "collapsed";
   children: ReactNode;
 }) {
-  const [state, setState] = useState<"expanded" | "collapsed">(initialState);
-
-  function toggleState(newState: "expanded" | "collapsed") {
-    setState(newState);
-  }
-
   return (
-    <div className="border-2 border-accent rounded-2xl overflow-hidden">
-      <div className="flex flex-row items-center justify-between bg-accent text-3xl font-bold py-2 px-4">
-        <div className="flex flex-row gap-4 items-center">
-          <div className="text-foreground">{title}</div>
-          {subTitle && <div className="text-xl text-muted-foreground">{subTitle}</div>}
-        </div>
-
-        {state === "collapsed" ? (
-          <Button variant="default" size="lg" onClick={() => toggleState("expanded")}>
-            <Plus className="w-14 h-14" />
-          </Button>
-        ) : (
-          <Button variant="default" size="lg" onClick={() => toggleState("collapsed")}>
-            <Minus className="w-14 h-14" />
-          </Button>
-        )}
-      </div>
-      {state === "expanded" && <div className="p-4">{children}</div>}
-    </div>
+    <Card className="mx-auto w-full m-0 p-0">
+      <CardContent className="m-0 p-0">
+        <Collapsible className="m-0 p-0" defaultOpen={initialState === "expanded"}>
+          <CollapsibleTrigger asChild className="m-0 p-0">
+            <div className="flex flex-row items-center justify-between bg-primary text-primary-foreground text-2xl font-extrabold p-4">
+              <div className="flex flex-row gap-4 items-baseline">
+                <div className="text-primary-foreground">{title}</div>
+                {subTitle && <div className="text-sm text-muted">{subTitle}</div>}
+              </div>
+              <Button variant="ghost" className="group" size="lg">
+                <ChevronDownIcon className="ml-auto group-data-[state=open]:rotate-180" />
+              </Button>
+            </div>
+          </CollapsibleTrigger>
+          <CollapsibleContent className="w-full p-4">{children}</CollapsibleContent>
+        </Collapsible>
+      </CardContent>
+    </Card>
   );
 }
